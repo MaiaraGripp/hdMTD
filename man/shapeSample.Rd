@@ -2,7 +2,7 @@
 % Please edit documentation in R/shapeSample.R
 \name{shapeSample}
 \alias{shapeSample}
-\title{Creates a table with sample informartion.}
+\title{Creates a table with sample information}
 \usage{
 shapeSample(X, d)
 }
@@ -15,7 +15,7 @@ shapeSample(X, d)
 A table with every sequence in the sample and its frequency.
 }
 \description{
-Creates a table with sample informartion.
+Creates a table with sample information
 }
 \details{
 The function will make a tibble with \eqn{d+2} columns. For each row, the first \eqn{d+1} columns will
@@ -43,4 +43,7 @@ Note that, for every loop, the last elements of the sample are discarted, if nee
 \examples{
 shapeSample(c(1,2,2,1,2,1,1,2,1,2),3)
 shapeSample(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
+
+
+
 }

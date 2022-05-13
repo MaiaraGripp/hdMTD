@@ -1,17 +1,14 @@
-#' Checks if a sample is suitable for use.
+#' Checks if a sample is suitable for use
 #'
 #' @param X A vector with a Markov Chain.
 #'
 #' @return Returns possible sample errors.
-#' @export
 #'
-#' @examples
-#' checkSample(c(1,1,2,1,1,2,1,2,1,1,2,2,1))
 checkSample <- function(X){
-  if( !is.numeric(X) ){stop("X must be a numeric vector.")}
-  if( length(ncol(X))!=0 ){stop("X must have only 1 dimension.")}
-  if( any(is.na(X)) ){stop("NA values are not allowed in the sample.")}
-  if( length(unique(X))==1){stop("All elements in the sample are the same.")}
+  if ( !is.numeric(X) ) { stop("X must be a numeric vector.") }
+  if ( length(ncol(X)) != 0 ) { stop("X must have only 1 dimension.") }
+  if ( any(is.na(X)) ) { stop("NA values are not allowed in the sample.") }
+  if ( length(unique(X)) == 1 ) { stop("All elements in the sample are the same.") }
 }
 
 #colocar mais restrições? Tamanho minimo de amostra...
@@ -22,4 +19,3 @@ checkSample <- function(X){
 #if( message==TRUE & any( levels(X)!= 1:length(levels(X)) ) ){
 #message("The elements ",paste0(levels(X)," ")," in sample where replaced by ",paste0(seq(1,length(levels(X)))," ")," respectively.")
 #}
-

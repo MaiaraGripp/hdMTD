@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkSample.R
 \name{checkSample}
 \alias{checkSample}
-\title{Checks if a sample is suitable for use.}
+\title{Checks if a sample is suitable for use}
 \usage{
 checkSample(X)
 }
@@ -13,8 +13,5 @@ checkSample(X)
 Returns possible sample errors.
 }
 \description{
-Checks if a sample is suitable for use.
-}
-\examples{
-checkSample(c(1,1,2,1,1,2,1,2,1,1,2,2,1))
+Checks if a sample is suitable for use
 }

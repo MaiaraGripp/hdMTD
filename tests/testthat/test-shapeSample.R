@@ -3,9 +3,6 @@ test_that("shapeSample works", {
   expect_error(shapeSample(c(1,1,1,0,1,0,0,0,1),10))
 })
 test_that("shapeSample works", {
-  expect_error(shapeSample(c(1,1,1,0,1,0,0,0,1),1))
-})
-test_that("shapeSample works", {
   expect_error(shapeSample(c(1,1,1,0,1,0,0,0,1),15.5))
 })
 
