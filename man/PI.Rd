@@ -4,7 +4,7 @@
 \alias{PI}
 \title{Estimated stationary distribution vector for every a_j and a sequence x_S}
 \usage{
-PI(S, base, x_S, lenX)
+PI(S, base, x_S, lenX, d)
 }
 \arguments{
 \item{S}{Set of lags.}
@@ -14,6 +14,8 @@ PI(S, base, x_S, lenX)
 \item{x_S}{A specific sequence indexed by S.}
 
 \item{lenX}{Lenght of sample vector.}
+
+\item{d}{The order.}
 }
 \value{
 Returns a vector of estimated stationary distributions of a sequence X_S

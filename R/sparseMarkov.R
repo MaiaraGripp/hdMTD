@@ -1,3 +1,13 @@
+#' A function for inference in sparse Markov chains
+#'
+#' @param X A markov chain sample
+#' @param d The order or a upper bound for the order.
+#' @param method A method for estimation
+#' @param l A stop point for some methods
+#'
+#' @return The relevant lag set
+#' @export
+#'
 sparseMarkov <- function(X,d,method,l=NULL){
   #l <- list(...)
 

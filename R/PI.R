@@ -4,6 +4,7 @@
 #' @param base A table with frequencies of a Markov Chain sample.
 #' @param x_S A specific sequence indexed by S.
 #' @param lenX Lenght of sample vector.
+#' @param d The order.
 #'
 #' @return Returns a vector of estimated stationary distributions of a sequence X_S
 #' with the element in j varying in all the states space.
@@ -11,7 +12,7 @@
 #'
 #' @details #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
 #'
-PI <- function(S,base,x_S,lenX){
+PI <- function(S,base,x_S,lenX,d){
   if (is.numeric(S)) {
     S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
     filtr_S <- paste0("x",S)

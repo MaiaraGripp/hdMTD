@@ -54,8 +54,8 @@ sparseMarkov_FS <- function(X,l,A,d){
       j <- Sc[z]
 
       b_Sja <- base_Sja(S,j,A,base)
-      b_Sj <- base_Sj(S,j,b_Sja,lenX)
-      b_S <- base_Sj(S,j=NULL,b_Sja,lenX)#if S=NULL b_S<-matrix(c(0,lenX-d),ncol=2)
+      b_Sj <- base_Sj(S,j,b_Sja,lenX,d)
+      b_S <- base_Sj(S,j=NULL,b_Sja,lenX,d)#if S=NULL b_S<-matrix(c(0,lenX-d),ncol=2)
       ncolb_S <- ncol(b_S)
 
       if( lenS > 0) { PositNx_S <- which(b_S$Nx_Sj>0) }else{ PositNx_S <- 1 }
@@ -66,7 +66,7 @@ sparseMarkov_FS <- function(X,l,A,d){
         t <- PositNx_S[k]
         cont <- 0
 
-        PIs <- PI(dec_S,b_Sj,subx[t,],lenX) #receives b_Sj
+        PIs <- PI(dec_S,b_Sj,subx[t,],lenX,d) #receives b_Sj
 #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
         dTVs <- dTV(dec_S,j,lenA,b_Sja,A_pairs,subx[t,]) #receives b_Sja
 #(dTv_xS[p(.|a_j),p(.|b_j)],dTv_xS[p(.|a_j),p(.|c_j)]...)
