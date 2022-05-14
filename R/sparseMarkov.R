@@ -51,15 +51,14 @@ sparseMarkov <- function(X,d,method,l=NULL, alpha=0.05, mu=1, xi=0.5){
     n <- length(Xn)
 
     S <- sparseMarkov_FS(Xm,l=l,A=A,d=d)
-    sparseMarkov_CUT(Xn, A=A, d=d, alpha=alpha, mu=mu, xi=xi, S=S)
-
+    S <- sparseMarkov_CUT(Xn, A=A, d=d, alpha=alpha, mu=mu, xi=xi, S=S)
   }
   if ( method == "FS" ) {
-    sparseMarkov_FS(X=X,l=l,A=A,d=d)
+    S <- sparseMarkov_FS(X=X,l=l,A=A,d=d)
   }
   if ( method == "CUT" ) {
-    sparseMarkov_CUT(X=X, A=A, d=d, alpha=alpha, mu=mu, xi=xi)
+    S <- sparseMarkov_CUT(X=X, A=A, d=d, alpha=alpha, mu=mu, xi=xi)
   }
-
+  return(S)
 }
 
