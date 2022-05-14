@@ -25,7 +25,7 @@ sparseMarkov_FS <- function(X,l,A,d){
   #\.
   #Gathering inputs from inputs
   lenX <- length(X)
-  base <- shapeSample(X,d)
+  base <- shapeSample(X=X,d=d)
   A <- sort(A)
   lenA <- length(A)
   A_pairs <- t(utils::combn(A,2))
@@ -53,9 +53,9 @@ sparseMarkov_FS <- function(X,l,A,d){
     for (z in 1:lenSc) {
       j <- Sc[z]
 
-      b_Sja <- base_Sja(S,j,A,base)
-      b_Sj <- base_Sj(S,j,b_Sja,lenX,d)
-      b_S <- base_Sj(S,j=NULL,b_Sja,lenX,d)#if S=NULL b_S<-matrix(c(0,lenX-d),ncol=2)
+      b_Sja <- base_Sja(S=S,j=j,A=A,base=base)
+      b_Sj <- base_Sj(S=S,j=j,b_Sja,lenX=lenX,d=d)
+      b_S <- base_Sj(S=S,j=NULL,b_Sja,lenX=lenX,d=d)#if S=NULL b_S<-matrix(c(0,lenX-d),ncol=2)
       ncolb_S <- ncol(b_S)
 
       if( lenS > 0) { PositNx_S <- which(b_S$Nx_Sj>0) }else{ PositNx_S <- 1 }
@@ -66,13 +66,13 @@ sparseMarkov_FS <- function(X,l,A,d){
         t <- PositNx_S[k]
         cont <- 0
 
-        PIs <- PI(dec_S,b_Sj,subx[t,],lenX,d) #receives b_Sj
+        PIs <- PI(S=dec_S,base=b_Sj,x_S=subx[t,],lenX=lenX,d=d) #receives b_Sj
 #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
-        dTVs <- dTV(dec_S,j,lenA,b_Sja,A_pairs,subx[t,]) #receives b_Sja
+        dTVs <- dTV(S=dec_S,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[t,]) #receives b_Sja
 #(dTv_xS[p(.|a_j),p(.|b_j)],dTv_xS[p(.|a_j),p(.|c_j)]...)
 
-        for (l in 1:nrowA_pairs) {#runs in pairs (b,c) such that b\in A, c\in A and b\neq c
-          cont <- cont + prod(PIs[A_pairs[l,]])*dTVs[l]
+        for (y in 1:nrowA_pairs) {#runs in pairs (b,c) such that b\in A, c\in A and b\neq c
+          cont <- cont + prod(PIs[A_pairs[y,]])*dTVs[y]
         }
 
         PI_xS <- as.numeric(b_S[t,ncolb_S]/(lenX-d))#will be 1 when S=NULL.
@@ -86,4 +86,3 @@ sparseMarkov_FS <- function(X,l,A,d){
   S
 }
 
-#sparseMarkov_FS(X,3,c(1,2,3),10)

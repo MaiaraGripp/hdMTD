@@ -4,7 +4,7 @@
 \alias{sparseMarkov}
 \title{A function for inference in sparse Markov chains}
 \usage{
-sparseMarkov(X, d, method, l = NULL)
+sparseMarkov(X, d, method, l = NULL, alpha = 0.05, mu = 1, xi = 0.5)
 }
 \arguments{
 \item{X}{A markov chain sample}
@@ -14,6 +14,12 @@ sparseMarkov(X, d, method, l = NULL)
 \item{method}{A method for estimation}
 
 \item{l}{A stop point for some methods}
+
+\item{alpha}{CUT parameter}
+
+\item{mu}{CUT parameter}
+
+\item{xi}{CUT parameter}
 }
 \value{
 The relevant lag set

@@ -6,11 +6,10 @@
 #' @param base A table with sequencies of size d+1 in sample and their absolute frequency.
 #'
 #' @return A table with sequencies (x) indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
+#' @export
 #' @importFrom dplyr %>%
 #'
-#@examples
-#base_Sja(S=c(2,4),j=1,A=c(1,2,3),base=shapeSample(sample(1:2,50,replace=TRUE),5))
-base_Sja <- function(S,j,A,base){
+base_Sja <- function(S,j=NULL,A,base){
   #essa função cria uma base Nxa, vou fazer outra função que tira o a.
 
   #faz um teste para verificar se é possível contruir a maior base (l) acho melhor

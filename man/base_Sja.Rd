@@ -4,7 +4,7 @@
 \alias{base_Sja}
 \title{Makes a table with certain sequencies in sample and their frequencies.}
 \usage{
-base_Sja(S, j, A, base)
+base_Sja(S, j = NULL, A, base)
 }
 \arguments{
 \item{S}{A set of lags in \eqn{1:d}.}

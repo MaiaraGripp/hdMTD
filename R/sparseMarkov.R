@@ -4,11 +4,14 @@
 #' @param d The order or a upper bound for the order.
 #' @param method A method for estimation
 #' @param l A stop point for some methods
+#' @param alpha CUT parameter
+#' @param mu CUT parameter
+#' @param xi CUT parameter
 #'
 #' @return The relevant lag set
 #' @export
 #'
-sparseMarkov <- function(X,d,method,l=NULL){
+sparseMarkov <- function(X,d,method,l=NULL, alpha=0.05, mu=1, xi=0.5){
   #l <- list(...)
 
   # Checking restrictions
@@ -47,10 +50,16 @@ sparseMarkov <- function(X,d,method,l=NULL){
     Xn <- X[(m+1):lenX]
     n <- length(Xn)
 
-    sparseMarkov_FS(Xm,l,A,d)
+    S <- sparseMarkov_FS(Xm,l=l,A=A,d=d)
+    sparseMarkov_CUT(Xn, A=A, d=d, alpha=alpha, mu=mu, xi=xi, S=S)
 
   }
-
+  if ( method == "FS" ) {
+    sparseMarkov_FS(X=X,l=l,A=A,d=d)
+  }
+  if ( method == "CUT" ) {
+    sparseMarkov_CUT(X=X, A=A, d=d, alpha=alpha, mu=mu, xi=xi)
+  }
 
 }
 
