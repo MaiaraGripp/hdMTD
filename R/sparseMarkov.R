@@ -62,3 +62,4 @@ sparseMarkov <- function(X,d,method,l=NULL, alpha=0.05, mu=1, xi=0.5){
   return(S)
 }
 
+
