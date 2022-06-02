@@ -1,6 +1,6 @@
 #' A chain for testing the package
 #'
-#' A data frame with Markov Chain samples with Misture Transition
+#' A data frame with Markov Chain samples with Mixture Transition
 #' distribution.
 #'
 #' @format A data frame with 10000 rows and 2 variables:

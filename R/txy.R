@@ -1,7 +1,7 @@
 #' Calculates txy
 #'
-#' @param R A sx formed matrix
-#' @param A_pairs Pairs in A
+#' @param R A sx formed matrix.
+#' @param A_pairs Pairs in A.
 #'
 #' @return The threshold txy=sx+sy
 #'

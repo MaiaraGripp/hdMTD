@@ -1,9 +1,9 @@
-#' Aplies Forward Stepwise (FS) algorithm
+#' Applies Forward Stepwise algorithm
 #'
-#' @param X A Markov Chain sample with mixture transition distribution.
+#' @param X A mixture transition distribution chain sample.
 #' @param l Stop point for FS algorithm.
-#' @param A States space.
-#' @param d Chains order.
+#' @param A The States space.
+#' @param d The chains order.
 #'
 #' @return Returns a set S of size l that contains relevant lags.
 #' @export
@@ -20,10 +20,10 @@ sparseMarkov_FS <- function(X,l,A,d){
   #\.
   # Cheking A
   if ( !all( sort(unique(X)) %in% sort(A) ) ) {
-    stop("Check the states space, it must have all possible configurations of X.")
+    stop("Check the states space, it must have all states that occur in the sample.")
   }
   #\.
-  #Gathering inputs from inputs
+  #Gathering inputs
   lenX <- length(X)
   base <- shapeSample(X=X,d=d)
   A <- sort(A)
@@ -59,7 +59,7 @@ sparseMarkov_FS <- function(X,l,A,d){
       ncolb_S <- ncol(b_S)
 
       if( lenS > 0) { PositNx_S <- which(b_S$Nx_Sj>0) }else{ PositNx_S <- 1 }
-#PositNx_S is de index of all sequences x_S : N(x_S)>0
+#PositNx_S is the index of all sequences x_S : N(x_S)>0
 
       lenPositNx_S <- length(PositNx_S)
       for (k in 1:lenPositNx_S) { #runs in all sequences x_S: N(x_S)>0

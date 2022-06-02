@@ -1,12 +1,12 @@
-#' Calculates sx
+#' Calculates sx, and txy=sx+sy
 #'
-#' @param S A set of relevant lags
-#' @param base A table with frequencies of a Markov Chain
-#' @param lenA The size of the states space
-#' @param x_S A sequence indexed by S
-#' @param mu A parameter of CUT
-#' @param alpha A parameter of CUT
-#' @param xi A parameter of CUT
+#' @param S A set of relevant lags.
+#' @param base A table with frequencies of a Markov chain.
+#' @param lenA The size of the states space.
+#' @param x_S A sequence indexed by S.
+#' @param mu A parameter of CUT.
+#' @param alpha A parameter of CUT.
+#' @param xi A parameter of CUT.
 #'
 #' @return Returns sx the for the threshold txy=sx+sy
 #' @importFrom dplyr %>%

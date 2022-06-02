@@ -2,28 +2,28 @@
 % Please edit documentation in R/sparseMarkov_CUT.R
 \name{sparseMarkov_CUT}
 \alias{sparseMarkov_CUT}
-\title{Aplies Cut algorithm}
+\title{Applies Cut algorithm}
 \usage{
 sparseMarkov_CUT(X, A, d, alpha, mu, xi, S = 1:d)
 }
 \arguments{
-\item{X}{A Markov Chain sample with mixture transition distribution.}
+\item{X}{A mixture transition distribution chain sample.}
 
-\item{A}{States space.}
+\item{A}{The states space.}
 
-\item{d}{Chains order.}
+\item{d}{The chains order.}
 
-\item{alpha}{A parameter of CUT}
+\item{alpha}{A parameter of CUT.}
 
-\item{mu}{A parameter of CUT}
+\item{mu}{A parameter of CUT.}
 
-\item{xi}{A parameter of CUT}
+\item{xi}{A parameter of CUT.}
 
-\item{S}{A set of relevant lags}
+\item{S}{A set of relevant lags.}
 }
 \value{
-Returns a setthat contains relevant lags.
+Returns a set that contains relevant lags.
 }
 \description{
-Aplies Cut algorithm
+Applies Cut algorithm
 }

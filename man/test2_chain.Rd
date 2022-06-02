@@ -18,7 +18,7 @@ A data frame with 10000 rows and 2 variables:
 test2_chain
 }
 \description{
-A data frame with Markov Chain samples with Misture Transition
+A data frame with Markov Chain samples with Mixture Transition
 distribution.
 }
 \examples{

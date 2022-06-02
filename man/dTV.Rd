@@ -11,13 +11,13 @@ dTV(S, j, lenA, base, A_pairs, x_S)
 
 \item{j}{A specific lag \eqn{j \in S^c}.}
 
-\item{lenA}{The length of the states space A}
+\item{lenA}{The length of the states space A.}
 
-\item{base}{A set with the estimated transition probabilities q(a|xb_Sj)}
+\item{base}{A set with the estimated transition probabilities qa|xb_Sj.}
 
-\item{A_pairs}{A list with all pairs with elements of A}
+\item{A_pairs}{A list with all pairs with elements of A.}
 
-\item{x_S}{A specific sequence indexed by S}
+\item{x_S}{A specific sequence indexed by S.}
 }
 \value{
 Returns a vector with the total variation distance between estimated distributions
@@ -25,7 +25,4 @@ given a x_S
 }
 \description{
 Total variation distance between distributions given x_S
-}
-\details{
-(dTv_xS p(.|a_j),p(.|b_j),dTv_xS p(.|a_j),p(.|c_j) ...)
 }

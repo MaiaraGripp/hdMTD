@@ -1,17 +1,17 @@
 #' A function for inference in sparse Markov chains
 #'
-#' @param X A markov chain sample
-#' @param d The order or a upper bound for the order.
-#' @param method A method for estimation
-#' @param l A stop point for some methods
-#' @param alpha CUT parameter
-#' @param mu CUT parameter
-#' @param xi CUT parameter
+#' @param X A markov chain sample.
+#' @param d The order or an upper bound for the order.
+#' @param method A method for estimation. The default method is the Forward Stepwise and Cut ("FSC"="FS"+"CUT"). Alternatively, the methods "FS" and "CUT" can be used separately.
+#' @param l A stop point for the "FS" method.
+#' @param alpha "CUT" parameter.
+#' @param mu "CUT" parameter.
+#' @param xi "CUT" parameter.
 #'
-#' @return The relevant lag set
+#' @return The set of relevant lags.
 #' @export
 #'
-sparseMarkov <- function(X,d,method,l=NULL, alpha=0.05, mu=1, xi=0.5){
+sparseMarkov <- function(X,d,method="FSC",l=NULL, alpha=0.05, mu=1, xi=0.5){
   #l <- list(...)
 
   # Checking restrictions

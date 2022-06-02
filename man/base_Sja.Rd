@@ -16,7 +16,7 @@ base_Sja(S, j = NULL, A, base)
 \item{base}{A table with sequencies of size d+1 in sample and their absolute frequency.}
 }
 \value{
-A table with sequencies (x) indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
+A table with sequencies x indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
 }
 \description{
 Makes a table with certain sequencies in sample and their frequencies.

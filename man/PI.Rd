@@ -7,15 +7,15 @@
 PI(S, base, x_S, lenX, d)
 }
 \arguments{
-\item{S}{Set of lags.}
+\item{S}{A set of lags.}
 
-\item{base}{A table with frequencies of a Markov Chain sample.}
+\item{base}{A table with frequencies of a Markov chain sample.}
 
 \item{x_S}{A specific sequence indexed by S.}
 
-\item{lenX}{Lenght of sample vector.}
+\item{lenX}{The lenght of the sample vector.}
 
-\item{d}{The order.}
+\item{d}{The order of the chain.}
 }
 \value{
 Returns a vector of estimated stationary distributions of a sequence X_S
@@ -23,7 +23,4 @@ with the element in j varying in all the states space.
 }
 \description{
 Estimated stationary distribution vector for every a_j and a sequence x_S
-}
-\details{
-#(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
 }

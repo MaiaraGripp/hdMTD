@@ -9,7 +9,7 @@ is_xS(x, y)
 \arguments{
 \item{x}{A data frame whose rows are sequencies indexed by S.}
 
-\item{y}{A specific x_s sequence.}
+\item{y}{A specific x_S sequence.}
 }
 \value{
 A vector of true and false if a row in x is exactly equal to x_S.

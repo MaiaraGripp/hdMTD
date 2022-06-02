@@ -1,16 +1,15 @@
 #' Estimated stationary distribution vector for every a_j and a sequence x_S
 #'
-#' @param S Set of lags.
-#' @param base A table with frequencies of a Markov Chain sample.
+#' @param S A set of lags.
+#' @param base A table with frequencies of a Markov chain sample.
 #' @param x_S A specific sequence indexed by S.
-#' @param lenX Lenght of sample vector.
-#' @param d The order.
+#' @param lenX The lenght of the sample vector.
+#' @param d The order of the chain.
 #'
 #' @return Returns a vector of estimated stationary distributions of a sequence X_S
 #' with the element in j varying in all the states space.
 #' @importFrom dplyr %>%
-#'
-#' @details #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
+#
 #'
 PI <- function(S,base,x_S,lenX,d){
   if (is.numeric(S)) {
@@ -26,3 +25,4 @@ PI <- function(S,base,x_S,lenX,d){
   colnames(inv) <- paste0(x_S,collapse = "")
   inv
 }
+##(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)

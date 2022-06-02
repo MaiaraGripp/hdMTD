@@ -7,9 +7,9 @@
 txy(R, A_pairs)
 }
 \arguments{
-\item{R}{A sx formed matrix}
+\item{R}{A sx formed matrix.}
 
-\item{A_pairs}{Pairs in A}
+\item{A_pairs}{Pairs in A.}
 }
 \value{
 The threshold txy=sx+sy

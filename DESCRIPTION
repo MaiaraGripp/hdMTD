@@ -5,7 +5,6 @@ Version: 0.1.0
 Author: Maiara Gripp
 Maintainer: Maiara Gripp <maiaragripp@gmail.com>
 Description: Estimates the set os relevant lags in a sparce Markov Chain.
-    Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

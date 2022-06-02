@@ -2,28 +2,28 @@
 % Please edit documentation in R/sx.R
 \name{sx}
 \alias{sx}
-\title{Calculates sx}
+\title{Calculates sx, and txy=sx+sy}
 \usage{
 sx(S, base, lenA, x_S, mu, alpha, xi)
 }
 \arguments{
-\item{S}{A set of relevant lags}
+\item{S}{A set of relevant lags.}
 
-\item{base}{A table with frequencies of a Markov Chain}
+\item{base}{A table with frequencies of a Markov chain.}
 
-\item{lenA}{The size of the states space}
+\item{lenA}{The size of the states space.}
 
-\item{x_S}{A sequence indexed by S}
+\item{x_S}{A sequence indexed by S.}
 
-\item{mu}{A parameter of CUT}
+\item{mu}{A parameter of CUT.}
 
-\item{alpha}{A parameter of CUT}
+\item{alpha}{A parameter of CUT.}
 
-\item{xi}{A parameter of CUT}
+\item{xi}{A parameter of CUT.}
 }
 \value{
 Returns sx the for the threshold txy=sx+sy
 }
 \description{
-Calculates sx
+Calculates sx, and txy=sx+sy
 }

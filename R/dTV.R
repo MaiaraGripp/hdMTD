@@ -2,15 +2,14 @@
 #'
 #' @param S A set of lags.
 #' @param j A specific lag \eqn{j \in S^c}.
-#' @param lenA The length of the states space A
-#' @param base  A set with the estimated transition probabilities q(a|xb_Sj)
-#' @param A_pairs A list with all pairs with elements of A
-#' @param x_S A specific sequence indexed by S
+#' @param lenA The length of the states space A.
+#' @param base  A set with the estimated transition probabilities qa|xb_Sj.
+#' @param A_pairs A list with all pairs with elements of A.
+#' @param x_S A specific sequence indexed by S.
 #'
 #' @return Returns a vector with the total variation distance between estimated distributions
 #' given a x_S
 #' @importFrom dplyr %>%
-#' @details (dTv_xS p(.|a_j),p(.|b_j),dTv_xS p(.|a_j),p(.|c_j) ...)
 #'
 dTV <- function(S,j,lenA,base,A_pairs,x_S){
 
@@ -36,3 +35,4 @@ dTV <- function(S,j,lenA,base,A_pairs,x_S){
   rownames(disTV) <- paste0(x_S,collapse = "")
   disTV #vector size nrowA_pairs
 }
+#details (dTv_xS p(.|a_j),p(.|b_j),dTv_xS p(.|a_j),p(.|c_j) ...)

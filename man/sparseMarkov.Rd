@@ -4,25 +4,25 @@
 \alias{sparseMarkov}
 \title{A function for inference in sparse Markov chains}
 \usage{
-sparseMarkov(X, d, method, l = NULL, alpha = 0.05, mu = 1, xi = 0.5)
+sparseMarkov(X, d, method = "FSC", l = NULL, alpha = 0.05, mu = 1, xi = 0.5)
 }
 \arguments{
-\item{X}{A markov chain sample}
+\item{X}{A markov chain sample.}
 
-\item{d}{The order or a upper bound for the order.}
+\item{d}{The order or an upper bound for the order.}
 
-\item{method}{A method for estimation}
+\item{method}{A method for estimation. The default method is the Forward Stepwise and Cut ("FSC"="FS"+"CUT"). Alternatively, the methods "FS" and "CUT" can be used separately.}
 
-\item{l}{A stop point for some methods}
+\item{l}{A stop point for the "FS" method.}
 
-\item{alpha}{CUT parameter}
+\item{alpha}{"CUT" parameter.}
 
-\item{mu}{CUT parameter}
+\item{mu}{"CUT" parameter.}
 
-\item{xi}{CUT parameter}
+\item{xi}{"CUT" parameter.}
 }
 \value{
-The relevant lag set
+The set of relevant lags.
 }
 \description{
 A function for inference in sparse Markov chains

@@ -2,22 +2,22 @@
 % Please edit documentation in R/sparseMarkov_FS.R
 \name{sparseMarkov_FS}
 \alias{sparseMarkov_FS}
-\title{Aplies Forward Stepwise (FS) algorithm}
+\title{Applies Forward Stepwise algorithm}
 \usage{
 sparseMarkov_FS(X, l, A, d)
 }
 \arguments{
-\item{X}{A Markov Chain sample with mixture transition distribution.}
+\item{X}{A mixture transition distribution chain sample.}
 
 \item{l}{Stop point for FS algorithm.}
 
-\item{A}{States space.}
+\item{A}{The States space.}
 
-\item{d}{Chains order.}
+\item{d}{The chains order.}
 }
 \value{
 Returns a set S of size l that contains relevant lags.
 }
 \description{
-Aplies Forward Stepwise (FS) algorithm
+Applies Forward Stepwise algorithm
 }

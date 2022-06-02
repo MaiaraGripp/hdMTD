@@ -1,20 +1,17 @@
-#' Aplies Cut algorithm
+#' Applies Cut algorithm
 #'
-#' @param X A Markov Chain sample with mixture transition distribution.
-#' @param A States space.
-#' @param d Chains order.
-#' @param alpha A parameter of CUT
-#' @param mu A parameter of CUT
-#' @param xi A parameter of CUT
-#' @param S A set of relevant lags
+#' @param X A mixture transition distribution chain sample.
+#' @param A The states space.
+#' @param d The chains order.
+#' @param alpha A parameter of CUT.
+#' @param mu A parameter of CUT.
+#' @param xi A parameter of CUT.
+#' @param S A set of relevant lags.
 #'
-#' @return Returns a setthat contains relevant lags.
+#' @return Returns a set that contains relevant lags.
 #' @export
 #'
 sparseMarkov_CUT <- function(X, A, d, alpha, mu, xi, S=1:d){
-  #se eu já tiver passado pelo FS posso chegar aqui com um S onde max S <d,
-  #mas eu nao posso tomar maxS=d certo? porque vai dar problema na minha pg 47
-  #essa pergunta serve para saber se pode deixar d=NULL, d é usado em shapeSample
 
   #Checking inputs
   if ( is.numeric(S) ) {

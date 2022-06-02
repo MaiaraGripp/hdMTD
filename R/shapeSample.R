@@ -1,7 +1,6 @@
-
 #' Creates a table with sample information
 #'
-#' @param X A Markov Chain sample.
+#' @param X A Markov chain sample.
 #' @param d The order of the Markov chain.
 #'
 #' @return A table with every sequence in the sample and its frequency.
@@ -12,23 +11,6 @@
 #'   have a sequency of size \eqn{d+1} that appeared in the sample. The last column, called \code{Nxa},
 #'   will contain the number of times each of these sequences appeared in the sample.
 #'
-#'The algorithm to obtain a tibble with all sequences that appear in the sample consists in generating \code{d1} smaller matrices and grouping then by rows.
-#' For exemple, let \code{d=3} and the sample \code{X} be a sequence of size \code{n=13}, where
-#'\eqn{X=(x_1,x_2,x_3,x_4,x_5,x_6,x_7,x_8,x_9,x_{10},x_{11},x_{12},x_{13})}.
-#'
-#'For the first matrix beggin from de element \eqn{x_1}.
-#'
-#'\eqn{\begin{bmatrix}x_1 & x_2 & x_3 & x_4\\ x_5 & x_6 & x_7 & x_8\\ x_9 & x_{10} & x_{11} & x_{12}\end{bmatrix}}
-#'
-#'For the second matrix discard the element \eqn{x_1} and beggin from element \eqn{x_2}. Than attach it to the last matrix.
-#'
-#' \eqn{\begin{bmatrix} x_1 & x_2 & x_3 & x_4\\ x_5 & x_6 & x_7 & x_8\\ x_9 & x_{10} & x_{11} & x_{12}\end{bmatrix}\\\begin{bmatrix}x_2 & x_3 & x_4 & x_5\\ x_6 & x_7 & x_8 & x_9\\ x_{10} & x_{11} & x_{12} & x_{13}\end{bmatrix}}
-#'
-#'Repeat \code{d1} times, for the last matrix discard \eqn{x_{d}} and beggin from \eqn{x_{d1}}.
-#'
-#'\eqn{\begin{bmatrix}x_1 & x_2 & x_3 & x_4\\ x_5 & x_6 & x_7 & x_8\\ x_9 & x_{10} & x_{11} & x_{12}\\ x_2 & x_3 & x_4 & x_5\\ x_6 & x_7 & x_8 & x_9\\ x_{10} & x_{11} & x_{12} & x_{13}\\ \vdots & & & \\ x_4 & x_5 & x_6 & x_7\\ x_8 & x_9 & x_{10} & x_{11} \end{bmatrix}}
-#'
-#'Note that, for every loop, the last elements of the sample are discarted, if needed, to fit the matrices.
 #'
 #' @examples
 #' shapeSample(c(1,2,2,1,2,1,1,2,1,2),3)

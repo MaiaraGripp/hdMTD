@@ -5,12 +5,11 @@
 #' @param A The states space.
 #' @param base A table with sequencies of size d+1 in sample and their absolute frequency.
 #'
-#' @return A table with sequencies (x) indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
+#' @return A table with sequencies x indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
 #' @export
 #' @importFrom dplyr %>%
 #'
 base_Sja <- function(S,j=NULL,A,base){
-  #essa função cria uma base Nxa, vou fazer outra função que tira o a.
 
   #faz um teste para verificar se é possível contruir a maior base (l) acho melhor
   #fazer isso dentro do loop do FS
