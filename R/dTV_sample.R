@@ -11,7 +11,7 @@
 #' given a x_S
 #' @importFrom dplyr %>%
 #'
-dTV <- function(S,j,lenA,base,A_pairs,x_S){
+dTV_sample <- function(S,j,lenA,base,A_pairs,x_S){
 
   nrowA_pairs <- nrow(A_pairs)
   if ( is.numeric(S) ) {

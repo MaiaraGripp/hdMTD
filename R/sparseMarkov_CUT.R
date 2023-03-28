@@ -55,7 +55,7 @@ sparseMarkov_CUT <- function(X, A, d, alpha, mu, xi, S=1:d){
     Q <- matrix(0,ncol=nrowA_pairs,nrow = nrow_subx)
     R <- matrix(0,ncol = lenA, nrow = nrow_subx)
     for (k in 1:nrow_subx) { #runs in all x_S
-      Q[k,] <- dTV(S=Sminusj,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[k,])
+      Q[k,] <- dTV_sample(S=Sminusj,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[k,])
       R[k,] <- sx(S=Sminusj,base=b_Sja,lenA=lenA,x_S=subx[k,],mu=mu,alpha=alpha,xi=xi)
     }
     colnames(Q) <- apply(A_pairs, 1, paste0, collapse="x")

@@ -13,13 +13,13 @@ sparseMarkov(X, d, method = "FSC", l = NULL, alpha = 0.05, mu = 1, xi = 0.5)
 
 \item{method}{A method for estimation. The default method is the Forward Stepwise and Cut ("FSC"="FS"+"CUT"). Alternatively, the methods "FS" and "CUT" can be used separately.}
 
-\item{l}{A stop point for the "FS" method.}
+\item{l}{A stop point for the "FS" and "BIC" methods.}
 
-\item{alpha}{"CUT" parameter.}
+\item{alpha}{"CUT" parameter. Defaulted to 0.05.}
 
-\item{mu}{"CUT" parameter.}
+\item{mu}{"CUT" parameter. Defaulted to 1.}
 
-\item{xi}{"CUT" parameter.}
+\item{xi}{"CUT" parameter if method="FSC" or "CUT". BIC constant if method="BIC".Defaulted to 0.5.}
 }
 \value{
 The set of relevant lags.

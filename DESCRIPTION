@@ -1,10 +1,10 @@
 Package: sparseMarkov
 Type: Package
-Title: Inference in sparse Markov Chains
+Title: Inference in sparse Mixture Transition Distribution (MTD) Markov Chains
 Version: 0.1.0
 Author: Maiara Gripp
 Maintainer: Maiara Gripp <maiaragripp@gmail.com>
-Description: Estimates the set os relevant lags in a sparce Markov Chain.
+Description: Estimates the set os relevant lags from a MTD Markov Chain sample. Can also perfectly simulate a MTD Markov Chain with integer numeric state spaces.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

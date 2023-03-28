@@ -13,7 +13,7 @@ sparseMarkov_FS <- function(X,l,A,d){
 
 
   while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d ) {
-    cat("l value is not valid for FS step. l should be a positive integer number lower or equal to d.")
+    cat("l value is not valid for FS step. l should be a positive integer lower or equal to d.")
     l <- readline(prompt = "Please enter a valid l : ")
     l <- suppressWarnings(as.numeric(l))
   }
@@ -47,7 +47,7 @@ sparseMarkov_FS <- function(X,l,A,d){
     }
     lenSc <- length(Sc)
     Sc <- sort(Sc,decreasing = TRUE)
-    dec_S <- sort(S,decreasing = TRUE) # functions dTV and PI need a decreasing S
+    dec_S <- sort(S,decreasing = TRUE) # functions dTV_sample and PI need a decreasing S
 
     nuj <- numeric(lenSc)
     for (z in 1:lenSc) {
@@ -68,7 +68,7 @@ sparseMarkov_FS <- function(X,l,A,d){
 
         PIs <- PI(S=dec_S,base=b_Sj,x_S=subx[t,],lenX=lenX,d=d) #receives b_Sj
 #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
-        dTVs <- dTV(S=dec_S,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[t,]) #receives b_Sja
+        dTVs <- dTV_sample(S=dec_S,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[t,]) #receives b_Sja
 #(dTv_xS[p(.|a_j),p(.|b_j)],dTv_xS[p(.|a_j),p(.|c_j)]...)
 
         for (y in 1:nrowA_pairs) {#runs in pairs (b,c) such that b\in A, c\in A and b\neq c

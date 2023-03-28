@@ -2,9 +2,9 @@
 % Please edit documentation in R/base_Sja.R
 \name{base_Sja}
 \alias{base_Sja}
-\title{Makes a table with certain sequencies in sample and their frequencies.}
+\title{Makes a table with certain sequences in sample and their frequencies.}
 \usage{
-base_Sja(S, j = NULL, A, base)
+base_Sja(S, j = NULL, A, base, complete = TRUE)
 }
 \arguments{
 \item{S}{A set of lags in \eqn{1:d}.}
@@ -13,11 +13,14 @@ base_Sja(S, j = NULL, A, base)
 
 \item{A}{The states space.}
 
-\item{base}{A table with sequencies of size d+1 in sample and their absolute frequency.}
+\item{base}{A table with sequences of size d+1 in sample and their absolute frequency.}
+
+\item{complete}{logical, if TRUE and there are sequences that didn't appear in the sample,
+the base will be completed with such sequences appearing 0 times.}
 }
 \value{
-A table with sequencies x indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
+A table with sequences x indexed by \eqn{S\cup j} followed by any element a, their frequencies and the MLE estimator of the transition probabilities.
 }
 \description{
-Makes a table with certain sequencies in sample and their frequencies.
+Makes a table with certain sequences in sample and their frequencies.
 }
