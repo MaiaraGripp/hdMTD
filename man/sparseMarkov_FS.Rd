@@ -4,16 +4,16 @@
 \alias{sparseMarkov_FS}
 \title{Applies Forward Stepwise algorithm}
 \usage{
-sparseMarkov_FS(X, l, A, d)
+sparseMarkov_FS(X, A, d, l)
 }
 \arguments{
 \item{X}{A mixture transition distribution chain sample.}
 
-\item{l}{Stop point for FS algorithm.}
-
 \item{A}{The States space.}
 
 \item{d}{The chains order.}
+
+\item{l}{Stop point for FS algorithm.}
 }
 \value{
 Returns a set S of size l that contains relevant lags.

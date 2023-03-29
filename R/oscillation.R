@@ -11,6 +11,6 @@ checkMTD(MTD)
 lenA <- length(MTD$A) #number of rows/cols in each p_j
 rows <- t(combn(lenA,2))
 x <- MTD$lambdas[-1]*sapply(MTD$p_j,dTV_pj,rows)
-names(x) <- paste0("-",Lambda)
+names(x) <- paste0("-",MTD$Lambda)
 x
 }

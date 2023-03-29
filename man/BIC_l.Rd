@@ -4,10 +4,12 @@
 \alias{BIC_l}
 \title{Bayesian Information Criterion \code{(BIC)} of a Markov Chain.}
 \usage{
-BIC_l(X, d, l, c = 1/2)
+BIC_l(X, A, d, l, c = 1/2)
 }
 \arguments{
 \item{X}{Markov chain.}
+
+\item{A}{The state space.}
 
 \item{d}{A upper threshold for the chains order.}
 

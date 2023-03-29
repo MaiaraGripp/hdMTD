@@ -4,10 +4,12 @@
 \alias{sparseMarkov_BIC}
 \title{Estimates a relevant lag set Lambda with BIC}
 \usage{
-sparseMarkov_BIC(X, d, l, c = 1/2)
+sparseMarkov_BIC(X, A, d, l, c = 1/2)
 }
 \arguments{
 \item{X}{A Markov chain.}
+
+\item{A}{The state space.}
 
 \item{d}{A upper threshold for the chains order.}
 

@@ -8,7 +8,7 @@
 #' @return Returns a set S of size l that contains relevant lags.
 #' @export
 #'
-sparseMarkov_FS <- function(X,l,A,d){
+sparseMarkov_FS <- function(X,A,d,l){
   # Cheking l
 
 

@@ -15,7 +15,7 @@ checkMTD <- function(MTD){
 
   #sorting parameters
   if(all(sort(MTD$Lambda)!=MTD$Lambda))stop("Lambda set must be ordered from smallest to greater, be carefull with matching order of weights.")
-  Lambda <- sort(Lambda)
+  Lambda <- sort(MTD$Lambda)
   if(all(sort(MTD$A)!=MTD$A))stop("Stace space A must be ordered from smallest to greater.")
   MTD$A <- sort(MTD$A)
 

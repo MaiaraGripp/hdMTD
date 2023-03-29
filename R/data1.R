@@ -6,10 +6,10 @@
 #' Each chain was perfectly sampled from the same MTD model created as follows:
 #' set.seed(1)
 #'
-#' p_j <- list("p_-1"=matrix(c(0.1,0.1,0.8,0.4,0.4,0.2,0.5,0.3,0.2),byrow = T,ncol = 3),"p_-30"=matrix(c(0.05,0.2,0.75,0.4,0.4,0.2,0.3,0.3,0.4),byrow = T,ncol = 3))
+#' p_j = list("p_-2"=matrix(c(0.73449134, 0.2655087,0.04906214, 0.9509379), byrow=T,ncol=2),"p_-3"=matrix(c(0.6278761,0.3721239,0.3415812,0.6584188), byrow=T,ncol=2),"p_-9"=matrix(c(0.4271466,0.5728534,0.6650324, 0.3349676), byrow=T,ncol=2))
 #'
-#' MTDseed1 <- MTDmodel(Lambda=c(1,30),A=c(1,2,3),w0=0.05,
-#' w_j = c(0.35,0.6),p_j=p_j)
+#' MTDseed1 <- MTDmodel(Lambda=c(2,3,9),A=c(0,1),w0=0.05,
+#'  w_j = c(0.25,0.3,0.4),p_j=p_j).
 #'
 #'testChainCol1 <- perfectSample(MTDseed1,3000)
 #'
@@ -28,5 +28,5 @@
 #' @source {Created in-house to serve as example.}
 #'
 #' @examples
-#' data(testChain2)
-"testChain2"
+#' data(testChain1)
+"testChain1"
