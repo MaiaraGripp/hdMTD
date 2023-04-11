@@ -2,22 +2,24 @@
 % Please edit documentation in R/sparseMarkov_FS.R
 \name{sparseMarkov_FS}
 \alias{sparseMarkov_FS}
-\title{Applies Forward Stepwise algorithm}
+\title{Estimation for MTD model-}
 \usage{
-sparseMarkov_FS(X, A, d, l)
+sparseMarkov_FS(X, A, d, l, warning = FALSE)
 }
 \arguments{
-\item{X}{A mixture transition distribution chain sample.}
+\item{X}{A mixture transition distribution (MTD) chain sample.}
 
 \item{A}{The States space.}
 
 \item{d}{The chains order.}
 
 \item{l}{Stop point for FS algorithm.}
+
+\item{warning}{If True may return warnings}
 }
 \value{
-Returns a set S of size l that contains relevant lags.
+Returns a estimated S set of relevant lags with size l .
 }
 \description{
-Applies Forward Stepwise algorithm
+Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD Chains.
 }

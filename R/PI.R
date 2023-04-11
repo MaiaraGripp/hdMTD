@@ -13,7 +13,7 @@
 #'
 PI <- function(S,base,x_S,lenX,d){
   if (is.numeric(S)) {
-    S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
+   #S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
     filtr_S <- paste0("x",S)
     B <- base
     B$test <- apply( B %>% dplyr::select_at(filtr_S),1,is_xS,x_S) #true forall B$x_S == x_S

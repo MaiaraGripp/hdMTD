@@ -1,18 +1,38 @@
-#' A function for inference in sparse Markov chains
+#' A function for inference in MTD Markov chains
 #'
-#' @param X A markov chain sample.
+#' This function returns an estimation of the relevant lag set \eqn{\Lambda}
+#' of a MTD model. The method for this estimation must be set in the `method` parameter which is defaulted to "FSC".
+#' See [Ost and Takahashi](https://arxiv.org/abs/2202.08007).
+#'
+#' @param X A MTD Markov chain sample.
+#' @param A The states space.
 #' @param d The order or an upper bound for the order.
-#' @param method A method for estimation. The default method is the Forward Stepwise and Cut ("FSC"="FS"+"CUT"). Alternatively, the methods "FS" and "CUT" can be used separately.
+#' @param method One of the following methods for estimation:
+#'   ## "FSC":
+#'      The default method "Forward Stepwise and Cut". See [Ost and Takahashi](https://arxiv.org/abs/2202.08007).
+#'
+#'   ## "FS":
+#'      Applies only the first part of the "FSC" method, i.e. the "Forward Stepwise" part.
+#'
+#'   ## "CUT":
+#'      Applies only the second part of the "FSC" method, i.e. the "CUT" part.
+#'
+#'   ## "BIC":
+#'      A method that selects a relevant lag set using Bayesian Information Criterion
+#'
+#'
 #' @param l A stop point for the "FS" and "BIC" methods.
 #' @param alpha "CUT" parameter. Defaulted to 0.05.
 #' @param mu "CUT" parameter. Defaulted to 1.
 #' @param xi "CUT" parameter if method="FSC" or "CUT". BIC constant if method="BIC".Defaulted to 0.5.
+#' @param warning If TRUE may return warnings.
 #'
-#' @return The set of relevant lags.
+#' @return The estimated set of relevant lags.
 #' @export
 #'
-sparseMarkov <- function(X,d,method="FSC",l=NULL, alpha=0.05, mu=1, xi=0.5){
-  #l <- list(...)
+sparseMarkov <- function(X,A=NULL,d,method="FSC",l=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
+
+  #check methods
   if(method!="CUT" & length(l)==0)stop("Parameter l can't be NULL for the choosen method.")
   if(method!="CUT"){
     if(!is.numeric(l) ||
@@ -20,11 +40,6 @@ sparseMarkov <- function(X,d,method="FSC",l=NULL, alpha=0.05, mu=1, xi=0.5){
        l%%1!=0 ||
        l<=0 ||
        l>=d )stop("l must be a integer number greater than 0 and equal to or lower than d.")
-  }
-  # Checking restrictions
-  checkSample(X)
-  if( !is.numeric(d) | d<2 | (d %% 1)!=0 ){
-    stop("The order d must be an integer number greater than 2.")
   }
   method_list <- c("FSC","FS","CUT","BIC")
   if( !(toupper(method) %in% method_list) ) {
@@ -34,16 +49,8 @@ sparseMarkov <- function(X,d,method="FSC",l=NULL, alpha=0.05, mu=1, xi=0.5){
     }
   #\.
   # Gathering inputs from sample
-  A <- sort(unique(X))
-  lenA <- length(A)
   lenX <- length(X)
-
-  #A_pairs <- t(combn(A,2))
-  #nrowA_pairs <- nrow(A_pairs)
-
   #\.
-
-
   if ( method == "FSC" ) {
     # Checing restrictions for FSC
     if ( lenX <= 2*(d+1)) {
@@ -57,19 +64,19 @@ sparseMarkov <- function(X,d,method="FSC",l=NULL, alpha=0.05, mu=1, xi=0.5){
     Xn <- X[(m+1):lenX]
     n <- length(Xn)
 
-    S <- sparseMarkov_FS(Xm,l=l,A=A,d=d)
+    S <- sparseMarkov_FS(Xm,l=l,A=A,d=d,warning=warning)
     S <- sparseMarkov_CUT(Xn, A=A, d=d, alpha=alpha, mu=mu, xi=xi, S=S)
   }
   if ( method == "FS" ) {
-    S <- sparseMarkov_FS(X=X,l=l,A=A,d=d)
+    S <- sparseMarkov_FS(X=X,l=l,A=A,d=d,warning=warning)
   }
   if ( method == "CUT" ) {
     S <- sparseMarkov_CUT(X=X, A=A, d=d, alpha=alpha, mu=mu, xi=xi)
   }
   if (method == "BIC" ){
-    S <- sparseMarkov_BIC(X=X,d=d,l=l,c=xi)
+    S <- sparseMarkov_BIC(X=X,A=A,d=d,l=l,xi=xi)[l]
+    S <- as.numeric(unlist(strsplit(S, ",")))
   }
   return(S)
 }
-
 

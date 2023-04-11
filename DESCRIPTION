@@ -4,7 +4,7 @@ Title: Inference in sparse Mixture Transition Distribution (MTD) Markov Chains
 Version: 0.1.0
 Author: Maiara Gripp
 Maintainer: Maiara Gripp <maiaragripp@gmail.com>
-Description: Estimates the set os relevant lags from a MTD Markov Chain sample. Can also perfectly simulate a MTD Markov Chain with integer numeric state spaces.
+Description: Estimates the set os relevant lags from a MTD Markov Chain sample. Can also perfectly simulate a MTD Markov Chain.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

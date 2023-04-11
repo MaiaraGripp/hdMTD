@@ -4,7 +4,7 @@
 \alias{perfectSample}
 \title{Perfect Sample.}
 \usage{
-perfectSample(MTD, N)
+perfectSample(MTD, N = NULL)
 }
 \arguments{
 \item{MTD}{a canonical MTD object.}

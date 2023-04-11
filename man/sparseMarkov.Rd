@@ -2,16 +2,51 @@
 % Please edit documentation in R/sparseMarkov.R
 \name{sparseMarkov}
 \alias{sparseMarkov}
-\title{A function for inference in sparse Markov chains}
+\title{A function for inference in MTD Markov chains}
 \usage{
-sparseMarkov(X, d, method = "FSC", l = NULL, alpha = 0.05, mu = 1, xi = 0.5)
+sparseMarkov(
+  X,
+  A = NULL,
+  d,
+  method = "FSC",
+  l = NULL,
+  alpha = 0.05,
+  mu = 1,
+  xi = 0.5,
+  warning = FALSE
+)
 }
 \arguments{
-\item{X}{A markov chain sample.}
+\item{X}{A MTD Markov chain sample.}
+
+\item{A}{The states space.}
 
 \item{d}{The order or an upper bound for the order.}
 
-\item{method}{A method for estimation. The default method is the Forward Stepwise and Cut ("FSC"="FS"+"CUT"). Alternatively, the methods "FS" and "CUT" can be used separately.}
+\item{method}{One of the following methods for estimation:
+\subsection{"FSC":}{
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ The default method "Forward Stepwise and Cut". See [Ost and Takahashi](https://arxiv.org/abs/2202.08007).
+}\if{html}{\out{</div>}}
+}
+
+\subsection{"FS":}{
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ Applies only the first part of the "FSC" method, i.e. the "Forward Stepwise" part.
+}\if{html}{\out{</div>}}
+}
+
+\subsection{"CUT":}{
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ Applies only the second part of the "FSC" method, i.e. the "CUT" part.
+}\if{html}{\out{</div>}}
+}
+
+\subsection{"BIC":}{
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ A method that selects a relevant lag set using Bayesian Information Criterion
+}\if{html}{\out{</div>}}
+}}
 
 \item{l}{A stop point for the "FS" and "BIC" methods.}
 
@@ -20,10 +55,14 @@ sparseMarkov(X, d, method = "FSC", l = NULL, alpha = 0.05, mu = 1, xi = 0.5)
 \item{mu}{"CUT" parameter. Defaulted to 1.}
 
 \item{xi}{"CUT" parameter if method="FSC" or "CUT". BIC constant if method="BIC".Defaulted to 0.5.}
+
+\item{warning}{If TRUE may return warnings.}
 }
 \value{
-The set of relevant lags.
+The estimated set of relevant lags.
 }
 \description{
-A function for inference in sparse Markov chains
+This function returns an estimation of the relevant lag set \eqn{\Lambda}
+of a MTD model. The method for this estimation must be set in the \code{method} parameter which is defaulted to "FSC".
+See \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}.
 }

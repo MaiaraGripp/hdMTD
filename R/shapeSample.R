@@ -15,9 +15,6 @@
 #' @examples
 #' shapeSample(c(1,2,2,1,2,1,1,2,1,2),3)
 #' shapeSample(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
-#'
-#'
-#'
 shapeSample <-function(X,d){
   # Checking restrictions
   X <- unlist(X)
@@ -38,7 +35,7 @@ shapeSample <-function(X,d){
 
   # Adding counts do XTab:
   ##  Column Nxa: how many times each sequence appeared in X.
-  count=NULL #solve problem with global binding in check()
+  count <- NULL #solve problem with global binding in check()
   XTab <- dplyr::as_tibble(cbind(XTab,count=1))
   XTab <- XTab %>%
             dplyr::mutate(count = as.numeric(count))

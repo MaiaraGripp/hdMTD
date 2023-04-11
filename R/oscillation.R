@@ -1,10 +1,15 @@
-#' Calculates the oscillation of a MTD model
+#' Oscillations of a MTD model
+#'
+#' Calculates the oscillations of a MTD model
+#'
 #'
 #' @param MTD an MTD object.
 #'
-#' @return Returns the oscillations of a MTD object, that is, for each
-#' relevant lag j, returns lambda_j times the maximum of the total variation
-#'  distance between the distributions in matrix p_j.
+#' @details The oscillations of a MTD model
+#' (\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j} times the maximum of the total variation distances between the distributions in the matrix p_j.
+#' These values are important because they measure how much a relevant lag j influences the model.
+#'
+#' @return Returns the oscillations for each relevant lag of a MTD object.
 #' @export
 oscillation <- function(MTD){
 checkMTD(MTD)

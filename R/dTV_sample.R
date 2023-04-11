@@ -8,14 +8,14 @@
 #' @param x_S A specific sequence indexed by S.
 #'
 #' @return Returns a vector with the total variation distance between estimated distributions
-#' given a x_S
+#' given a x_S (i.e. a past indexed by S).
 #' @importFrom dplyr %>%
 #'
 dTV_sample <- function(S,j,lenA,base,A_pairs,x_S){
 
   nrowA_pairs <- nrow(A_pairs)
   if ( is.numeric(S) ) {
-    S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
+   # S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
     filtr_S <- paste0("x",S)
     B <- base
     B$test <- apply(B %>% dplyr::select_at(filtr_S),1,is_xS,x_S)
@@ -36,3 +36,7 @@ dTV_sample <- function(S,j,lenA,base,A_pairs,x_S){
   disTV #vector size nrowA_pairs
 }
 #details (dTv_xS p(.|a_j),p(.|b_j),dTv_xS p(.|a_j),p(.|c_j) ...)
+
+is_xS <- function(x,y) {
+  return( all( x == y ) ) #I used return() so R would let me use Roxygen
+}

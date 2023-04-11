@@ -21,7 +21,7 @@ dTV_sample(S, j, lenA, base, A_pairs, x_S)
 }
 \value{
 Returns a vector with the total variation distance between estimated distributions
-given a x_S
+given a x_S (i.e. a past indexed by S).
 }
 \description{
 Total variation distance between distributions given x_S

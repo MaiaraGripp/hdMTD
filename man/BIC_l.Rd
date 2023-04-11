@@ -2,24 +2,26 @@
 % Please edit documentation in R/BIC_l.R
 \name{BIC_l}
 \alias{BIC_l}
-\title{Bayesian Information Criterion \code{(BIC)} of a Markov Chain.}
+\title{Bayesian Information Criterion (BIC) of a MTD Markov Chain.}
 \usage{
-BIC_l(X, A, d, l, c = 1/2)
+BIC_l(X, A, S, l, xi = 1/2)
 }
 \arguments{
 \item{X}{Markov chain.}
 
-\item{A}{The state space.}
+\item{A}{The states space.}
 
-\item{d}{A upper threshold for the chains order.}
+\item{S}{A set that includes all relevant lags. If only the upper bound d for the chains order in known set S=1:d.}
 
-\item{l}{A upper threshold for the number of elements in the relevant lag set.}
+\item{l}{A upper threshold for the number of elements in the relevant lag sets.}
 
-\item{c}{The BIC constant. Defaulted to 1/2. Smaller c \verb{(near 0)} reduces the impact of overparameterization.}
+\item{xi}{The BIC constant. Defaulted to 1/2. Smaller xi (near 0) reduces the impact of overparameterization.}
 }
 \value{
 The BIC of a Markov Chain for each possible set of lags with size 1,2...,l.
 }
 \description{
-Bayesian Information Criterion \code{(BIC)} of a Markov Chain.
+Calculates the log maximum likelihood for each possible set of lags (with elements from \eqn{1 to d})
+of sizes \eqn{1,2, \dots, l} and penalizes by the number of parameters.
+\deqn{ -log ML + n_parameters x N x c }. See function \code{\link[=n_parameters]{n_parameters()}}.
 }

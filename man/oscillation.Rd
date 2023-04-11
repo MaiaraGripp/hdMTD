@@ -2,7 +2,7 @@
 % Please edit documentation in R/oscillation.R
 \name{oscillation}
 \alias{oscillation}
-\title{Calculates the oscillation of a MTD model}
+\title{Oscillations of a MTD model}
 \usage{
 oscillation(MTD)
 }
@@ -10,10 +10,13 @@ oscillation(MTD)
 \item{MTD}{an MTD object.}
 }
 \value{
-Returns the oscillations of a MTD object, that is, for each
-relevant lag j, returns lambda_j times the maximum of the total variation
-distance between the distributions in matrix p_j.
+Returns the oscillations for each relevant lag of a MTD object.
 }
 \description{
-Calculates the oscillation of a MTD model
+Calculates the oscillations of a MTD model
+}
+\details{
+The oscillations of a MTD model
+(\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j} times the maximum of the total variation distances between the distributions in the matrix p_j.
+These values are important because they measure how much a relevant lag j influences the model.
 }

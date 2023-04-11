@@ -8,7 +8,13 @@
 #' @return Returns a sample from o MTD model.
 #'
 #' @export perfectSample
-perfectSample <- function(MTD,N){
+perfectSample <- function(MTD,N=NULL){
+
+  UseMethod("perfectSample")
+}
+
+#' @export
+perfectSample.MTD <- function(MTD,N=NULL){
   if(length(N)==0){
     warning("Sample size N not informed. N will be set to 1000.")
     N <- 1000
@@ -19,11 +25,6 @@ perfectSample <- function(MTD,N){
       length(N)!=1 ||
       N%%1!=0 )stop("Sample size N needs a integer number greater than max(Lambda)")
 
-  UseMethod("perfectSample")
-}
-
-#' @export
-perfectSample.MTD <- function(MTD,N=NULL){
   a_k <- cumsum(MTD$lambdas)
   acum_p0 <- cumsum(MTD$p0)
   chain <- NULL
