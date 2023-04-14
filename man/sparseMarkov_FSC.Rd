@@ -2,7 +2,7 @@
 % Please edit documentation in R/sparseMarkov_FSC.R
 \name{sparseMarkov_FSC}
 \alias{sparseMarkov_FSC}
-\title{A function for inference in MTD Markov chains}
+\title{A function for inference in MTD Markov chains with FSC method.}
 \usage{
 sparseMarkov_FSC(
   X,
@@ -18,9 +18,9 @@ sparseMarkov_FSC(
 \arguments{
 \item{X}{A MTD Markov chain sample.}
 
-\item{A}{The states space.}
+\item{A}{The States space.}
 
-\item{d}{The chains order.}
+\item{d}{An upper threshold for the chains order.}
 
 \item{l}{Stop point for FS algorithm.}
 

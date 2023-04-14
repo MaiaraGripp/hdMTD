@@ -2,16 +2,25 @@
 % Please edit documentation in R/sparseMarkov_CUT.R
 \name{sparseMarkov_CUT}
 \alias{sparseMarkov_CUT}
-\title{Estimation for MTD model}
+\title{A function for inference in MTD Markov chains with CUT method.}
 \usage{
-sparseMarkov_CUT(X, A, d, S = 1:d, alpha = 0.05, mu = 1, xi = 0.5)
+sparseMarkov_CUT(
+  X,
+  A,
+  d,
+  S = 1:d,
+  alpha = 0.05,
+  mu = 1,
+  xi = 0.5,
+  warning = FALSE
+)
 }
 \arguments{
 \item{X}{A mixture transition distribution (MTD) chain sample.}
 
 \item{A}{The states space.}
 
-\item{d}{The chains order.}
+\item{d}{An upper threshold for the chains order..}
 
 \item{S}{A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.}
 
@@ -20,10 +29,19 @@ sparseMarkov_CUT(X, A, d, S = 1:d, alpha = 0.05, mu = 1, xi = 0.5)
 \item{mu}{A parameter of CUT.}
 
 \item{xi}{A parameter of CUT.}
+
+\item{warning}{If TRUE may return warnings.}
 }
 \value{
 Returns a estimated set of relevant lags.
 }
 \description{
-Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda}.
+Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+}
+\details{
+The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
+Mixture Transition Ditribution (MTD) models.
+It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+This method was developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and is specially useful for High order MTD Markov chains.
+This function will apply only the CUT step of the algorithm.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sparseMarkov_FS.R
 \name{sparseMarkov_FS}
 \alias{sparseMarkov_FS}
-\title{Estimation for MTD model-}
+\title{A function for inference in MTD Markov chains with FS method.}
 \usage{
 sparseMarkov_FS(X, A, d, l, warning = FALSE)
 }
@@ -11,7 +11,7 @@ sparseMarkov_FS(X, A, d, l, warning = FALSE)
 
 \item{A}{The States space.}
 
-\item{d}{The chains order.}
+\item{d}{An upper threshold for the chains order.}
 
 \item{l}{Stop point for FS algorithm.}
 
@@ -21,5 +21,12 @@ sparseMarkov_FS(X, A, d, l, warning = FALSE)
 Returns a estimated S set of relevant lags with size l .
 }
 \description{
-Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD Chains.
+Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD models.
+}
+\details{
+The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
+Mixture Transition Ditribution (MTD) models.
+It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+This method was developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and is specially useful for High order MTD Markov chains.
+This function will apply only the FS step of the algorithm.
 }

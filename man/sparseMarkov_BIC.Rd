@@ -2,14 +2,14 @@
 % Please edit documentation in R/sparseMarkov_BIC.R
 \name{sparseMarkov_BIC}
 \alias{sparseMarkov_BIC}
-\title{Estimation by BIC for MTD model}
+\title{A function for inference in MTD Markov chains with BIC.}
 \usage{
 sparseMarkov_BIC(X, A = NULL, d, S = 1:d, l, xi = 1/2, warning = FALSE)
 }
 \arguments{
 \item{X}{A Markov chain.}
 
-\item{A}{The state space.}
+\item{A}{The states space.}
 
 \item{d}{An upper threshold for the chains order.}
 
@@ -17,7 +17,7 @@ sparseMarkov_BIC(X, A = NULL, d, S = 1:d, l, xi = 1/2, warning = FALSE)
 
 \item{l}{An upper bound for the number of elements to be returned in the estimated relevant lag set.}
 
-\item{xi}{The BIC constant. Defaulted to 1/2. Smaller c \verb{(near 0)} reduces the impact of overparameterization.}
+\item{xi}{The BIC constant. Defaulted to 1/2. Smaller xi \verb{(near 0)} reduces the impact of overparameterization.}
 
 \item{warning}{If TRUE may return warnings.}
 }
@@ -25,8 +25,8 @@ sparseMarkov_BIC(X, A = NULL, d, S = 1:d, l, xi = 1/2, warning = FALSE)
 Returns an estimation, using BIC, of the relevant lag set with size \eqn{1,2, \dots l} and the relevant lag set with smallest BIC independent of size.
 }
 \description{
-Estimates a relevant lag set \eqn{\Lambda} with BIC
+Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
 }
 \details{
-Presents the sets with smallest BIC of the BIC_l function. See function \link{BIC_l}.
+See function \link{BIC_l}.
 }
