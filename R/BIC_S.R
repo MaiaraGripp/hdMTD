@@ -22,6 +22,7 @@
 #' which supposes S is the relevant lag set. The last entry shows which of the previous
 #' entries has the smallest BIC.
 #' @export
+#'
 BIC_S <- function(X,A,S=1:d,xi=1/2){
   A <- sort(A)
   lenS <- length(S)
