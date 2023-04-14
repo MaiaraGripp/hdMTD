@@ -1,16 +1,16 @@
-#' Estimation by BIC for MTD model
+#' A function for inference in MTD Markov chains with BIC.
 #'
-#' Estimates a relevant lag set \eqn{\Lambda} with BIC
+#' Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
 #'
 #' @param X A Markov chain.
-#' @param A The state space.
+#' @param A The states space.
 #' @param d An upper threshold for the chains order.
 #' @param S A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.
 #' @param l An upper bound for the number of elements to be returned in the estimated relevant lag set.
-#' @param xi The BIC constant. Defaulted to 1/2. Smaller c `(near 0)` reduces the impact of overparameterization.
+#' @param xi The BIC constant. Defaulted to 1/2. Smaller xi `(near 0)` reduces the impact of overparameterization.
 #' @param warning If TRUE may return warnings.
 #'
-#' @details Presents the sets with smallest BIC of the BIC_l function. See function [sparseMarkov::BIC_l].
+#' @details See function [sparseMarkov::BIC_l].
 #'
 #' @return Returns an estimation, using BIC, of the relevant lag set with size \eqn{1,2, \dots l} and the relevant lag set with smallest BIC independent of size.
 #' @export

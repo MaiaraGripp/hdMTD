@@ -1,14 +1,20 @@
-#' Estimation for MTD model-
+#' A function for inference in MTD Markov chains with FS method.
 #'
-#' Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD Chains.
+#' Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD models.
 #'
 #' @param X A mixture transition distribution (MTD) chain sample.
-#' @param l Stop point for FS algorithm.
 #' @param A The States space.
-#' @param d The chains order.
+#' @param d An upper threshold for the chains order.
+#' @param l Stop point for FS algorithm.
 #' @param warning If True may return warnings
 #'
 #' @importFrom utils combn
+#'
+#' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
+#' Mixture Transition Ditribution (MTD) models.
+#' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for High order MTD Markov chains.
+#' This function will apply only the FS step of the algorithm.
 #'
 #' @return Returns a estimated S set of relevant lags with size l .
 #' @export

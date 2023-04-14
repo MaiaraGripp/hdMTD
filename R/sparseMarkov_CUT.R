@@ -1,20 +1,27 @@
-#' Estimation for MTD model
+#' A function for inference in MTD Markov chains with CUT method.
 #'
-#' Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda}.
+#' Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
 #'
 #' @param X A mixture transition distribution (MTD) chain sample.
 #' @param A The states space.
-#' @param d The chains order.
+#' @param d An upper threshold for the chains order..
 #' @param S A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.
 #' @param alpha A parameter of CUT.
 #' @param mu A parameter of CUT.
 #' @param xi A parameter of CUT.
+#' @param warning If TRUE may return warnings.
 #'
+#'
+#' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
+#' Mixture Transition Ditribution (MTD) models.
+#' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for High order MTD Markov chains.
+#' This function will apply only the CUT step of the algorithm.
 #'
 #' @return Returns a estimated set of relevant lags.
 #' @export
 #'
-sparseMarkov_CUT <- function(X, A, d, S=1:d, alpha=0.05, mu=1, xi=0.5){
+sparseMarkov_CUT <- function(X, A, d, S=1:d, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
 
   #Checking inputs
   if(length(S) < 2  ||
