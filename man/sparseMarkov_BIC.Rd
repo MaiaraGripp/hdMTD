@@ -4,29 +4,50 @@
 \alias{sparseMarkov_BIC}
 \title{A function for inference in MTD Markov chains with BIC.}
 \usage{
-sparseMarkov_BIC(X, A = NULL, d, S = 1:d, l, xi = 1/2, warning = FALSE)
+sparseMarkov_BIC(
+  X,
+  A = NULL,
+  S,
+  l,
+  xi = 1/2,
+  nested = FALSE,
+  smallestBIC = FALSE,
+  lset = FALSE,
+  warning = FALSE
+)
 }
 \arguments{
 \item{X}{A Markov chain.}
 
 \item{A}{The states space.}
 
-\item{d}{An upper threshold for the chains order.}
-
-\item{S}{A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.}
+\item{S}{A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known set \eqn{S=1:d}. .}
 
 \item{l}{An upper bound for the number of elements to be returned in the estimated relevant lag set.}
 
 \item{xi}{The BIC constant. Defaulted to 1/2. Smaller xi \verb{(near 0)} reduces the impact of overparameterization.}
 
+\item{nested}{If TRUE will interpret that the elements in S are sorted from most relevant to least relevant and will calculate BIC supposing \eqn{\Lambda=S[1]}, then \eqn{\Lambda=S[1:2], \dots, \Lambda=S[1:l]}.}
+
+\item{smallestBIC}{If TRUE will return only the set with smallest BIC between all possible relevant lag sets with elements of S and sizes from 1 til l.
+if \eqn{nested=TRUE} will suppose the elements of S are sorted from most relevant to least relevant and will return only the smallest BIc between the models supposing
+\eqn{\Lambda=S[1]}, \eqn{\Lambda=S[1:2], \dots \Lambda=S[1:l]}.}
+
+\item{lset}{If TRUE will return only the smallest BIC between the models with l elements of S. If \eqn{nested=TRUE} will return only the BIC of the model with \eqn{\Lambda=S[1:l]}.}
+
 \item{warning}{If TRUE may return warnings.}
 }
 \value{
-Returns an estimation, using BIC, of the relevant lag set with size \eqn{1,2, \dots l} and the relevant lag set with smallest BIC independent of size.
+Returns estimations, using BIC, of the relevant lag set of size \eqn{1,2, \dots l}.
+For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{l=3}. This function
+will run from \eqn{l=1 to l=3} and calculate the BIC supposing the MTD model has \eqn{\Lambda=c(1)}, then will calculate the BIC for \eqn{\Lambda=c(2)}, ... \eqn{\Lambda=c(9)}.
+Then it will suppose \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ... , \eqn{\Lambda=c(5,9)}, and then \eqn{\Lambda=c(1,2,5)} til \eqn{\Lambda=c(2,5,9)}. After calculating all BIC will return the sets with smallest BIC by each l size.
+And finally the set with smallest BIC between all l sizes. If \eqn{nested=TRUE} the function will suppose the elements of S are sorted from most relevant to least, and will only
+calculate the relevant lags supposing \eqn{\Lambda=9}, then \eqn{\Lambda=c(9,5)}, \eqn{\Lambda=c(9,5,1)} stopping here since \eqn{l=3}.
 }
 \description{
 Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
 }
 \details{
-See function \link{BIC_l}.
+smallestBIC and lset can't both be TRUE at the same time.
 }
