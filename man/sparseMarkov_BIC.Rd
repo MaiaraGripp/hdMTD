@@ -8,7 +8,7 @@ sparseMarkov_BIC(
   X,
   A = NULL,
   S,
-  l,
+  l = max(S),
   xi = 1/2,
   nested = FALSE,
   smallestBIC = FALSE,

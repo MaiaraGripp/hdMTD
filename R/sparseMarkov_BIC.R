@@ -23,7 +23,7 @@
 #' And finally the set with smallest BIC between all l sizes. If \eqn{nested=TRUE} the function will suppose the elements of S are sorted from most relevant to least, and will only
 #' calculate the relevant lags supposing \eqn{\Lambda=9}, then \eqn{\Lambda=c(9,5)}, \eqn{\Lambda=c(9,5,1)} stopping here since \eqn{l=3}.
 #' @export
-sparseMarkov_BIC <- function(X,A=NULL,S,l,xi=1/2,nested=FALSE,
+sparseMarkov_BIC <- function(X,A=NULL,S,l=max(S),xi=1/2,nested=FALSE,
                              smallestBIC=FALSE,lset=FALSE, warning=FALSE){
   #Checking inputs
   checkSample(X)
