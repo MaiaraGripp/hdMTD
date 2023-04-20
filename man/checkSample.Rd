@@ -10,7 +10,7 @@ checkSample(X)
 \item{X}{A vector with a Markov Chain.}
 }
 \value{
-Returns possible sample errors.
+Returns adjusted sample and possible sample errors.
 }
 \description{
 Checks if a sample is suitable for use

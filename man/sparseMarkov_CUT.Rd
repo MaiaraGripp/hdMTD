@@ -6,7 +6,7 @@
 \usage{
 sparseMarkov_CUT(
   X,
-  A,
+  A = NULL,
   d,
   S = 1:d,
   alpha = 0.05,

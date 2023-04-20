@@ -22,7 +22,7 @@
 sparseMarkov_FSC <- function(X,A=NULL,d,l=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
   # Checking inputs
     # Sample
-  checkSample(X)
+  X <- checkSample(X)
     # A
   if(length(A)==0){
     if(warning==TRUE){

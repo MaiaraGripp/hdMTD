@@ -4,7 +4,7 @@
 \alias{sparseMarkov_FS}
 \title{A function for inference in MTD Markov chains with FS method.}
 \usage{
-sparseMarkov_FS(X, A, d, l, warning = FALSE)
+sparseMarkov_FS(X, A = NULL, d, l, warning = FALSE)
 }
 \arguments{
 \item{X}{A mixture transition distribution (MTD) chain sample.}

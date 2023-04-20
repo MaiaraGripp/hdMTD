@@ -21,7 +21,7 @@
 #' @return Returns a estimated set of relevant lags.
 #' @export
 #'
-sparseMarkov_CUT <- function(X, A, d, S=1:d, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
+sparseMarkov_CUT <- function(X, A=NULL, d, S=1:d, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
 
   #Checking inputs
   if(length(S) < 2  ||
@@ -30,7 +30,7 @@ sparseMarkov_CUT <- function(X, A, d, S=1:d, alpha=0.05, mu=1, xi=0.5, warning=F
   if( !is.numeric(d) || d<2 || (d %% 1)!=0 || d<max(S)){
     stop("The order d must be an integer number greater than 2 or the greatest element in S.")
   }
-  checkSample(X)
+  X <- checkSample(X)
   if(length(A)==0){
     if(warning==TRUE){
       warning("States space A not informed. Code will set A <- sort(unique(X)).")

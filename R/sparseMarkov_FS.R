@@ -19,14 +19,14 @@
 #' @return Returns a estimated S set of relevant lags with size l .
 #' @export
 #'
-sparseMarkov_FS <- function(X,A,d,l,warning=FALSE){
+sparseMarkov_FS <- function(X,A=NULL,d,l,warning=FALSE){
   # Cheking inputs
   while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d ) {
     cat("l value is not valid for FS step. l should be a positive integer lower or equal to d.")
     l <- readline(prompt = "Please enter a valid l : ")
     l <- suppressWarnings(as.numeric(l))
   }
-  checkSample(X)
+  X <- checkSample(X)
   if(length(A)==0){
     if(warning==TRUE){
       warning("States space A not informed. Code will set A <- sort(unique(X)).")

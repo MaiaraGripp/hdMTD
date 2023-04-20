@@ -26,7 +26,7 @@
 sparseMarkov_BIC <- function(X,A=NULL,S,l=max(S),xi=1/2,nested=FALSE,
                              smallestBIC=FALSE,lset=FALSE, warning=FALSE){
   #Checking inputs
-  checkSample(X)
+  X <- checkSample(X)
   if(length(A)==0){
     if(warning==TRUE){
       warning("States space A not informed. Code will set A <- sort(unique(X)).")

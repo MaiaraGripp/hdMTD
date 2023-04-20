@@ -2,8 +2,6 @@
 
 S3method(perfectSample,MTD)
 S3method(perfectSample,default)
-export(BIC_S)
-export(BIC_l)
 export(MTDmodel)
 export(base_Sja)
 export(oscillation)

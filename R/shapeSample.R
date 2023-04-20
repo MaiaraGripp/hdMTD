@@ -18,7 +18,7 @@
 shapeSample <-function(X,d){
   # Checking restrictions
   X <- unlist(X)
-  checkSample(X)
+  X <- checkSample(X)
   if (length(X)<d+1) { stop("The sample size must be greater than d+1.") }
   #\.
 
