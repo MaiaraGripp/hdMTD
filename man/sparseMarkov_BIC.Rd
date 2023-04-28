@@ -21,33 +21,53 @@ sparseMarkov_BIC(
 
 \item{A}{The states space.}
 
-\item{S}{A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known set \eqn{S=1:d}. .}
+\item{S}{A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known, set \eqn{S=1:d}. If S is a subset
+of the set 1:d, the order of the chain will be considered the greatest element of S.}
 
-\item{l}{An upper bound for the number of elements to be returned in the estimated relevant lag set.}
+\item{l}{If \eqn{lset=FALSE} l is an upper bound for the number of elements to be returned in the estimated relevant lag set.
+If \eqn{lset=TRUE} l will be the exact number number of elements to be returned in the estimated relevant lag set.
+l is a}
 
 \item{xi}{The BIC constant. Defaulted to 1/2. Smaller xi \verb{(near 0)} reduces the impact of overparameterization.}
 
-\item{nested}{If TRUE will interpret that the elements in S are sorted from most relevant to least relevant and will calculate BIC supposing \eqn{\Lambda=S[1]}, then \eqn{\Lambda=S[1:2], \dots, \Lambda=S[1:l]}.}
+\item{nested}{If TRUE the function will interpret that the elements in S are sorted from most relevant to least relevant and will calculate BIC supposing \eqn{\Lambda=S[1]}, then \eqn{\Lambda=S[1:2], \dots, \Lambda=S[1:l]}.}
 
 \item{smallestBIC}{If TRUE will return only the set with smallest BIC between all possible relevant lag sets with elements of S and sizes from 1 til l.
 if \eqn{nested=TRUE} will suppose the elements of S are sorted from most relevant to least relevant and will return only the smallest BIc between the models supposing
-\eqn{\Lambda=S[1]}, \eqn{\Lambda=S[1:2], \dots \Lambda=S[1:l]}.}
+\eqn{\Lambda=S[1]}, \eqn{\Lambda=S[1:2], \dots \Lambda=S[1:l]}. Can't be TRUE if \eqn{lset=TRUE}.}
 
-\item{lset}{If TRUE will return only the smallest BIC between the models with l elements of S. If \eqn{nested=TRUE} will return only the BIC of the model with \eqn{\Lambda=S[1:l]}.}
+\item{lset}{If TRUE will return the smallest BIC between the models with exactly l elements of S. If \eqn{nested=TRUE} will return only the BIC of the model with \eqn{\Lambda=S[1:l]}.
+Can't be TRUE if \eqn{smallestBIC=TRUE}}
 
 \item{warning}{If TRUE may return warnings.}
 }
 \value{
-Returns estimations, using BIC, of the relevant lag set of size \eqn{1,2, \dots l}.
+Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{1,2, \dots l}.
 For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{l=3}. This function
-will run from \eqn{l=1 to l=3} and calculate the BIC supposing the MTD model has \eqn{\Lambda=c(1)}, then will calculate the BIC for \eqn{\Lambda=c(2)}, ... \eqn{\Lambda=c(9)}.
-Then it will suppose \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ... , \eqn{\Lambda=c(5,9)}, and then \eqn{\Lambda=c(1,2,5)} til \eqn{\Lambda=c(2,5,9)}. After calculating all BIC will return the sets with smallest BIC by each l size.
-And finally the set with smallest BIC between all l sizes. If \eqn{nested=TRUE} the function will suppose the elements of S are sorted from most relevant to least, and will only
+will run from \eqn{l=1 to l=3} and calculate the BIC supposing the MTD model has \eqn{\Lambda=c(1)}, then will calculate the BIC for \eqn{\Lambda=c(2)}, then \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
+Then it will suppose \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ... , \eqn{\Lambda=c(5,9)}, and then \eqn{\Lambda=c(1,2,5)} til \eqn{\Lambda=c(2,5,9)}. After calculating all BIC for each model will return the
+sets with smallest BIC by each l size. And finally the set with smallest BIC between all l sizes. If \eqn{nested=TRUE} the function will suppose the elements of S are sorted from most relevant to least, and will only
 calculate the relevant lags supposing \eqn{\Lambda=9}, then \eqn{\Lambda=c(9,5)}, \eqn{\Lambda=c(9,5,1)} stopping here since \eqn{l=3}.
 }
 \description{
 Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
 }
 \details{
-smallestBIC and lset can't both be TRUE at the same time.
+smallestBIC and lset can't both be TRUE at the same time since, \eqn{lset=TRUE} looks for the smallest BIC between the all combinations of size l sets. While \eqn{smallestBIC=TRUE}
+looks for the smallest BIC between all combinations of sizes 1 to l sets.
+
+Note that the order of the chain matters at the counting of sequences step. If we run the function for \eqn{S=c(1,3,6)} the order d will be set to 6, while if we run for \eqn{S=c(1,3,5)}
+the order will be \eqn{d=5}. That will alter the count of sequences that appear in the sample and might alter BIC values for the estimated lag sets. Meaning that the same output of relevant lags
+(for example \eqn{1,3}) can have different BIC values if there was an initial order difference.
+}
+\examples{
+X <- perfectSample(MTDmodel(Lambda=c(1,3,6),A=c(0,1,2)),N=2000)
+sparseMarkov_BIC(X,S=1:7,l=4)
+sparseMarkov_BIC(X,S=1:7,l=4,xi=0.8)
+sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=3)
+sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,nested=TRUE)
+sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,lset=TRUE)
+sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,xi=0.75,smallestBIC=TRUE)
+sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=2,lset=TRUE, nested = TRUE)
+
 }

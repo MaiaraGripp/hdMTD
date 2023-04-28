@@ -25,4 +25,7 @@ PI <- function(S,base,x_S,lenX,d){
   colnames(inv) <- paste0(x_S,collapse = "")
   inv
 }
-##(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
+
+is_xS <- function(x,y) {
+  return( all( x == y ) ) #I used return() so R would let me use Roxygen
+}

@@ -43,8 +43,10 @@ Given a set of parameters generates an MTD model.
 }
 \examples{
 MTDmodel(Lambda=c(1,3),A=c(4,8,12))
+
 MTDmodel(Lambda=c(2,4,9),A=c(0,1),w0=0.05,w_j=c(0.35,0.2,0.4),
 p_j=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
+
 MTDmodel(Lambda=c(2,4,9),A=c(0,1),w0=0.05,
 p_j=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
 }

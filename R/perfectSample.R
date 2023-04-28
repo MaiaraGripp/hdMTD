@@ -84,15 +84,3 @@ perfectSample.MTD <- function(MTD,N=NULL){
 perfectSample.default <- function(MTD,N){
   print("The implemented perfect sample algorithm works only for MTD class objetcs.")
 }
-
-#export
-#print.tildeMTD_01 <- function(x){
- # y <- unlist(MTD$perfectSample)
- # print(y)
-#}
-
-#export
-#summary.tildeMTD_01 <- function(x){
- # list("P"=MTD$P,"lambdas"=MTD$lambdas,"p0"=MTD$p0,"Lambda"=MTD$Lambda,"A"=MTD$A,"signal"=MTD$signal,"perfectSample"=MTD$perfectSample)
-#}
-

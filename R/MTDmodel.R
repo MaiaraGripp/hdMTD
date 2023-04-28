@@ -19,8 +19,10 @@
 #'
 #' @examples
 #' MTDmodel(Lambda=c(1,3),A=c(4,8,12))
+#'
 #' MTDmodel(Lambda=c(2,4,9),A=c(0,1),w0=0.05,w_j=c(0.35,0.2,0.4),
 #' p_j=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
+#'
 #' MTDmodel(Lambda=c(2,4,9),A=c(0,1),w0=0.05,
 #' p_j=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
 MTDmodel <- function(Lambda,
@@ -42,7 +44,7 @@ MTDmodel <- function(Lambda,
      !is.vector(A))stop("A must be a numeric vector with nonnegative numbers.")
 
   #sorting parameters
-  if(all(sort(Lambda)!=Lambda))warning("Lambda set will be ordered from smallest to greater, be carefull with matching order of w_j.")
+  if(all(sort(Lambda)!=Lambda) & length(w_j)!=0 )warning("Lambda set will be ordered from smallest to greater, be carefull with matching order of w_j.")
   Lambda <- sort(Lambda)
   A <- sort(A)
 
@@ -180,4 +182,10 @@ MTDmodel <- function(Lambda,
               A=A)
   class(MTD) <- "MTD"
   MTD
+}
+
+#' @export
+print.MTD <- function(x, ...){
+  print(x[seq_along(x)])
+  return(invisible(x))
 }

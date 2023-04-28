@@ -13,7 +13,7 @@ oscillation(MTD)
 Returns the oscillations for each relevant lag of a MTD object.
 }
 \description{
-Calculates the oscillations of a MTD model
+Calculates the oscillations of a MTD model object.
 }
 \details{
 The oscillations of a MTD model
