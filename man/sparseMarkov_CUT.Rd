@@ -6,9 +6,9 @@
 \usage{
 sparseMarkov_CUT(
   X,
-  A = NULL,
   d,
   S = 1:d,
+  A = NULL,
   alpha = 0.05,
   mu = 1,
   xi = 0.5,
@@ -18,11 +18,11 @@ sparseMarkov_CUT(
 \arguments{
 \item{X}{A mixture transition distribution (MTD) chain sample.}
 
-\item{A}{The states space.}
-
 \item{d}{An upper threshold for the chains order..}
 
 \item{S}{A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.}
+
+\item{A}{The states space.}
 
 \item{alpha}{A parameter of CUT.}
 

@@ -3,9 +3,9 @@
 #' Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
 #'
 #' @param X A mixture transition distribution (MTD) chain sample.
-#' @param A The states space.
 #' @param d An upper threshold for the chains order..
 #' @param S A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.
+#' @param A The states space.
 #' @param alpha A parameter of CUT.
 #' @param mu A parameter of CUT.
 #' @param xi A parameter of CUT.
@@ -21,7 +21,7 @@
 #' @return Returns a estimated set of relevant lags.
 #' @export
 #'
-sparseMarkov_CUT <- function(X, A=NULL, d, S=1:d, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
+sparseMarkov_CUT <- function(X, d, S=1:d, A=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
 
   #Checking inputs
   if(length(S) < 2  ||

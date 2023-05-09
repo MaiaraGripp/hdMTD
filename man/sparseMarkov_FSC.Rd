@@ -6,9 +6,9 @@
 \usage{
 sparseMarkov_FSC(
   X,
-  A = NULL,
   d,
   l = NULL,
+  A = NULL,
   alpha = 0.05,
   mu = 1,
   xi = 0.5,
@@ -18,11 +18,11 @@ sparseMarkov_FSC(
 \arguments{
 \item{X}{A MTD Markov chain sample.}
 
-\item{A}{The States space.}
-
 \item{d}{An upper threshold for the chains order.}
 
 \item{l}{Stop point for FS algorithm.}
+
+\item{A}{The States space.}
 
 \item{alpha}{A parameter of CUT.}
 

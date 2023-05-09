@@ -44,7 +44,7 @@ MTDmodel <- function(Lambda,
      !is.vector(A))stop("A must be a numeric vector with nonnegative numbers.")
 
   #sorting parameters
-  if(all(sort(Lambda)!=Lambda) & length(w_j)!=0 )warning("Lambda set will be ordered from smallest to greater, be carefull with matching order of w_j.")
+  if( all(sort(Lambda)!=Lambda) & length(w_j)!=0 )warning("Lambda set will be ordered from smallest to greater, be carefull with matching order of w_j.")
   Lambda <- sort(Lambda)
   A <- sort(A)
 

@@ -4,9 +4,9 @@
 #' of a MTD model through the FSC algorithm.
 #'
 #' @param X A MTD Markov chain sample.
-#' @param A The States space.
 #' @param d An upper threshold for the chains order.
 #' @param l Stop point for FS algorithm.
+#' @param A The States space.
 #' @param alpha A parameter of CUT.
 #' @param mu A parameter of CUT.
 #' @param xi A parameter of CUT.
@@ -19,7 +19,7 @@
 #'
 #' @return Returns a estimated set of relevant lags.
 #' @export
-sparseMarkov_FSC <- function(X,A=NULL,d,l=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
+sparseMarkov_FSC <- function(X,d,l=NULL,A=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
   # Checking inputs
     # Sample
   X <- checkSample(X)
@@ -76,7 +76,7 @@ sparseMarkov_FSC <- function(X,A=NULL,d,l=NULL, alpha=0.05, mu=1, xi=0.5, warnin
   Xm <- X[1:m]
   Xn <- X[(m+1):lenX]
   n <- length(Xn)
-  S <- sparseMarkov_FS(Xm,A=A,d=d,l=l,warning=warning)
-  S <- sparseMarkov_CUT(Xn,A=A,d=d,S=S,alpha=alpha,mu=mu,xi=xi)
+  S <- sparseMarkov_FS(Xm,d=d,l=l,A=A,warning=warning)
+  S <- sparseMarkov_CUT(Xn,d=d,S=S,A=A,alpha=alpha,mu=mu,xi=xi)
   s
 }

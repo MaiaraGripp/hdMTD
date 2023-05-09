@@ -3,23 +3,30 @@
 #' Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD models.
 #'
 #' @param X A mixture transition distribution (MTD) chain sample.
-#' @param A The States space.
 #' @param d An upper threshold for the chains order.
 #' @param l Stop point for FS algorithm.
+#' @param A The States space.
+#' @param elbowTest If TRUE the function will choose the point where the \eqn{ max(\nu)} stops decreasing (that is, where the graph of the \eqn{ max(\nu)} changes its direction like an elbow).
+#' If l is smaller than this point the function will simply return a set with l elements, so setting elbowTest=TRUE only makes a difference if the elbow point happens in the first l-1 elements of \eqn{ max(\nu)}.
 #' @param warning If True may return warnings
 #'
 #' @importFrom utils combn
 #'
-#' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
-#' Mixture Transition Ditribution (MTD) models.
-#' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for High order MTD Markov chains.
-#' This function will apply only the FS step of the algorithm.
+#' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut" (FSC) algorithm for inference in
+#' Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and are specially useful for inference in High order MTD Markov chains.
+#' This specific function will apply only the FS step of the algorithm and return an estimated relevant lag set of size l.
 #'
 #' @return Returns a estimated S set of relevant lags with size l .
 #' @export
+#' @examples
+#' X <- perfectSample(MTDmodel(Lambda=c(2,7),A=c(0,1),w0=0.05),2000)
+#'sparseMarkov_FS(X,A=c(0,1),d=10,l=5)
+#'sparseMarkov_FS(X,d=10,l=5)
+#'sparseMarkov_FS(X,d=10,l=5,elbowTest = TRUE)
+#'sparseMarkov_FS(X,d=10,l=10,elbowTest = TRUE)
 #'
-sparseMarkov_FS <- function(X,A=NULL,d,l,warning=FALSE){
+sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
   # Cheking inputs
   while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d ) {
     cat("l value is not valid for FS step. l should be a positive integer lower or equal to d.")
@@ -55,6 +62,7 @@ sparseMarkov_FS <- function(X,A=NULL,d,l,warning=FALSE){
 
   S <- NULL
   lenS <- 0
+  maxnu <- numeric(l)
   while ( lenS < l ) {
 
     if( is.numeric(S) ){
@@ -104,9 +112,17 @@ sparseMarkov_FS <- function(X,A=NULL,d,l,warning=FALSE){
         nuj[z] <- nuj[z]+cont/PI_xS
       }
     }
+    maxnu[lenS+1] <- max(nuj) #################
     s <- Sc[which(nuj==max(nuj))]
     S <- c(S,s)
     lenS <- length(S)
+    if(elbowTest==TRUE & lenS>1){ ########################
+      if(maxnu[lenS]>maxnu[lenS-1]){
+        S <- S[-lenS]
+        maxnu <- maxnu[-length(maxnu)]
+        break
+      }
+    }
   }
   S
 }
