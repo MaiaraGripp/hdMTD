@@ -4,10 +4,10 @@
 \alias{oscillation}
 \title{Oscillations of a MTD model}
 \usage{
-oscillation(MTD)
+oscillation(x)
 }
 \arguments{
-\item{MTD}{an MTD object.}
+\item{x}{Must be a MTD object.}
 }
 \value{
 Returns the oscillations for each relevant lag of a MTD object.

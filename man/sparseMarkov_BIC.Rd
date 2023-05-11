@@ -6,68 +6,72 @@
 \usage{
 sparseMarkov_BIC(
   X,
-  A = NULL,
-  S,
-  l = max(S),
+  d,
+  S = 1:d,
+  minl = 1,
+  maxl = max(S),
   xi = 1/2,
-  nested = FALSE,
-  smallestBIC = FALSE,
-  lset = FALSE,
+  A = NULL,
+  byl = FALSE,
+  BICvalue = FALSE,
   warning = FALSE
 )
 }
 \arguments{
 \item{X}{A Markov chain.}
 
-\item{A}{The states space.}
+\item{d}{An upper threshold for the chains order.}
 
-\item{S}{A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known, set \eqn{S=1:d}. If S is a subset
-of the set 1:d, the order of the chain will be considered the greatest element of S.}
+\item{S}{A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known, the function will set \eqn{S=1:d}.}
 
-\item{l}{If \eqn{lset=FALSE} l is an upper bound for the number of elements to be returned in the estimated relevant lag set.
-If \eqn{lset=TRUE} l will be the exact number number of elements to be returned in the estimated relevant lag set.
-l is a}
+\item{minl}{Lower value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
+If minl<maxl then the function will consider sets of size minl up to size maxl when looking for the set of elements of S with smallest BIC.}
+
+\item{maxl}{Upper value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
+If minl<maxl then the function will consider all sets of sizes minl up to size maxl when looking for the set of elements of S with smallest BIC.}
 
 \item{xi}{The BIC constant. Defaulted to 1/2. Smaller xi \verb{(near 0)} reduces the impact of overparameterization.}
 
-\item{nested}{If TRUE the function will interpret that the elements in S are sorted from most relevant to least relevant and will calculate BIC supposing \eqn{\Lambda=S[1]}, then \eqn{\Lambda=S[1:2], \dots, \Lambda=S[1:l]}.}
+\item{A}{The states space. If not informed function will set A=unique(X). You should inform A specially if there is an element in the states space
+that doesn't appear in the sample X.}
 
-\item{smallestBIC}{If TRUE will return only the set with smallest BIC between all possible relevant lag sets with elements of S and sizes from 1 til l.
-if \eqn{nested=TRUE} will suppose the elements of S are sorted from most relevant to least relevant and will return only the smallest BIc between the models supposing
-\eqn{\Lambda=S[1]}, \eqn{\Lambda=S[1:2], \dots \Lambda=S[1:l]}. Can't be TRUE if \eqn{lset=TRUE}.}
+\item{byl}{If TRUE will look for the set with smallest BIC by each size from size minl to size maxl, and return the set with smallest BIC for each size.
+If minl==maxl setting byl TRUE or FALSE makes no difference since the function will only calculate the BIC for models with maxl elements in the relevant lag set.}
 
-\item{lset}{If TRUE will return the smallest BIC between the models with exactly l elements of S. If \eqn{nested=TRUE} will return only the BIC of the model with \eqn{\Lambda=S[1:l]}.
-Can't be TRUE if \eqn{smallestBIC=TRUE}}
+\item{BICvalue}{If TRUE the function will also return the calculated values of the BIC for the estimated relevant lag sets.}
 
 \item{warning}{If TRUE may return warnings.}
 }
 \value{
-Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{1,2, \dots l}.
-For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{l=3}. This function
+Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{minl,minl+1, \dots maxl}.
+For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1} and \eqn{maxl=3}. This function
 will run from \eqn{l=1 to l=3} and calculate the BIC supposing the MTD model has \eqn{\Lambda=c(1)}, then will calculate the BIC for \eqn{\Lambda=c(2)}, then \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
 Then it will suppose \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ... , \eqn{\Lambda=c(5,9)}, and then \eqn{\Lambda=c(1,2,5)} til \eqn{\Lambda=c(2,5,9)}. After calculating all BIC for each model will return the
-sets with smallest BIC by each l size. And finally the set with smallest BIC between all l sizes. If \eqn{nested=TRUE} the function will suppose the elements of S are sorted from most relevant to least, and will only
-calculate the relevant lags supposing \eqn{\Lambda=9}, then \eqn{\Lambda=c(9,5)}, \eqn{\Lambda=c(9,5,1)} stopping here since \eqn{l=3}.
+sets with smallest BIC between all sizes. Unless option byl=TRUE in which case will return the sets with smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the smallest
+BIC set will will be chosen among the sets of size maxl.
 }
 \description{
 Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
 }
 \details{
-smallestBIC and lset can't both be TRUE at the same time since, \eqn{lset=TRUE} looks for the smallest BIC between the all combinations of size l sets. While \eqn{smallestBIC=TRUE}
-looks for the smallest BIC between all combinations of sizes 1 to l sets.
-
-Note that the order of the chain matters at the counting of sequences step. If we run the function for \eqn{S=c(1,3,6)} the order d will be set to 6, while if we run for \eqn{S=c(1,3,5)}
-the order will be \eqn{d=5}. That will alter the count of sequences that appear in the sample and might alter BIC values for the estimated lag sets. Meaning that the same output of relevant lags
-(for example \eqn{1,3}) can have different BIC values if there was an initial order difference.
+Note that the order of the chain matters at the counting of sequences step. If we run the function with some order parameter d, all the sequences of size d will be counted and when
+calculating the BIC for some subset S of the set 1:d the function will sum over those counts. That means that if the order d changes for say d', some counts will change, especially when d is
+distant from d'. That might cause the function to calculate a different BIC for the same set S.
 }
 \examples{
-X <- perfectSample(MTDmodel(Lambda=c(1,3,6),A=c(0,1,2)),N=2000)
-sparseMarkov_BIC(X,S=1:7,l=4)
-sparseMarkov_BIC(X,S=1:7,l=4,xi=0.8)
-sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=3)
-sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,nested=TRUE)
-sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,lset=TRUE)
-sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,xi=0.75,smallestBIC=TRUE)
-sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=2,lset=TRUE, nested = TRUE)
+X <- perfectSample(MTDmodel(Lambda=c(2,4,6),A=c(0,2,5),w0=0.05),2000)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=1)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=1,BICvalue = TRUE)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=4)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=4, BICvalue = TRUE)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=4,xi=1.2)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=4,byl = TRUE)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=4,byl = TRUE, BICvalue = TRUE)
+sparseMarkov_BIC(X,d=9,minl=1,maxl=4,xi=0.8,byl = TRUE)
+sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=3,maxl=3)
+sparseMarkov_BIC(X,d=9,S=c(2,4,7,6,8),minl=1,maxl=3)
+sparseMarkov_BIC(X,d=9,S=c(2,4,7,6,8),minl=3,maxl=3,byl=TRUE)
+sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=1,maxl=3,xi=0.9,byl=TRUE)
+sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=1,maxl=3,xi=0.9,byl=TRUE, BICvalue = TRUE)
 
 }

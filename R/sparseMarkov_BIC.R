@@ -3,47 +3,50 @@
 #' Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
 #'
 #' @param X A Markov chain.
-#' @param A The states space.
-#' @param S A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known, set \eqn{S=1:d}. If S is a subset
-#'  of the set 1:d, the order of the chain will be considered the greatest element of S.
-#' @param l If \eqn{lset=FALSE} l is an upper bound for the number of elements to be returned in the estimated relevant lag set.
-#'  If \eqn{lset=TRUE} l will be the exact number number of elements to be returned in the estimated relevant lag set.
-#' l is a
+#' @param d An upper threshold for the chains order.
+#' @param S A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known, the function will set \eqn{S=1:d}.
+#' @param minl Lower value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
+#' If minl<maxl then the function will consider sets of size minl up to size maxl when looking for the set of elements of S with smallest BIC.
+#' @param maxl Upper value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
+#' If minl<maxl then the function will consider all sets of sizes minl up to size maxl when looking for the set of elements of S with smallest BIC.
 #' @param xi The BIC constant. Defaulted to 1/2. Smaller xi `(near 0)` reduces the impact of overparameterization.
-#' @param nested If TRUE the function will interpret that the elements in S are sorted from most relevant to least relevant and will calculate BIC supposing \eqn{\Lambda=S[1]}, then \eqn{\Lambda=S[1:2], \dots, \Lambda=S[1:l]}.
-#' @param smallestBIC If TRUE will return only the set with smallest BIC between all possible relevant lag sets with elements of S and sizes from 1 til l.
-#'if \eqn{nested=TRUE} will suppose the elements of S are sorted from most relevant to least relevant and will return only the smallest BIc between the models supposing
-#'\eqn{\Lambda=S[1]}, \eqn{\Lambda=S[1:2], \dots \Lambda=S[1:l]}. Can't be TRUE if \eqn{lset=TRUE}.
-#' @param lset If TRUE will return the smallest BIC between the models with exactly l elements of S. If \eqn{nested=TRUE} will return only the BIC of the model with \eqn{\Lambda=S[1:l]}.
-#' Can't be TRUE if \eqn{smallestBIC=TRUE}
+#' @param A The states space. If not informed function will set A=unique(X). You should inform A specially if there is an element in the states space
+#' that doesn't appear in the sample X.
+#' @param byl If TRUE will look for the set with smallest BIC by each size from size minl to size maxl, and return the set with smallest BIC for each size.
+#' If minl==maxl setting byl TRUE or FALSE makes no difference since the function will only calculate the BIC for models with maxl elements in the relevant lag set.
+#' @param BICvalue If TRUE the function will also return the calculated values of the BIC for the estimated relevant lag sets.
 #' @param warning If TRUE may return warnings.
 #'
-#' @details smallestBIC and lset can't both be TRUE at the same time since, \eqn{lset=TRUE} looks for the smallest BIC between the all combinations of size l sets. While \eqn{smallestBIC=TRUE}
-#' looks for the smallest BIC between all combinations of sizes 1 to l sets.
-#' @details Note that the order of the chain matters at the counting of sequences step. If we run the function for \eqn{S=c(1,3,6)} the order d will be set to 6, while if we run for \eqn{S=c(1,3,5)}
-#' the order will be \eqn{d=5}. That will alter the count of sequences that appear in the sample and might alter BIC values for the estimated lag sets. Meaning that the same output of relevant lags
-#' (for example \eqn{1,3}) can have different BIC values if there was an initial order difference.
+#' @details Note that the order of the chain matters at the counting of sequences step. If we run the function with some order parameter d, all the sequences of size d will be counted and when
+#' calculating the BIC for some subset S of the set 1:d the function will sum over those counts. That means that if the order d changes for say d', some counts will change, especially when d is
+#' distant from d'. That might cause the function to calculate a different BIC for the same set S.
 #'
-#' @return Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{1,2, \dots l}.
-#'  For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{l=3}. This function
+#' @return Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{minl,minl+1, \dots maxl}.
+#'  For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1} and \eqn{maxl=3}. This function
 #' will run from \eqn{l=1 to l=3} and calculate the BIC supposing the MTD model has \eqn{\Lambda=c(1)}, then will calculate the BIC for \eqn{\Lambda=c(2)}, then \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
 #' Then it will suppose \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ... , \eqn{\Lambda=c(5,9)}, and then \eqn{\Lambda=c(1,2,5)} til \eqn{\Lambda=c(2,5,9)}. After calculating all BIC for each model will return the
-#' sets with smallest BIC by each l size. And finally the set with smallest BIC between all l sizes. If \eqn{nested=TRUE} the function will suppose the elements of S are sorted from most relevant to least, and will only
-#' calculate the relevant lags supposing \eqn{\Lambda=9}, then \eqn{\Lambda=c(9,5)}, \eqn{\Lambda=c(9,5,1)} stopping here since \eqn{l=3}.
+#' sets with smallest BIC between all sizes. Unless option byl=TRUE in which case will return the sets with smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the smallest
+#' BIC set will will be chosen among the sets of size maxl.
 #' @export
 #'
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(1,3,6),A=c(0,1,2)),N=2000)
-#' sparseMarkov_BIC(X,S=1:7,l=4)
-#' sparseMarkov_BIC(X,S=1:7,l=4,xi=0.8)
-#' sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=3)
-#' sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,nested=TRUE)
-#' sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,lset=TRUE)
-#' sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=4,xi=0.75,smallestBIC=TRUE)
-#' sparseMarkov_BIC(X,S=c(6,3,1,4,7),l=2,lset=TRUE, nested = TRUE)
+#' X <- perfectSample(MTDmodel(Lambda=c(2,4,6),A=c(0,2,5),w0=0.05),2000)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=1)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=1,BICvalue = TRUE)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4, BICvalue = TRUE)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,xi=1.2)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,byl = TRUE)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,byl = TRUE, BICvalue = TRUE)
+#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,xi=0.8,byl = TRUE)
+#'sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=3,maxl=3)
+#'sparseMarkov_BIC(X,d=9,S=c(2,4,7,6,8),minl=1,maxl=3)
+#'sparseMarkov_BIC(X,d=9,S=c(2,4,7,6,8),minl=3,maxl=3,byl=TRUE)
+#'sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=1,maxl=3,xi=0.9,byl=TRUE)
+#'sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=1,maxl=3,xi=0.9,byl=TRUE, BICvalue = TRUE)
 #'
-sparseMarkov_BIC <- function(X,A=NULL,S,l=max(S),xi=1/2,nested=FALSE,
-                             smallestBIC=FALSE,lset=FALSE, warning=FALSE){
+sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
+                              xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,warning=FALSE){
   #Checking inputs
   X <- checkSample(X)
   if(length(A)==0){
@@ -55,127 +58,110 @@ sparseMarkov_BIC <- function(X,A=NULL,S,l=max(S),xi=1/2,nested=FALSE,
     if( !is.numeric(A) ||
         length(A)<=1   ||
         length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
-  }
+    }
+  if( !is.numeric(d) ||
+      d<2 ||
+      (d %% 1)!=0  ||
+      d<max(S)){stop("The order d must be an integer number greater than 2 or the greatest element in S.")
+    }
   if(length(S) < 2  ||
      !is.numeric(S) ||
-     any( S%%1 != 0) ){stop("S must be a vector of at least 2 integer numbers.")}
-  #if( !is.numeric(d) || d<2 || (d %% 1)!=0  ||  d<max(S)){
-  #stop("The order d must be an integer number greater than 2 or the greatest elements in S.")
-  #}
-  while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>length(S) ) {
-    cat("l value is not valid. l should be a positive integer lower or equal to the number of elements in S.")
-    l <- readline(prompt = "Please enter a valid l : ")
-    l <- suppressWarnings(as.numeric(l))
+     any( S%%1 != 0) ){stop("S must be a vector of at least 2 integer numbers.")
+    }
+  if ( is.na(minl) ||
+       !is.numeric(minl) ||
+       minl%%1 != 0 ||
+       minl>length(S) ||
+       minl <=0 ) {
+    stop("minl value is not valid. minl should be a positive integer lower or equal to the number of elements in S.")
+  }
+  if ( is.na(maxl) ||
+       !is.numeric(maxl) ||
+       maxl%%1 != 0 ||
+       maxl>length(S) ||
+       maxl<minl) {
+    stop("maxl value is not valid. maxl should be a positive integer lower or equal to the number of elements in S, and greater or equal to minl.")
   }
   while ( is.na(xi) || !is.numeric(xi) || xi <= 0 ) {
     cat("BIC constant xi value is not valid. xi should be a positive number.")
     xi <- readline(prompt = "Please enter a valid xi: ")
     xi <- suppressWarnings(as.numeric(xi))
   }
-  if(!is.logical(nested)){stop("nested must me a logical argument")}
+  if(!is.logical(byl)){stop("byl must me a logical argument")}
+  if(!is.logical(BICvalue)){stop("BICvalue must me a logical argument")}
   if(!is.logical(warning)){stop("warning must me a logical argument")}
-  if(!is.logical(smallestBIC)){stop("smallestBIC must me a logical argument")}
-  if(!is.logical(lset)){stop("lset must me a logical argument")}
-  if(smallestBIC & lset){stop("Arguments smallestBIC and lset can't both be TRUE at the same time")}
 
   #gatherin inputs
   A <- sort(A)
   lenS <- length(S)
-  d <- max(S)
+  S <- sort(S)
   base <- shapeSample(X,d)
   #\.
 
-  if(!nested){
-    S <- sort(S)
-
-    if(!lset){
-
-      if(l==1){
-        tryCombs <- matrix( c( rep(0,lenS), rep(n_parameters(1,A)*log(length(X))*xi,lenS) ),
+  if(maxl==minl){
+        nCombs <- choose(lenS,minl)
+        tryCombs <- matrix( c( rep(0,nCombs), rep(n_parameters(1:minl,A)*log(length(X))*xi,nCombs) ),
                             byrow = T,nrow = 2 )
-        colnames(tryCombs) <- S
-        rownames(tryCombs) <- c("log_ML","penalty")
-        for (k in S) {
-          b <- base_Sja(k,j=NULL,A,base,complete = FALSE)
+        aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
+        for ( k in 1:nCombs ) {
+          G <- as.numeric(unlist(strsplit(aux[k], ",")))
+          b <- base_Sja(G,j=NULL,A,base,complete = FALSE)
           tryCombs[1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
         }
+        colnames(tryCombs) <- aux
+        rownames(tryCombs) <- c("log_ML","penalty")
         pML <- apply(tryCombs,2,sum)
-      }else{ # if l>1
+        pML <- sort(pML)[1]
+        if(!BICvalue){
+          pML <- as.numeric(unlist(strsplit(names(pML), ",")))
+        }
+      }else{ #maxl>minl
         tryCombs <- list()
-        for (i in 1:l) {
+        cont <- 1
+        for (i in minl:maxl) {
           nCombs <- choose(lenS,i)
-          tryCombs[[i]] <- matrix( rep(0,2*nCombs) ,byrow = T,nrow = 2 )
-          tryCombs[[i]][2,] <- n_parameters(Lambda=(1:i),A)*log(length(X))*xi
+          tryCombs[[cont]] <- matrix( rep(0,2*nCombs) ,byrow = T,nrow = 2 )
+          tryCombs[[cont]][2,] <- n_parameters(Lambda=(1:i),A)*log(length(X))*xi
           aux <- apply(t(combn(S,i)), 1, paste0,collapse=",")
-          for ( k in 1:nCombs ) {
+          for ( k in 1:nCombs) {
             G <- as.numeric(unlist(strsplit(aux[k], ",")))
             b <- base_Sja(G,j=NULL,A,base,complete = FALSE)
-            tryCombs[[i]][1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
+            tryCombs[[cont]][1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
           }
-          colnames(tryCombs[[i]]) <- aux
-          rownames(tryCombs[[i]]) <- c("log_ML","penalty")
+          colnames(tryCombs[[cont]]) <- aux
+          rownames(tryCombs[[cont]]) <- c("log_ML","penalty")
+          cont <- cont+1
         }
+          if(maxl-minl==1){ #this solves a problem that may occur if all vectors in
+            #tryCombs list have the same length. If that is the case, the function sapply
+            #will format pML differently and remove the colnames, which we cant have...
+            if( ncol(tryCombs[[1]])==ncol(tryCombs[[2]]) ){
+             tryCombs[[2]] <- cbind(tryCombs[[2]],tryCombs[[2]][,1])
+             colnames(tryCombs[[2]])[ncol(tryCombs[[2]])] <- colnames(tryCombs[[2]])[1]
+            }
+          }
         pML <- sapply(tryCombs, apply, 2,sum)
-      }
-      smallest <- names(unlist(pML))[order(unlist(pML))][1]
-      nam <- sapply(sapply(pML, orderedNames), dplyr::first )
-      pML <- sapply(sapply(pML,sort),dplyr::first)
-      pML <- c( pML,unlist(pML)[order(unlist(pML))][1] )
-      names(pML) <- c(nam,paste0("smallest: ",smallest)) #nested=FAlSE & lset=FALSE
 
-    }else{ #if lset=TRUE
-
-      combs <- combn(S,l)
-      nCombs <- choose(lenS,l)
-      tryCombs <- matrix(
-        c( rep(0,nCombs) , rep(n_parameters((1:l),A)*log(length(X))*xi,nCombs) ),
-        byrow = T,nrow = 2
-      )
-      colnames(tryCombs) <- apply(t(combs), 1, paste0,collapse=",")
-      for ( k in 1:nCombs ) {
-        G <- t(combs)[k,]
-        b <- base_Sja(G,j=NULL,A,base,complete = FALSE)
-        tryCombs[1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
-      }
-      rownames(tryCombs) <- c("log_ML","penalty")
-      pML <- apply(tryCombs, 2,sum)
-      pML <- sort(pML)[1] #Nested=FALSE & lset=TRUE
-      pML <- as.numeric(unlist(strsplit(names(pML), ",")))
+          if(byl){
+            smallest <- names(unlist(pML))[order(unlist(pML))][1]
+            nam <- sapply(sapply(pML, orderedNames), dplyr::first )
+            pML <- sapply(sapply(pML,sort),dplyr::first)
+            pML <- c( pML,unlist(pML)[order(unlist(pML))][1] )
+            names(pML) <- c(nam,paste0("smallest: ",smallest))
+              if(!BICvalue){
+                pML <- names(pML)
+              }
+          }else{
+            pML <- unlist(pML)[order(unlist(pML))][1]
+              if(!BICvalue){
+                pML <- as.numeric(unlist(strsplit(names(pML), ",")))
+              }
+          }
     }
-
-  }else{ #if nested=TRUE
-
-    if(!lset){
-      ML <- numeric(l)
-      penalty <- numeric(l)
-      pML <- numeric(l)
-      for (i in 1:l) {
-        b <- base_Sja(S[1:i],j=NULL,A,base,complete = FALSE)
-        ML[i] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
-        penalty[i] <- n_parameters(1:i,A)*log(length(X))*xi
-        pML[i] <- ML[i]+penalty[i]
-        names(pML)[i] <- paste0(S[1:i],collapse = ",")
-      }
-      nam <- paste0("smallest: ",names(pML)[which( min(pML)==pML )])
-      pML <- c(pML,min(pML))
-      names(pML)[l+1] <- nam
-    }else{
-      b <- base_Sja(S[1:l],j=NULL,A,base,complete = FALSE)
-      log_ML <- -sum(b$Nxa_Sj*log(b$qax_Sj))
-      penalty <- n_parameters((1:l),A)*log(length(X))*xi
-      pML <- log_ML+penalty #nested=TRUE & lset=TRUE
-      names(pML) <- paste0(S[1:l],collapse = ",")
-    }
-  }
-  if(smallestBIC){
-    pML <- pML[l+1]
-    pML <- as.numeric(unlist(strsplit(substring(names(pML),11), ",")))
-  }
-  pML
+   pML
 }
 
 orderedNames <- function(x){
   names(x[order(x)])
 }
-
 
