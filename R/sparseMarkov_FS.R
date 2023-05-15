@@ -124,6 +124,6 @@ sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
       }
     }
   }
-  S
+  rbind(S,maxnu)
 }
 
