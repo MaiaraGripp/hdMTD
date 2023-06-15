@@ -1,27 +1,32 @@
-#' A function for inference in MTD Markov chains with CUT method.
+#' The Cut method.
 #'
-#' Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+#' A function for inference in MTD Markov chains with CUT method. Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
 #'
 #' @param X A mixture transition distribution (MTD) chain sample.
-#' @param d An upper threshold for the chains order..
-#' @param S A set of relevant lags, if empty S=\eqn{1,2,\dots, d}.
+#' @param d An upper bound for the chains order.
+#' @param S A subset of 1:d that contains the relevant lag set, if empty S=\eqn{1,2,\dots, d}.
 #' @param A The states space.
 #' @param alpha A parameter of CUT.
 #' @param mu A parameter of CUT.
 #' @param xi A parameter of CUT.
 #' @param warning If TRUE may return warnings.
+#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()]  function.
 #'
 #'
 #' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
-#' Mixture Transition Ditribution (MTD) models.
+#' Mixture Transition Distribution (MTD) models.
 #' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
 #' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for High order MTD Markov chains.
 #' This function will apply only the CUT step of the algorithm.
 #'
 #' @return Returns a estimated set of relevant lags.
 #' @export
+#' @examples
+#' X <- perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,1)),N=1000)
+#' hdMTD_CUT(X,4,alpha=0.02,mu=1,xi=0.4)
+#' hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
 #'
-sparseMarkov_CUT <- function(X, d, S=1:d, A=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
+hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE,...){
 
   #Checking inputs
   if(length(S) < 2  ||
@@ -42,11 +47,6 @@ sparseMarkov_CUT <- function(X, d, S=1:d, A=NULL, alpha=0.05, mu=1, xi=0.5, warn
       length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
   if ( !all( unique(X) %in% A ) ) {
     stop("Check the states space, it must have all states that occur in the sample.")
-  }
-  while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d || l>length(S) ) {
-    cat("l value is not valid. l should be a positive integer lower or equal to d or the number of elements in S.")
-    l <- readline(prompt = "Please enter a valid l : ")
-    l <- suppressWarnings(as.numeric(l))
   }
   while ( is.na(alpha) || !is.numeric(alpha) || alpha <= 0 ) {
     cat("alpha value is not valid for CUT step. alpha should be a positive number.")
@@ -74,8 +74,8 @@ sparseMarkov_CUT <- function(X, d, S=1:d, A=NULL, alpha=0.05, mu=1, xi=0.5, warn
   A_pairs <- t(utils::combn(A,2))
   A_pairsPos <- t(utils::combn(1:lenA,2))
   nrowA_pairs <- nrow(A_pairs)
-  base <- shapeSample(X=X,d=d)
-  b_Sja <- base_Sja(S=S,A=A,base=base)
+  base <- countsTab(X=X,d=d)
+  b_Sja <- freqTab(S=S,A=A,countsTab=base)
   #\.
 
   dTV_txy <- numeric(lenS)
@@ -87,7 +87,7 @@ sparseMarkov_CUT <- function(X, d, S=1:d, A=NULL, alpha=0.05, mu=1, xi=0.5, warn
     R <- matrix(0,ncol = lenA, nrow = nrow_subx)
     for (k in 1:nrow_subx) { #runs in all x_S
       Q[k,] <- dTV_sample(S=Sminusj,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[k,])
-      R[k,] <- sx(S=Sminusj,base=b_Sja,lenA=lenA,x_S=subx[k,],mu=mu,alpha=alpha,xi=xi)
+      R[k,] <- sx(S=Sminusj,freqTab=b_Sja,lenA=lenA,x_S=subx[k,],mu=mu,alpha=alpha,xi=xi)
     }
     colnames(Q) <- apply(A_pairs, 1, paste0, collapse="x")
     rownames(Q) <- apply(subx, 1, paste0, collapse="")
@@ -116,3 +116,5 @@ txy <- function(R,A_pairs,A_pairsPos){
 #\.
 #tn=|s(1111)+s(2111)|s(1111)+s(3111)|s(2111)+s(3111)|
 #   |s(1211)+s(2211)|s(1211)+s(3211)|s(2211)+s(3211)|...
+
+

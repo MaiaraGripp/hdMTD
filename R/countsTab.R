@@ -1,9 +1,11 @@
-#' Creates a table with sample information
+#' Table of sample sequences counts.
 #'
-#' @param X A Markov chain sample.
-#' @param d The order of the Markov chain.
+#' Creates a table with sample sequences and their absolute frequency.
 #'
-#' @return A table with every sequence in the sample and its frequency.
+#' @param X A Markov Chain sample.
+#' @param d A upper bound for the Markov chains order.
+#'
+#' @return A table with every size d+1 sequence in the sample and its absolute frequency.
 #' @export
 #' @importFrom dplyr %>%
 #'
@@ -11,20 +13,17 @@
 #'   have a sequency of size \eqn{d+1} that appeared in the sample. The last column, called \code{Nxa},
 #'   will contain the number of times each of these sequences appeared in the sample.
 #'
-#'
 #' @examples
-#' shapeSample(c(1,2,2,1,2,1,1,2,1,2),3)
-#' shapeSample(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
-shapeSample <-function(X,d){
+#' countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
+#' countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
+countsTab <-function(X,d){
   # Checking restrictions
   X <- unlist(X)
   X <- checkSample(X)
   if (length(X)<d+1) { stop("The sample size must be greater than d+1.") }
   #\.
 
-  #
-
-  n <- length(X)
+    n <- length(X)
   d1 <- d+1
   XTab <- NULL
   for (i in 1:d1) {
@@ -42,6 +41,7 @@ shapeSample <-function(X,d){
   XTab <- XTab %>%
             dplyr::group_by(XTab[,1:d1]) %>%
             dplyr::summarise(Nxa=sum(count),.groups="drop")
-
   XTab
 }
+
+

@@ -7,16 +7,18 @@
 perfectSample(MTD, N = NULL)
 }
 \arguments{
-\item{MTD}{a canonical MTD object.}
+\item{MTD}{A canonical MTD object.}
 
-\item{N}{the sample size. If NULL sample size will be set to 1000.}
+\item{N}{The sample size. If NULL sample size will be set to 1000.}
 }
 \value{
 Returns a sample from o MTD model.
 }
 \description{
-Perfectly samples a MTD Markov chain.
+Perfectly samples a MTD Markov chain. In other words, samples a MTD Markov Chain from stationary distribution.
 }
-\details{
-Can sample a MTD Markov Chain with stationary distribution.
+\examples{
+perfectSample( MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
+perfectSample( MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
+
 }

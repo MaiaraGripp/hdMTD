@@ -1,14 +1,15 @@
-#' A function for inference in MTD Markov chains with FS method.
+#' The Foward Stepwise method.
 #'
-#' Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set for MTD models.
+#' A function for inference in MTD Markov chains with FS method. Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
 #'
 #' @param X A mixture transition distribution (MTD) chain sample.
-#' @param d An upper threshold for the chains order.
+#' @param d An upper bound for the chains order.
 #' @param l Stop point for FS algorithm.
 #' @param A The States space.
 #' @param elbowTest If TRUE the function will choose the point where the \eqn{ max(\nu)} stops decreasing (that is, where the graph of the \eqn{ max(\nu)} changes its direction like an elbow).
 #' If l is smaller than this point the function will simply return a set with l elements, so setting elbowTest=TRUE only makes a difference if the elbow point happens in the first l-1 elements of \eqn{ max(\nu)}.
-#' @param warning If True may return warnings
+#' @param warning If True may return warnings.
+#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
 #'
 #' @importFrom utils combn
 #'
@@ -20,16 +21,16 @@
 #' @return Returns a estimated S set of relevant lags with size l .
 #' @export
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(2,7),A=c(0,1),w0=0.05),2000)
-#'sparseMarkov_FS(X,A=c(0,1),d=10,l=5)
-#'sparseMarkov_FS(X,d=10,l=5)
-#'sparseMarkov_FS(X,d=10,l=5,elbowTest = TRUE)
-#'sparseMarkov_FS(X,d=10,l=10,elbowTest = TRUE)
+#' X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),w0=0.05),2000)
+#'hdMTD_FS(X,A=c(0,1),d=5,l=2)
+#'hdMTD_FS(X,d=5,l=2)
+#'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
+#'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 #'
-sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
+hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
   # Cheking inputs
   while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d ) {
-    cat("l value is not valid for FS step. l should be a positive integer lower or equal to d.")
+    cat("l value is not valid for FS step. l should be a positive integer less than or equal to d.")
     l <- readline(prompt = "Please enter a valid l : ")
     l <- suppressWarnings(as.numeric(l))
   }
@@ -49,12 +50,15 @@ sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
   if( !is.numeric(d) || d<2 || (d %% 1)!=0 ){
     stop("The order d must be an integer number greater than 2.")
   }
+  #test if l is valid but creates too big a table
+  xa=try(expand.grid(rep(list(A),l)),silent = TRUE)
+  if(class(xa)=="try-error"){stop(paste0("The data set with all sequences of size l is too large, try a lower l."))}
   #\.
   #Gathering inputs
   A <- sort(A)
   lenA <- length(A)
   lenX <- length(X)
-  base <- shapeSample(X=X,d=d)
+  base <- countsTab(X=X,d=d)
   A_pairs <- t(utils::combn(A,2))
   A_pairsPos <- t(utils::combn(1:lenA,2))
   nrowA_pairs <- nrow(A_pairs)
@@ -78,9 +82,9 @@ sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
 
     for (z in 1:lenSc) {
       j <- Sc[z]
-      b_Sja <- base_Sja(S=S,j=j,A=A,base=base)
-      b_Sj <- base_Sj(S=S,j=j,b_Sja,lenX=lenX,d=d)
-      b_S <- base_Sj(S=S,j=NULL,b_Sja,lenX=lenX,d=d)#if S=NULL: b_S<-matrix(c(0,lenX-d),ncol=2)
+      b_Sja <- freqTab(S=S,j=j,A=A,countsTab=base)
+      b_Sj <- freqTabSj(S=S,j=j,b_Sja,lenX=lenX,d=d)
+      b_S <- freqTabSj(S=S,j=NULL,b_Sja,lenX=lenX,d=d)#if S=NULL: b_S<-matrix(c(0,lenX-d),ncol=2)
       ncolb_S <- ncol(b_S)
 
       if( lenS > 0) {
@@ -97,7 +101,7 @@ sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
         t <- PositNx_S[k]
         cont <- 0
 
-        PIs <- PI(S=dec_S,base=b_Sj,x_S=subx[t,],lenX=lenX,
+        PIs <- PI(S=dec_S,freqTabSj=b_Sj,x_S=subx[t,],lenX=lenX,
                   d=d)
         #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
         dTVs <- dTV_sample(S=dec_S,j=j,lenA=lenA,base=b_Sja,
@@ -112,7 +116,6 @@ sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
         nuj[z] <- nuj[z]+cont/PI_xS
       }
     }
-    maxnu[lenS+1] <- max(nuj) #################
     s <- Sc[which(nuj==max(nuj))]
     S <- c(S,s)
     lenS <- length(S)
@@ -124,6 +127,6 @@ sparseMarkov_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE){
       }
     }
   }
-  rbind(S,maxnu)
+  S
 }
 

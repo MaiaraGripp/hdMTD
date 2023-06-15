@@ -1,7 +1,10 @@
+#' Total distance variation for p_j distribution.
+#'
 #' Calculates the total distance variation given a stochastic matrix p_j
 #'
-#' @param p_j a stochastic matrix
-#' @param rows A matrix with two columns, the pair of numbers in each row represents the rows of p_j to be compared, i.e. the distributions in p_j to be compared.
+#' @param p_j A stochastic matrix.
+#' @param rows A matrix with two columns, the pair of numbers in each row represents the rows of p_j to be compared,
+#'  i.e. the distributions in p_j to be compared.
 #'
 #' @return Returns de total variation distance of a set of distributions in p_j.
 #'

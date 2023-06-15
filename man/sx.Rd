@@ -4,12 +4,12 @@
 \alias{sx}
 \title{Calculates sx, and txy=sx+sy}
 \usage{
-sx(S, base, lenA, x_S, mu, alpha, xi)
+sx(S, freqTab, lenA, x_S, mu, alpha, xi)
 }
 \arguments{
 \item{S}{A set of relevant lags.}
 
-\item{base}{A table with frequencies of a Markov chain.}
+\item{freqTab}{A table with frequencies of a Markov chain.}
 
 \item{lenA}{The size of the states space.}
 

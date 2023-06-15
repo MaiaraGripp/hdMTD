@@ -16,20 +16,20 @@ MTDmodel(
 )
 }
 \arguments{
-\item{Lambda}{the relevant lag set. Should be positive integers and will be sorted from smallest to greater. The smallest number
-will represent the latest \verb{(most recent)} lag and the greater number the earliest.}
+\item{Lambda}{The relevant lag set. Should be positive integers and will be sorted from smallest to greater. The smallest number
+will represent the latest \verb{(most recent)} time in the past and the greatest number the earliest time in the past.}
 
-\item{A}{the states space.}
+\item{A}{The states space.}
 
-\item{w0}{the weight of the independent distribution, must be a value in \verb{[0,1)}.}
+\item{w0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
 
-\item{w_j}{a vector of weights for the distributions p_j. Values must be in \verb{[0,1)}. The order of weights must match the order
+\item{w_j}{A vector of weights for the distributions p_j. Values must be in \verb{[0,1)}. The order of weights must match the order
 of the sorted Lambda set.}
 
-\item{p_j}{a list with \verb{|\\Lambda|} matrices \verb{|A|\\times|A|}.}
+\item{p_j}{A list with lenL matrices \verb{lenA x lenA}. Where lenL is the number of elements in Lambda and lenA the number of elements in A.}
 
-\item{p0}{a vector with the independent distribution part of a MTD model. If not informed and indep_part=TRUE will be sampled
-from a uniform. If indep_part=FALSE will be set to zero.}
+\item{p0}{A vector with the independent distribution part of a MTD model. If not informed and indep_part=TRUE the distribution will be sampled
+form a uniform. If indep_part=FALSE the distribution will be set to zero.}
 
 \item{single_matrix}{If TRUE all p_j matrix are equal.}
 
@@ -39,7 +39,11 @@ from a uniform. If indep_part=FALSE will be set to zero.}
 An MTD model as a MTD object.
 }
 \description{
-Given a set of parameters generates an MTD model.
+Given a set of parameters generates a Mixture transition distribution model as an object of class MTD.
+}
+\details{
+This MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}} which retrieves the models oscillation and \code{\link[=perfectSample]{perfectSample()}} which will
+perfectly sample a Markov chain with the models parameters.
 }
 \examples{
 MTDmodel(Lambda=c(1,3),A=c(4,8,12))

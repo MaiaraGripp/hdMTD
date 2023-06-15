@@ -1,10 +1,12 @@
-#' A function for inference in MTD Markov chains with BIC.
+#' The Bayesian Information Criterion (BIC) method.
 #'
-#' Estimates a relevant lag set \eqn{\Lambda} of MTD models using BIC.
+#' A function for inference in MTD Markov chains with BIC. Estimates a relevant lag set \eqn{\Lambda} of MTD models using Bayesian Information Criterion.
+#' This means that this method selects the set of lags that minimizes the penalized log likelihood for a given sample.
+#'
 #'
 #' @param X A Markov chain.
-#' @param d An upper threshold for the chains order.
-#' @param S A set of all possible relevant lags, if only an upper threshold (d) for the chains order is known, the function will set \eqn{S=1:d}.
+#' @param d An upper bound for the chains order.
+#' @param S A subset of 1:d that contains the relevant lags, if only an upper bound (d) for the chains order is known, the function will set \eqn{S=1:d}.
 #' @param minl Lower value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
 #' If minl<maxl then the function will consider sets of size minl up to size maxl when looking for the set of elements of S with smallest BIC.
 #' @param maxl Upper value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
@@ -16,10 +18,11 @@
 #' If minl==maxl setting byl TRUE or FALSE makes no difference since the function will only calculate the BIC for models with maxl elements in the relevant lag set.
 #' @param BICvalue If TRUE the function will also return the calculated values of the BIC for the estimated relevant lag sets.
 #' @param warning If TRUE may return warnings.
+#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()]  function.
 #'
 #' @details Note that the order of the chain matters at the counting of sequences step. If we run the function with some order parameter d, all the sequences of size d will be counted and when
-#' calculating the BIC for some subset S of the set 1:d the function will sum over those counts. That means that if the order d changes for say d', some counts will change, especially when d is
-#' distant from d'. That might cause the function to calculate a different BIC for the same set S.
+#' calculating the BIC for some subset S of the set 1:d the function will sum over those counts. That means that if the order d changes to d', some counts will change, especially when d is
+#' distant from d', and that might cause the function to calculate a different BIC for the same set S.
 #'
 #' @return Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{minl,minl+1, \dots maxl}.
 #'  For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1} and \eqn{maxl=3}. This function
@@ -30,23 +33,15 @@
 #' @export
 #'
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(2,4,6),A=c(0,2,5),w0=0.05),2000)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=1)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=1,BICvalue = TRUE)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4, BICvalue = TRUE)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,xi=1.2)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,byl = TRUE)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,byl = TRUE, BICvalue = TRUE)
-#'sparseMarkov_BIC(X,d=9,minl=1,maxl=4,xi=0.8,byl = TRUE)
-#'sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=3,maxl=3)
-#'sparseMarkov_BIC(X,d=9,S=c(2,4,7,6,8),minl=1,maxl=3)
-#'sparseMarkov_BIC(X,d=9,S=c(2,4,7,6,8),minl=3,maxl=3,byl=TRUE)
-#'sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=1,maxl=3,xi=0.9,byl=TRUE)
-#'sparseMarkov_BIC(X,d=9,S=c(2,8,7,6,4),minl=1,maxl=3,xi=0.9,byl=TRUE, BICvalue = TRUE)
+#' X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),w0=0.05),2000)
+#'hdMTD_BIC (X,d=6,minl=1,maxl=1)
+#'hdMTD_BIC (X,d=5,minl=2,maxl=2,BICvalue = TRUE)
+#'hdMTD_BIC (X,d=5,minl=1,maxl=3)
+#'hdMTD_BIC (X,d=5,minl=1,maxl=3,xi=0.1)
+#'hdMTD_BIC (X,d=6,S=c(1,2,4,6),minl=2,maxl=2)
 #'
-sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
-                              xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,warning=FALSE){
+hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
+                          xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,warning=FALSE,...){
   #Checking inputs
   X <- checkSample(X)
   if(length(A)==0){
@@ -65,7 +60,7 @@ sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
       d<max(S)){stop("The order d must be an integer number greater than 2 or the greatest element in S.")
     }
   if(length(S) < 2  ||
-     !is.numeric(S) ||
+     length(dim(S))!=0 ||
      any( S%%1 != 0) ){stop("S must be a vector of at least 2 integer numbers.")
     }
   if ( is.na(minl) ||
@@ -95,7 +90,7 @@ sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
   A <- sort(A)
   lenS <- length(S)
   S <- sort(S)
-  base <- shapeSample(X,d)
+  base <- countsTab(X,d)
   #\.
 
   if(maxl==minl){
@@ -105,7 +100,7 @@ sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
         aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
         for ( k in 1:nCombs ) {
           G <- as.numeric(unlist(strsplit(aux[k], ",")))
-          b <- base_Sja(G,j=NULL,A,base,complete = FALSE)
+          b <- freqTab(S=G,j=NULL,A=A,countsTab=base,complete = FALSE)
           tryCombs[1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
         }
         colnames(tryCombs) <- aux
@@ -125,7 +120,7 @@ sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
           aux <- apply(t(combn(S,i)), 1, paste0,collapse=",")
           for ( k in 1:nCombs) {
             G <- as.numeric(unlist(strsplit(aux[k], ",")))
-            b <- base_Sja(G,j=NULL,A,base,complete = FALSE)
+            b <- freqTab(S=G,j=NULL,A=A,countsTab=base,complete = FALSE)
             tryCombs[[cont]][1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
           }
           colnames(tryCombs[[cont]]) <- aux
@@ -164,4 +159,5 @@ sparseMarkov_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
 orderedNames <- function(x){
   names(x[order(x)])
 }
+
 

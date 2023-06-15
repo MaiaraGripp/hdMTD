@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkSample.R
 \name{checkSample}
 \alias{checkSample}
-\title{Checks if a sample is suitable for use}
+\title{Checks if a Markov chain sample is suitable for use}
 \usage{
 checkSample(X)
 }
@@ -13,5 +13,5 @@ checkSample(X)
 Returns adjusted sample and possible sample errors.
 }
 \description{
-Checks if a sample is suitable for use
+Checks if a Markov chain sample is suitable for use
 }

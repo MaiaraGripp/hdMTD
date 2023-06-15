@@ -2,14 +2,14 @@
 % Please edit documentation in R/n_parameters.R
 \name{n_parameters}
 \alias{n_parameters}
-\title{Calculates the number of parameters in a MTD model given the Lambda set.}
+\title{Number of parameters of a MTD model.}
 \usage{
 n_parameters(Lambda, A, single_matrix = FALSE, indep_part = TRUE)
 }
 \arguments{
-\item{Lambda}{the relevant lag set.}
+\item{Lambda}{The relevant lag set.}
 
-\item{A}{the states space.}
+\item{A}{The states space.}
 
 \item{single_matrix}{If TRUE all p_j matrix are equal.}
 
@@ -19,5 +19,5 @@ n_parameters(Lambda, A, single_matrix = FALSE, indep_part = TRUE)
 The number of parameters of a MTD model.
 }
 \description{
-Calculates the number of parameters in a MTD model given the Lambda set.
+Calculates the number of parameters of a MTD model with relevant lag set Lambda and states space A.
 }

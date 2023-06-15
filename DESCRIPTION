@@ -1,4 +1,4 @@
-Package: sparseMarkov
+Package: hdMTD
 Type: Package
 Title: Inference in sparse Mixture Transition Distribution (MTD) Markov Chains
 Version: 0.1.0

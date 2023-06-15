@@ -2,14 +2,14 @@
 % Please edit documentation in R/PI.R
 \name{PI}
 \alias{PI}
-\title{Estimated stationary distribution vector for every a_j and a sequence x_S}
+\title{Estimated stationary distribution.}
 \usage{
-PI(S, base, x_S, lenX, d)
+PI(S, freqTabSj, x_S, lenX, d)
 }
 \arguments{
-\item{S}{A set of lags.}
+\item{S}{A subset of 1:d}
 
-\item{base}{A table with frequencies of a Markov chain sample.}
+\item{freqTabSj}{A table with frequencies of sequences in a Markov chain sample.}
 
 \item{x_S}{A specific sequence indexed by S.}
 
@@ -22,5 +22,5 @@ Returns a vector of estimated stationary distributions of a sequence X_S
 with the element in j varying in all the states space.
 }
 \description{
-Estimated stationary distribution vector for every a_j and a sequence x_S
+Estimated stationary distribution vector for every a_j and x_S
 }

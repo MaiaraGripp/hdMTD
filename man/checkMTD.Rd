@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkMTD.R
 \name{checkMTD}
 \alias{checkMTD}
-\title{Checks if a MTD object has all the needed parameters.}
+\title{Check a MTD object.}
 \usage{
 checkMTD(MTD)
 }

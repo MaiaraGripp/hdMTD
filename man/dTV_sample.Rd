@@ -9,7 +9,7 @@ dTV_sample(S, j, lenA, base, A_pairs, x_S)
 \arguments{
 \item{S}{A set of lags.}
 
-\item{j}{A specific lag \eqn{j \in S^c}.}
+\item{j}{A specific lag \eqn{j in the complement of S}.}
 
 \item{lenA}{The length of the states space A.}
 

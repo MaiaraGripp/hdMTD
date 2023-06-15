@@ -1,13 +1,16 @@
-#' Perfectly samples a MTD Markov chain.
-#'
-#' Can sample a MTD Markov Chain with stationary distribution.
+#' Perfectly samples a MTD Markov chain. In other words, samples a MTD Markov Chain from stationary distribution.
 #'
 #' @title Perfect Sample.
-#' @param MTD a canonical MTD object.
-#' @param N the sample size. If NULL sample size will be set to 1000.
+#' @param MTD A canonical MTD object.
+#' @param N The sample size. If NULL sample size will be set to 1000.
 #' @return Returns a sample from o MTD model.
 #'
 #' @export perfectSample
+#'
+#' @examples
+#' perfectSample( MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
+#' perfectSample( MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
+#'
 perfectSample <- function(MTD,N=NULL){
 
   UseMethod("perfectSample")

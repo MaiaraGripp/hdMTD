@@ -1,25 +1,31 @@
-#' A function for inference in MTD Markov chains with FSC method.
+#' Forward Stepwise and Cut method.
 #'
-#' This function estimates the relevant lag set \eqn{\Lambda}
+#' A function for inference in MTD Markov chains with FSC method. This function estimates the relevant lag set \eqn{\Lambda}
 #' of a MTD model through the FSC algorithm.
 #'
 #' @param X A MTD Markov chain sample.
-#' @param d An upper threshold for the chains order.
+#' @param d An upper bound for the chains order.
 #' @param l Stop point for FS algorithm.
-#' @param A The States space.
-#' @param alpha A parameter of CUT.
-#' @param mu A parameter of CUT.
-#' @param xi A parameter of CUT.
+#' @param A The states space.
+#' @param alpha A parameter of CUT step.
+#' @param mu A parameter of CUT step.
+#' @param xi A parameter of CUT step.
 #' @param warning If TRUE may return warnings.
+#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()]  function.
 #'
 #' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
-#' Mixture Transition Ditribution (MTD) models.
-#' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for High order MTD Markov chains.
+#' Mixture Transition Distribution (MTD) models.
+#' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT step.
+#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for high order MTD Markov chains.
 #'
 #' @return Returns a estimated set of relevant lags.
 #' @export
-sparseMarkov_FSC <- function(X,d,l=NULL,A=NULL, alpha=0.05, mu=1, xi=0.5, warning=FALSE){
+#' @examples
+#' X <- perfectSample(MTDmodel(Lambda=c(1,3),A=c(0,1)),N=2000)
+#' hdMTD_FSC(X,4,3,alpha=0.02)
+#' hdMTD_FSC(X,4,2,alpha=0.001)
+#'
+hdMTD_FSC <- function(X,d,l,alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE, ...){
   # Checking inputs
     # Sample
   X <- checkSample(X)
@@ -41,8 +47,8 @@ sparseMarkov_FSC <- function(X,d,l=NULL,A=NULL, alpha=0.05, mu=1, xi=0.5, warnin
     stop("The order d must be an integer number greater than 2.")
   }
     # l
-  while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d || l>length(S) ) {
-    cat("l value is not valid. l should be a positive integer lower or equal to d or the number of elements in S.")
+  while ( is.na(l) || l%%1 != 0 || l>d ) {
+    cat("l value is not valid. l should be a positive integer lower or equal to d.")
     l <- readline(prompt = "Please enter a valid l : ")
     l <- suppressWarnings(as.numeric(l))
   }
@@ -64,7 +70,7 @@ sparseMarkov_FSC <- function(X,d,l=NULL,A=NULL, alpha=0.05, mu=1, xi=0.5, warnin
     xi <- readline(prompt = "Please enter a valid xi: ")
     xi <- suppressWarnings(as.numeric(xi))
   }
-  if(!logical(warning)){stop("warning must be TRUE or FALSE.")}
+  if(!is.logical(warning)){stop("warning must be TRUE or FALSE.")}
 
 
   lenX <- length(X)
@@ -76,7 +82,8 @@ sparseMarkov_FSC <- function(X,d,l=NULL,A=NULL, alpha=0.05, mu=1, xi=0.5, warnin
   Xm <- X[1:m]
   Xn <- X[(m+1):lenX]
   n <- length(Xn)
-  S <- sparseMarkov_FS(Xm,d=d,l=l,A=A,warning=warning)
-  S <- sparseMarkov_CUT(Xn,d=d,S=S,A=A,alpha=alpha,mu=mu,xi=xi)
-  s
+  S <- hdMTD_FS(Xm,d=d,l=l,A=A,warning=warning)
+  S <- hdMTD_CUT(Xn,d=d,S=S,A=A,alpha=alpha,mu=mu,xi=xi)
+  S
 }
+

@@ -1,18 +1,22 @@
 #' Creates an MTD model
 #'
-#' Given a set of parameters generates an MTD model.
+#' Given a set of parameters generates a Mixture transition distribution model as an object of class MTD.
 #'
-#' @param Lambda the relevant lag set. Should be positive integers and will be sorted from smallest to greater. The smallest number
-#' will represent the latest `(most recent)` lag and the greater number the earliest.
-#' @param A the states space.
-#' @param w0 the weight of the independent distribution, must be a value in `[0,1)`.
-#' @param w_j a vector of weights for the distributions p_j. Values must be in `[0,1)`. The order of weights must match the order
+#' @param Lambda The relevant lag set. Should be positive integers and will be sorted from smallest to greater. The smallest number
+#' will represent the latest `(most recent)` time in the past and the greatest number the earliest time in the past.
+#' @param A The states space.
+#' @param w0 The weight of the independent distribution, must be a value in `[0,1)`.
+#' @param w_j A vector of weights for the distributions p_j. Values must be in `[0,1)`. The order of weights must match the order
 #' of the sorted Lambda set.
-#' @param p_j a list with `|\Lambda|` matrices `|A|\times|A|`.
-#' @param p0 a vector with the independent distribution part of a MTD model. If not informed and indep_part=TRUE will be sampled
-#' from a uniform. If indep_part=FALSE will be set to zero.
+#' @param p_j A list with lenL matrices `lenA x lenA`. Where lenL is the number of elements in Lambda and lenA the number of elements in A.
+#' @param p0 A vector with the independent distribution part of a MTD model. If not informed and indep_part=TRUE the distribution will be sampled
+#' form a uniform. If indep_part=FALSE the distribution will be set to zero.
 #' @param single_matrix If TRUE all p_j matrix are equal.
 #' @param indep_part If FALSE independent distribution is set to zero.
+#'
+#' @details This MTD object can be used by functions such as [oscillation()] which retrieves the models oscillation and [perfectSample()] which will
+#' perfectly sample a Markov chain with the models parameters.
+#'
 #' @return An MTD model as a MTD object.
 #' @importFrom stats runif
 #' @export
@@ -67,8 +71,7 @@ MTDmodel <- function(Lambda,
     p0 <- stats::runif(lenA)
     p0 <- p0/sum(p0)
   }
-  names(p0) <- c(paste0("p_0(",A,")"))#finished setting p0
-  #############################################################################
+  names(p0) <- c(paste0("p_0(",A,")"))
 
   #rewrite p0 and set w0=0 if indep_part=FALSE
   if(!is.logical(indep_part)) stop("Argument indep_part must be TRUE OR FALSE.")
@@ -112,8 +115,7 @@ MTDmodel <- function(Lambda,
 
   if(round(sum(lambdas),6)!=1) stop("Weights w0 + [w_j] must add up to 1, if indep_part=FALSE w0 will be set to 0 so be carefull in case w_j was inputed.")
 
-  names(lambdas) <- c("lam0",paste0("lam-", Lambda) ) #finished setting lambdas
-  #############################################################################
+  names(lambdas) <- c("lam0",paste0("lam-", Lambda) )
 
   #tests for p_j
   if(!is.logical(single_matrix))stop("Argument single_matrix must be TRUE OR FALSE.")
@@ -131,7 +133,6 @@ MTDmodel <- function(Lambda,
         ncol(aux)!=lenA ||
         any(sapply(p_j,dim)!=lenA)) stop(paste0("p_j must be a list of stochastic matrices ", lenA, "x",lenA))
   }else{ #if p_j=NULL
-    #makes lenL matrixes p_j
     p_j <- list()
     for (j in 1:lenL) {
       R <- matrix(runif(lenA^2),ncol=lenA,nrow = lenA)
@@ -145,8 +146,7 @@ MTDmodel <- function(Lambda,
       p_j[[j]] <- p_j[[1]]
     }
   }
-  names(p_j) <- paste0("p_-",Lambda)#finished settinf p_j
-  #############################################################################
+  names(p_j) <- paste0("p_-",Lambda)
 
   subx <- try(expand.grid(rep(list(tilde_A),lenL)),silent = TRUE) #all possible sequences x_{Lambda}
   if(class(subx)=="try-error"){stop(paste0("For lenL=",lenL," the data set with all pasts sequences (x of size lenL) with elements of A is too large."))}

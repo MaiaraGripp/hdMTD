@@ -1,7 +1,7 @@
 #' Total variation distance between distributions given x_S
 #'
 #' @param S A set of lags.
-#' @param j A specific lag \eqn{j \in S^c}.
+#' @param j A specific lag \eqn{j in the complement of S}.
 #' @param lenA The length of the states space A.
 #' @param base  A set with the estimated transition probabilities qa|xb_Sj.
 #' @param A_pairs A list with all pairs with elements of A.
@@ -15,7 +15,6 @@ dTV_sample <- function(S,j,lenA,base,A_pairs,x_S){
 
   nrowA_pairs <- nrow(A_pairs)
   if ( is.numeric(S) ) {
-   # S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
     filtr_S <- paste0("x",S)
     B <- base
     B$test <- apply(B %>% dplyr::select_at(filtr_S),1,is_xS,x_S)
@@ -33,10 +32,10 @@ dTV_sample <- function(S,j,lenA,base,A_pairs,x_S){
   }
   colnames(disTV) <- apply(A_pairs, 1, paste0, collapse="x")
   rownames(disTV) <- paste0(x_S,collapse = "")
-  disTV #vector size nrowA_pairs
+  disTV
 }
-#details (dTv_xS p(.|a_j),p(.|b_j),dTv_xS p(.|a_j),p(.|c_j) ...)
+
 
 is_xS <- function(x,y) {
-  return( all( x == y ) ) #I used return() so R would let me use Roxygen
+  return( all( x == y ) )
 }

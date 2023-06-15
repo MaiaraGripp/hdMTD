@@ -1,7 +1,9 @@
-#' Estimated stationary distribution vector for every a_j and a sequence x_S
+#' Estimated stationary distribution.
 #'
-#' @param S A set of lags.
-#' @param base A table with frequencies of a Markov chain sample.
+#' Estimated stationary distribution vector for every a_j and x_S
+#'
+#' @param S A subset of 1:d
+#' @param freqTabSj A table with frequencies of sequences in a Markov chain sample.
 #' @param x_S A specific sequence indexed by S.
 #' @param lenX The lenght of the sample vector.
 #' @param d The order of the chain.
@@ -11,15 +13,14 @@
 #' @importFrom dplyr %>%
 #
 #'
-PI <- function(S,base,x_S,lenX,d){
+PI <- function(S,freqTabSj,x_S,lenX,d){
   if (is.numeric(S)) {
-   #S <- sort(S,decreasing = TRUE) #S needs to be decreasing for filtering
     filtr_S <- paste0("x",S)
-    B <- base
+    B <- freqTabSj
     B$test <- apply( B %>% dplyr::select_at(filtr_S),1,is_xS,x_S) #true forall B$x_S == x_S
     C <- dplyr::filter(B,test == TRUE) #only rows with x_S remain
   }else{
-    C <- base
+    C <- freqTabSj
   }
   inv <- matrix(C$Nx_Sj/(lenX-d),ncol = 1)
   colnames(inv) <- paste0(x_S,collapse = "")
@@ -27,5 +28,5 @@ PI <- function(S,base,x_S,lenX,d){
 }
 
 is_xS <- function(x,y) {
-  return( all( x == y ) ) #I used return() so R would let me use Roxygen
+  return( all( x == y ) )
 }

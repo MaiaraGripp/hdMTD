@@ -1,3 +1,5 @@
+#' Check a MTD object.
+#'
 #' Checks if a MTD object has all the needed parameters.
 #'
 #' @param MTD An MTD object

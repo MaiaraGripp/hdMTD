@@ -1,4 +1,4 @@
 library(testthat)
-library(sparseMarkov)
+library(hdMTD)
 
-test_check("sparseMarkov")
+test_check("hdMTD")
