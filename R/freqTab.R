@@ -1,4 +1,4 @@
-#' Table of estimated transition probabilities and frequencies of sample sequences.
+#' Table of estimated transition probabilities and frequencies of sample sequences
 #'
 #' A table with the sample sequences (including time 0) frequencies , and the estimated transition probabilities.
 #'

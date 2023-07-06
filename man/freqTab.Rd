@@ -2,7 +2,7 @@
 % Please edit documentation in R/freqTab.R
 \name{freqTab}
 \alias{freqTab}
-\title{Table of estimated transition probabilities and frequencies of sample sequences.}
+\title{Table of estimated transition probabilities and frequencies of sample sequences}
 \usage{
 freqTab(S, j = NULL, A, countsTab, complete = TRUE)
 }

@@ -1,6 +1,6 @@
-#' Table of frequency of sample sequences.
+#' Table with the frequency of sample sequences
 #'
-#' Makes a table with the frequencies of sequences in the sample that occurred at times {-S}U{-j}.
+#' Creates a table with the frequencies of the sequences in the sample.
 #'
 #' @param S A subset of \eqn{1:d}.
 #' @param j An element \eqn{j \in (1:d) \setminus S}.

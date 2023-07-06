@@ -2,7 +2,7 @@
 % Please edit documentation in R/freqTabSj.R
 \name{freqTabSj}
 \alias{freqTabSj}
-\title{Table of frequency of sample sequences.}
+\title{Table with the frequency of sample sequences}
 \usage{
 freqTabSj(S, j, freqTab, lenX, d)
 }
@@ -21,5 +21,5 @@ freqTabSj(S, j, freqTab, lenX, d)
 A table with sequences x indexed by \eqn{-S\cup -j}, their frequencies and the MLE estimator of the transition probabilities.
 }
 \description{
-Makes a table with the frequencies of sequences in the sample that occurred at times {-S}U{-j}.
+Creates a table with the frequencies of the sequences in the sample.
 }

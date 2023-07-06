@@ -7,7 +7,7 @@
 hdMTD(X, d, method = "FS", ...)
 }
 \arguments{
-\item{X}{A mixture transition distribution (MTD) chain sample.}
+\item{X}{A Mixture Transition Distribution (MTD) chain sample.}
 
 \item{d}{An upper bound for the chains order.}
 
@@ -20,21 +20,21 @@ each method with its respective function as explained in "details".}
 Returns the estimated relevant lag set for a MTD chain sample.
 }
 \description{
-A function for inference in mixture transition distribution (MTD) Markov chains. This function can use a selected "method" to perform estimation of the relevant lag set of a MTD chain sample.
+A function for inference in Mixture Transition Distribution (MTD) Markov chains. This function can use a selected "method" to perform estimation of the relevant lag set of a MTD chain sample.
 The default method is "FS" (Foward Stepwise) which is specially useful in high dimension. The other available methods are "CUT", FSC" (Foward Stepwise and Cut) which is a application of the
 "FS" method followed by the "CUT" method, and lastly the "BIC" (Bayesian Information Criterion) method. For more information on these methods see the documentation of their specific functions
 listed on "details" below.
 }
 \details{
 This function is simply a way to gather all of the hdMTD_ functions in a single place.
-So, for example, if the \code{\link[=hdMTD]{hdMTD()}} function is used with method="FSC" it will call the \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} function. Note that, in this case, any extra parameters must match those used by \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}.
+For example, if the \code{\link[=hdMTD]{hdMTD()}} function is used with method="FSC" it will call the \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} function. Note that, in this case, any extra parameters must match those used by \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}.
 Each method may use a different set of parameters, and they can be passed to \code{\link[=hdMTD]{hdMTD()}} trough the ... argument. In other to see with parameters can be passed for each method
 seek the documentation of the hdMTD_"method" function as follows:
 \itemize{
-\item For "FS" method, extra parameters can be cheeked in \code{\link[=hdMTD_FS]{hdMTD_FS()}} documentation.
-\item For "FSC" method, extra parameters can be cheeked in \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} documentation.
-\item For "CUT" method, extra parameters can be cheeked in \code{\link[=hdMTD_CUT]{hdMTD_CUT()}} documentation.
-\item For "BIC" method, extra parameters can be cheeked in \code{\link[=hdMTD_BIC]{hdMTD_BIC()}} documentation.
+\item For "FS" method, extra parameters are listed in \code{\link[=hdMTD_FS]{hdMTD_FS()}} documentation.
+\item For "FSC" method, extra parameters are listed in \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} documentation.
+\item For "CUT" method, extra parameters are listed in \code{\link[=hdMTD_CUT]{hdMTD_CUT()}} documentation.
+\item For "BIC" method, extra parameters are listed in \code{\link[=hdMTD_BIC]{hdMTD_BIC()}} documentation.
 }
 }
 \examples{
