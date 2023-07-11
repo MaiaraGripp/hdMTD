@@ -1,14 +1,14 @@
 #' Inference in MTD models
 #'
 #' A function for inference in Mixture Transition Distribution (MTD) Markov chains. This function can use a selected "method" to perform estimation of the relevant lag set of a MTD chain sample.
-#' The default method is "FS" (Foward Stepwise) which is specially useful in high dimension. The other available methods are "CUT", FSC" (Foward Stepwise and Cut) which is a application of the
+#' The default method is "FS" (Foward Stepwise) which is specially useful in high dimension. The other available methods are "CUT", FSC" (Foward Stepwise and Cut) which is an application of the
 #' "FS" method followed by the "CUT" method, and lastly the "BIC" (Bayesian Information Criterion) method. For more information on these methods see the documentation of their specific functions
 #' listed on "details" below.
 #'
 #'
 #' @details This function is simply a way to gather all of the hdMTD_ functions in a single place.
 #' For example, if the [hdMTD()] function is used with method="FSC" it will call the [hdMTD_FSC()] function. Note that, in this case, any extra parameters must match those used by [hdMTD_FSC()].
-#' Each method may use a different set of parameters, and they can be passed to [hdMTD()] trough the ... argument. In other to see with parameters can be passed for each method
+#' Each method may use a different set of parameters, and they can be passed to [hdMTD()] trough the ... argument. In other to see which parameters can be passed for each method
 #' seek the documentation of the hdMTD_"method" function as follows:
 #' \itemize{
 #' \item For "FS" method, extra parameters are listed in [hdMTD_FS()] documentation.
@@ -21,7 +21,7 @@
 #' @param d An upper bound for the chains order.
 #' @param method A method for estimation of the relevant lag set. The methods available in this package are "FS" (default),"FSC","CUT" and "BIC". See documentation for
 #' each method with its respective function as explained in "details".
-#' @param ... Extra arguments relevant to chosen method see "details" for more information.
+#' @param ... Extra arguments relevant to the chosen method, see "details" for more information.
 #'
 #' @return Returns the estimated relevant lag set for a MTD chain sample.
 #' @export
