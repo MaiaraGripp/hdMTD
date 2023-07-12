@@ -9,7 +9,7 @@ countsTab(X, d)
 \arguments{
 \item{X}{A Markov Chain sample.}
 
-\item{d}{A upper bound for the Markov chains order.}
+\item{d}{An upper bound for the Markov chain order.}
 }
 \value{
 A table with every size d+1 sequence in the sample and its absolute frequency.

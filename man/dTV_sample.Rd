@@ -2,27 +2,27 @@
 % Please edit documentation in R/dTV_sample.R
 \name{dTV_sample}
 \alias{dTV_sample}
-\title{Total variation distance between distributions given x_S}
+\title{Total variation distance between distributions}
 \usage{
 dTV_sample(S, j, lenA, base, A_pairs, x_S)
 }
 \arguments{
 \item{S}{A set of lags.}
 
-\item{j}{A specific lag \eqn{j in the complement of S}.}
+\item{j}{A lag j in the \eqn{complement of S}.}
 
 \item{lenA}{The length of the states space A.}
 
-\item{base}{A set with the estimated transition probabilities qa|xb_Sj.}
+\item{base}{A set with the estimated transition probabilities \eqn{q(a|xb_Sj)}.}
 
 \item{A_pairs}{A list with all pairs with elements of A.}
 
 \item{x_S}{A specific sequence indexed by S.}
 }
 \value{
-Returns a vector with the total variation distance between estimated distributions
-given a x_S (i.e. a past indexed by S).
+Returns a vector with the total variation distance between the estimated distributions
+given a past x_S (i.e. a past x indexed by S).
 }
 \description{
-Total variation distance between distributions given x_S
+Calculates the total variation distance between distributions conditioned in a given past x_S.
 }

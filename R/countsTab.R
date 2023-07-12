@@ -3,7 +3,7 @@
 #' Creates a table with sample sequences and their absolute frequency.
 #'
 #' @param X A Markov Chain sample.
-#' @param d A upper bound for the Markov chains order.
+#' @param d An upper bound for the Markov chain order.
 #'
 #' @return A table with every size d+1 sequence in the sample and its absolute frequency.
 #' @export
@@ -32,9 +32,7 @@ countsTab <-function(X,d){
   }
   colnames(XTab) <- c(paste("x",seq(d,1),sep="" ),"a")
 
-  # Adding counts do XTab:
-  ##  Column Nxa: how many times each sequence appeared in X.
-  count <- NULL #solve problem with global binding in check()
+  count <- NULL
   XTab <- dplyr::as_tibble(cbind(XTab,count=1))
   XTab <- XTab %>%
             dplyr::mutate(count = as.numeric(count))

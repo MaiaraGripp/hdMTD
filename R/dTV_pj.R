@@ -1,12 +1,12 @@
-#' Total distance variation for p_j distribution.
+#' Total variation distance for p_j distribution.
 #'
-#' Calculates the total distance variation given a stochastic matrix p_j
+#' Calculates the total variation distance given a stochastic matrix p_j.
 #'
 #' @param p_j A stochastic matrix.
 #' @param rows A matrix with two columns, the pair of numbers in each row represents the rows of p_j to be compared,
 #'  i.e. the distributions in p_j to be compared.
 #'
-#' @return Returns de total variation distance of a set of distributions in p_j.
+#' @return Returns the total variation distance of a set of distributions in p_j.
 #'
 dTV_pj <- function(p_j,rows){
   dV <- numeric(nrow(rows))

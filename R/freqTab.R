@@ -21,7 +21,7 @@
 #' countsTab=countsTab(c(1,0,1,0,2,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0),d=3),complete=FALSE)
 freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
   # Cheking inputs
-  if(!is.data.frame(countsTab)){stop("countsTab must be a dataframe. Try usings countsTab() function.")}
+  if(!is.data.frame(countsTab)){stop("countsTab must be a dataframe. Try using countsTab() function.")}
   d <- ncol(countsTab)-2
   if(length(S)!=0){
     if(length(S) < 1  ||
@@ -31,7 +31,7 @@ freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
   if(length(j)!=0){
     if(length(j)!=1 ||
        j%%1!=0      ||
-       j %in% S ){stop("j must be a integer number in the complement of S in (1:d).")}
+       j %in% S ){stop("j must be a integer number in the complement of S.")}
   }
   Sj <- sort(c(S,j),decreasing = TRUE)
   if(length(Sj)==0){stop("The set {S}U{j} can't be NULL.")}
@@ -49,9 +49,9 @@ freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
 
   if ( ( nrow(freqTab) < lenA^(lenSj+1) ) && complete ){
     Tablexa <- expand.grid(rep(list(A),lenSj+1))[,order((lenSj+1):1)]
-    list1 <- apply( freqTab[,1:(lenSj+1)],1,paste0,collapse="" ) #list of sequences in freqTab
-    list2 <- apply( Tablexa, 1, paste0,collapse="" ) #list of sequences in Tablexa
-    Tablexa <- Tablexa[ match(setdiff(list2,list1),list2),] #list of sequences in Tablexa that where not in freqTab
+    list1 <- apply( freqTab[,1:(lenSj+1)],1,paste0,collapse="" )
+    list2 <- apply( Tablexa, 1, paste0,collapse="" )
+    Tablexa <- Tablexa[ match(setdiff(list2,list1),list2),]
     Tablexa <- cbind(Tablexa,0)
     colnames(Tablexa) <- colnames(freqTab)
     freqTab <- rbind(freqTab,Tablexa)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dTV_pj.R
 \name{dTV_pj}
 \alias{dTV_pj}
-\title{Total distance variation for p_j distribution.}
+\title{Total variation distance for p_j distribution.}
 \usage{
 dTV_pj(p_j, rows)
 }
@@ -13,8 +13,8 @@ dTV_pj(p_j, rows)
 i.e. the distributions in p_j to be compared.}
 }
 \value{
-Returns de total variation distance of a set of distributions in p_j.
+Returns the total variation distance of a set of distributions in p_j.
 }
 \description{
-Calculates the total distance variation given a stochastic matrix p_j
+Calculates the total variation distance given a stochastic matrix p_j.
 }

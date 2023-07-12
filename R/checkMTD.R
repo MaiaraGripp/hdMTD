@@ -5,8 +5,9 @@
 #' @param MTD An MTD object
 #'
 checkMTD <- function(MTD){
-  if(!is.list(MTD)|| class(MTD)!="MTD")stop("MTD must be a object of class MTD which is a list of especific parameters. You can resort to MTDmodel function to create such object.")
-  #testing Lambda and A
+  if(!is.list(MTD)|| class(MTD)!="MTD")stop("MTD must be an object of class MTD which is a list with especific parameters.
+                                            The use of MTDmodel() function in order to create MTD is recommended.")
+
   if(!is.numeric(MTD$Lambda) ||
      any(MTD$Lambda<=0) ||
      !all(MTD$Lambda%%1==0)||
@@ -16,9 +17,9 @@ checkMTD <- function(MTD){
      !is.vector(MTD$A))stop("A must be a numeric vector with nonnegative numbers.")
 
   #sorting parameters
-  if(all(sort(MTD$Lambda)!=MTD$Lambda))stop("Lambda set must be ordered from smallest to greater, be carefull with matching order of weights.")
+  if(all(sort(MTD$Lambda)!=MTD$Lambda))stop("Lambda set must be ordered from smallest to largest, be carefull with matching order of weights.")
   Lambda <- sort(MTD$Lambda)
-  if(all(sort(MTD$A)!=MTD$A))stop("Stace space A must be ordered from smallest to greater.")
+  if(all(sort(MTD$A)!=MTD$A))stop("The states space A must be ordered from smallest to largest.")
   MTD$A <- sort(MTD$A)
 
   lenL <- length(MTD$Lambda)
