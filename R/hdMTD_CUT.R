@@ -9,8 +9,8 @@
 #' @param alpha A parameter of the CUT algorithm. Alpha is constant of a threshold used in the CUT
 #'step to determine if two distributions are different enough. The larger the alpha, the
 #'greater the distance required between the distributions (to be considered different).
-#' @param mu A parameter of the CUT algorithm. mu is also a component of the same threshold of alpha.
-#' @param xi A parameter of the CUT algorithm. xi is also a component of the same threshold of alpha and mu.
+#' @param mu A parameter of the CUT algorithm. mu is also a component of the same threshold as alpha.
+#' @param xi A parameter of the CUT algorithm. xi is also a component of the same threshold as alpha and mu.
 #' @param warning If TRUE may return warnings.
 #' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
 #'

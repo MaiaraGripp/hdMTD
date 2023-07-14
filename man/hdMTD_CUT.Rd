@@ -27,9 +27,9 @@ hdMTD_CUT(
 step to determine if two distributions are different enough. The larger the alpha, the
 greater the distance required between the distributions (to be considered different).}
 
-\item{mu}{A parameter of the CUT algorithm. mu is also a component of the same threshold of alpha.}
+\item{mu}{A parameter of the CUT algorithm. mu is also a component of the same threshold as alpha.}
 
-\item{xi}{A parameter of the CUT algorithm. xi is also a component of the same threshold of alpha and mu.}
+\item{xi}{A parameter of the CUT algorithm. xi is also a component of the same threshold as alpha and mu.}
 
 \item{A}{The states space.}
 
