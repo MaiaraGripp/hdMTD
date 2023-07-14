@@ -15,7 +15,10 @@ perfectSample(MTD, N = NULL)
 Returns a sample from o MTD model.
 }
 \description{
-Perfectly samples a MTD Markov chain. In other words, samples a MTD Markov Chain from stationary distribution.
+Perfectly samples a MTD Markov chain.
+}
+\details{
+Samples a MTD Markov Chain from stationary distribution.
 }
 \examples{
 perfectSample( MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )

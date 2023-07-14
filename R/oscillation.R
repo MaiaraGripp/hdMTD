@@ -5,9 +5,10 @@
 #' @param x Must be a MTD object.
 #'
 #' @details The oscillations of a MTD model
-#' (\eqn{\delta_k} for \eqn{k in \Lambda}), are the product of the weight \eqn{\lambda_k} times the maximum of the total variation distances between the distributions in the matrix p_k.
-#' These values are important because they measure how much a relevant lag k influences the model.
-#'
+#' (\eqn{\delta_k} for \eqn{k in \Lambda}), are the product of the weight \eqn{\lambda_k}
+#'   multiplied by the maximum of the total variation distances between the
+#'  distributions in the matrix p_k. These values are important because they
+#'   measure the influence of a relevant lag k on the model.
 #' @return Returns the oscillations for each relevant lag of a MTD object.
 #' @export oscillation
 #' @examples oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )
@@ -31,7 +32,7 @@ oscillation.MTD <- function(x){
 
 #' @export
 oscillation.default <- function(x){
-  print("The implemented method can only calculate oscillations for MTD objects for now.")
+  print("The implemented method can currently only calculate oscillations for MTD objects.")
 }
 
 

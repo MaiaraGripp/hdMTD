@@ -17,7 +17,7 @@ checkMTD <- function(MTD){
      !is.vector(MTD$A))stop("A must be a numeric vector with nonnegative numbers.")
 
   #sorting parameters
-  if(all(sort(MTD$Lambda)!=MTD$Lambda))stop("Lambda set must be ordered from smallest to largest, be carefull with matching order of weights.")
+  if(all(sort(MTD$Lambda)!=MTD$Lambda))stop("The Lambda set will be ordered from smallest to greatest, be carefull with matching the order of weights w_j accordingly.")
   Lambda <- sort(MTD$Lambda)
   if(all(sort(MTD$A)!=MTD$A))stop("The states space A must be ordered from smallest to largest.")
   MTD$A <- sort(MTD$A)

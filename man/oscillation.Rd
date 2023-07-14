@@ -17,8 +17,10 @@ Calculates the oscillations of a MTD model object.
 }
 \details{
 The oscillations of a MTD model
-(\eqn{\delta_k} for \eqn{k in \Lambda}), are the product of the weight \eqn{\lambda_k} times the maximum of the total variation distances between the distributions in the matrix p_k.
-These values are important because they measure how much a relevant lag k influences the model.
+(\eqn{\delta_k} for \eqn{k in \Lambda}), are the product of the weight \eqn{\lambda_k}
+multiplied by the maximum of the total variation distances between the
+distributions in the matrix p_k. These values are important because they
+measure the influence of a relevant lag k on the model.
 }
 \examples{
 oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )

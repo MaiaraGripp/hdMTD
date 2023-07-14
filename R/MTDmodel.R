@@ -2,20 +2,22 @@
 #'
 #' Given a set of parameters generates a Mixture transition distribution model as an object of class MTD.
 #'
-#' @param Lambda The relevant lag set. Should be positive integers and will be sorted from smallest to greater. The smallest number
-#' will represent the latest `(most recent)` time in the past and the greatest number the earliest time in the past.
+#' @param Lambda The relevant lag set should consist of positive integers and will be sorted from smallest
+#'  to greatest. The smallest number represents the latest (most recent) time in the past, and the greatest
+#'   number represents the earliest time in the past.
 #' @param A The states space.
 #' @param w0 The weight of the independent distribution, must be a value in `[0,1)`.
-#' @param w_j A vector of weights for the distributions p_j. Values must be in `[0,1)`. The order of weights must match the order
-#' of the sorted Lambda set.
-#' @param p_j A list with lenL matrices `lenA x lenA`. Where lenL is the number of elements in Lambda and lenA the number of elements in A.
-#' @param p0 A vector with the independent distribution part of a MTD model. If not informed and indep_part=TRUE the distribution will be sampled
-#' form a uniform. If indep_part=FALSE the distribution will be set to zero.
-#' @param single_matrix If TRUE all p_j matrix are equal.
-#' @param indep_part If FALSE independent distribution is set to zero.
+#' @param w_j A vector of weights for the distributions p_j. Values must be in the range `[0, 1)`. The order of weights must match the order
+#'  of the sorted Lambda set.
+#' @param p_j A list with lenL matrices of size `lenA x lenA`. Here, lenL represents the number of elements in Lambda, and lenA represents the number
+#'  of elements in A.
+#' @param p0 A vector with the independent distribution part of an MTD model. If not informed and indep_part=TRUE, the distribution will be sampled
+#' from a uniform distribution. If indep_part=FALSE, the distribution will be set to zero.
+#' @param single_matrix If TRUE all p_j matrices are equal.
+#' @param indep_part If FALSE the independent distribution is set to zero.
 #'
-#' @details This MTD object can be used by functions such as [oscillation()] which retrieves the models oscillation and [perfectSample()] which will
-#' perfectly sample a Markov chain with the models parameters.
+#' @details This MTD object can be used by functions such as [oscillation()], which retrieves the model's oscillation, and [perfectSample()],
+#'  which will perfectly sample a MTD Markov chain with the model's parameters
 #'
 #' @return An MTD model as a MTD object.
 #' @importFrom stats runif
@@ -48,7 +50,7 @@ MTDmodel <- function(Lambda,
      !is.vector(A))stop("A must be a numeric vector with nonnegative numbers.")
 
   #sorting parameters
-  if( all(sort(Lambda)!=Lambda) & length(w_j)!=0 )warning("Lambda set will be ordered from smallest to greater, be carefull with matching order of w_j.")
+  if( all(sort(Lambda)!=Lambda) & length(w_j)!=0 )warning("The Lambda set will be ordered from smallest to greatest, be carefull with matching order of w_j accordingly.")
   Lambda <- sort(Lambda)
   A <- sort(A)
 
@@ -66,7 +68,7 @@ MTDmodel <- function(Lambda,
     if( !is.numeric(p0) ||
         sum(p0)!=1 ||
         !all(p0>0) ||
-        length(p0)!=lenA )stop("p0 must be a vector of size ",lenA, " numeric, nonnegative and must add up to 1.")
+        length(p0)!=lenA )stop("p0 must be a vector of size ",lenA, " consisting of numeric, nonnegative values that sum up to 1.")
   }else{
     p0 <- stats::runif(lenA)
     p0 <- p0/sum(p0)
@@ -77,7 +79,7 @@ MTDmodel <- function(Lambda,
   if(!is.logical(indep_part)) stop("Argument indep_part must be TRUE OR FALSE.")
   if(!indep_part){
       p0 <- rep(0,lenA)
-      if(length(w0)!=0 && w0!=0 )warning("Since indep_part=FALSE w0 and p0 will be set to 0")
+      if(length(w0)!=0 && w0!=0 )warning("Since indep_part=FALSE w0 and p0 will be set to 0.")
       w0 <- 0
     }
 
@@ -87,7 +89,7 @@ MTDmodel <- function(Lambda,
     if( length(w0) > 1 ||
         !is.numeric(w0) ||
         w0 < 0 ||
-        w0 >= 1) stop("w0 must be a number in [0,1) .")
+        w0 >= 1) stop("w0 must be a number in the range [0,1) .")
     #if w0 passes test...
     lambdas[1] <- w0
   }
@@ -113,7 +115,7 @@ MTDmodel <- function(Lambda,
     }
   }
 
-  if(round(sum(lambdas),6)!=1) stop("Weights w0 + [w_j] must add up to 1, if indep_part=FALSE w0 will be set to 0 so be carefull in case w_j was inputed.")
+  if(round(sum(lambdas),6)!=1) stop("The sum of weights w0 + [w_j] must add up to 1. If indep_part=FALSE, w0 will be set to 0, so be careful in case w_j was inputted.")
 
   names(lambdas) <- c("lam0",paste0("lam-", Lambda) )
 
@@ -149,7 +151,7 @@ MTDmodel <- function(Lambda,
   names(p_j) <- paste0("p_-",Lambda)
 
   subx <- try(expand.grid(rep(list(tilde_A),lenL)),silent = TRUE) #all possible sequences x_{Lambda}
-  if(class(subx)=="try-error"){stop(paste0("For lenL=",lenL," the data set with all pasts sequences (x of size lenL) with elements of A is too large."))}
+  if(class(subx)=="try-error"){stop(paste0("For lenL=",lenL," the dataset with all pasts sequences (x of size lenL) with elements of A is too large."))}
   subx <- subx[,order(lenL:1)]
 
   P <- matrix(0,ncol = lenA,nrow = lenAL)

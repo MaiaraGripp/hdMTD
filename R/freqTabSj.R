@@ -8,7 +8,7 @@
 #' @param lenX The length of sample vector.
 #' @param d The chains order.
 #'
-#' @return A table with sequences x indexed by \eqn{-S\cup -j}, their frequencies and the MLE estimator of the transition probabilities.
+#' @return A table with sequences x indexed by \eqn{{-S} U {-j}}, their frequencies and the MLE estimator of the transition probabilities.
 #' @importFrom dplyr %>%
 #'
 freqTabSj <- function(S,j,freqTab,lenX,d){

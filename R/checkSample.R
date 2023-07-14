@@ -1,14 +1,14 @@
-#' Check a Markov chain sample
+#' Check a sample
 #'
-#' Checks if a Markov chain sample is suitable for use
+#' Checks if a sample is suitable for use
 #'
-#' @param X A vector with a Markov Chain.
+#' @param X A vector with a sample of a MTD Markov chain.
 #'
 #' @return Returns adjusted chain sample and possible sample errors.
 #'
 checkSample <- function(X){
   if(is.data.frame(X)){
-    if(ncol(X)!=1)stop("X must be a single Markov Chain so multiple columns are not accepted.")
+    if(ncol(X)!=1)stop("X must be a single chain so multiple columns are not accepted.")
     if(nrow(X)<=1)stop("Insufficient sample size.")
     X <- X[,1]
   }

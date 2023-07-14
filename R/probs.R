@@ -1,13 +1,13 @@
 #' Estimated transition probabilities
 #'
-#' Maximum likelihood estimators for a Markov Chain with relevant lag set S.
+#' Maximum likelihood estimators for a MTD Markov chain with relevant lag set S.
 #'
-#' @param X Markov Chain.
-#' @param S Relevant lag set.
-#' @param A State space.
+#' @param X A MTD Markov Chain.
+#' @param S The estimated relevant lags set.
+#' @param A The state space.
 #' @param warning If TRUE may return warnings.
 #'
-#' @return The MLE for a given Markov Chain sample with relevant lag set S.
+#' @return The MLE for a given MTD Markov Chain sample with relevant lags set S.
 #' @export
 #'
 #' @examples
@@ -31,7 +31,7 @@ probs <- function(X,S,A=NULL,warning=FALSE){
       length(A)<=1   ||
       length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
   if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it must have all states that occur in the sample.")
+    stop("Check the states space, it include all states that occur in the sample.")
   }
 
   S <- sort(S,decreasing = TRUE)

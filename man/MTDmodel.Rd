@@ -16,24 +16,26 @@ MTDmodel(
 )
 }
 \arguments{
-\item{Lambda}{The relevant lag set. Should be positive integers and will be sorted from smallest to greater. The smallest number
-will represent the latest \verb{(most recent)} time in the past and the greatest number the earliest time in the past.}
+\item{Lambda}{The relevant lag set should consist of positive integers and will be sorted from smallest
+to greatest. The smallest number represents the latest (most recent) time in the past, and the greatest
+number represents the earliest time in the past.}
 
 \item{A}{The states space.}
 
 \item{w0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
 
-\item{w_j}{A vector of weights for the distributions p_j. Values must be in \verb{[0,1)}. The order of weights must match the order
+\item{w_j}{A vector of weights for the distributions p_j. Values must be in the range \verb{[0, 1)}. The order of weights must match the order
 of the sorted Lambda set.}
 
-\item{p_j}{A list with lenL matrices \verb{lenA x lenA}. Where lenL is the number of elements in Lambda and lenA the number of elements in A.}
+\item{p_j}{A list with lenL matrices of size \verb{lenA x lenA}. Here, lenL represents the number of elements in Lambda, and lenA represents the number
+of elements in A.}
 
-\item{p0}{A vector with the independent distribution part of a MTD model. If not informed and indep_part=TRUE the distribution will be sampled
-form a uniform. If indep_part=FALSE the distribution will be set to zero.}
+\item{p0}{A vector with the independent distribution part of an MTD model. If not informed and indep_part=TRUE, the distribution will be sampled
+from a uniform distribution. If indep_part=FALSE, the distribution will be set to zero.}
 
-\item{single_matrix}{If TRUE all p_j matrix are equal.}
+\item{single_matrix}{If TRUE all p_j matrices are equal.}
 
-\item{indep_part}{If FALSE independent distribution is set to zero.}
+\item{indep_part}{If FALSE the independent distribution is set to zero.}
 }
 \value{
 An MTD model as a MTD object.
@@ -42,8 +44,8 @@ An MTD model as a MTD object.
 Given a set of parameters generates a Mixture transition distribution model as an object of class MTD.
 }
 \details{
-This MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}} which retrieves the models oscillation and \code{\link[=perfectSample]{perfectSample()}} which will
-perfectly sample a Markov chain with the models parameters.
+This MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}}, which retrieves the model's oscillation, and \code{\link[=perfectSample]{perfectSample()}},
+which will perfectly sample a MTD Markov chain with the model's parameters
 }
 \examples{
 MTDmodel(Lambda=c(1,3),A=c(4,8,12))

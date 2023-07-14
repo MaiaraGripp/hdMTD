@@ -2,16 +2,16 @@
 % Please edit documentation in R/checkSample.R
 \name{checkSample}
 \alias{checkSample}
-\title{Check a Markov chain sample}
+\title{Check a sample}
 \usage{
 checkSample(X)
 }
 \arguments{
-\item{X}{A vector with a Markov Chain.}
+\item{X}{A vector with a sample of a MTD Markov chain.}
 }
 \value{
 Returns adjusted chain sample and possible sample errors.
 }
 \description{
-Checks if a Markov chain sample is suitable for use
+Checks if a sample is suitable for use
 }

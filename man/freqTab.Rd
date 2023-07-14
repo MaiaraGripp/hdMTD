@@ -25,7 +25,7 @@ A table with the sequences that appeared in the sample (at times \eqn{ {-S}U{-j}
 their frequencies and the MLE estimator of the transition probabilities.
 }
 \description{
-A table with the sample sequences (including time 0) frequencies , and the estimated transition probabilities.
+A table with the sample sequences (including time 0) frequencies, and the estimated transition probabilities.
 }
 \examples{
 freqTab(S=c(1,3),j=NULL,A=c(0,1,2),

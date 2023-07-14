@@ -2,15 +2,15 @@
 #'
 #' Creates a table with sample sequences and their absolute frequency.
 #'
-#' @param X A Markov Chain sample.
-#' @param d An upper bound for the Markov chain order.
+#' @param X A MTD Markov Chain sample.
+#' @param d An upper bound for the chains order.
 #'
 #' @return A table with every size d+1 sequence in the sample and its absolute frequency.
 #' @export
 #' @importFrom dplyr %>%
 #'
 #' @details The function will make a tibble with \eqn{d+2} columns. For each row, the first \eqn{d+1} columns will
-#'   have a sequency of size \eqn{d+1} that appeared in the sample. The last column, called \code{Nxa},
+#'   have a sequence of size \eqn{d+1} that appeared in the sample. The last column, called \code{Nxa},
 #'   will contain the number of times each of these sequences appeared in the sample.
 #'
 #' @examples

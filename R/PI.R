@@ -1,15 +1,15 @@
 #' Estimated stationary distribution.
 #'
-#' Estimated stationary distribution vector for every a_j and x_S
+#' Estimated stationary distribution vector for every a_j and past x_S
 #'
 #' @param S A subset of 1:d
-#' @param freqTabSj A table with frequencies of sequences in a Markov chain sample.
+#' @param freqTabSj A table with frequencies of sequences in a MTD Markov chain sample.
 #' @param x_S A specific sequence indexed by S.
-#' @param lenX The lenght of the sample vector.
+#' @param lenX The length of the sample vector.
 #' @param d The order of the chain.
 #'
 #' @return Returns a vector of estimated stationary distributions of a sequence X_S
-#' with the element in j varying in all the states space.
+#' with the element in j varying across the entire state space.
 #' @importFrom dplyr %>%
 #
 #'

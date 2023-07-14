@@ -9,18 +9,18 @@ PI(S, freqTabSj, x_S, lenX, d)
 \arguments{
 \item{S}{A subset of 1:d}
 
-\item{freqTabSj}{A table with frequencies of sequences in a Markov chain sample.}
+\item{freqTabSj}{A table with frequencies of sequences in a MTD Markov chain sample.}
 
 \item{x_S}{A specific sequence indexed by S.}
 
-\item{lenX}{The lenght of the sample vector.}
+\item{lenX}{The length of the sample vector.}
 
 \item{d}{The order of the chain.}
 }
 \value{
 Returns a vector of estimated stationary distributions of a sequence X_S
-with the element in j varying in all the states space.
+with the element in j varying across the entire state space.
 }
 \description{
-Estimated stationary distribution vector for every a_j and x_S
+Estimated stationary distribution vector for every a_j and past x_S
 }

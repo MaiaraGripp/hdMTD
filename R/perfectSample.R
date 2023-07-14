@@ -1,4 +1,6 @@
-#' Perfectly samples a MTD Markov chain. In other words, samples a MTD Markov Chain from stationary distribution.
+#' Perfectly samples a MTD Markov chain.
+#'
+#' Samples a MTD Markov Chain from stationary distribution.
 #'
 #' @title Perfect Sample.
 #' @param MTD A canonical MTD object.
@@ -22,7 +24,7 @@ perfectSample.MTD <- function(MTD,N=NULL){
     warning("Sample size N not informed. N will be set to 1000.")
     N <- 1000
   }
-  checkMTD(MTD) #checks if MTD object is correctly set
+  checkMTD(MTD)
   if( N<=max(MTD$Lambda) ||
       !is.numeric(N) ||
       length(N)!=1 ||
@@ -33,7 +35,7 @@ perfectSample.MTD <- function(MTD,N=NULL){
   chain <- NULL
   repeat{
     chain <- c(NA,chain)
-    Yt <- NULL #times chain
+    Yt <- NULL
     Yt[1] <- 1
     Kt <- 1
     cont <- 1

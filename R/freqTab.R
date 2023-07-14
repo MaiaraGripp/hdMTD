@@ -1,6 +1,6 @@
 #' Table of probabilities and frequencies of sample sequences
 #'
-#' A table with the sample sequences (including time 0) frequencies , and the estimated transition probabilities.
+#' A table with the sample sequences (including time 0) frequencies, and the estimated transition probabilities.
 #'
 #' @param S A subset of \eqn{1:d}.
 #' @param j An element j in set \eqn{ {1:d} \ {S} }.

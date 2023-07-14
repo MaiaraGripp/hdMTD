@@ -18,7 +18,7 @@ freqTabSj(S, j, freqTab, lenX, d)
 \item{d}{The chains order.}
 }
 \value{
-A table with sequences x indexed by \eqn{-S\cup -j}, their frequencies and the MLE estimator of the transition probabilities.
+A table with sequences x indexed by \eqn{{-S} U {-j}}, their frequencies and the MLE estimator of the transition probabilities.
 }
 \description{
 Creates a table with the frequencies of the sequences in the sample.

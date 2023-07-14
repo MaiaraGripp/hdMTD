@@ -7,19 +7,19 @@
 probs(X, S, A = NULL, warning = FALSE)
 }
 \arguments{
-\item{X}{Markov Chain.}
+\item{X}{A MTD Markov Chain.}
 
-\item{S}{Relevant lag set.}
+\item{S}{The estimated relevant lags set.}
 
-\item{A}{State space.}
+\item{A}{The state space.}
 
 \item{warning}{If TRUE may return warnings.}
 }
 \value{
-The MLE for a given Markov Chain sample with relevant lag set S.
+The MLE for a given MTD Markov Chain sample with relevant lags set S.
 }
 \description{
-Maximum likelihood estimators for a Markov Chain with relevant lag set S.
+Maximum likelihood estimators for a MTD Markov chain with relevant lag set S.
 }
 \examples{
 X <- perfectSample(MTDmodel(Lambda=c(1,7),A=c(1,2)),N=500)

@@ -3,7 +3,7 @@
 #' Calculates the total variation distance between distributions conditioned in a given past x_S.
 #'
 #' @param S A set of lags.
-#' @param j A lag j in the \eqn{complement of S}.
+#' @param j A lag j in the \eqn{complement} of S.
 #' @param lenA The length of the states space A.
 #' @param base  A set with the estimated transition probabilities \eqn{q(a|xb_Sj)}.
 #' @param A_pairs A list with all pairs with elements of A.
