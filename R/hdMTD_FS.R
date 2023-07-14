@@ -1,13 +1,15 @@
-#' The Foward Stepwise method.
+#' The Forward Stepwise method.
 #'
-#' A function for inference in MTD Markov chains with FS method. Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
+#' A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS) algorithm to estimate a relevant lags set \eqn{\Lambda} for MTD models.
 #'
-#' @param X A mixture transition distribution (MTD) chain sample.
+#' @param X A MTD chain sample.
 #' @param d An upper bound for the chains order.
 #' @param l Stop point for FS algorithm.
-#' @param A The States space.
-#' @param elbowTest If TRUE the function will choose the point where the \eqn{ max(\nu)} stops decreasing (that is, where the graph of the \eqn{ max(\nu)} changes its direction like an elbow).
-#' If l is smaller than this point the function will simply return a set with l elements, so setting elbowTest=TRUE only makes a difference if the elbow point happens in the first l-1 elements of \eqn{ max(\nu)}.
+#' @param A The states space.
+#' @param elbowTest If TRUE, the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
+#'the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
+#'values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
+#'all lags that were included in S from that lag onwards.
 #' @param warning If True may return warnings.
 #' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
 #'
@@ -15,22 +17,21 @@
 #'
 #' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut" (FSC) algorithm for inference in
 #' Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and are specially useful for inference in High order MTD Markov chains.
-#' This specific function will apply only the FS step of the algorithm and return an estimated relevant lag set of size l.
+#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and are specially useful for inference in high-order MTD Markov chains.
+#' This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
 #'
-#' @return Returns a estimated S set of relevant lags with size l .
+#' @return Returns a estimated S set of relevant lags.
 #' @export
 #' @examples
 #' X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),w0=0.05),2000)
 #'hdMTD_FS(X,A=c(0,1),d=5,l=2)
 #'hdMTD_FS(X,d=5,l=2)
 #'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
-#'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 #'
 hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
   # Cheking inputs
   while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d ) {
-    cat("l value is not valid for FS step. l should be a positive integer less than or equal to d.")
+    cat("The l value is not valid for FS step. l should be a positive integer less than or equal to d.")
     l <- readline(prompt = "Please enter a valid l : ")
     l <- suppressWarnings(as.numeric(l))
   }
@@ -45,14 +46,14 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
       length(A)<=1   ||
       length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
   if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it must have all states that occur in the sample.")
+    stop("Check the states space, it must include all states that occur in the sample.")
   }
   if( !is.numeric(d) || d<2 || (d %% 1)!=0 ){
     stop("The order d must be an integer number greater than 2.")
   }
   #test if l is valid but creates too big a table
   xa=try(expand.grid(rep(list(A),l)),silent = TRUE)
-  if(class(xa)=="try-error"){stop(paste0("The data set with all sequences of size l is too large, try a lower l."))}
+  if(class(xa)=="try-error"){stop(paste0("The dataset with all sequences of size l is too large. Please try a lower value for l."))}
   #\.
   #Gathering inputs
   A <- sort(A)
@@ -66,7 +67,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
 
   S <- NULL
   lenS <- 0
-  maxnu <- numeric(l)
+  maxnu <- numeric(l) #elbow
   while ( lenS < l ) {
 
     if( is.numeric(S) ){
@@ -116,16 +117,16 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
         nuj[z] <- nuj[z]+cont/PI_xS
       }
     }
+    maxnu[lenS+1] <- max(nuj) #elbow
     s <- Sc[which(nuj==max(nuj))]
     S <- c(S,s)
     lenS <- length(S)
-    if(elbowTest==TRUE & lenS>1){ ########################
-      if(maxnu[lenS]>maxnu[lenS-1]){
-        S <- S[-lenS]
-        maxnu <- maxnu[-length(maxnu)]
-        break
-      }
-    }
+  }
+  if(elbowTest==TRUE){
+    stp <- which(maxnu==min(maxnu))
+    if(length(stp)>1){stp <- stp[length(stp)]}
+    if(stp>1){stp <- stp-1}
+    S <- S[1:stp]
   }
   S
 }

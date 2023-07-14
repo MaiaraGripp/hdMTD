@@ -2,7 +2,7 @@
 % Please edit documentation in R/hdMTD_BIC.R
 \name{hdMTD_BIC}
 \alias{hdMTD_BIC}
-\title{The Bayesian Information Criterion (BIC) method.}
+\title{The Bayesian Information Criterion (BIC) method for inference in MTD models.}
 \usage{
 hdMTD_BIC(
   X,
@@ -19,48 +19,48 @@ hdMTD_BIC(
 )
 }
 \arguments{
-\item{X}{A Markov chain.}
+\item{X}{A MTD chain sample.}
 
 \item{d}{An upper bound for the chains order.}
 
-\item{S}{A subset of 1:d that contains the relevant lags, if only an upper bound (d) for the chains order is known, the function will set \eqn{S=1:d}.}
+\item{S}{A subset of 1:d that contains the relevant lags. If only an upper bound (d) for the chains order is known, the function will set \eqn{S=1:d}.}
 
-\item{minl}{Lower value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
+\item{minl}{A lower value for l. If minl==maxl, the function will return the set of size l with elements of S with the smallest BIC.
 If minl<maxl then the function will consider sets of size minl up to size maxl when looking for the set of elements of S with smallest BIC.}
 
-\item{maxl}{Upper value for l. If minl==maxl the function will return the set of size l with elements of S with smallest BIC.
+\item{maxl}{An upper value for l. If minl==maxl, the function will return the set of size l with elements of S that have the smallest BIC.
 If minl<maxl then the function will consider all sets of sizes minl up to size maxl when looking for the set of elements of S with smallest BIC.}
 
-\item{xi}{The BIC constant. Defaulted to 1/2. Smaller xi \verb{(near 0)} reduces the impact of overparameterization.}
+\item{xi}{The BIC constant. Defaulted to 1/2. A smaller xi \verb{(near 0)} reduces the impact of overparameterization.}
 
-\item{A}{The states space. If not informed function will set A=unique(X). You should inform A specially if there is an element in the states space
-that doesn't appear in the sample X.}
+\item{A}{The states space. If not informed, function will set A=unique(X). If there is an element in the states space
+that doesn't appear in the sample X, A should be informed.}
 
-\item{byl}{If TRUE will look for the set with smallest BIC by each size from size minl to size maxl, and return the set with smallest BIC for each size.
+\item{byl}{If TRUE, the function will look for the set with smallest BIC by each size from size minl to size maxl, and return the set with smallest BIC for each size.
 If minl==maxl setting byl TRUE or FALSE makes no difference since the function will only calculate the BIC for models with maxl elements in the relevant lag set.}
 
-\item{BICvalue}{If TRUE the function will also return the calculated values of the BIC for the estimated relevant lag sets.}
+\item{BICvalue}{If TRUE, the function will also return the calculated values of the BIC for the estimated relevant lags sets.}
 
-\item{warning}{If TRUE may return warnings.}
+\item{warning}{If TRUE, may return warnings.}
 
-\item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}}  function.}
+\item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}} function.}
 }
 \value{
 Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{minl,minl+1, \dots maxl}.
-For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1} and \eqn{maxl=3}. This function
-will run from \eqn{l=1 to l=3} and calculate the BIC supposing the MTD model has \eqn{\Lambda=c(1)}, then will calculate the BIC for \eqn{\Lambda=c(2)}, then \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
-Then it will suppose \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ... , \eqn{\Lambda=c(5,9)}, and then \eqn{\Lambda=c(1,2,5)} til \eqn{\Lambda=c(2,5,9)}. After calculating all BIC for each model will return the
-sets with smallest BIC between all sizes. Unless option byl=TRUE in which case will return the sets with smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the smallest
-BIC set will will be chosen among the sets of size maxl.
+For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1}, and \eqn{maxl=3}. This function
+will iterate from \eqn{l=1 to l=3} and calculate the BIC assuming the MTD model has \eqn{\Lambda=c(1)}, then it will calculate the BIC for \eqn{\Lambda=c(2)}, followed by \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
+Afterwards, it will assume \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ..., \eqn{\Lambda=c(5,9)}, and subsequently \eqn{\Lambda=c(1,2,5)} until \eqn{\Lambda=c(2,5,9)}. After calculating the BIC for each model, it will return the
+sets with the smallest BIC among all sizes. However, if the option byl=TRUE is selected, it will return the sets with the smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the set with the smallest
+BIC will be chosen among the sets of size maxl.
 }
 \description{
-A function for inference in MTD Markov chains with BIC. Estimates a relevant lag set \eqn{\Lambda} of MTD models using Bayesian Information Criterion.
+A function for inference in MTD Markov chains with BIC. It estimates a relevant lag set \eqn{\Lambda} of MTD models using the Bayesian Information Criterion.
 This means that this method selects the set of lags that minimizes the penalized log likelihood for a given sample.
 }
 \details{
-Note that the order of the chain matters at the counting of sequences step. If we run the function with some order parameter d, all the sequences of size d will be counted and when
-calculating the BIC for some subset S of the set 1:d the function will sum over those counts. That means that if the order d changes to d', some counts will change, especially when d is
-distant from d', and that might cause the function to calculate a different BIC for the same set S.
+Note that the order of the chain matters at the counting of sequences step. If we run the function with a certain order parameter d, all the sequences of size d will be counted, and when
+calculating the BIC for a subset S (of 1:d), the function will sum over those counts. This means that if the order changes from d to d', some counts will change, especially when d is
+distant from d'. As a result, the function might calculate a different BIC for the same set S.
 }
 \examples{
 X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),w0=0.05),2000)

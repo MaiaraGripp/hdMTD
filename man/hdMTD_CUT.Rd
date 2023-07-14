@@ -17,36 +17,38 @@ hdMTD_CUT(
 )
 }
 \arguments{
-\item{X}{A mixture transition distribution (MTD) chain sample.}
+\item{X}{A MTD chain sample.}
 
 \item{d}{An upper bound for the chains order.}
 
 \item{S}{A subset of 1:d that contains the relevant lag set, if empty S=\eqn{1,2,\dots, d}.}
 
-\item{alpha}{A parameter of CUT.}
+\item{alpha}{A parameter of the CUT algorithm. Alpha is constant of a threshold used in the CUT
+step to determine if two distributions are different enough. The larger the alpha, the
+greater the distance required between the distributions (to be considered different).}
 
-\item{mu}{A parameter of CUT.}
+\item{mu}{A parameter of the CUT algorithm. mu is also a component of the same threshold of alpha.}
 
-\item{xi}{A parameter of CUT.}
+\item{xi}{A parameter of the CUT algorithm. xi is also a component of the same threshold of alpha and mu.}
 
 \item{A}{The states space.}
 
 \item{warning}{If TRUE may return warnings.}
 
-\item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}}  function.}
+\item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}} function.}
 }
 \value{
 Returns a estimated set of relevant lags.
 }
 \description{
-A function for inference in MTD Markov chains with CUT method. Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
 }
 \details{
 The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
 Mixture Transition Distribution (MTD) models.
 It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-This method was developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and is specially useful for High order MTD Markov chains.
-This function will apply only the CUT step of the algorithm.
+This method was developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and is specially useful for high-order MTD Markov chains.
+This function will only apply the CUT step of the algorithm.
 }
 \examples{
 X <- perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,1)),N=1000)

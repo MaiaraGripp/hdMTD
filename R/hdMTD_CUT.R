@@ -1,23 +1,25 @@
 #' The Cut method.
 #'
-#' A function for inference in MTD Markov chains with CUT method. Applies Cut algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+#' A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
 #'
-#' @param X A mixture transition distribution (MTD) chain sample.
+#' @param X A MTD chain sample.
 #' @param d An upper bound for the chains order.
 #' @param S A subset of 1:d that contains the relevant lag set, if empty S=\eqn{1,2,\dots, d}.
 #' @param A The states space.
-#' @param alpha A parameter of CUT.
-#' @param mu A parameter of CUT.
-#' @param xi A parameter of CUT.
+#' @param alpha A parameter of the CUT algorithm. Alpha is constant of a threshold used in the CUT
+#'step to determine if two distributions are different enough. The larger the alpha, the
+#'greater the distance required between the distributions (to be considered different).
+#' @param mu A parameter of the CUT algorithm. mu is also a component of the same threshold of alpha.
+#' @param xi A parameter of the CUT algorithm. xi is also a component of the same threshold of alpha and mu.
 #' @param warning If TRUE may return warnings.
-#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()]  function.
+#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
 #'
 #'
 #' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
 #' Mixture Transition Distribution (MTD) models.
 #' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for High order MTD Markov chains.
-#' This function will apply only the CUT step of the algorithm.
+#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for high-order MTD Markov chains.
+#' This function will only apply the CUT step of the algorithm.
 #'
 #' @return Returns a estimated set of relevant lags.
 #' @export
@@ -46,20 +48,20 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
       length(A)<=1   ||
       length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
   if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it must have all states that occur in the sample.")
+    stop("Check the states space, it must include all states that occur in the sample.")
   }
   while ( is.na(alpha) || !is.numeric(alpha) || alpha <= 0 ) {
-    cat("alpha value is not valid for CUT step. alpha should be a positive number.")
+    cat("The alpha value is not valid for CUT step. alpha should be a positive number.")
     alpha <- readline(prompt = "Please enter a valid alpha: ")
     alpha <- suppressWarnings(as.numeric(alpha))
   }
   while ( is.na(mu) || !is.numeric(mu) || mu <= 0 ) {
-    cat("mu value is not valid for CUT step. mu should be a positive number.")
+    cat("The mu value is not valid for CUT step. mu should be a positive number.")
     mu <- readline(prompt = "Please enter a valid mu: ")
     mu <- suppressWarnings(as.numeric(mu))
   }
   while ( is.na(xi) || !is.numeric(xi) || xi <= 0 ) {
-    cat("xi value is not valid for CUT step. xi should be a positive number.")
+    cat("The xi value is not valid for CUT step. xi should be a positive number.")
     xi <- readline(prompt = "Please enter a valid xi: ")
     xi <- suppressWarnings(as.numeric(xi))
   }
@@ -114,7 +116,5 @@ txy <- function(R,A_pairs,A_pairsPos){
   tn
 }
 #\.
-#tn=|s(1111)+s(2111)|s(1111)+s(3111)|s(2111)+s(3111)|
-#   |s(1211)+s(2211)|s(1211)+s(3211)|s(2211)+s(3211)|...
 
 

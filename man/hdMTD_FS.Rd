@@ -2,43 +2,44 @@
 % Please edit documentation in R/hdMTD_FS.R
 \name{hdMTD_FS}
 \alias{hdMTD_FS}
-\title{The Foward Stepwise method.}
+\title{The Forward Stepwise method.}
 \usage{
 hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE, ...)
 }
 \arguments{
-\item{X}{A mixture transition distribution (MTD) chain sample.}
+\item{X}{A MTD chain sample.}
 
 \item{d}{An upper bound for the chains order.}
 
 \item{l}{Stop point for FS algorithm.}
 
-\item{A}{The States space.}
+\item{A}{The states space.}
 
-\item{elbowTest}{If TRUE the function will choose the point where the \eqn{ max(\nu)} stops decreasing (that is, where the graph of the \eqn{ max(\nu)} changes its direction like an elbow).
-If l is smaller than this point the function will simply return a set with l elements, so setting elbowTest=TRUE only makes a difference if the elbow point happens in the first l-1 elements of \eqn{ max(\nu)}.}
+\item{elbowTest}{If TRUE, the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
+the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
+values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
+all lags that were included in S from that lag onwards.}
 
 \item{warning}{If True may return warnings.}
 
 \item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}} function.}
 }
 \value{
-Returns a estimated S set of relevant lags with size l .
+Returns a estimated S set of relevant lags.
 }
 \description{
-A function for inference in MTD Markov chains with FS method. Applies Forward Stepwise (FS) algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
+A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS) algorithm to estimate a relevant lags set \eqn{\Lambda} for MTD models.
 }
 \details{
 The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut" (FSC) algorithm for inference in
 Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and are specially useful for inference in High order MTD Markov chains.
-This specific function will apply only the FS step of the algorithm and return an estimated relevant lag set of size l.
+This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and are specially useful for inference in high-order MTD Markov chains.
+This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
 }
 \examples{
 X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),w0=0.05),2000)
 hdMTD_FS(X,A=c(0,1),d=5,l=2)
 hdMTD_FS(X,d=5,l=2)
-hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 
 }

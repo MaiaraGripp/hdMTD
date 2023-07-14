@@ -1,9 +1,10 @@
-#' Markov Chains for tests.
+#' MTD samples for tests.
 #'
-#' A data frame with Markov Chains perfectly sampled from a Mixture Transition
-#' Distribution model.
+#' A data frame with samples perfectly sampled from a Mixture Transition
+#' Distribution model and their parameters. Each chain was perfectly sampled from the same MTD model.
 #'
-#' Each chain was perfectly sampled from the same MTD model created as follows:
+#' The samples where created as follows:
+#'
 #' set.seed(1)
 #'
 #' p_j = list("p_-2"=matrix(c(0.73449134, 0.2655087,0.04906214, 0.9509379),
@@ -20,7 +21,7 @@
 #'
 #'testChainCol3 <- perfectSample(MTDseed1,3000)
 #'
-#' @format A data frame with 3000 rows and 3 perfectly sampled chains.
+#' @format A data frame with 3000 rows and 3 perfectly sampled chains from the same MTD model.
 #'
 #' \describe{
 #'   \item{testChain1}{perfectSample1,N=3000}

@@ -3,9 +3,9 @@
 \docType{data}
 \name{testChain1}
 \alias{testChain1}
-\title{Markov Chains for tests.}
+\title{MTD samples for tests.}
 \format{
-A data frame with 3000 rows and 3 perfectly sampled chains.
+A data frame with 3000 rows and 3 perfectly sampled chains from the same MTD model.
 
 \describe{
 \item{testChain1}{perfectSample1,N=3000}
@@ -20,11 +20,12 @@ A data frame with 3000 rows and 3 perfectly sampled chains.
 testChain1
 }
 \description{
-A data frame with Markov Chains perfectly sampled from a Mixture Transition
-Distribution model.
+A data frame with samples perfectly sampled from a Mixture Transition
+Distribution model and their parameters. Each chain was perfectly sampled from the same MTD model.
 }
 \details{
-Each chain was perfectly sampled from the same MTD model created as follows:
+The samples where created as follows:
+
 set.seed(1)
 
 p_j = list("p_-2"=matrix(c(0.73449134, 0.2655087,0.04906214, 0.9509379),
