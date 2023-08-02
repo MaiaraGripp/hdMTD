@@ -28,7 +28,7 @@
 #'hdMTD_FS(X,d=5,l=2)
 #'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 #'
-hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
+hdMTD_FSnu <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
   # Cheking inputs
   while ( is.na(l) || !is.numeric(l) || l%%1 != 0 || l>d ) {
     cat("The l value is not valid for FS step. l should be a positive integer less than or equal to d.")
@@ -128,6 +128,6 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
     if(stp>1){stp <- stp-1}
     S <- S[1:stp]
   }
-  S
+  rbind(S,maxnu)
 }
 

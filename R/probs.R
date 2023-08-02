@@ -4,7 +4,7 @@
 #'
 #' @param X A MTD Markov Chain.
 #' @param S The estimated relevant lags set.
-#' @param A The state space.
+#' @param A The state space. "A" only needs to be informed if X does not already contain all elements of "A"
 #' @param warning If TRUE may return warnings.
 #'
 #' @return The MLE for a given MTD Markov Chain sample with relevant lags set S.

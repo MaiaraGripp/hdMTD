@@ -31,7 +31,7 @@ greater the distance required between the distributions (to be considered differ
 
 \item{xi}{A parameter of the CUT algorithm. xi is also a component of the same threshold as alpha and mu.}
 
-\item{A}{The states space.}
+\item{A}{The states space. "A" only needs to be informed if X does not already contain all elements of "A".}
 
 \item{warning}{If TRUE may return warnings.}
 

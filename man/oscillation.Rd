@@ -2,18 +2,22 @@
 % Please edit documentation in R/oscillation.R
 \name{oscillation}
 \alias{oscillation}
-\title{Oscillations of a MTD model}
+\title{Oscillations of a MTD Markov chain}
 \usage{
-oscillation(x)
+oscillation(x, ...)
 }
 \arguments{
-\item{x}{Must be a MTD object.}
+\item{x}{Must be a MTD object or a chain sample.}
+
+\item{...}{bla}
 }
 \value{
-Returns the oscillations for each relevant lag of a MTD object.
+If the x parameter is an MTD object, it will provide the oscillations for
+each relevant element. In case x is a MTD chain sample, it estimates the oscillations
+for a user-inputted set S of lags.
 }
 \description{
-Calculates the oscillations of a MTD model object.
+Calculates the oscillations of a MTD model object or estimates the oscillations of a chain sample.
 }
 \details{
 The oscillations of a MTD model

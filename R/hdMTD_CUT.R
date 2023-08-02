@@ -5,7 +5,7 @@
 #' @param X A MTD chain sample.
 #' @param d An upper bound for the chains order.
 #' @param S A subset of 1:d that contains the relevant lag set, if empty S=\eqn{1,2,\dots, d}.
-#' @param A The states space.
+#' @param A The states space. "A" only needs to be informed if X does not already contain all elements of "A".
 #' @param alpha A parameter of the CUT algorithm. Alpha is constant of a threshold used in the CUT
 #'step to determine if two distributions are different enough. The larger the alpha, the
 #'greater the distance required between the distributions (to be considered different).

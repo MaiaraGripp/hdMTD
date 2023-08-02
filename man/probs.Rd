@@ -11,7 +11,7 @@ probs(X, S, A = NULL, warning = FALSE)
 
 \item{S}{The estimated relevant lags set.}
 
-\item{A}{The state space.}
+\item{A}{The state space. "A" only needs to be informed if X does not already contain all elements of "A"}
 
 \item{warning}{If TRUE may return warnings.}
 }
