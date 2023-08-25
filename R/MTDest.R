@@ -1,17 +1,34 @@
-#' Title
+#' EM estimation
 #'
-#' @param X bla
-#' @param S bla
-#' @param M bla
-#' @param init bla
-#' @param A bla
-#' @param init_ask bla
-#' @param indep_part bla
+#' Estimation of MTD parameters through EM algorithm
 #'
-#' @return bla
+#' @param X A MTD chain sample
+#' @param S The relevant lag set
+#' @param M A stopping point for the EM algorithm.
+#' @param init A list with initial parameters.
+#' @param A The states space
+#' @param indep_part If False the MTD model does not have
+#' parameters independent from the past and p0=0.
+#'
+#' @details About the parameter M: it serves as a stopping
+#'criterion for the EM algorithm. If the distance between
+#'the log-likelihood calculated with the newly estimated
+#'parameters and the log-likelihood calculated with the
+#'previous parameters is less than M, the algorithm stops.
+#'
+#'About the parameter init: It's a list that must have 3
+#'entries: a vector named p0 (representing an independent
+#'distribution, ordered from the smallest to the greatest
+#'element of A), p_j (a list containing a stochastic matrix
+#'for each element of S, also ordered from the smallest to
+#'the greatest element of S), and a vector named lambdas
+#'(representing the weights, first the weight for p0, and
+#' then for each element in p_j).
+#'
+#' @return A list with the estimated parameters of the MTD model
 #' @export
 #'
-MTDest <- function(X,S,M=2,init,A=NULL,init_ask=FALSE,indep_part=TRUE){
+MTDest <- function(X,S,M=2,init,A=NULL,indep_part=TRUE){
   if(length(S) < 1  ||
      !is.numeric(S) ||
      any( S%%1 != 0) ){
