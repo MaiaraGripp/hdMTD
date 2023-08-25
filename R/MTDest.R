@@ -1,9 +1,16 @@
-
-
-#for this function to work the elements in A must be ordered,
-# and this order must be followed for the init parameters and at the
-#bSja base (note that the function that constructs bSja already uses
-# the order of A for creating of the base so that is covered.)
+#' Title
+#'
+#' @param X bla
+#' @param S bla
+#' @param M bla
+#' @param init bla
+#' @param A bla
+#' @param init_ask bla
+#' @param indep_part bla
+#'
+#' @return bla
+#' @export
+#'
 MTDest <- function(X,S,M=2,init,A=NULL,init_ask=FALSE,indep_part=TRUE){
   if(length(S) < 1  ||
      !is.numeric(S) ||
@@ -113,4 +120,5 @@ MTDest <- function(X,S,M=2,init,A=NULL,init_ask=FALSE,indep_part=TRUE){
   }
   endlist
 }
-
+require(devtools)
+use_git()
