@@ -12,6 +12,7 @@
 #' @return Returns a vector with the total variation distance between the estimated distributions
 #' given a past x_S (i.e. a past x indexed by S).
 #' @importFrom dplyr %>%
+#' @export
 #'
 dTV_sample <- function(S,j,lenA,base,A_pairs,x_S){
 

@@ -10,6 +10,7 @@
 #'
 #' @return A table with sequences x indexed by \eqn{{-S} U {-j}}, their frequencies and the MLE estimator of the transition probabilities.
 #' @importFrom dplyr %>%
+#' @export
 #'
 freqTabSj <- function(S,j,freqTab,lenX,d){
   Sj <- sort(c(S,j),decreasing = TRUE)
