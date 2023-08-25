@@ -12,9 +12,8 @@ checkMTD <- function(MTD){
      any(MTD$Lambda<=0) ||
      !all(MTD$Lambda%%1==0)||
      !is.vector(MTD$Lambda))stop("Lambda must be a numeric vector with positive integers.")
-  if(!is.numeric(MTD$A) ||
-     any(MTD$A<0) ||
-     !is.vector(MTD$A))stop("A must be a numeric vector with nonnegative numbers.")
+  if( length(MTD$A)<=1   ||
+      any(MTD$A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
 
   #sorting parameters
   if(all(sort(MTD$Lambda)!=MTD$Lambda))stop("The Lambda set will be ordered from smallest to greatest, be carefull with matching the order of weights w_j accordingly.")

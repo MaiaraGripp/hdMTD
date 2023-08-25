@@ -45,9 +45,8 @@ MTDmodel <- function(Lambda,
      any(Lambda<=0) ||
      !all(Lambda%%1==0)||
      !is.vector(Lambda))stop("Lambda must be a numeric vector with positive integers.")
-  if(!is.numeric(A) ||
-     any(A<0) ||
-     !is.vector(A))stop("A must be a numeric vector with nonnegative numbers.")
+  if( length(A)<=1   ||
+      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
 
   #sorting parameters
   if( all(sort(Lambda)!=Lambda) & length(w_j)!=0 )warning("The Lambda set will be ordered from smallest to greatest, be carefull with matching order of w_j accordingly.")
@@ -66,7 +65,7 @@ MTDmodel <- function(Lambda,
   #test for p0 (independent distribution)
   if(length(p0)!=0){
     if( !is.numeric(p0) ||
-        sum(p0)!=1 ||
+        round(sum(p0),3)!=1 ||
         !all(p0>0) ||
         length(p0)!=lenA )stop("p0 must be a vector of size ",lenA, " consisting of numeric, nonnegative values that sum up to 1.")
   }else{

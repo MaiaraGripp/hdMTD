@@ -36,12 +36,12 @@ hdMTD_FSC <- function(X,d,l,alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE, ...
     }
     A <- unique(X)
   }
-  if( !is.numeric(A) ||
-      length(A)<=1   ||
-      length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
+  if( length(A)<=1   ||
+      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
   if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it must have all states that occur in the sample.")
+    stop("Check the states space, it must include all states that occur in the sample.")
   }
+  A <- sort(A)
     # d
   if( !is.numeric(d) || d<2 || (d %% 1)!=0 ){
     stop("The order d must be an integer number greater than 2.")

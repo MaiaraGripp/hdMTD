@@ -17,7 +17,7 @@
 #'
 probs <- function(X,S,A=NULL,warning=FALSE){
   X <- checkSample(X)
-  if(length(S) < 2  ||
+  if(length(S) < 1  ||
      !is.numeric(S) ||
      any( S%%1 != 0) ){stop("S must be a vector of at least 2 integer numbers.")
   }
@@ -27,13 +27,12 @@ probs <- function(X,S,A=NULL,warning=FALSE){
     }
     A <- unique(X)
   }
-  if( !is.numeric(A) ||
-      length(A)<=1   ||
-      length(dim(A))!=0 )stop("States space A must be a numeric vector with at least two values.")
+  if( length(A)<=1   ||
+      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
   if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it include all states that occur in the sample.")
+    stop("Check the states space, it must include all states that occur in the sample.")
   }
-
+  A <- sort(A)
   S <- sort(S,decreasing = TRUE)
   lenS <- length(S)
   base <- countsTab(X,S[1])

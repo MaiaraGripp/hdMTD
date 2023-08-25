@@ -38,6 +38,8 @@ freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
   if(Sj[1] > d){stop("The set {S}U{j} can't have an element greater than d which is the upper bound for the chains order.")}
   if(!is.logical(complete)){stop("Complete must be a logical argument.")}
   if( !all(unique(unlist(countsTab[,-(d+2)])) %in% A) ){stop("A must contain all elements that appear in the countsTab sequencies.")}
+  if( length(A)<=1   ||
+      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
   A <- sort(A)
   lenSj <- length(Sj)
   filtrs <- c(paste0("x",Sj),"a")
