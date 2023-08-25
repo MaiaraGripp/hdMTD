@@ -2,28 +2,43 @@
 % Please edit documentation in R/MTDest.R
 \name{MTDest}
 \alias{MTDest}
-\title{Title}
+\title{EM estimation}
 \usage{
-MTDest(X, S, M = 2, init, A = NULL, init_ask = FALSE, indep_part = TRUE)
+MTDest(X, S, M = 2, init, A = NULL, indep_part = TRUE)
 }
 \arguments{
-\item{X}{bla}
+\item{X}{A MTD chain sample}
 
-\item{S}{bla}
+\item{S}{The relevant lag set}
 
-\item{M}{bla}
+\item{M}{A stopping point for the EM algorithm.}
 
-\item{init}{bla}
+\item{init}{A list with initial parameters.}
 
-\item{A}{bla}
+\item{A}{The states space}
 
-\item{init_ask}{bla}
-
-\item{indep_part}{bla}
+\item{indep_part}{If False the MTD model does not have
+parameters independent from the past and p0=0.}
 }
 \value{
-bla
+A list with the estimated parameters of the MTD model
 }
 \description{
-Title
+Estimation of MTD parameters through EM algorithm
+}
+\details{
+About the parameter M: it serves as a stopping
+criterion for the EM algorithm. If the distance between
+the log-likelihood calculated with the newly estimated
+parameters and the log-likelihood calculated with the
+previous parameters is less than M, the algorithm stops.
+
+About the parameter init: It's a list that must have 3
+entries: a vector named p0 (representing an independent
+distribution, ordered from the smallest to the greatest
+element of A), p_j (a list containing a stochastic matrix
+for each element of S, also ordered from the smallest to
+the greatest element of S), and a vector named lambdas
+(representing the weights, first the weight for p0, and
+then for each element in p_j).
 }
