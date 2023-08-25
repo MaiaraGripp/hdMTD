@@ -137,5 +137,4 @@ MTDest <- function(X,S,M=2,init,A=NULL,indep_part=TRUE){
   }
   endlist
 }
-require(devtools)
-use_git()
+
