@@ -4,7 +4,7 @@
 \alias{MTDest}
 \title{EM estimation}
 \usage{
-MTDest(X, S, M = 2, init, A = NULL, indep_part = TRUE)
+MTDest(X, S, M = 1, init, A = NULL)
 }
 \arguments{
 \item{X}{A MTD chain sample}
@@ -16,9 +16,6 @@ MTDest(X, S, M = 2, init, A = NULL, indep_part = TRUE)
 \item{init}{A list with initial parameters.}
 
 \item{A}{The states space}
-
-\item{indep_part}{If False the MTD model does not have
-parameters independent from the past and p0=0.}
 }
 \value{
 A list with the estimated parameters of the MTD model

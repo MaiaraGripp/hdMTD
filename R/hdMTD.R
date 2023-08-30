@@ -32,7 +32,6 @@
 #' hdMTD(X=X,d=5, method = "FSC",alpha=0.001,xi=1,l=3)
 #' hdMTD(X=X,d=5, method = "BIC",xi=1, minl=3, maxl=3)
 #' hdMTD(X=X,d=5, method = "CUT",S=c(1,5,3,2),alpha=0.1,xi=1)
-#'
 hdMTD <- function(X,d,method="FS", ...){
 
   if( !method %in% c("FSC","FS","CUT","BIC") ){stop("The chosen method is unknown")}

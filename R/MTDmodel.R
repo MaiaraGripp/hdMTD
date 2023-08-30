@@ -77,10 +77,10 @@ MTDmodel <- function(Lambda,
   #rewrite p0 and set w0=0 if indep_part=FALSE
   if(!is.logical(indep_part)) stop("Argument indep_part must be TRUE OR FALSE.")
   if(!indep_part){
-      p0 <- rep(0,lenA)
-      if(length(w0)!=0 && w0!=0 )warning("Since indep_part=FALSE w0 and p0 will be set to 0.")
-      w0 <- 0
-    }
+    p0 <- rep(0,lenA)
+    if(length(w0)!=0 && w0!=0 )warning("Since indep_part=FALSE w0 and p0 will be set to 0.")
+    w0 <- 0
+  }
 
 
   #tests for lambdas

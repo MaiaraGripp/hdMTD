@@ -29,11 +29,11 @@ checkMTD <- function(MTD){
       length(MTD$p0)!=lenA )stop("p0 must be a vector of size ",lenA, " numeric, nonnegative and must add up to 1.")
 
   if( !is.numeric(MTD$lambdas) ||
-       round(sum(MTD$lambdas),3)!=1 ||
-       !all(MTD$lambdas>0) ||
-       length(MTD$lambdas)!=(lenL+1) )stop("p0 must be a vector of size ",lenL+1, " numeric, nonnegative and must add up to 1.")
+      round(sum(MTD$lambdas),3)!=1 ||
+      !all(MTD$lambdas>0) ||
+      length(MTD$lambdas)!=(lenL+1) )stop("p0 must be a vector of size ",lenL+1, " numeric, nonnegative and must add up to 1.")
 
-   if(length(MTD$p_j)!=lenL)stop("p_j must be a list with ", lenL," stochastic matrices.")
+  if(length(MTD$p_j)!=lenL)stop("p_j must be a list with ", lenL," stochastic matrices.")
   aux <- do.call(rbind,MTD$p_j)
   if( !all(round(apply(aux, 1, sum),3)==1)  ||
       !all(aux>0) ||
