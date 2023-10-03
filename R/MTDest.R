@@ -36,7 +36,9 @@
 #'smallest to the greatest element of S), and a vector named 'lambdas'
 #'(representing the weights, first the weight for p0, and
 #' then for each element in p_j).
+#'
 #' @export
+#'
 #' @return A list with the estimated parameters of the MTD model
 #'
 MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALSE){
