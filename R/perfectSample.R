@@ -3,9 +3,12 @@
 #' Samples a MTD Markov Chain from stationary distribution.
 #'
 #' @title Perfect Sample.
-#' @param MTD A canonical MTD object.
+#' @param MTD A MTD object.
 #' @param N The sample size. If NULL sample size will be set to 1000.
 #' @return Returns a sample from o MTD model.
+#'
+#' @details This perfect sample algorithm requires that the MTD model has
+#' an independent distribution and a positive weight for it.
 #'
 #' @export perfectSample
 #'
@@ -25,6 +28,7 @@ perfectSample.MTD <- function(MTD,N=NULL){
     N <- 1000
   }
   checkMTD(MTD)
+  if( sum(MTD$p0)==0 || MTD$lambdas[1]==0){stop("The provided MTD model does not have an independent distribution or a positive weight for it, but the algorithm that this function uses for perfect sampling requires both.")}
   if( N<=max(MTD$Lambda) ||
       !is.numeric(N) ||
       length(N)!=1 ||

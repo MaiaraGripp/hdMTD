@@ -2,20 +2,39 @@
 % Please edit documentation in R/MTDest.R
 \name{MTDest}
 \alias{MTDest}
-\title{EM estimation}
+\title{EM estimation of MTD parameters}
 \usage{
-MTDest(X, S, M = 1, init, A = NULL)
+MTDest(
+  X,
+  S,
+  M = 0.01,
+  init,
+  iter = FALSE,
+  nIter = 100,
+  A = NULL,
+  oscillations = FALSE
+)
 }
 \arguments{
 \item{X}{A MTD chain sample}
 
 \item{S}{The relevant lag set}
 
-\item{M}{A stopping point for the EM algorithm.}
+\item{M}{A stopping point for the EM algorithm. If NULL the algorithm will run
+for a total of nIter iteractions.}
 
 \item{init}{A list with initial parameters.}
 
+\item{iter}{If True, returns the number of iterations of the
+algorithm, that is, the number of times the initial parameters
+were updated.}
+
+\item{nIter}{An integer positive number with the maximum number of iterations.}
+
 \item{A}{The states space}
+
+\item{oscillations}{If TRUE the function will return the estimated oscillations
+for the updated model along with the estimated parameters.}
 }
 \value{
 A list with the estimated parameters of the MTD model
@@ -24,18 +43,25 @@ A list with the estimated parameters of the MTD model
 Estimation of MTD parameters through EM algorithm
 }
 \details{
-About the parameter M: it serves as a stopping
-criterion for the EM algorithm. If the distance between
-the log-likelihood calculated with the newly estimated
-parameters and the log-likelihood calculated with the
-previous parameters is less than M, the algorithm stops.
+Regarding the 'M' parameter: it functions as a stopping
+criterion within the EM algorithm. When the difference between
+the log-likelihood computed with the newly estimated parameters
+and that computed with the previous parameters falls below M,
+the algorithm halts. Nevertheless, if the value of nIter
+(which represents the maximum number of iterations) is smaller
+than the number of iterations required to meet the M criterion,
+the algorithm will conclude its execution when nIter is reached.
+To ensure that the M criterion is effectively utilized, we
+recommend using a higher value for nIter, which is set to a
+default of 100.
 
-About the parameter init: It's a list that must have 3
-entries: a vector named p0 (representing an independent
+Concerning the 'init' parameter, it is expected to be a list
+comprising either 2 or 3 entries. These entries consist of:
+an optional vector named 'p0' (representing an independent
 distribution, ordered from the smallest to the greatest
-element of A), p_j (a list containing a stochastic matrix
-for each element of S, also ordered from the smallest to
-the greatest element of S), and a vector named lambdas
+element of A), a required list of matrices 'p_j' (a list containing
+a stochastic matrix for each element of S, also ordered from the
+smallest to the greatest element of S), and a vector named 'lambdas'
 (representing the weights, first the weight for p0, and
 then for each element in p_j).
 }

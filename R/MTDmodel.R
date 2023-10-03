@@ -64,10 +64,11 @@ MTDmodel <- function(Lambda,
 
   #test for p0 (independent distribution)
   if(length(p0)!=0){
+    if(all(p0==0)){p0 <- rep(0,lenA)}
     if( !is.numeric(p0) ||
-        round(sum(p0),3)!=1 ||
-        !all(p0>0) ||
-        length(p0)!=lenA )stop("p0 must be a vector of size ",lenA, " consisting of numeric, nonnegative values that sum up to 1.")
+        !all(p0>=0) ||
+        length(p0)!=lenA )stop("p0 must be a vector of size ",lenA, " consisting of numeric, nonnegative numbers.")
+    if( round(sum(p0),3)!=1 & sum(p0)!=0 )stop("Either each element in p0 is 0 or they must sum up to 1.")
   }else{
     p0 <- stats::runif(lenA)
     p0 <- p0/sum(p0)
@@ -75,7 +76,7 @@ MTDmodel <- function(Lambda,
   names(p0) <- c(paste0("p_0(",A,")"))
 
   #rewrite p0 and set w0=0 if indep_part=FALSE
-  if(!is.logical(indep_part)) stop("Argument indep_part must be TRUE OR FALSE.")
+  if(!is.logical(indep_part)) stop("Argument indep_part must be TRUE or FALSE.")
   if(!indep_part){
     p0 <- rep(0,lenA)
     if(length(w0)!=0 && w0!=0 )warning("Since indep_part=FALSE w0 and p0 will be set to 0.")
@@ -129,7 +130,7 @@ MTDmodel <- function(Lambda,
     if(!is.list(p_j)) stop("p_j must be a list.")
     aux <- do.call(rbind,p_j)
     if( !all(round(apply(aux, 1, sum),2)==1)  ||
-        !all(aux>0) ||
+        !all(aux>=0) ||
         !is.numeric(aux) ||
         ncol(aux)!=lenA ||
         any(sapply(p_j,dim)!=lenA)) stop(paste0("p_j must be a list of stochastic matrices ", lenA, "x",lenA))

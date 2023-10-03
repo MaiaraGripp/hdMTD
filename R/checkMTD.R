@@ -5,8 +5,7 @@
 #' @param MTD An MTD object
 #'
 checkMTD <- function(MTD){
-  if(!is.list(MTD)|| class(MTD)!="MTD")stop("MTD must be an object of class MTD which is a list with especific parameters.
-                                            The use of MTDmodel() function in order to create MTD is recommended.")
+  if(!is.list(MTD)|| class(MTD)!="MTD")stop("MTD must be an object of class MTD which is a list with especific parameters. The use of MTDmodel() function in order to create MTD is recommended.")
 
   if(!is.numeric(MTD$Lambda) ||
      any(MTD$Lambda<=0) ||
@@ -24,19 +23,19 @@ checkMTD <- function(MTD){
   lenL <- length(MTD$Lambda)
   lenA <- length(MTD$A)
   if( !is.numeric(MTD$p0) ||
-      round(sum(MTD$p0),3)!=1 ||
-      !all(MTD$p0>0) ||
+      !all(MTD$p0>=0) ||
       length(MTD$p0)!=lenA )stop("p0 must be a vector of size ",lenA, " numeric, nonnegative and must add up to 1.")
+  if( round(sum(MTD$p0),3)!=1 & sum(MTD$p0)!=0 )stop("Either each element in p0 is 0 or they must sum up to 1.")
 
   if( !is.numeric(MTD$lambdas) ||
       round(sum(MTD$lambdas),3)!=1 ||
-      !all(MTD$lambdas>0) ||
-      length(MTD$lambdas)!=(lenL+1) )stop("p0 must be a vector of size ",lenL+1, " numeric, nonnegative and must add up to 1.")
+      !all(MTD$lambdas>=0) ||
+      length(MTD$lambdas)!=(lenL+1) )stop("lambdas must be a vector of size ",lenL+1, ", with nonnegative numbers that must add up to 1. The first element of the lambdas vector is the weight for the independent distribution p0, if your MTD model doesn't have and independent distribution set lambdas[1]=0.")
 
   if(length(MTD$p_j)!=lenL)stop("p_j must be a list with ", lenL," stochastic matrices.")
   aux <- do.call(rbind,MTD$p_j)
   if( !all(round(apply(aux, 1, sum),3)==1)  ||
-      !all(aux>0) ||
+      !all(aux>=0) ||
       !is.numeric(aux) ||
       ncol(aux)!=lenA ||
       any(sapply(MTD$p_j,dim)!=lenA)) stop(paste0("p_j must be a list of stochastic matrices ", lenA, "x",lenA))
