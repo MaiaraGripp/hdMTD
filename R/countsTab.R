@@ -1,9 +1,9 @@
-#' Table of sample sequences counts.
+#' Table of sample sequence counts.
 #'
-#' Creates a table with sample sequences and their absolute frequency.
+#' Creates a table with sample sequences and their absolute frequencies.
 #'
-#' @param X A MTD Markov Chain sample.
-#' @param d An upper bound for the chains order.
+#' @param X A sample from an MTD Markov Chain.
+#' @param d An upper bound for the chain's order.
 #'
 #' @return A table with every size d+1 sequence in the sample and its absolute frequency.
 #' @export

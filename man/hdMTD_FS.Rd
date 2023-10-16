@@ -15,10 +15,7 @@ hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE, ...)
 
 \item{A}{The states space. "A" only needs to be informed if X does not already contain all elements of "A".}
 
-\item{elbowTest}{If TRUE, the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
-the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
-values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
-all lags that were included in S from that lag onwards.}
+\item{elbowTest}{If TRUE, the function will use a special criterion to determine the size of the estimated relevant lag set. See @details.}
 
 \item{warning}{If True may return warnings.}
 
@@ -35,6 +32,11 @@ The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise
 Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
 This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and are specially useful for inference in high-order MTD Markov chains.
 This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
+
+If the elboTest parameter is TRUE the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
+the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
+values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
+all lags that were included in S from that lag onwards.
 }
 \examples{
 X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),w0=0.05),2000)

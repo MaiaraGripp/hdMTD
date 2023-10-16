@@ -8,7 +8,7 @@
 #' @param alpha A parameter of CUT.
 #' @param xi A parameter of CUT.
 #'
-#' @return Returns sx the for the threshold txy=sx+sy
+#' @return Returns 'sx' or 'sy,' where 'sx + sy = txy' is the threshold for the CUT step.
 #' @importFrom dplyr %>%
 #'
 sx <- function(S,freqTab,lenA,x_S,mu,alpha,xi){
@@ -26,8 +26,8 @@ sx <- function(S,freqTab,lenA,x_S,mu,alpha,xi){
                 sqrt(( C$qax_Sj[i+(k-1)*lenA] +
                 alpha/Nx[k])*mu/(2*mu-exp(mu)+1))
     }
-    result[k]=sqrt(2*alpha*(1+xi)/Nx[k])*sums+alpha*lenA/(3*Nx[k])
+    result[k]=sqrt(0.5*alpha*(1+xi)/Nx[k])*sums+alpha*lenA/(6*Nx[k])
   }
-  result
+  result #result=s(x_Sj)=s(ax_S\j),s(bx_S\j),...,s(mx_S\j)
 }
 

@@ -65,3 +65,14 @@ smallest to the greatest element of S), and a vector named 'lambdas'
 (representing the weights, first the weight for p0, and
 then for each element in p_j).
 }
+\examples{
+MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),w0=0.01)
+X <- perfectSample(MTD,N=2000)
+init <- list('p0'=c(0.4,0.6),'lambdas'=c(0.05,0.45,0.5),
+'p_j'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
+matrix(c(0.25,0.75,0.3,0.7),byrow = TRUE,ncol=2)))
+MTDest(X,S=c(1,10),M=1,init)
+MTDest(X,S=c(1,10),init=init,iter = TRUE)
+MTDest(X,S=c(1,10),init=init,iter = TRUE,nIter=5)
+MTDest(X,S=c(1,10),init=init,oscillations = TRUE)
+}

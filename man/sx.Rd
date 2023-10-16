@@ -22,7 +22,7 @@ sx(S, freqTab, lenA, x_S, mu, alpha, xi)
 \item{xi}{A parameter of CUT.}
 }
 \value{
-Returns sx the for the threshold txy=sx+sy
+Returns 'sx' or 'sy,' where 'sx + sy = txy' is the threshold for the CUT step.
 }
 \description{
 Calculates sx, and txy=sx+sy

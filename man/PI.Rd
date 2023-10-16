@@ -18,9 +18,9 @@ PI(S, freqTabSj, x_S, lenX, d)
 \item{d}{The order of the chain.}
 }
 \value{
-Returns a vector of estimated stationary distributions of a sequence X_S
-with the element in j varying across the entire state space.
+Returns a vector of estimated stationary distributions of a sequence x_S
+with the element x_j ( for j in S)varying across the entire state space.
 }
 \description{
-Estimated stationary distribution vector for every a_j and past x_S
+Estimated stationary distribution vector for each x_j and past x_S.
 }

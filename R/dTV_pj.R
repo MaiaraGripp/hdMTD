@@ -3,8 +3,8 @@
 #' Calculates the total variation distance given a stochastic matrix p_j.
 #'
 #' @param p_j A stochastic matrix.
-#' @param rows A matrix with two columns, the pair of numbers in each row represents the rows of p_j to be compared,
-#'  i.e. the distributions in p_j to be compared.
+#' @param rows A matrix with two columns, the pair of numbers in each row represents the rows of p_j that
+#'  will be compared, that is, the distributions in p_j to be compared.
 #' @param which_max If TRUE, the function will also return the rows of the p_j matrices with the distributions
 #' that have the greatest total variation distance.
 #'

@@ -3,7 +3,7 @@
 #' A data frame with samples perfectly sampled from a Mixture Transition
 #' Distribution model and their parameters. Each chain was perfectly sampled from the same MTD model.
 #'
-#' The samples where created as follows:
+#' The samples were created as follows:
 #'
 #' set.seed(1)
 #'

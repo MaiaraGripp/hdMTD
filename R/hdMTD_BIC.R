@@ -33,12 +33,9 @@
 #' @export
 #'
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),w0=0.05),2000)
+#' X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),w0=0.05),500)
 #'hdMTD_BIC (X,d=6,minl=1,maxl=1)
 #'hdMTD_BIC (X,d=5,minl=2,maxl=2,BICvalue = TRUE)
-#'hdMTD_BIC (X,d=5,minl=1,maxl=3)
-#'hdMTD_BIC (X,d=5,minl=1,maxl=3,xi=0.1)
-#'hdMTD_BIC (X,d=6,S=c(1,2,4,6),minl=2,maxl=2)
 #'
 hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
                           xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,warning=FALSE,...){

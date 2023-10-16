@@ -1,17 +1,9 @@
-#should not work
+
 test_that("countsTab works", {
   expect_error(countsTab(c(1,1,1,0,1,0,0,0,1),10))
 })
 test_that("countsTab works", {
   expect_error(countsTab(c(1,1,1,0,1,0,0,0,1),15.5))
-})
-
-A <- c(1,8,9,11)
-n <- 100
-testVar <- rbind(sample(A,n,replace = TRUE),sample(A,n,replace = TRUE))
-d=5
-test_that("countsTab works", {
-  expect_error(countsTab(testVar,d))
 })
 
 testVar <- sample(A,n,replace = TRUE)

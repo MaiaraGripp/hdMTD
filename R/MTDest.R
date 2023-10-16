@@ -40,13 +40,23 @@
 #' @export
 #'
 #' @return A list with the estimated parameters of the MTD model
-#'
+#' @examples
+#' MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),w0=0.01)
+#'X <- perfectSample(MTD,N=2000)
+#'init <- list('p0'=c(0.4,0.6),'lambdas'=c(0.05,0.45,0.5),
+#''p_j'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
+#'matrix(c(0.25,0.75,0.3,0.7),byrow = TRUE,ncol=2)))
+#'MTDest(X,S=c(1,10),M=1,init)
+#'MTDest(X,S=c(1,10),init=init,iter = TRUE)
+#'MTDest(X,S=c(1,10),init=init,iter = TRUE,nIter=5)
+#'MTDest(X,S=c(1,10),init=init,oscillations = TRUE)
 MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALSE){
   if(length(S) < 1  ||
      !is.numeric(S) ||
      any( S%%1 != 0) ){
     stop("S must be informed. S should be a number or a vector of positive integer numbers representing the relevant lags.")
   }
+  rS <- sort(S)
   S <- sort(S,decreasing = TRUE)
   lenS <- length(S)
 
@@ -66,7 +76,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
 
   if(!is.list(init)){stop("init must be a list with the initial parameters for the EM algorithm.")}
   if(!all(names(init) %in% c("p0","p_j","lambdas"))){
-    stop("The init parameters must be names p0, p_j and lambdas, and at least p_j and lambdas must be informed.")
+    stop("The init list entrances must be labeled 'p0', 'p_j', and 'lambdas', and at least 'p_j' and 'lambdas' must be provided.")
   }
   indep <- TRUE
   if(length(init$p0)==0){
@@ -79,7 +89,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
       }
   }
   if( sum(init$p0)==0 ){indep <- FALSE}
-  checkMTD(MTDmodel(S,A,w0=init$lambdas[1],
+  checkMTD(MTDmodel(rS,A,w0=init$lambdas[1],
                     w_j = init$lambdas[-1],
                     p_j=init$p_j,
                     p0=init$p0)
@@ -107,15 +117,13 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
   distlogL <- NULL
 
   repeat{
-    initMTD <- MTDmodel(S,A,w0=init$lambdas[1],
+    initMTD <- MTDmodel(rS,A,w0=init$lambdas[1],
                         w_j = init$lambdas[-1],
                         p_j=init$p_j,
                         p0=init$p0)
     initLogL <- sum( log(as.vector(t(initMTD$P)))*baseSja$Nxa_Sj )
 
-    #preciso separar o caso de não ter distribuição indep p0!!!
-
-    #PASSO E
+    #step E
     pSja <- matrix(rep(rev(init$lambdas),lenA^(lenS0)),byrow = T,ncol=(lenS+1))
     colnames(pSja) <- S0
     pSja[,lenS0] <- pSja[,lenS0]*init$p0 #init$p0 must be ordered according to A
@@ -133,16 +141,16 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
     norm <- apply(pSja, 1, sum)
     Pj_xa_S <- pSja/norm
     colnames(Pj_xa_S) <- paste0("P",S0,"xa_S")
-    # Fim do passo E
+    #end step E
 
-    # Passo M
+    #Step M
     NxaXPjxa <- Pj_xa_S*baseSja$Nxa_Sj
     colnames(NxaXPjxa) <- paste0("NXP",S0,"xa")
     #eq (14)
     end_lambdas <- apply(NxaXPjxa,2,sum)/(lenX-S[1])
     names(end_lambdas) <- paste0("lam-",S0)
     end_lambdas <- rev(end_lambdas)
-    #eq (15) para p0
+    #eq (15) for p0
     NPSja <- cbind(baseSja[,1:lenS0],NxaXPjxa)
     end_p0 <- rep(sum(NPSja$NXP0xa),lenA)
     if(indep){
@@ -152,7 +160,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
       }
     }
     names(end_p0) <- paste0("p_0(",A,")")
-    #eq (15) para pj
+    #eq (15) for pj
     end_pj <- list()
     for (j in 1:lenS) {
       aux_pj <- matrix(0,ncol = lenA,nrow = lenA)
@@ -172,8 +180,8 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
       end_pj[[lenS-j+1]] <- aux_pj
     }
     names(end_pj) <- paste0("p_-",rev(S))
-    #Estimar a verossimilhança:
-    endMTD <- MTDmodel(S,A,w0=end_lambdas[1],
+    #likelihoods
+    endMTD <- MTDmodel(rS,A,w0=end_lambdas[1],
                        w_j = end_lambdas[-1],
                        p_j=end_pj,
                        p0=end_p0)

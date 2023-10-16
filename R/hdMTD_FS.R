@@ -6,10 +6,7 @@
 #' @param d An upper bound for the chains order.
 #' @param l Stop point for FS algorithm.
 #' @param A The states space. "A" only needs to be informed if X does not already contain all elements of "A".
-#' @param elbowTest If TRUE, the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
-#'the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
-#'values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
-#'all lags that were included in S from that lag onwards.
+#' @param elbowTest If TRUE, the function will use a special criterion to determine the size of the estimated relevant lag set. See @details.
 #' @param warning If True may return warnings.
 #' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
 #'
@@ -19,6 +16,10 @@
 #' Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
 #' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and are specially useful for inference in high-order MTD Markov chains.
 #' This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
+#' @details If the elboTest parameter is TRUE the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
+#'the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
+#'values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
+#'all lags that were included in S from that lag onwards.
 #'
 #' @return Returns a estimated S set of relevant lags.
 #' @export

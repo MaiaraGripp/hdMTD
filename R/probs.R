@@ -30,7 +30,7 @@ probs <- function(X,S,A=NULL,warning=FALSE){
   if( length(A)<=1   ||
       any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
   if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it must include all states that occur in the sample.")
+    stop("Verify the state space to ensure it includes all states that appear in the sample.")
   }
   A <- sort(A)
   S <- sort(S,decreasing = TRUE)

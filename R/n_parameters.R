@@ -1,13 +1,13 @@
-#' Number of parameters of a MTD model.
+#' Number of Parameters in an MTD Model
 #'
-#' Calculates the number of parameters of a MTD model with relevant lag set Lambda and states space A.
+#' Calculates the number of parameters in an MTD model with a relevant lag set Lambda and state space A.
 #'
 #' @param Lambda The relevant lag set.
-#' @param A The states space.
-#' @param single_matrix If TRUE all p_j matrix are equal.
+#' @param A The state space.
+#' @param single_matrix If TRUE all p_j matrices are equal.
 #' @param indep_part If FALSE independent distribution is set to zero.
 #'
-#' @return The number of parameters of a MTD model.
+#' @return The number of parameters in a MTD model.
 n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE){
   lenA <- length(A)
   lenL <- length(Lambda)

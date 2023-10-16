@@ -33,9 +33,9 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
   #Checking inputs
   if(length(S) < 2  ||
      !is.numeric(S) ||
-     any( S%%1 != 0) ){stop("S must be a vector of at least 2 integer numbers.")}
+     any( S%%1 != 0) ){stop("Parameter 'S' must be a numeric vector containing at least 2 integer values.")}
   if( !is.numeric(d) || d<2 || (d %% 1)!=0 || d<max(S)){
-    stop("The order d must be an integer number greater than 2 or the greatest element in S.")
+    stop("The 'd' parameter must be an integer greater than 2 and at least as large as the greatest value in 'S'.")
   }
   X <- checkSample(X)
   if(length(A)==0){

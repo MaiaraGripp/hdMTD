@@ -7,11 +7,11 @@
 checkSample(X)
 }
 \arguments{
-\item{X}{A vector with a sample of a MTD Markov chain.}
+\item{X}{A vector with a sample of an MTD Markov chain.}
 }
 \value{
-Returns adjusted chain sample and possible sample errors.
+Returns an adjusted chain sample and possible sample errors.
 }
 \description{
-Checks if a sample is suitable for use
+Checks if a sample is suitable for use.
 }

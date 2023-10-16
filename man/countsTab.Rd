@@ -2,20 +2,20 @@
 % Please edit documentation in R/countsTab.R
 \name{countsTab}
 \alias{countsTab}
-\title{Table of sample sequences counts.}
+\title{Table of sample sequence counts.}
 \usage{
 countsTab(X, d)
 }
 \arguments{
-\item{X}{A MTD Markov Chain sample.}
+\item{X}{A sample from an MTD Markov Chain.}
 
-\item{d}{An upper bound for the chains order.}
+\item{d}{An upper bound for the chain's order.}
 }
 \value{
 A table with every size d+1 sequence in the sample and its absolute frequency.
 }
 \description{
-Creates a table with sample sequences and their absolute frequency.
+Creates a table with sample sequences and their absolute frequencies.
 }
 \details{
 The function will make a tibble with \eqn{d+2} columns. For each row, the first \eqn{d+1} columns will
