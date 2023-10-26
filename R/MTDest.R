@@ -78,17 +78,31 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
   if(!all(names(init) %in% c("p0","p_j","lambdas"))){
     stop("The init list entrances must be labeled 'p0', 'p_j', and 'lambdas', and at least 'p_j' and 'lambdas' must be provided.")
   }
+
+  if(length(init$lambdas)!=(lenS+1)||
+     !is.vector(init$lambdas)      ||
+     !is.numeric(init$lambdas)     ||
+     !all(init$lambdas>=0)         ||
+     round(sum(init$lambdas),3)!=1)stop(paste0("The parameter init$lambdas must be a numeric, non-negative vector of length ", lenS+1," that must sum up to 1."))
+
   indep <- TRUE
-  if(length(init$p0)==0){
-    if( length(init$lambdas)==(lenS+1) & init$lambdas[1]!=0 ){
-      stop("You didn't provide a distribution p0, but you entered a positive weight for this distribution. If your MTD model doesn't have an independent distribution, either set lambdas[1]=0 or provide a vector of lambdas with the same number of elements as S.")}
-      indep <- FALSE
-      init$p0 <- rep(0,lenA)
-      if(length(init$lambdas)==lenS){
-        init$lambdas <- c(0,init$lambdas)
-      }
+  if(length(init$p0)==0 & init$lambdas[1]!=0){
+      stop("You didn't provide a distribution p0, but you entered a positive weight for this distribution. If your MTD model doesn't have an independent distribution, set lambdas[1]=0.")
+  }
+  if(length(init$p0)==0 & init$lambdas[1]==0){
+    indep <- FALSE
+    init$p0 <- rep(0,lenA)
+  }
+  if( !length(init$p0) %in% c(1,lenA) ||
+      !sum(init$p0) %in% c(0,1)      ||
+      !is.numeric(init$p0)           ||
+      !is.vector(init$p0)            ||
+      !all(init$p0>=0)               ){
+    stop("The parameter init$p0 must either 0 or a non-negative vector that sums up to 1.")
   }
   if( sum(init$p0)==0 ){indep <- FALSE}
+
+
   checkMTD(MTDmodel(rS,A,w0=init$lambdas[1],
                     w_j = init$lambdas[-1],
                     p_j=init$p_j,
@@ -137,9 +151,11 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
       }
       cont <- cont-1
     }
+    #each element in pSja is a numerator of eq (13) for a different
+    #past i^0_m (rows) and g={0,1,2,5} columns
     colnames(pSja) <- paste0("lamXp_",S0)
     norm <- apply(pSja, 1, sum)
-    Pj_xa_S <- pSja/norm
+    Pj_xa_S <- pSja/norm #eq(13) for past i^0_m (rows) and g={0,1,2,5} columns
     colnames(Pj_xa_S) <- paste0("P",S0,"xa_S")
     #end step E
 
