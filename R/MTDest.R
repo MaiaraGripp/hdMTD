@@ -87,7 +87,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
 
   indep <- TRUE
   if(length(init$p0)==0 & init$lambdas[1]!=0){
-      stop("You didn't provide a distribution p0, but you entered a positive weight for this distribution. If your MTD model doesn't have an independent distribution, set lambdas[1]=0.")
+    stop("You didn't provide a distribution p0, but you entered a positive weight for this distribution. If your MTD model doesn't have an independent distribution, set lambdas[1]=0.")
   }
   if(length(init$p0)==0 & init$lambdas[1]==0){
     indep <- FALSE
@@ -102,12 +102,12 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
   }
   if( sum(init$p0)==0 ){indep <- FALSE}
 
+  initMTD <- MTDmodel(rS,A,w0=init$lambdas[1],
+                      w_j = init$lambdas[-1],
+                      p_j=init$p_j,
+                      p0=init$p0)
+  checkMTD(initMTD)
 
-  checkMTD(MTDmodel(rS,A,w0=init$lambdas[1],
-                    w_j = init$lambdas[-1],
-                    p_j=init$p_j,
-                    p0=init$p0)
-           )
   if (!is.logical(iter)) {
     stop("Iter must be logical.")
   }
@@ -119,7 +119,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
      nIter <= 0 ){stop("nIter must be a positive integer number.")}
   if(length(M)!=0){
     if(length(M)!=1 ||
-      !is.numeric(M) ||
+       !is.numeric(M) ||
        M<=0 ){stop("M is either NULL or a positive real number.")}
   }
 
@@ -127,15 +127,34 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
   lenS0 <- length(S0)
   base <- countsTab(X,S[1])
   baseSja <- freqTab(S,j=NULL,A,base)
+
+  Pinit <- t(initMTD$P) #check if initial probabilities are compatible with initial sample
+  dim(Pinit) <- NULL
+  if(any(round(Pinit,5)==0)){
+    if( baseSja$qax_Sj[which(round(Pinit,5)==0)]>0 ){
+      stop("The initial parameters aren't compatible with the sample. There are sequences that appear in the sample for which the provided initial probability is zero. Run: 'MTDmodel(Lambda=S,A=sort(unique(X)),w0=init$lambdas[1],w_j=init$lambdas[-1],p_j = p_j, p0=init$p0)$P' and verify if there are null entries.")
+    }
+  }
+
   contInt <- 0
   distlogL <- NULL
+
 
   repeat{
     initMTD <- MTDmodel(rS,A,w0=init$lambdas[1],
                         w_j = init$lambdas[-1],
                         p_j=init$p_j,
                         p0=init$p0)
-    initLogL <- sum( log(as.vector(t(initMTD$P)))*baseSja$Nxa_Sj )
+
+    if(any(baseSja$Nxa_Sj==0)){ #if TRUE is possible that some probabilities in
+      #the initial P matrix are 0. So the loglikelihood will be -inf*0=Nan. The condition
+      #in Nxa=0 is better since Nxa=0 is necessary for P=0. And P=0 with Nxa>0 should trigger error.
+      initLogL <- sum( prodinf( log(as.vector(t(initMTD$P))) , baseSja$Nxa_Sj ) )
+    }else{
+      initLogL <- sum( log(as.vector(t(initMTD$P)))*baseSja$Nxa_Sj )
+    }
+
+
 
     #step E
     pSja <- matrix(rep(rev(init$lambdas),lenA^(lenS0)),byrow = T,ncol=(lenS+1))
@@ -152,11 +171,15 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
       cont <- cont-1
     }
     #each element in pSja is a numerator of eq (13) for a different
-    #past i^0_m (rows) and g={0,1,2,5} columns
+    #past i^0_m (rows) and g={0,Lambda} columns
     colnames(pSja) <- paste0("lamXp_",S0)
     norm <- apply(pSja, 1, sum)
-    Pj_xa_S <- pSja/norm #eq(13) for past i^0_m (rows) and g={0,1,2,5} columns
+    norm[which(norm==0)] <- 1 #avoid 0/0
+
+    Pj_xa_S <- pSja/norm #eq(13) for past i^0_m (rows) and g={0,Lambda} columns
     colnames(Pj_xa_S) <- paste0("P",S0,"xa_S")
+    rownames(Pj_xa_S) <- apply(expand.grid(rep(list(A),lenS0))[,order((lenS0):1)],
+                               1, paste0,collapse = "")
     #end step E
 
     #Step M
@@ -203,7 +226,14 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
                        p0=end_p0)
     endlist <- list("lambdas"=end_lambdas,"p_j"=end_pj,"p0"=end_p0)
 
-    endLogL <- sum( log( as.vector(t(endMTD$P)) )*baseSja$Nxa_Sj )
+
+    if(any(baseSja$Nxa_Sj==0)){ #if TRUE is possible that some probabilities in
+      #the initial P matrix are 0. So the loglikelihood will be -inf*0=Nan. The condition
+      #in Nxa=0 is better since Nxa=0 is necessary for P=0. And P=0 with Nxa>0 should trigger error.
+      endLogL <- sum( prodinf( log(as.vector(t(endMTD$P))) , baseSja$Nxa_Sj ) )
+    }else{
+      endLogL <- sum( log(as.vector(t(endMTD$P)))*baseSja$Nxa_Sj )
+    }
 
     distlogL[contInt+1] <- abs(endLogL-initLogL)
     if(length(M)==1){
@@ -213,13 +243,24 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
     init <- endlist
     if (contInt==nIter) {break}
   }
-  if(oscillations){
-    init$oscillations <- oscillation(initMTD)
-  }
-  if(iter){
-    init$iterations <- contInt
-    init$distlogL <- distlogL
+    if(oscillations){
+      init$oscillations <- oscillation(initMTD)
+    }
+    if(iter){
+      init$iterations <- contInt
+      init$distlogL <- distlogL
     }
   init
 }
 
+prodinf <- function(x,y){
+  prinf <- numeric(length(x))
+  for (i in 1:length(x)) {
+    if (is.infinite(x[i]) && y[i] == 0) {
+      prinf[i] <- 0
+    } else {
+      prinf[i] <- x[i] * y[i]
+    }
+  }
+  prinf
+}
