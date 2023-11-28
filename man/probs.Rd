@@ -4,12 +4,14 @@
 \alias{probs}
 \title{Estimated transition probabilities}
 \usage{
-probs(X, S, A = NULL, warning = FALSE)
+probs(X, S, matrixform = FALSE, A = NULL, warning = FALSE)
 }
 \arguments{
 \item{X}{A MTD Markov Chain.}
 
 \item{S}{The estimated relevant lags set.}
+
+\item{matrixform}{If TRUE, the function returns probability estimates in the form of a stochastic matrix.}
 
 \item{A}{The state space. "A" only needs to be informed if X does not already contain all elements of "A"}
 
