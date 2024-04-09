@@ -39,7 +39,7 @@ values for each lag inserted in S. It will then look at this vector, find the la
 all lags that were included in S from that lag onwards.
 }
 \examples{
-X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),w0=0.05),2000)
+X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),lam0=0.05),2000)
 hdMTD_FS(X,A=c(0,1),d=5,l=2)
 hdMTD_FS(X,d=5,l=2)
 hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)

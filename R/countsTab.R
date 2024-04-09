@@ -16,14 +16,15 @@
 #' @examples
 #' countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
 #' countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
+#'
 countsTab <-function(X,d){
-  # Checking restrictions
   X <- unlist(X)
+  # Checking restrictions
   X <- checkSample(X)
   if (length(X)<d+1) { stop("The sample size must be greater than d+1.") }
   #\.
 
-    n <- length(X)
+  n <- length(X)
   d1 <- d+1
   XTab <- NULL
   for (i in 1:d1) {

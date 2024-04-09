@@ -7,12 +7,12 @@
 #'
 #' set.seed(1)
 #'
-#' p_j <- list("p_-1"=matrix(c(0.1,0.1,0.8,0.4,0.4,0.2,0.5,0.3,0.2),
-#' byrow = T,ncol = 3),"p_-30"=matrix(c(0.05,0.2,0.75,0.4,0.4,0.2,0.3,0.3,0.4),
+#' pj <- list("p-1"=matrix(c(0.1,0.1,0.8,0.4,0.4,0.2,0.5,0.3,0.2),
+#' byrow = T,ncol = 3),"p-30"=matrix(c(0.05,0.2,0.75,0.4,0.4,0.2,0.3,0.3,0.4),
 #' byrow = T,ncol = 3))
 #'
-#' MTDseed1 <- MTDmodel(Lambda=c(1,30),A=c(1,2,3),w0=0.05,
-#' w_j = c(0.35,0.6),p_j=p_j)
+#' MTDseed1 <- MTDmodel(Lambda=c(1,30),A=c(1,2,3),lam0=0.05,
+#' lamj = c(0.35,0.6),pj=pj)
 #'
 #'testChainCol1 <- perfectSample(MTDseed1,3000)
 #'

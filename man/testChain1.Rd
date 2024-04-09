@@ -28,13 +28,13 @@ The samples were created as follows:
 
 set.seed(1)
 
-p_j = list("p_-2"=matrix(c(0.73449134, 0.2655087,0.04906214, 0.9509379),
-byrow=T,ncol=2),"p_-3"=matrix(c(0.6278761,0.3721239,0.3415812,0.6584188),
-byrow=T,ncol=2),"p_-9"=matrix(c(0.4271466,0.5728534,0.6650324, 0.3349676),
+pj = list("p-2"=matrix(c(0.73449134, 0.2655087,0.04906214, 0.9509379),
+byrow=T,ncol=2),"p-3"=matrix(c(0.6278761,0.3721239,0.3415812,0.6584188),
+byrow=T,ncol=2),"p-9"=matrix(c(0.4271466,0.5728534,0.6650324, 0.3349676),
 byrow=T,ncol=2))
 
-MTDseed1 <- MTDmodel(Lambda=c(2,3,9),A=c(0,1),w0=0.05,
-w_j = c(0.25,0.3,0.4),p_j=p_j).
+MTDseed1 <- MTDmodel(Lambda=c(2,3,9),A=c(0,1),lam0=0.05,
+lamj = c(0.25,0.3,0.4),pj=pj).
 
 testChainCol1 <- perfectSample(MTDseed1,3000)
 

@@ -7,9 +7,9 @@
 MTDmodel(
   Lambda,
   A,
-  w0 = NULL,
-  w_j = NULL,
-  p_j = NULL,
+  lam0 = NULL,
+  lamj = NULL,
+  pj = NULL,
   p0 = NULL,
   single_matrix = FALSE,
   indep_part = TRUE
@@ -22,20 +22,21 @@ number represents the earliest time in the past.}
 
 \item{A}{The states space.}
 
-\item{w0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
+\item{lam0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
 
-\item{w_j}{A vector of weights for the distributions p_j. Values must be in the range \verb{[0, 1)}. The order of weights must match the order
+\item{lamj}{A vector of weights for the distributions pj. Values must be in the range \verb{[0, 1)}. The order of weights must match the order
 of the sorted Lambda set.}
 
-\item{p_j}{A list with lenL matrices of size \verb{lenA x lenA}. Here, lenL represents the number of elements in Lambda, and lenA represents the number
+\item{pj}{A list with lenL matrices of size \verb{lenA x lenA}. Here, lenL represents the number of elements in Lambda, and lenA represents the number
 of elements in A.}
 
-\item{p0}{A vector with the independent distribution part of an MTD model. If not informed and indep_part=TRUE, the distribution will be sampled
-from a uniform distribution. If indep_part=FALSE, the distribution will be set to zero.}
+\item{p0}{A vector with the independent distribution part of an MTD model. If not informed and argument indep_part=TRUE, the distribution will be sampled
+from a uniform distribution. If indep_part=FALSE, then there is no independent distribution and p0 entries will be set to zero. If you enter p0=0,
+then indep_part will be set to FALSE.}
 
-\item{single_matrix}{If TRUE all p_j matrices are equal.}
+\item{single_matrix}{If TRUE all pj matrices are equal.}
 
-\item{indep_part}{If FALSE the independent distribution is set to zero.}
+\item{indep_part}{If FALSE there is no independent distribution and p0 is set to zero.}
 }
 \value{
 An MTD model as a MTD object.
@@ -50,9 +51,9 @@ which will perfectly sample a MTD Markov chain with the model's parameters
 \examples{
 MTDmodel(Lambda=c(1,3),A=c(4,8,12))
 
-MTDmodel(Lambda=c(2,4,9),A=c(0,1),w0=0.05,w_j=c(0.35,0.2,0.4),
-p_j=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
+MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,lamj=c(0.35,0.2,0.4),
+pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
 
-MTDmodel(Lambda=c(2,4,9),A=c(0,1),w0=0.05,
-p_j=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
+MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,
+pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
 }

@@ -13,6 +13,7 @@ oscillation(x, ...)
 
 S: If x is a chain sample,
 the user should provide a set of lags, that must be labeled as S, for which he wishes to estimate the oscillations.
+In this case d=max{S}.
 
 A: If x is a chain sample, and there may be elements is A that did not appear in x, the state space A should be
 specified, and it must be labeled as A.}
@@ -27,16 +28,16 @@ Calculates the oscillations of a MTD model object or estimates the oscillations 
 }
 \details{
 The oscillations of a MTD model
-(\eqn{\delta_k} for \eqn{k in \Lambda}), are the product of the weight \eqn{\lambda_k}
+(\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j}
 multiplied by the maximum of the total variation distances between the
-distributions in the matrix p_k. These values are important because they
-measure the influence of a relevant lag k on the model.
+distributions in the matrix pj. These values are important because they
+measure the influence of a relevant lag j on the model.
 }
 \examples{
 oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )
-oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),w0=0.01 ) )
-oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),w0=0.01,w_j=c(0.49,0.5)) )
-oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),w0=0.01,w_j=c(0.49,0.5),
-p_j=list(matrix(c(0.1,0.9,0.9,0.1),ncol=2)), single_matrix=TRUE))
+oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01 ) )
+oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5)) )
+oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5),
+pj=list(matrix(c(0.1,0.9,0.9,0.1),ncol=2)), single_matrix=TRUE))
 
 }

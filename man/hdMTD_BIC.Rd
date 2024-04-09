@@ -63,7 +63,7 @@ calculating the BIC for a subset S (of 1:d), the function will sum over those co
 distant from d'. As a result, the function might calculate a different BIC for the same set S.
 }
 \examples{
-X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),w0=0.05),500)
+X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),lam0=0.05),500)
 hdMTD_BIC (X,d=6,minl=1,maxl=1)
 hdMTD_BIC (X,d=5,minl=2,maxl=2,BICvalue = TRUE)
 

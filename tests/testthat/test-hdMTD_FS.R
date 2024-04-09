@@ -1,7 +1,7 @@
 test_that("hdMTD_FS function works as expected", {
   # Create a sample MTD chain
   set.seed(1)
-  X <- perfectSample(MTDmodel(c(2, 4), c(0, 1), w0 = 0.05), 2000)
+  X <- perfectSample(MTDmodel(c(2, 4), c(0, 1), lam0 = 0.05), 2000)
   d <- 5
   l <- 2
 

@@ -7,25 +7,27 @@
 #'
 #' S: If x is a chain sample,
 #' the user should provide a set of lags, that must be labeled as S, for which he wishes to estimate the oscillations.
+#' In this case d=max{S}.
 #'
 #' A: If x is a chain sample, and there may be elements is A that did not appear in x, the state space A should be
 #' specified, and it must be labeled as A.
 #'
 #'
 #' @details The oscillations of a MTD model
-#' (\eqn{\delta_k} for \eqn{k in \Lambda}), are the product of the weight \eqn{\lambda_k}
+#' (\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j}
 #'   multiplied by the maximum of the total variation distances between the
-#'  distributions in the matrix p_k. These values are important because they
-#'   measure the influence of a relevant lag k on the model.
+#'  distributions in the matrix pj. These values are important because they
+#'   measure the influence of a relevant lag j on the model.
 #' @return If the x parameter is an MTD object, it will provide the oscillations for
 #' each relevant element. In case x is a MTD chain sample, it estimates the oscillations
 #'  for a user-inputted set S of lags.
+#'
 #' @export oscillation
 #' @examples oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )
-#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),w0=0.01 ) )
-#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),w0=0.01,w_j=c(0.49,0.5)) )
-#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),w0=0.01,w_j=c(0.49,0.5),
-#' p_j=list(matrix(c(0.1,0.9,0.9,0.1),ncol=2)), single_matrix=TRUE))
+#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01 ) )
+#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5)) )
+#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5),
+#' pj=list(matrix(c(0.1,0.9,0.9,0.1),ncol=2)), single_matrix=TRUE))
 #'
 oscillation <- function(x,...){ UseMethod("oscillation") }
 
@@ -34,9 +36,10 @@ oscillation.MTD <- function(x,...){
   checkMTD(x)
   lenA <- length(x$A) #number of rows/cols in each p_k
   rows <- t(combn(lenA,2))
-  y <- x$lambdas[-1]*sapply(x$p_j,dTV_pj,rows)
+  y <- x$lambdas[-1]*sapply(x$pj,dTV_pj,rows)
   names(y) <- paste0("-",x$Lambda)
-  class(y) <- "MTDoscillation"
+  class(y) <- "oscillation"
+  attr(y,"type") <- "MTD"
   y
 }
 
@@ -56,7 +59,7 @@ oscillation.default <- function(x,...){
     A <- unique(x)
   }
   if( length(A)<=1   ||
-      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
+      any(A%%1 !=0)   )stop("States space A must be a vector of integers with at least two numbers.")
   if ( !all( unique(x) %in% A ) ) {
     stop("Check the states space, it must include all states that occur in the sample.")
   }
@@ -72,7 +75,7 @@ oscillation.default <- function(x,...){
   Z <- NULL
 
 
-  for(i in 1:lenS){
+  for(i in 1:lenS){ #for each element in S
     j <- S[i]
     if(lenS>1){
       Z <- S[-i] #Z are the lags in S\j
@@ -96,7 +99,7 @@ oscillation.default <- function(x,...){
                                     A_pairs=A_pairs,x_S=subx[t,])
     }
     if(lenS>1){
-      NxS_dtvxS <- sweep(dtv_xS,MARGIN=1,t(b_S[PositiveNx_S,lenS]),'*')
+      NxS_dtvxS <- sweep(dtv_xS,MARGIN=1,t(b_S[PositiveNx_S,lenS]),'*')#dtv|p(.|xz aj)-p(.|xz bj)|*Nxz
     }else{
       NxS_dtvxS <- dtv_xS*(lenX-S[1])#since S\j=NULL, N(x_S)=n-d, so N(x_S)/(n-d)=1 in the weighted mean
     }
@@ -106,16 +109,26 @@ oscillation.default <- function(x,...){
   }
   names(y) <- paste0("-",S)
   y <- rev(y)
+  class(y) <- "oscillation"
+  attr(y,"type") <- "est"
   y
 }
 
 #' @export
-print.MTDoscillation <- function(x, ...){
+print.oscillation <- function(x, ...){
  class(x) <- NULL
- cat("Calculating \U03B4\U2096 = \U03BB\U2096*max{b,c in A: dTV[p\U2096(.|b),p\U2096(.|c)]}, \n")
- cat("for each k in Lambda: \n")
- cat("\n")
+ if( attr(x,"type") == "MTD"){
+   cat("Calculating \U03B4\U006A = \U03BB\U006A*max{b\U006A,c\U006A in A: dTV[p\U006A(.|b\U006A),p\U006A(.|c\U006A)]}, \n")
+   cat("for each j in Lambda: \n")
+   cat("\n")
+ }else{
+   cat("Estimating \u0302\U03B4\U006A = max{b\U006A,c\U006A in A: sum{x in A^{|S\U2216j|} dTV[\u0302p(.|b\U006Ax),\u0302p(.|c\U006Ax)] } }\n")
+   cat("for each j in Lambda: \n")
+   cat("\n")
+ }
+ attr(x,"type") <- NULL
  print(x)
  return(invisible(x))
 }
+
 

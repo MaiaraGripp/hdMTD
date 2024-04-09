@@ -35,13 +35,13 @@ checkMTD <- function(MTD){
       !all(MTD$lambdas>=0)         ||
       length(MTD$lambdas)!=(lenL+1) )stop("lambdas must be a vector of size ",lenL+1, "(the same size of the vector of relevant lags Lambda + 1), with nonnegative numbers that must add up to 1. The first element of the lambdas vector is the weight for the independent distribution p0, if your MTD model doesn't have and independent distribution set lambdas[1]=0.")
 
-  if(!is.list(MTD$p_j)                ||
-     length(MTD$p_j)!=lenL            ||
-     !all(sapply(MTD$p_j, is.matrix)) ||
-     !all(sapply(MTD$p_j,dim)==c(lenA,lenA))
-     )stop(paste0("p_j must be a list with ", lenL," stochastic matrices ", lenA, "x",lenA))
-  aux <- do.call(rbind,MTD$p_j)
+  if(!is.list(MTD$pj)                ||
+     length(MTD$pj)!=lenL            ||
+     !all(sapply(MTD$pj, is.matrix)) ||
+     !all(sapply(MTD$pj,dim)==c(lenA,lenA))
+     )stop(paste0("pj must be a list with ", lenL," stochastic matrices ", lenA, "x",lenA))
+  aux <- do.call(rbind,MTD$pj)
   if(!is.numeric(aux)                      ||
      !all(round(apply(aux, 1, sum),3)==1)  ||
-     !all(aux>=0) )stop(paste0("p_j must be a list with ", lenL," stochastic matrices ", lenA, "x",lenA,". In other words, each matrix row must sum up to 1."))
+     !all(aux>=0) )stop(paste0("pj must be a list with ", lenL," stochastic matrices ", lenA, "x",lenA,". In other words, each matrix row must sum up to 1."))
 }

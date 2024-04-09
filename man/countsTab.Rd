@@ -25,4 +25,5 @@ will contain the number of times each of these sequences appeared in the sample.
 \examples{
 countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
 countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
+
 }

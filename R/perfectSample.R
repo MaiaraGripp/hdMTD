@@ -61,9 +61,9 @@ perfectSample.MTD <- function(MTD,N=NULL){
     if(lenYt > 1){
       for (i in lenYt:2) {
         Kt <- Yt[i]-Yt[i-1]
-        p_Kt <- MTD$p_j[[which(MTD$Lambda==Kt)]]
+        p_Kt <- MTD$pj[[which(MTD$Lambda==Kt)]]
         p_KtRow <- which(MTD$A==chain[Yt[i]])#carefull a needs to be sorted
-        #cant use rownames cause if p_j is inputed they can be missing
+        #cant use rownames cause if pj is inputed they can be missing
         acum_p_KtRow <- cumsum(p_Kt[p_KtRow,])
         chain[Yt[i-1]] <- MTD$A[which(acum_p_KtRow>runif(1))[1]]
       }
@@ -80,7 +80,7 @@ perfectSample.MTD <- function(MTD,N=NULL){
       if(Kt==0){
         MTD$A[which(acum_p0>runif(1))[1]]
       }else{
-        p_Kt <- MTD$p_j[[which(MTD$Lambda==Kt)]]
+        p_Kt <- MTD$pj[[which(MTD$Lambda==Kt)]]
         p_KtRow <- which(MTD$A==chain[1+Kt])
         acum_p_KtRow <- cumsum(p_Kt[p_KtRow,])
         chain[1] <- MTD$A[which(acum_p_KtRow>runif(1))[1]]

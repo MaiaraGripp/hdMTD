@@ -5,7 +5,7 @@ test_that("checkMTD works correctly", {
     A = c(2, 3, 5),
     p0 = c(0.2, 0.5, 0.3),
     lambdas = c(0.01, 0.49, 0.5),
-    p_j = list(
+    pj = list(
       matrix(c(0.1, 0.2, 0.7, 0.4, 0.5, 0.1, 0.5, 0.3, 0.2), nrow = 3),
       matrix(c(0.1, 0.2, 0.7, 0.4, 0.5, 0.1, 0.5, 0.3, 0.2), nrow = 3)
       )
@@ -58,8 +58,8 @@ test_that("checkMTD works lambdas", {
   obj$lambdas <- c(0.5,0.5,0.5,0.5)
   expect_error(checkMTD(obj))
 })
-test_that("checkMTD works p_j", {
+test_that("checkMTD works pj", {
   obj <- MTDmodel(c(1,2,3),c(0,1))
-  obj$p_j <- c(1,2,3)
+  obj$pj <- c(1,2,3)
   expect_error(checkMTD(obj))
 })

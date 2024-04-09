@@ -18,12 +18,13 @@ MTDest(
 \arguments{
 \item{X}{A MTD chain sample}
 
-\item{S}{The relevant lag set}
+\item{S}{The relevant lag set (sorted positive integer numbers).}
 
 \item{M}{A stopping point for the EM algorithm. If NULL the algorithm will run
 for a total of nIter iteractions.}
 
-\item{init}{A list with initial parameters.}
+\item{init}{A list with initial parameters: 'p0' optional, 'lambdas' required,
+'pj' required. The order of elements in 'lambdas'}
 
 \item{iter}{If True, returns the number of iterations of the
 algorithm, that is, the number of times the initial parameters
@@ -31,7 +32,7 @@ were updated.}
 
 \item{nIter}{An integer positive number with the maximum number of iterations.}
 
-\item{A}{The states space}
+\item{A}{The states space (sorted positive integer numbers).}
 
 \item{oscillations}{If TRUE the function will return the estimated oscillations
 for the updated model along with the estimated parameters.}
@@ -43,6 +44,11 @@ A list with the estimated parameters of the MTD model
 Estimation of MTD parameters through EM algorithm
 }
 \details{
+This function was created based on the following article:
+Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
+in the Mixture Transition Distribution model. Journal of Statistical Computation
+and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
+
 Regarding the 'M' parameter: it functions as a stopping
 criterion within the EM algorithm. When the difference between
 the log-likelihood computed with the newly estimated parameters
@@ -58,18 +64,19 @@ default of 100.
 Concerning the 'init' parameter, it is expected to be a list
 comprising either 2 or 3 entries. These entries consist of:
 an optional vector named 'p0' (representing an independent
-distribution, ordered from the smallest to the greatest
-element of A), a required list of matrices 'p_j' (a list containing
-a stochastic matrix for each element of S, also ordered from the
-smallest to the greatest element of S), and a vector named 'lambdas'
-(representing the weights, first the weight for p0, and
-then for each element in p_j).
+distribution, the order must follow that of A), a required list
+of matrices 'pj' (a list containing a stochastic matrix for each
+element of S, also ordered from the smallest to the greatest
+element of S), and a vector named 'lambdas' (representing
+the weights, first the weight for p0, and then for each element
+in pj). If your MTD model does not have an independent
+distribution p0, just set the first entry of init$lambda to 0.
 }
 \examples{
-MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),w0=0.01)
+MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),lam0=0.01)
 X <- perfectSample(MTD,N=2000)
 init <- list('p0'=c(0.4,0.6),'lambdas'=c(0.05,0.45,0.5),
-'p_j'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
+'pj'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
 matrix(c(0.25,0.75,0.3,0.7),byrow = TRUE,ncol=2)))
 MTDest(X,S=c(1,10),M=1,init)
 MTDest(X,S=c(1,10),init=init,iter = TRUE)
