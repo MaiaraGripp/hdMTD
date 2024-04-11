@@ -18,28 +18,24 @@
 #' countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
 #'
 countsTab <-function(X,d){
+  ## Checks
   X <- unlist(X)
-  # Checking restrictions
   X <- checkSample(X)
   if (length(X)<d+1) { stop("The sample size must be greater than d+1.") }
-  #\.
 
   n <- length(X)
   d1 <- d+1
   XTab <- NULL
-  for (i in 1:d1) {
+  for (i in 1:d1) { # makes d1 matrices with different sequences in the sample then binds them
     aux <- (n-(i-1))%%d1
     XTab <- rbind( XTab, matrix( X[i:(n-aux)] ,ncol = d1,byrow = TRUE) )
   }
   colnames(XTab) <- c(paste("x",seq(d,1),sep="" ),"a")
-
-  count <- NULL
-  XTab <- dplyr::as_tibble(cbind(XTab,count=1))
+  count <- rep(1,n-d)
+  XTab <- dplyr::as_tibble(cbind(XTab,count))
   XTab <- XTab %>%
-            dplyr::mutate(count = as.numeric(count))
-  XTab <- XTab %>%
-            dplyr::group_by(XTab[,1:d1]) %>%
-            dplyr::summarise(Nxa=sum(count),.groups="drop")
+    dplyr::group_by(XTab[,-(d1+1)]) %>%
+    dplyr::summarise(Nxa=sum(count),.groups="drop")
   XTab
 }
 

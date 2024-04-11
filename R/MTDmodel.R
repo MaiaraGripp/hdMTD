@@ -175,12 +175,17 @@ MTDmodel <- function(Lambda,
               p0=p0,
               Lambda=Lambda,
               A=A)
+
   class(MTD) <- "MTD"
   MTD
 }
 
 #' @export
 print.MTD <- function(x, ...){
-  print(x[seq_along(x)])
+  ind <- seq_along(x)
+  if ( all(x$p0==0) ) {
+    ind <- ind[-4]
+  }
+  print(x[ind])
   return(invisible(x))
 }
