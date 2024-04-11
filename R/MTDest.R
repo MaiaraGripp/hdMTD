@@ -119,7 +119,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
     stop("init$p0 must be a non-negative vector that sums up to 1. If your model doesn't have an
          independent distribution simply do not provide p0 in the init argument, and set init$lambdas[1] to 0.")####!
   }
-  if( sum(init$p0)>0 & init$lambdas[1]==0 )stop("You privided an independent distribution with init$lambas[1]=0.
+  if( sum(init$p0)>0 & init$lambdas[1]==0 )stop("You provided an independent distribution with init$lambas[1]=0.
 If your MTD doesn't have an independent distribution do not inform p0 in the init list. If it does, please set
 an init$lambdas[1] to a value greater than 0.")
   if( sum(init$p0)==0 ){indep <- FALSE} #in case user enters init$p0 <- c(0,...,0)

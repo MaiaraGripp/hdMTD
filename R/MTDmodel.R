@@ -141,19 +141,20 @@ MTDmodel <- function(Lambda,
     }
   }
   names(pj) <- paste0("p-",Lambda)
-
+## Calculating P
+  #initiating
   subx <- try(expand.grid(rep(list(seq(1:lenA)),lenL)),silent = TRUE) #all possible sequences x_{Lambda}
   if(class(subx)=="try-error"){stop(paste0("For lenL=",lenL," the dataset with all pasts sequences (x of size lenL) with elements of A is too large."))}
   subx <- subx[,order(lenL:1)]
-
   P <- matrix(0,ncol = lenA,nrow = lenAL)
+
   if (lenL==1) {
-    for (i in 1:lenAL) {
+    for (i in 1:lenAL) { # runs in all pasts of sizeL with elements of A (the lines of P)
       P[i,] <- lambdas%*%rbind(p0,pj[[1]][i,])
     }
     rownames(P) <- A
   }else{
-    for (i in 1:lenAL) {
+    for (i in 1:lenAL) { # runs in all pasts of sizeL with elements of A (the lines of P)
       aux <- matrix(0,ncol=lenA,nrow = lenL)
       for (j in 1:lenL) {
         aux[j,] <- pj[[j]][subx[i,(lenL+1-j)],] # the lines in aux are each from a different pj

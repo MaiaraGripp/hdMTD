@@ -34,7 +34,7 @@ checkMTD <- function(MTD){
       round(sum(MTD$lambdas),3)!=1 ||
       !all(MTD$lambdas>=0)         ||
       length(MTD$lambdas)!=(lenL+1) )stop("lambdas must be a vector of size ",lenL+1, "(the same size of the vector of relevant lags Lambda + 1), with nonnegative numbers that must add up to 1. The first element of the lambdas vector is the weight for the independent distribution p0, if your MTD model doesn't have and independent distribution set lambdas[1]=0.")
-
+  #pj
   if(!is.list(MTD$pj)                ||
      length(MTD$pj)!=lenL            ||
      !all(sapply(MTD$pj, is.matrix)) ||

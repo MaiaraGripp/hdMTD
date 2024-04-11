@@ -30,7 +30,7 @@
 #'
 hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE,...){
 
-  #Checking inputs
+## Checking S, d, X, A
   if(length(S) < 2  ||
      !is.numeric(S) ||
      any( S%%1 != 0) ){stop("Parameter 'S' must be a numeric vector containing at least 2 integer values.")}
@@ -43,12 +43,13 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
       warning("States space A not informed. Code will set A <- sort(unique(X)).")
     }
     A <- sort(unique(X))
-  }
+  }else{A <- sort(A)}
   if( length(A)<=1   ||
       any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
   if ( !all( unique(X) %in% A ) ) {
     stop("Check the states space, it must include all states that occur in the sample.")
   }
+## ask to change constantes alpha, mu, xi if needed
   while ( is.na(alpha) || !is.numeric(alpha) || alpha <= 0 ) {
     cat("The alpha value is not valid for CUT step. alpha should be a positive number.")
     alpha <- readline(prompt = "Please enter a valid alpha: ")
@@ -64,9 +65,8 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
     xi <- readline(prompt = "Please enter a valid xi: ")
     xi <- suppressWarnings(as.numeric(xi))
   }
-  #\.
-  # Gathering inputs
-  A <- sort(A)
+
+## Gathering inputs
   lenA <- length(A)
   lenS <- length(S)
   subx <- as.matrix(expand.grid(rep(list(A),lenS-1))[,(lenS-1):1],ncol=lenS-1)
@@ -77,19 +77,20 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
   nrowA_pairs <- nrow(A_pairs)
   base <- countsTab(X=X,d=d)
   b_Sja <- freqTab(S=S,A=A,countsTab=base)
-  #\.
+
 
   dTV_txy <- numeric(lenS)
-  for (z in 1:lenS) {
+  for (z in 1:lenS) { #It runs through all lags in S, singling out one in each loop.
     j <- dec_S[z]
     Sminusj <- dec_S[ -which( dec_S == j ) ]
-
     Q <- matrix(0,ncol=nrowA_pairs,nrow = nrow_subx)
     R <- matrix(0,ncol = lenA, nrow = nrow_subx)
-    for (k in 1:nrow_subx) { #runs in all x_S
+    for (k in 1:nrow_subx) { #runs through all sequences x of size |S|-1 ( i.e. x_{S\j})
       Q[k,] <- dTV_sample(S=Sminusj,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[k,])
       R[k,] <- sx(S=Sminusj,freqTab=b_Sja,lenA=lenA,x_S=subx[k,],mu=mu,alpha=alpha,xi=xi)
     }
+    # Q: a matrix for all total var distances when changing the element in past j
+    # R: a matrix with thresholds for the entries in Q
     colnames(Q) <- apply(A_pairs, 1, paste0, collapse="x")
     rownames(Q) <- apply(subx, 1, paste0, collapse="")
     assign(paste0("dtv_j",j),Q)
@@ -98,6 +99,7 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
     assign(paste0("sx_Sj",j),R)
 
     dTV_txy[z] <- max(Q-txy(R=R,A_pairs=A_pairs,A_pairsPos=A_pairsPos))
+    #see txy() below
   }
   S <- sort(S,decreasing = TRUE)
   S <- S[which(dTV_txy>0)]
@@ -114,6 +116,6 @@ txy <- function(R,A_pairs,A_pairsPos){
   rownames(tn)=rownames(R)
   tn
 }
-#\.
+
 
 

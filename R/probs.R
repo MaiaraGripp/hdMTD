@@ -17,6 +17,7 @@
 #' probs(X,S=c(1,7,9))
 #'
 probs <- function(X,S,matrixform=FALSE,A=NULL,warning=FALSE){
+## Check X, S, A, matrixform
   X <- checkSample(X)
   if(length(S) < 1  ||
      !is.numeric(S) ||
@@ -26,8 +27,8 @@ probs <- function(X,S,matrixform=FALSE,A=NULL,warning=FALSE){
     if(warning==TRUE){
       warning("States space A not informed. Code will set A <- sort(unique(X)).")
     }
-    A <- unique(X)
-  }
+    A <- sort(unique(X))
+  }else{A <- sort(A)}
   if( length(A)<=1   ||
       any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
   if ( !all( unique(X) %in% A ) ) {
@@ -35,7 +36,6 @@ probs <- function(X,S,matrixform=FALSE,A=NULL,warning=FALSE){
   }
   if(!is.logical(matrixform)){stop("matrixform should be a logical parameter that determines the return format of the function.")}
 
-  A <- sort(A)
   S <- sort(S,decreasing = TRUE)
   lenS <- length(S)
   base <- countsTab(X,S[1])
