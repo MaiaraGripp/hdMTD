@@ -30,8 +30,13 @@ Calculates the oscillations of a MTD model object or estimates the oscillations 
 The oscillations of a MTD model
 (\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j}
 multiplied by the maximum of the total variation distances between the
-distributions in the matrix pj. These values are important because they
-measure the influence of a relevant lag j on the model.
+distributions in the matrix pj.
+\deqn{\delta_j = \lambda_j\max_{b,c \in \mathcal{A}} d_{TV}(p_j(\cdot | b), p_j(\cdot | c))}
+
+When estimating oscillations from a sample you must inform S, this way the transition distributions
+\eqn{\hat{p}(.|x_S)} will be estimated for all possible pasts x_S.
+\deqn{\delta_j = \max_{c_j,b_j \in \mathcal{A}} \frac{1}{N-d}\sum_{x_{S\setminus j} \in \mathcal{A}^{S\setminus j }} N(x_{S\setminus j})d_{TV}(\hat{p}(\cdot | b_jx_{S\setminus j}), \hat{p}(\cdot | c_jx_{S\setminus j}))}
+where \eqn{d=\max{S}}.
 }
 \examples{
 oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )

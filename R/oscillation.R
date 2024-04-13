@@ -16,8 +16,14 @@
 #' @details The oscillations of a MTD model
 #' (\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j}
 #'   multiplied by the maximum of the total variation distances between the
-#'  distributions in the matrix pj. These values are important because they
-#'   measure the influence of a relevant lag j on the model.
+#'  distributions in the matrix pj.
+#' \deqn{\delta_j = \lambda_j\max_{b,c \in \mathcal{A}} d_{TV}(p_j(\cdot | b), p_j(\cdot | c))}
+#'
+#' @details When estimating oscillations from a sample you must inform S, this way the transition distributions
+#' \eqn{\hat{p}(.|x_S)} will be estimated for all possible pasts x_S.
+#' \deqn{\delta_j = \max_{c_j,b_j \in \mathcal{A}} \frac{1}{N-d}\sum_{x_{S\setminus j} \in \mathcal{A}^{S\setminus j }} N(x_{S\setminus j})d_{TV}(\hat{p}(\cdot | b_jx_{S\setminus j}), \hat{p}(\cdot | c_jx_{S\setminus j}))}
+#' where \eqn{d=\max{S}}.
+#'
 #' @return If the x parameter is an MTD object, it will provide the oscillations for
 #' each relevant element. In case x is a MTD chain sample, it estimates the oscillations
 #'  for a user-inputted set S of lags.
@@ -38,8 +44,6 @@ oscillation.MTD <- function(x,...){
   rows <- t(combn(lenA,2))
   y <- x$lambdas[-1]*sapply(x$pj,dTV_pj,rows)
   names(y) <- paste0("-",x$Lambda)
-  class(y) <- "oscillation"
-  attr(y,"type") <- "MTD"
   y
 }
 
@@ -109,26 +113,7 @@ oscillation.default <- function(x,...){
   }
   names(y) <- paste0("-",S)
   y <- rev(y)
-  class(y) <- "oscillation"
-  attr(y,"type") <- "est"
   y
-}
-
-#' @export
-print.oscillation <- function(x, ...){
- class(x) <- NULL
- if( attr(x,"type") == "MTD"){
-   cat("Calculating \U03B4\U006A = \U03BB\U006A*max{b\U006A,c\U006A in A: dTV[p\U006A(.|b\U006A),p\U006A(.|c\U006A)]}, \n")
-   cat("for each j in Lambda: \n")
-   cat("\n")
- }else{
-   cat("Estimating \u0302\U03B4\U006A = max{b\U006A,c\U006A in A: sum{x in A^{|S\U2216j|} dTV[\u0302p(.|b\U006Ax),\u0302p(.|c\U006Ax)] } }\n")
-   cat("for each j in Lambda: \n")
-   cat("\n")
- }
- attr(x,"type") <- NULL
- print(x)
- return(invisible(x))
 }
 
 
