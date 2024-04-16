@@ -54,8 +54,8 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
   #test if l is valid but creates too big a table
   xa=try(expand.grid(rep(list(A),l)),silent = TRUE)
   if(class(xa)=="try-error"){stop(paste0("The dataset with all sequences of size l is too large. Please try a lower value for l."))}
-  #\.
-  #Gathering inputs
+
+
   A <- sort(A)
   lenA <- length(A)
   lenX <- length(X)
@@ -63,11 +63,11 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
   A_pairs <- t(utils::combn(A,2))
   A_pairsPos <- t(utils::combn(1:lenA,2))
   nrowA_pairs <- nrow(A_pairs)
-  #\.
+
 
   S <- NULL
   lenS <- 0
-  maxnu <- numeric(l) #elbow
+  maxnu <- numeric(l) # used if elbow=TRUE
   while ( lenS < l ) {
 
     if( is.numeric(S) ){
@@ -81,16 +81,15 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
     dec_S <- sort(S,decreasing = TRUE)
     nuj <- numeric(lenSc)
 
-    for (z in 1:lenSc) {
+    for (z in 1:lenSc) { # runs in all elements in the complement o S i.e. (1:d)\S
       j <- Sc[z]
       b_Sja <- freqTab(S=S,j=j,A=A,countsTab=base)
       b_Sj <- freqTabSj(S=S,j=j,b_Sja,lenX=lenX,d=d)
-      b_S <- freqTabSj(S=S,j=NULL,b_Sja,lenX=lenX,d=d)#if S=NULL: b_S<-matrix(c(0,lenX-d),ncol=2)
+      b_S <- freqTabSj(S=S,j=NULL,b_Sja,lenX=lenX,d=d) #if S=NULL: b_S<-matrix(c(0,lenX-d),ncol=2)
       ncolb_S <- ncol(b_S)
 
       if( lenS > 0) {
-        PositNx_S <- which(b_S$Nx_Sj>0)
-        #PositNx_S = {index of all sequences x_S : N(x_S)>0}
+        PositNx_S <- which(b_S$Nx_Sj>0) #{index of all sequences x_S : N(x_S)>0}
         subx <- b_S[,-ncolb_S]
       }else{
         PositNx_S <- 1
@@ -98,7 +97,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
       }
 
       lenPositNx_S <- length(PositNx_S)
-      for (k in 1:lenPositNx_S) { #runs in all sequences x_S: N(x_S)>0
+      for (k in 1:lenPositNx_S) { #runs in all sequences x_S such that N(x_S)>0
         t <- PositNx_S[k]
         cont <- 0
 
@@ -117,7 +116,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
         nuj[z] <- nuj[z]+cont/PI_xS
       }
     }
-    maxnu[lenS+1] <- max(nuj) #elbow
+    maxnu[lenS+1] <- max(nuj) # used if elbow=TRUE
     s <- Sc[which(nuj==max(nuj))]
     S <- c(S,s)
     lenS <- length(S)

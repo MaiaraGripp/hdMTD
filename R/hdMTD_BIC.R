@@ -84,18 +84,19 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
   if(!is.logical(BICvalue)){stop("BICvalue must me a logical argument")}
   if(!is.logical(warning)){stop("warning must me a logical argument")}
 
-  #gatherin inputs
   A <- sort(A)
   lenS <- length(S)
   S <- sort(S)
   base <- countsTab(X,d)
-  #\.
 
+## Calculating penalized loglikelihood
   if(maxl==minl){
-        nCombs <- choose(lenS,minl)
+        nCombs <- choose(lenS,minl) #number of possible sets with size minl of elements of S
         tryCombs <- matrix( c( rep(0,nCombs), rep(n_parameters(1:minl,A)*log(length(X))*xi,nCombs) ),
                             byrow = T,nrow = 2 )
+        #since minl=maxl the number of parameters is the same, and the penalty is the same for any set
         aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
+        #aux is a vector with all possible sets of size minl with elements of S
         for ( k in 1:nCombs ) {
           G <- as.numeric(unlist(strsplit(aux[k], ",")))
           b <- freqTab(S=G,j=NULL,A=A,countsTab=base,complete = FALSE)
@@ -103,14 +104,16 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
         }
         colnames(tryCombs) <- aux
         rownames(tryCombs) <- c("log_ML","penalty")
-        pML <- apply(tryCombs,2,sum)
-        pML <- sort(pML)[1]
+        pML <- apply(tryCombs,2,sum) # -loglikelihood + penalty
+        pML <- sort(pML)[1] # max
         if(!BICvalue){
           pML <- as.numeric(unlist(strsplit(names(pML), ",")))
         }
       }else{ #maxl>minl
         tryCombs <- list()
         cont <- 1
+        # does the same thing as when minl=maxl but for all minl<=l<=maxl.
+        # So tryCombs is now a list, and the penalty changes with l
         for (i in minl:maxl) {
           nCombs <- choose(lenS,i)
           tryCombs[[cont]] <- matrix( rep(0,2*nCombs) ,byrow = T,nrow = 2 )

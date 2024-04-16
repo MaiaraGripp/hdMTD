@@ -18,7 +18,7 @@
 #' countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
 #'
 countsTab <-function(X,d){
-  ## Checks
+  ## Checks parameters
   X <- unlist(X)
   X <- checkSample(X)
   if (length(X)<d+1) { stop("The sample size must be greater than d+1.") }
