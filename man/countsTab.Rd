@@ -7,7 +7,7 @@
 countsTab(X, d)
 }
 \arguments{
-\item{X}{A sample from an MTD Markov Chain.}
+\item{X}{A sample from an MTD Markov Chain. First element must be the most recent.}
 
 \item{d}{An upper bound for the chain's order.}
 }

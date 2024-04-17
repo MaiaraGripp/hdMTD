@@ -7,12 +7,12 @@
 perfectSample(MTD, N = NULL)
 }
 \arguments{
-\item{MTD}{A MTD object.}
+\item{MTD}{An MTD object. The state space A in the MTD object must be sorted}
 
 \item{N}{The sample size. If NULL sample size will be set to 1000.}
 }
 \value{
-Returns a sample from o MTD model.
+Returns a sample from o MTD model (the first element is the most recent).
 }
 \description{
 Perfectly samples a MTD Markov chain.

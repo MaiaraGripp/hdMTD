@@ -2,7 +2,7 @@
 #'
 #' Creates a table with sample sequences and their absolute frequencies.
 #'
-#' @param X A sample from an MTD Markov Chain.
+#' @param X A sample from an MTD Markov Chain. First element must be the most recent.
 #' @param d An upper bound for the chain's order.
 #'
 #' @return A table with every size d+1 sequence in the sample and its absolute frequency.
@@ -26,6 +26,7 @@ countsTab <-function(X,d){
   n <- length(X)
   d1 <- d+1
   XTab <- NULL
+  X <- rev(X)
   for (i in 1:d1) { # makes d1 matrices with different sequences in the sample then binds them
     aux <- (n-(i-1))%%d1
     XTab <- rbind( XTab, matrix( X[i:(n-aux)] ,ncol = d1,byrow = TRUE) )
