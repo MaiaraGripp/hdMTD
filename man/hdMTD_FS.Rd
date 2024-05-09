@@ -33,6 +33,10 @@ Mixture Transition Distribution (MTD) models. Which consists in the application 
 This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and are specially useful for inference in high-order MTD Markov chains.
 This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
 
+If the algorithm determines that there are multiple lags equally important and more important than all others, they will all be included in the output.
+However, the size of the output cannot exceed size 'l'. Therefore, the function will select only the necessary number of lags to generate an output of size 'l',
+choosing uniformly among these equally important and most significant lags.
+
 If the elboTest parameter is TRUE the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
 the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
 values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
