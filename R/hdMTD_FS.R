@@ -16,9 +16,7 @@
 #' Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
 #' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and are specially useful for inference in high-order MTD Markov chains.
 #' This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
-#' @details If the algorithm determines that there are multiple lags equally important and more important than all others, they will all be included in the output.
-#' However, the size of the output cannot exceed size 'l'. Therefore, the function will select only the necessary number of lags to generate an output of size 'l',
-#' choosing uniformly among these equally important and most significant lags.
+#' @details If the algorithm determines that there are multiple lags equally important and more important than all others, it will sample one of them uniformly.
 #' @details If the elboTest parameter is TRUE the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
 #'the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
 #'values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
@@ -121,8 +119,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
     }
     maxnu[lenS+1] <- max(nuj) # used if elbow=TRUE
     posMaxnu <- which( nuj==max(nuj) ) # the position of nu max (can be more than one)
-    if( l-lenS < length(posMaxnu) ){ posMaxnu <- sample(posMaxnu,l-lenS,replace = FALSE) }
-    # if FS chooses more lags than needed, sample between the chosen lags uniformly.
+    if( posMaxnu > 1 ){ posMaxnu <- sample(posMaxnu,1) }# if FS chooses more than 1 lag, samples one uniformly.
     s <- Sc[posMaxnu]
     S <- c(S,s)
     lenS <- length(S)
