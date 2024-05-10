@@ -119,7 +119,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
     }
     maxnu[lenS+1] <- max(nuj) # used if elbow=TRUE
     posMaxnu <- which( nuj==max(nuj) ) # the position of nu max (can be more than one)
-    if( posMaxnu > 1 ){ posMaxnu <- sample(posMaxnu,1) }# if FS chooses more than 1 lag, samples one uniformly.
+    if( length(posMaxnu) > 1 ){ posMaxnu <- sample(posMaxnu,1) }# if FS chooses more than 1 lag, samples one uniformly.
     s <- Sc[posMaxnu]
     S <- c(S,s)
     lenS <- length(S)
