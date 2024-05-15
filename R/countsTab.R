@@ -21,15 +21,22 @@ countsTab <-function(X,d){
   ## Checks parameters
   X <- unlist(X)
   X <- checkSample(X)
-  if (length(X)<d+1) { stop("The sample size must be greater than d+1.") }
+  if (length(X)<=d+1) { stop("The sample size must be greater than d+1.") }
 
   n <- length(X)
   d1 <- d+1
   XTab <- NULL
   X <- rev(X)
-  for (i in 1:d1) { # makes d1 matrices with different sequences in the sample then binds them
-    aux <- (n-(i-1))%%d1
-    XTab <- rbind( XTab, matrix( X[i:(n-aux)] ,ncol = d1,byrow = TRUE) )
+
+  if( n-d >=d1 ){
+      for (i in 1:d1) { # makes d1 matrices with different sequences in the sample
+        aux <- (n-(i-1))%%d1
+        XTab <- rbind( XTab, matrix( X[i:(n-aux)] ,ncol = d1,byrow = TRUE) )
+      }
+  }else{
+    for (i in 1:(n-d)) { # if n+1<2*d1
+      XTab <- rbind( XTab, matrix( X[i:(i+d)] ,ncol = d1,byrow = TRUE) )
+    }
   }
   colnames(XTab) <- c(paste("x",seq(d,1),sep="" ),"a")
   count <- rep(1,n-d)
