@@ -30,9 +30,9 @@
 #'
 #' @export oscillation
 #' @examples oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )
-#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01 ) )
-#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5)) )
-#' oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5),
+#' oscillation(MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01 ) )
+#' oscillation(MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5)) )
+#' oscillation(MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5),
 #' pj=list(matrix(c(0.1,0.9,0.9,0.1),ncol=2)), single_matrix=TRUE))
 #'
 oscillation <- function(x,...){ UseMethod("oscillation") }

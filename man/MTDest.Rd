@@ -41,14 +41,9 @@ for the updated model along with the estimated parameters.}
 A list with the estimated parameters of the MTD model
 }
 \description{
-Estimation of MTD parameters through EM algorithm
+Estimation of MTD parameters through EM algorithm.
 }
 \details{
-This function was created based on the following article:
-Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
-in the Mixture Transition Distribution model. Journal of Statistical Computation
-and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
-
 Regarding the 'M' parameter: it functions as a stopping
 criterion within the EM algorithm. When the difference between
 the log-likelihood computed with the newly estimated parameters
@@ -72,6 +67,13 @@ the weights, first the weight for p0, and then for each element
 in pj). If your MTD model does not have an independent
 distribution p0, just set the first entry of init$lambda to 0.
 }
+\section{Author(s):}{
+This function was created based on the following article:
+Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
+in the Mixture Transition Distribution model. Journal of Statistical Computation
+and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
+}
+
 \examples{
 MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),lam0=0.01)
 X <- perfectSample(MTD,N=2000)

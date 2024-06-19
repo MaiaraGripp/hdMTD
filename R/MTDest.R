@@ -1,27 +1,9 @@
 #' EM estimation of MTD parameters
 #'
-#' Estimation of MTD parameters through EM algorithm
+#' Estimation of MTD parameters through EM algorithm.
+#
 #'
-#' @param X A MTD chain sample
-#' @param S The relevant lag set (sorted positive integer numbers).
-#' @param M A stopping point for the EM algorithm. If NULL the algorithm will run
-#' for a total of nIter iteractions.
-#' @param init A list with initial parameters: 'p0' optional, 'lambdas' required,
-#''pj' required. The order of elements in 'lambdas'
-#' @param iter If True, returns the number of iterations of the
-#' algorithm, that is, the number of times the initial parameters
-#' were updated.
-#' @param nIter An integer positive number with the maximum number of iterations.
-#' @param oscillations If TRUE the function will return the estimated oscillations
-#' for the updated model along with the estimated parameters.
-#' @param A The states space (sorted positive integer numbers).
-#'
-#' @details This function was created based on the following article:
-#' Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
-#' in the Mixture Transition Distribution model. Journal of Statistical Computation
-#' and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
-#'
-#'  Regarding the 'M' parameter: it functions as a stopping
+#' @details Regarding the 'M' parameter: it functions as a stopping
 #'criterion within the EM algorithm. When the difference between
 #' the log-likelihood computed with the newly estimated parameters
 #'and that computed with the previous parameters falls below M,
@@ -43,6 +25,30 @@
 #' the weights, first the weight for p0, and then for each element
 #' in pj). If your MTD model does not have an independent
 #' distribution p0, just set the first entry of init$lambda to 0.
+#'
+#'# Author(s):
+#'
+#' This function was created based on the following article:
+#' Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
+#' in the Mixture Transition Distribution model. Journal of Statistical Computation
+#' and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
+#'
+#'
+#' @param X A MTD chain sample
+#' @param S The relevant lag set (sorted positive integer numbers).
+#' @param M A stopping point for the EM algorithm. If NULL the algorithm will run
+#' for a total of nIter iteractions.
+#' @param init A list with initial parameters: 'p0' optional, 'lambdas' required,
+#''pj' required. The order of elements in 'lambdas'
+#' @param iter If True, returns the number of iterations of the
+#' algorithm, that is, the number of times the initial parameters
+#' were updated.
+#' @param nIter An integer positive number with the maximum number of iterations.
+#' @param oscillations If TRUE the function will return the estimated oscillations
+#' for the updated model along with the estimated parameters.
+#' @param A The states space (sorted positive integer numbers).
+#'
+#'
 #'
 #' @export
 #'
@@ -82,7 +88,7 @@ MTDest <- function(X,S,M=0.01,init,iter=FALSE,nIter=100,A=NULL,oscillations=FALS
     A <- sort(unique(X))
   }
   if( length(A)<=1   ||
-      any(A%%1!=0)    )stop("The informed states space A must be a numeric vector with at least two integers.")
+      any(A%%1!=0)     )stop("The informed states space A must be a numeric vector with at least two integers.")
   if ( !all( unique(X) %in% A ) ) {
     stop("Check the states space, it must include all states that occur in the sample.")
   }

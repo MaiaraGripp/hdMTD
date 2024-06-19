@@ -2,28 +2,44 @@
 % Please edit documentation in R/countsTab.R
 \name{countsTab}
 \alias{countsTab}
-\title{Table of sample sequence counts.}
+\title{A tibble with sample sequences counts}
 \usage{
 countsTab(X, d)
 }
 \arguments{
-\item{X}{A sample from an MTD Markov Chain. First element must be the most recent.}
+\item{X}{A vector or single-column data frame with a sample from a chain.
+The first element must be the most recent.}
 
-\item{d}{An upper bound for the chain's order.}
+\item{d}{Numeric, must be a positive integer. Specifies the number of
+elements in the sequences, which is \eqn{d+1}. Here, \eqn{d} is often taken as the
+chain order or serves as an upper limit for it.}
 }
 \value{
-A table with every size d+1 sequence in the sample and its absolute frequency.
+A tibble with every size \code{d+1} sequence present in the sample and its
+absolute frequency.
 }
 \description{
-Creates a table with sample sequences and their absolute frequencies.
+Creates a tibble containing all size \code{d+1} sequences present in the
+sample along with their absolute frequencies.
 }
 \details{
-The function will make a tibble with \eqn{d+2} columns. For each row, the first \eqn{d+1} columns will
-have a sequence of size \eqn{d+1} that appeared in the sample. The last column, called \code{Nxa},
-will contain the number of times each of these sequences appeared in the sample.
+The function will generate a tibble with \code{d+2} columns. For
+each row, the first \code{d+1} columns will display a sequence
+(of \code{d+1} elements) that appeared in the sample. The last column,
+called \code{Nxa}, will contain the number of times each of these
+sequences appeared in the sample. The number of rows in the outputted
+tibble depends on \code{X}, since each row represents an unique size
+\eqn{d+1} sequence that actually appeared in the chain. Let \eqn{|A|} be
+the number of elements in the state space, and \eqn{d+1} the size of the
+sequences, the number of rows varies between \eqn{1} and \eqn{|A|^{d+1}}.
+Note that the function won't accept \code{X} or \code{d} with
+\code{length(X)<=d+1}.
 }
 \examples{
+#Creates a tibble with 3+2 columns
 countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
+
+#Creates a tibble with 4+2 columns
 countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
 
 }

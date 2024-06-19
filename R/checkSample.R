@@ -1,10 +1,11 @@
-#' Check a sample
+#' Checks a sample
 #'
-#' Checks if a sample is suitable for use.
+#' Checks if a sample is a suitable argument for some functions within
+#'the package.
 #'
-#' @param X A vector with a sample of an MTD Markov chain.
+#' @param X A vector or a single-column data frame with a sample of a MTD chain.
 #'
-#' @return Returns an adjusted chain sample and possible sample errors.
+#' @return Returns the sample as a vector or identifies any possible sample problems.
 #'
 checkSample <- function(X){
   if(is.data.frame(X)){

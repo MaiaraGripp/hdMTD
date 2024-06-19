@@ -13,8 +13,8 @@
 #' @export perfectSample
 #'
 #' @examples
-#' perfectSample( MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
-#' perfectSample( MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
+#' perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
+#' perfectSample(MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
 #'
 perfectSample <- function(MTD,N=NULL){
 

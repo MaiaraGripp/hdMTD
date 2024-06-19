@@ -4,7 +4,8 @@ Title: Inference in Mixture Transition Distribution (MTD) Markov Chains with Hig
 Version: 0.1.0
 Author: Maiara Gripp
 Maintainer: Maiara Gripp <maiaragripp@gmail.com>
-Description: Estimates the set of relevant lags from a MTD chain sample, can also perfectly sample a MTD chain.
+Description: Estimates the set of relevant lags from an MTD chain sample and can also perfectly sample an MTD chain.
+URL: https://github.com/MaiaraGripp/hdMTD
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

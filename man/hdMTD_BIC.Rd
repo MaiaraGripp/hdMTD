@@ -50,7 +50,7 @@ Returns estimations, using Bayesian Information Criterion (BIC), of the relevant
 For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1}, and \eqn{maxl=3}. This function
 will iterate from \eqn{l=1 to l=3} and calculate the BIC assuming the MTD model has \eqn{\Lambda=c(1)}, then it will calculate the BIC for \eqn{\Lambda=c(2)}, followed by \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
 Afterwards, it will assume \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ..., \eqn{\Lambda=c(5,9)}, and subsequently \eqn{\Lambda=c(1,2,5)} until \eqn{\Lambda=c(2,5,9)}. After calculating the BIC for each model, it will return the
-sets with the smallest BIC among all sizes. However, if the option byl=TRUE is selected, it will return the sets with the smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the set with the smallest
+sets with the smallest BIC among all sizes. However, if the option \code{byl=TRUE} is selected, it will return the sets with the smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the set with the smallest
 BIC will be chosen among the sets of size maxl.
 }
 \description{

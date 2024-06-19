@@ -24,7 +24,7 @@ This perfect sample algorithm requires that the MTD model has
 an independent distribution and a positive weight for it.
 }
 \examples{
-perfectSample( MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
-perfectSample( MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
+perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
+perfectSample(MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
 
 }
