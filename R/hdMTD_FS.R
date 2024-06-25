@@ -1,32 +1,56 @@
-#' The Forward Stepwise method.
+#' The Forward Stepwise (FS) method for inference in MTD models
 #'
-#' A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS) algorithm to estimate a relevant lags set \eqn{\Lambda} for MTD models.
+#' A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS)
+#'  algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
 #'
-#' @param X A MTD chain sample.
-#' @param d An upper bound for the chains order.
-#' @param l Stop point for FS algorithm.
-#' @param A The states space. "A" only needs to be informed if X does not already contain all elements of "A".
-#' @param elbowTest If TRUE, the function will use a special criterion to determine the size of the estimated relevant lag set. See @details.
-#' @param warning If True may return warnings.
-#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
+#' @param X A vector or single-column data frame containing a chain sample.
+#' @param d A positive integer representing an upper bound for the chain order.
+#' @param l A positive integer that sets the number of elements in the output vector.
+#' @param A A vector with positive integers representing the state space. If not informed,
+#' this function will set \code{A=unique(X)}.
+#' @param elbowTest Logical. If TRUE, the function will use a special criterion to determine the size
+#' of the estimated relevant lag set. See *Details* below for more information.
+#' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.
+#' @param ... Other parameters. This is used to accommodate any additional argument passed
+#' to [hdMTD_FS()] through the [hdMTD()] function.
 #'
 #' @importFrom utils combn
 #'
-#' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut" (FSC) algorithm for inference in
-#' Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and are specially useful for inference in high-order MTD Markov chains.
-#' This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
-#' @details If the algorithm determines that there are multiple lags equally important and more important than all others, it will sample one of them uniformly.
-#' @details If the elboTest parameter is TRUE the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
-#'the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
-#'values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
-#'all lags that were included in S from that lag onwards.
+#' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
+#' (FSC) algorithm for inference in Mixture Transition Distribution (MTD) models. Which consists in
+#' the application of the FS step followed by the CUT algorithm.
+#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
+#' and are specially useful for inference in high-order MTD Markov chains. This specific function
+#' will only apply the FS step of the algorithm and return an estimated relevant lag set of size
+#'  \code{l}.
 #'
-#' @return Returns a estimated S set of relevant lags.
+#' @details If the algorithm determines that there are multiple lags equally important and more
+#' important than all others, it will sample one of them uniformly.
+#' @details If \code{elbowTest=TRUE} the function will have a new criterion to determine
+#' the size of the estimated relevant lag set. In the FS algorithm, a certain quantity \eqn{\nu} is
+#' calculated for all lags in \code{1:d}, and the lag with greatest \eqn{\nu} is deemed important.
+#' Such lag is included in the output and agregating this knowlegde the function sets upon seeking
+#' the next important (the one with hightest \eqn{\nu} within the remaining ones), and stops
+#' when the output vector reaches size \code{l}.
+
+#' @details If \code{elbowTest=TRUE}, the function will use a new criterion to determine the size of
+#' the estimated relevant lag set. In the FS algorithm, a certain quantity \eqn{\nu} is calculated
+#' for each lag in \code{1:d}, and the lag with the greatest \eqn{\nu} is deemed important. This lag
+#' is included in the output, and using this knowledge, the function proceeds to seek the next
+#' important lag (the one with the highest \eqn{\nu} among the remaining ones). The process stops
+#' when the output vector reaches size \code{l} if \code{elbowTest=FALSE}. If \code{elbowTest=TRUE},
+#' the function will store a vector with the value of these greatest \eqn{\nu} at each step. It will
+#' then look at this vector and identify the position of the smallest \eqn{\nu} among them. The
+#' output will only keep the lags that came before the one responsible for this \eqn{\nu} value.
+#'
+#'# Author(s):
+#'  This method was developed in [Ost and Takahashi](https://arxiv.org/abs/2202.08007),
+#' (2022), "Sparse markov models for high-dimensional inference".
+#'
+#' @return Returns a vector with the estimated relevant lag set using FS algorithm.
 #' @export
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),lam0=0.05),2000)
-#'hdMTD_FS(X,A=c(0,1),d=5,l=2)
+#' X <- testChains[,1]
 #'hdMTD_FS(X,d=5,l=2)
 #'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 #'
@@ -104,12 +128,11 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
 
         PIs <- PI(S=dec_S,freqTabSj=b_Sj,x_S=subx[t,],lenX=lenX,
                   d=d)
-        #(pi(xa_Sj),pi(xb_Sj),pi(xc_Sj),...)
+
         dTVs <- dTV_sample(S=dec_S,j=j,lenA=lenA,base=b_Sja,
                            A_pairs=A_pairs,x_S=subx[t,])
-        #(dTv_xS[p(.|a_j),p(.|b_j)],dTv_xS[p(.|a_j),p(.|c_j)]...)
 
-        for (y in 1:nrowA_pairs) {# runs in pairs (b,c) such that b\in A, c\in A and b\neq c
+        for (y in 1:nrowA_pairs) {# runs in pairs (b,c) such that b\in A, c\in A and b!=c
           cont <- cont + prod(PIs[A_pairsPos[y,]])*dTVs[y]
         }
 

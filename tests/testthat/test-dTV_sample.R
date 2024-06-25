@@ -11,7 +11,7 @@ test_that("dTV_sample works correctly", {
   x_S <- c(1, 0)
 
   # Test for a valid input
-  result <- dTV_sample(S, j, lenA, base, A_pairs, x_S)
+  result <- dTV_sample(S=S, j=j, lenA=lenA, base=base, A_pairs=A_pairs, x_S=x_S)
 
   # Check the result
   expect_equal(length(result), nrow(A_pairs))

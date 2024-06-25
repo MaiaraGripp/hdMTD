@@ -16,56 +16,61 @@ MTDest(
 )
 }
 \arguments{
-\item{X}{A MTD chain sample}
+\item{X}{A vector or single-column data frame containing a MTD chain sample.}
 
-\item{S}{The relevant lag set (sorted positive integer numbers).}
+\item{S}{A numeric vector of positive integers from which this function will select
+a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}.}
 
-\item{M}{A stopping point for the EM algorithm. If NULL the algorithm will run
-for a total of nIter iteractions.}
+\item{M}{A stopping point for the EM algorithm. If \code{M=NULL} the algorithm will run
+for a total of \code{nIter} iteractions.}
 
-\item{init}{A list with initial parameters: 'p0' optional, 'lambdas' required,
-'pj' required. The order of elements in 'lambdas'}
+\item{init}{A list with initial parameters: \code{p0} (optional), \code{lambdas} (required),
+\code{pj} (required). The entries in \code{lambdas} are weights for the distribution \code{p0}
+and the distributions present in the list \code{pj}. Therefore, the order in which the elements
+appear in the vector \code{lambdas} is important for correct assignment. Please refer to the
+\emph{Details} section for more information.}
 
-\item{iter}{If True, returns the number of iterations of the
-algorithm, that is, the number of times the initial parameters
-were updated.}
+\item{iter}{Logical. If \code{TRUE}, returns the number of iterations of the
+algorithm, that is, the number of times the initial parameters were updated.}
 
 \item{nIter}{An integer positive number with the maximum number of iterations.}
 
-\item{A}{The states space (sorted positive integer numbers).}
+\item{A}{A vector with positive integers representing the state space. If not informed,
+this function will set \code{A=unique(X)}.}
 
-\item{oscillations}{If TRUE the function will return the estimated oscillations
+\item{oscillations}{Logical. If \code{TRUE}, the function will return the estimated oscillations
 for the updated model along with the estimated parameters.}
 }
 \value{
 A list with the estimated parameters of the MTD model
 }
 \description{
-Estimation of MTD parameters through EM algorithm.
+Estimation of MTD parameters through the Expectation Maximization (EM) algorithm.
 }
 \details{
-Regarding the 'M' parameter: it functions as a stopping
+Regarding the \code{M} parameter: it functions as a stopping
 criterion within the EM algorithm. When the difference between
 the log-likelihood computed with the newly estimated parameters
-and that computed with the previous parameters falls below M,
-the algorithm halts. Nevertheless, if the value of nIter
+and that computed with the previous parameters falls below \code{M},
+the algorithm halts. Nevertheless, if the value of \code{nIter}
 (which represents the maximum number of iterations) is smaller
-than the number of iterations required to meet the M criterion,
-the algorithm will conclude its execution when nIter is reached.
-To ensure that the M criterion is effectively utilized, we
-recommend using a higher value for nIter, which is set to a
+than the number of iterations required to meet the \code{M} criterion,
+the algorithm will conclude its execution when \code{nIter} is reached.
+To ensure that the \code{M} criterion is effectively utilized, we
+recommend using a higher value for \code{nIter}, which is set to a
 default of 100.
 
-Concerning the 'init' parameter, it is expected to be a list
+Concerning the \code{init} parameter, it is expected to be a list
 comprising either 2 or 3 entries. These entries consist of:
-an optional vector named 'p0' (representing an independent
-distribution, the order must follow that of A), a required list
-of matrices 'pj' (a list containing a stochastic matrix for each
-element of S, also ordered from the smallest to the greatest
-element of S), and a vector named 'lambdas' (representing
-the weights, first the weight for p0, and then for each element
-in pj). If your MTD model does not have an independent
-distribution p0, just set the first entry of init$lambda to 0.
+an optional vector named \code{p0}, representing an independent
+distribution (the probability in the first entry of \code{p0} must be
+that of the smallest element in \code{A} and so on), a required list
+of matrices \code{pj}, containing a stochastic matrix for each
+element of \code{S} ( the first matrix must refer to the smallest
+element of \code{S} and so on), and a vector named \code{lambdas} representing
+the weights, the first entry must be the weight for \code{p0}, and then one entry
+for each element in \code{pj} list. If your MTD model does not have an independent
+distribution \code{p0}, set \code{init$lambda[1]=0}.
 }
 \section{Author(s):}{
 This function was created based on the following article:
@@ -75,13 +80,21 @@ and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
 }
 
 \examples{
+# Simulating data.
+# Model:
 MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),lam0=0.01)
-X <- perfectSample(MTD,N=2000)
+# Sampling a chain:
+X <- hdMTD::perfectSample(MTD,N=2000)
+
+# Initial Parameters:
 init <- list('p0'=c(0.4,0.6),'lambdas'=c(0.05,0.45,0.5),
-'pj'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
-matrix(c(0.25,0.75,0.3,0.7),byrow = TRUE,ncol=2)))
+  'pj'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
+   matrix(c(0.25,0.75,0.3,0.7),byrow = TRUE,ncol=2)))
+
+# MTDest() ------------------------------------
 MTDest(X,S=c(1,10),M=1,init)
 MTDest(X,S=c(1,10),init=init,iter = TRUE)
 MTDest(X,S=c(1,10),init=init,iter = TRUE,nIter=5)
 MTDest(X,S=c(1,10),init=init,oscillations = TRUE)
+
 }

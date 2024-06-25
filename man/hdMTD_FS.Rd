@@ -2,47 +2,71 @@
 % Please edit documentation in R/hdMTD_FS.R
 \name{hdMTD_FS}
 \alias{hdMTD_FS}
-\title{The Forward Stepwise method.}
+\title{The Forward Stepwise (FS) method for inference in MTD models}
 \usage{
 hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE, ...)
 }
 \arguments{
-\item{X}{A MTD chain sample.}
+\item{X}{A vector or single-column data frame containing a chain sample.}
 
-\item{d}{An upper bound for the chains order.}
+\item{d}{A positive integer representing an upper bound for the chain order.}
 
-\item{l}{Stop point for FS algorithm.}
+\item{l}{A positive integer that sets the number of elements in the output vector.}
 
-\item{A}{The states space. "A" only needs to be informed if X does not already contain all elements of "A".}
+\item{A}{A vector with positive integers representing the state space. If not informed,
+this function will set \code{A=unique(X)}.}
 
-\item{elbowTest}{If TRUE, the function will use a special criterion to determine the size of the estimated relevant lag set. See @details.}
+\item{elbowTest}{Logical. If TRUE, the function will use a special criterion to determine the size
+of the estimated relevant lag set. See \emph{Details} below for more information.}
 
-\item{warning}{If True may return warnings.}
+\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.}
 
-\item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}} function.}
+\item{...}{Other parameters. This is used to accommodate any additional argument passed
+to \code{\link[=hdMTD_FS]{hdMTD_FS()}} through the \code{\link[=hdMTD]{hdMTD()}} function.}
 }
 \value{
-Returns a estimated S set of relevant lags.
+Returns a vector with the estimated relevant lag set using FS algorithm.
 }
 \description{
-A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS) algorithm to estimate a relevant lags set \eqn{\Lambda} for MTD models.
+A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS)
+algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
 }
 \details{
-The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut" (FSC) algorithm for inference in
-Mixture Transition Distribution (MTD) models. Which consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and are specially useful for inference in high-order MTD Markov chains.
-This specific function will only apply the FS step of the algorithm and return an estimated relevant lag set of size l.
+The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
+(FSC) algorithm for inference in Mixture Transition Distribution (MTD) models. Which consists in
+the application of the FS step followed by the CUT algorithm.
+This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}
+and are specially useful for inference in high-order MTD Markov chains. This specific function
+will only apply the FS step of the algorithm and return an estimated relevant lag set of size
+\code{l}.
 
-If the algorithm determines that there are multiple lags equally important and more important than all others, it will sample one of them uniformly.
+If the algorithm determines that there are multiple lags equally important and more
+important than all others, it will sample one of them uniformly.
 
-If the elboTest parameter is TRUE the function will have a new criterion to determine the size of the estimated relevant lag set. Let S be the estimated lag set,
-the function includes an element in S if it has the highest \eqn{\nu} among the others. If elbowTest=TRUE, the function will store a vector of these \eqn{max(\nu)}
-values for each lag inserted in S. It will then look at this vector, find the lag that was inserted before the one with the smallest \eqn{max(\nu)}, and remove
-all lags that were included in S from that lag onwards.
+If \code{elbowTest=TRUE} the function will have a new criterion to determine
+the size of the estimated relevant lag set. In the FS algorithm, a certain quantity \eqn{\nu} is
+calculated for all lags in \code{1:d}, and the lag with greatest \eqn{\nu} is deemed important.
+Such lag is included in the output and agregating this knowlegde the function sets upon seeking
+the next important (the one with hightest \eqn{\nu} within the remaining ones), and stops
+when the output vector reaches size \code{l}.
+
+If \code{elbowTest=TRUE}, the function will use a new criterion to determine the size of
+the estimated relevant lag set. In the FS algorithm, a certain quantity \eqn{\nu} is calculated
+for each lag in \code{1:d}, and the lag with the greatest \eqn{\nu} is deemed important. This lag
+is included in the output, and using this knowledge, the function proceeds to seek the next
+important lag (the one with the highest \eqn{\nu} among the remaining ones). The process stops
+when the output vector reaches size \code{l} if \code{elbowTest=FALSE}. If \code{elbowTest=TRUE},
+the function will store a vector with the value of these greatest \eqn{\nu} at each step. It will
+then look at this vector and identify the position of the smallest \eqn{\nu} among them. The
+output will only keep the lags that came before the one responsible for this \eqn{\nu} value.
 }
+\section{Author(s):}{
+This method was developed in \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi},
+(2022), "Sparse markov models for high-dimensional inference".
+}
+
 \examples{
-X <- perfectSample(MTDmodel(Lambda=c(2,4),A=c(0,1),lam0=0.05),2000)
-hdMTD_FS(X,A=c(0,1),d=5,l=2)
+X <- testChains[,1]
 hdMTD_FS(X,d=5,l=2)
 hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 

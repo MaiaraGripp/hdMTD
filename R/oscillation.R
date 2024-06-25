@@ -42,7 +42,7 @@ oscillation.MTD <- function(x,...){
 ## check Inputs
   checkMTD(x)
   lenA <- length(x$A) #number of rows/cols in each p_j
-  rows <- t(combn(lenA,2))
+  rows <- t(utils::combn(lenA,2))
   y <- x$lambdas[-1]*sapply(x$pj,dTV_pj,rows)
   names(y) <- paste0("-",x$Lambda)
   y
@@ -100,8 +100,8 @@ oscillation.default <- function(x,...){
     dtv_xS <- matrix(0,ncol=lenPairs,nrow = lenPositiveNx_S)
     colnames(dtv_xS) <- apply(A_pairs,1,paste0,collapse="x")
     rownames(dtv_xS) <- apply(subx,1,paste0,collapse="")
-    for (t in 1:lenPositiveNx_S) { #calculates total var dist of dists. conditioned in each past x_zUa_j
-# that appears in the sample, for different values of a_j.
+    for (t in 1:lenPositiveNx_S) { #calculates total var. dist. of distributions conditioned
+# in each past that appears in the sample (but variating a single symbol of said past).
         dtv_xS[t,] <- dTV_sample(S=Z,j=j,lenA=lenA,base=b_Sja,
                                     A_pairs=A_pairs,x_S=subx[t,])
     }

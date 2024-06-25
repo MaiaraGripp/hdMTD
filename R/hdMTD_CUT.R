@@ -1,30 +1,43 @@
-#' The Cut method.
+#' The Cut method for inference in MTD models
 #'
-#' A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+#' A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to
+#'  estimate a relevant lag set \eqn{\Lambda} of a MTD model.
 #'
-#' @param X A MTD chain sample.
-#' @param d An upper bound for the chains order.
-#' @param S A subset of 1:d that contains the relevant lag set, if empty S=\eqn{1,2,\dots, d}.
-#' @param A The states space. "A" only needs to be informed if X does not already contain all elements of "A".
-#' @param alpha A parameter of the CUT algorithm. Alpha is constant of a threshold used in the CUT
-#'step to determine if two distributions are different enough. The larger the alpha, the
-#'greater the distance required between the distributions (to be considered different).
-#' @param mu A parameter of the CUT algorithm. mu is also a component of the same threshold as alpha.
-#' @param xi A parameter of the CUT algorithm. xi is also a component of the same threshold as alpha and mu.
-#' @param warning If TRUE may return warnings.
-#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
+#' @param X A vector or single-column data frame containing a chain sample.
+#' @param d A positive integer representing an upper bound for the chain order.
+#' @param S A numeric vector of positive integers from which this function will select
+#' a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}. If \code{S}
+#' is not provided, by default \code{S=1:d}.
+#' @param A A vector with positive integers representing the state space. If not informed,
+#' this function will set \code{A=unique(X)}.
+#' @param alpha A positive real number, \code{alpha}, appears in a threshold used in the CUT
+#'  step to determine if two distributions are different enough. The larger the \code{alpha},
+#'  he greater the distance required to consider that there is a difference between a set
+#' of distributions.
+#' @param mu A positive real number between 0 and 3. \code{mu}is also a component of the same
+#' threshold as \code{alpha}.
+#' @param xi A positive real number, \code{xi} is also a component of the same threshold as
+#'  \code{alpha} and \code{mu}.
+#' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as
+#' \code{A=unique(X)}.
+#' @param ... Other parameters. This is used to accommodate any additional argument passed
+#' to [hdMTD_CUT()] through the [hdMTD()] function.
 #'
+#' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
+#' Mixture Transition Distribution (MTD) models. It consists
+#' in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
+#' and are specially useful for inference in high-order MTD Markov chains. This specific function
+#' will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 #'
-#' @details The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
-#' Mixture Transition Distribution (MTD) models.
-#' It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007) and is specially useful for high-order MTD Markov chains.
-#' This function will only apply the CUT step of the algorithm.
+#'# Author(s):
+#' This method was developed in [Ost and Takahashi](https://arxiv.org/abs/2202.08007),
+#' (2022), "Sparse markov models for high-dimensional inference".
 #'
-#' @return Returns a estimated set of relevant lags.
+#' @return Returns a set of relevant lags estimated using the CUT algorithm.
 #' @export
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,1)),N=1000)
+#' X <- testChains[,3]
 #' hdMTD_CUT(X,4,alpha=0.02,mu=1,xi=0.4)
 #' hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
 #'
@@ -55,8 +68,8 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
     alpha <- readline(prompt = "Please enter a valid alpha: ")
     alpha <- suppressWarnings(as.numeric(alpha))
   }
-  while ( is.na(mu) || !is.numeric(mu) || mu <= 0 ) {
-    cat("The mu value is not valid for CUT step. mu should be a positive number.")
+  while ( is.na(mu) || !is.numeric(mu) || mu <= 0 || mu >=3) {
+    cat("The mu value is not valid for CUT step. mu should be a positive number less than or equal to 3.")
     mu <- readline(prompt = "Please enter a valid mu: ")
     mu <- suppressWarnings(as.numeric(mu))
   }

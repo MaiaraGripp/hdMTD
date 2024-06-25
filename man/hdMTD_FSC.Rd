@@ -2,7 +2,7 @@
 % Please edit documentation in R/hdMTD_FSC.R
 \name{hdMTD_FSC}
 \alias{hdMTD_FSC}
-\title{Forward Stepwise and Cut method.}
+\title{Forward Stepwise and Cut method for inference in MTD models}
 \usage{
 hdMTD_FSC(
   X,
@@ -17,39 +17,52 @@ hdMTD_FSC(
 )
 }
 \arguments{
-\item{X}{A MTD Markov chain sample.}
+\item{X}{A vector or single-column data frame containing a chain sample.}
 
-\item{d}{An upper bound for the chains order.}
+\item{d}{A positive integer representing an upper bound for the chain order.}
 
-\item{l}{Stop point for FS algorithm.}
+\item{l}{A positive integer that sets the number of elements in the output vector.}
 
-\item{alpha}{A parameter of CUT step.}
+\item{alpha}{A positive real number, \code{alpha}, appears in a threshold used in the CUT
+step to determine if two distributions are different enough. The larger the \code{alpha},
+he greater the distance required to consider that there is a difference between a set
+of distributions.}
 
-\item{mu}{A parameter of CUT step.}
+\item{mu}{A positive real number between 0 and 3. \code{mu}is also a component of the same
+threshold as \code{alpha}.}
 
-\item{xi}{A parameter of CUT step.}
+\item{xi}{A positive real number, \code{xi} is also a component of the same threshold as
+\code{alpha} and \code{mu}.}
 
-\item{A}{The states space.}
+\item{A}{A vector with positive integers representing the state space. If not informed,
+this function will set \code{A=unique(X)}.}
 
-\item{warning}{If TRUE may return warnings.}
+\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as
+\code{A=unique(X)}.}
 
-\item{...}{Used to accommodate any extra arguments passed by the \code{\link[=hdMTD]{hdMTD()}}  function.}
+\item{...}{Other parameters. This is used to accommodate any additional argument passed
+to \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} through the \code{\link[=hdMTD]{hdMTD()}} function.}
 }
 \value{
-Returns a estimated set of relevant lags.
+Returns a vector with the estimated relevant lag set using FSC algorithm.
 }
 \description{
-A function for inference in MTD Markov chains with FSC method. This function estimates the relevant lag set \eqn{\Lambda}
-of a MTD model through the FSC algorithm.
+A function for inference in MTD Markov chains with FSC method. This function estimates the relevant
+lag set \eqn{\Lambda} of a MTD model through the FSC algorithm.
 }
 \details{
-The "Forward Stepwise and Cut" (FSC)is an algorithm for inference in
-Mixture Transition Distribution (MTD) models.
-It consists in the application of the "Forward Stepwise" (FS) step followed by the CUT step.
-This method was developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi} and is specially useful for high order MTD Markov chains.
+The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
+Mixture Transition Distribution (MTD) models. It consists
+in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
+This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}
+and are specially useful for inference in high-order MTD Markov chains.
+
+#'# Author(s):
+This method was developed in \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi},
+(2022), "Sparse markov models for high-dimensional inference".
 }
 \examples{
-X <- perfectSample(MTDmodel(Lambda=c(1,3),A=c(0,1)),N=2000)
+X <- testChains[,1]
 hdMTD_FSC(X,4,3,alpha=0.02)
 hdMTD_FSC(X,4,2,alpha=0.001)
 

@@ -11,7 +11,7 @@ checkSample <- function(X){
   if(is.data.frame(X)){
     if(ncol(X)!=1)stop("X must be a single chain so multiple columns are not accepted.")
     if(nrow(X)<=1)stop("Insufficient sample size.")
-    X <- X[,1]
+    X <- as.vector(unlist(X[,1]))
   }
   if (length(X)<=1)stop("Insufficient sample size.")
   if ( !is.numeric(X) ) { stop("X must be a numeric dataset.") }

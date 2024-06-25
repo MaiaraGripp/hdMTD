@@ -28,11 +28,10 @@
 #'
 #'
 #' @examples
-#' #Creates a tibble with 3+2 columns
 #' countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
 #'
-#' #Creates a tibble with 4+2 columns
-#' countsTab(c(0,2,0,2,0,2,1,1,0,0,1,2,1,2,1),4)
+#' #Using test data.
+#' countsTab(testChains[,1],2)
 #'
 countsTab <-function(X,d){
   ## Checks parameters

@@ -1,41 +1,62 @@
-#' The Bayesian Information Criterion (BIC) method for inference in MTD models.
+#' The Bayesian Information Criterion (BIC) method for inference in MTD models
 #'
-#' A function for inference in MTD Markov chains with BIC. It estimates a relevant lag set \eqn{\Lambda} of MTD models using the Bayesian Information Criterion.
-#' This means that this method selects the set of lags that minimizes the penalized log likelihood for a given sample.
+#' A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chains using
+#' Bayesian Information Criterion (BIC). This means that this method selects the set of lags
+#' that minimizes a penalized log likelihood for a given sample.
 #'
 #'
-#' @param X A MTD chain sample.
-#' @param d An upper bound for the chains order.
-#' @param S A subset of 1:d that contains the relevant lags. If only an upper bound (d) for the chains order is known, the function will set \eqn{S=1:d}.
-#' @param minl A lower value for l. If minl==maxl, the function will return the set of size l with elements of S with the smallest BIC.
-#' If minl<maxl then the function will consider sets of size minl up to size maxl when looking for the set of elements of S with smallest BIC.
-#' @param maxl An upper value for l. If minl==maxl, the function will return the set of size l with elements of S that have the smallest BIC.
-#' If minl<maxl then the function will consider all sets of sizes minl up to size maxl when looking for the set of elements of S with smallest BIC.
-#' @param xi The BIC constant. Defaulted to 1/2. A smaller xi `(near 0)` reduces the impact of overparameterization.
-#' @param A The states space. If not informed, function will set A=unique(X). If there is an element in the states space
-#' that doesn't appear in the sample X, A should be informed.
-#' @param byl If TRUE, the function will look for the set with smallest BIC by each size from size minl to size maxl, and return the set with smallest BIC for each size.
-#' If minl==maxl setting byl TRUE or FALSE makes no difference since the function will only calculate the BIC for models with maxl elements in the relevant lag set.
-#' @param BICvalue If TRUE, the function will also return the calculated values of the BIC for the estimated relevant lags sets.
-#' @param warning If TRUE, may return warnings.
-#' @param ... Used to accommodate any extra arguments passed by the [hdMTD()] function.
+#' @param X A vector or single-column data frame containing a chain sample.
+#' @param d A positive integer representing an upper bound for the chain order.
+#' @param S A numeric vector of positive integers from which this function will select
+#' a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}. If \code{S}
+#' is not provided, by default \code{S=1:d}.
+#' @param minl A positive integer. \code{minl} represents the smallest size of any relevant lag
+#'  set this function might return. If \code{minl == maxl}, this function will return exactly
+#'  \code{minl} lags in its output, specifically the subset of \code{S} with \code{minl} elements
+#'  that has the smallest BIC. If \code{minl < maxl}, the function will consider subsets ranging
+#'  from size \code{minl} to size \code{maxl} when searching for the subset of \code{S} with
+#'  the smallest BIC.
+#' @param maxl A positive integer equal to or greater than \code{minl} but less than the number
+#'  of elements in \code{S} (\code{maxl = length(S)} is accepted but in this case the output will
+#'  always be \code{S}). \code{maxl} represents the largest size of any relevant lag set this
+#'  function might return.
+#' @param xi The BIC penalization term constant. Defaulted to 1/2. A smaller \code{xi} `(near 0)`
+#' reduces the impact of overparameterization.
+#' @param A A vector with positive integers representing the state space. If not informed,
+#' this function will set \code{A=unique(X)}.
+#' @param byl Logical. If \code{TRUE}, the function will look for the set with smallest BIC by each
+#' size (from  \code{minl} to \code{maxl}), and return the set with smallest BIC for each size.
+#' If \code{minl==maxl} setting \code{byl=TRUE} or \code{FALSE} makes no difference, since the
+#' function will only calculate the BIC for sets with \code{maxl} elements in the relevant lag set.
+#' @param BICvalue Logical. If \code{TRUE}, the function will also return the calculated values of
+#'  the BIC for the estimated relevant lag sets.
+#' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.
+#' @param ... Other parameters. This is used to accommodate any additional argument passed
+#' to [hdMTD_BIC()] through the [hdMTD()] function.
 #'
-#' @details Note that the order of the chain matters at the counting of sequences step. If we run the function with a certain order parameter d, all the sequences of size d will be counted, and when
-#'calculating the BIC for a subset S (of 1:d), the function will sum over those counts. This means that if the order changes from d to d', some counts will change, especially when d is
-#'distant from d'. As a result, the function might calculate a different BIC for the same set S.
+#' @details Note that the upper bound for the order of the chain \code{d} affects the estimation of
+#' the transition probabilities. If we run the function with a certain order parameter \code{d},
+#' only the sequences of size \code{d} that appeared in the sample will be counted. Therefore all
+#' transition probabilities, and hence all BIC values, will be calculated with respect to that
+#'\code{d}. If we use another value for \code{d} to run the function, even if the output
+#' agrees with the one of the previous run, it's BIC value might change a little.
 #'
-#' @return Returns estimations, using Bayesian Information Criterion (BIC), of the relevant lag set of size \eqn{minl,minl+1, \dots maxl}.
-#' For example, suppose \eqn{S=c(9,5,1,2)}, \eqn{minl=1}, and \eqn{maxl=3}. This function
-#' will iterate from \eqn{l=1 to l=3} and calculate the BIC assuming the MTD model has \eqn{\Lambda=c(1)}, then it will calculate the BIC for \eqn{\Lambda=c(2)}, followed by \eqn{\Lambda=c(5)}, and finally \eqn{\Lambda=c(9)}.
-#' Afterwards, it will assume \eqn{\Lambda=c(1,2)}, \eqn{\Lambda=c(1,5)}, ..., \eqn{\Lambda=c(5,9)}, and subsequently \eqn{\Lambda=c(1,2,5)} until \eqn{\Lambda=c(2,5,9)}. After calculating the BIC for each model, it will return the
-#' sets with the smallest BIC among all sizes. However, if the option \code{byl=TRUE} is selected, it will return the sets with the smallest BIC for each size. Parameters maxl and minl may have the same value, in which case the set with the smallest
-#' BIC will be chosen among the sets of size maxl.
+#' @details Note that the upper bound for the order of the chain (\code{d}) affects the estimation
+#' of the transition probabilities. If we run the function with a certain order parameter \code{d},
+#' only the sequences of size \code{d} that appeared in the sample will be counted. Therefore,
+#' all transition probabilities, and hence all BIC values, will be calculated with respect to
+#'that \code{d}. If we use another value for \code{d} to run the function, even if the output
+#' agrees with that of the previous run, its BIC value might change slightly.
+#'
+#' @return Returns a vector with the estimated relevant lag set using BIC. It might return more
+#' than one set if \code{minl < maxl} and \code{byl = TRUE}. Additionally, it can return the value
+#' of the penalized likelihood for the outputted lag sets if \code{BICvalue = TRUE}.
 #' @export
 #'
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(2,5),A=c(0,2),lam0=0.05),500)
+#' X <- testChains[,1]
 #'hdMTD_BIC (X,d=6,minl=1,maxl=1)
-#'hdMTD_BIC (X,d=5,minl=2,maxl=2,BICvalue = TRUE)
+#'hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
 #'
 hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
                           xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,warning=FALSE,...){
