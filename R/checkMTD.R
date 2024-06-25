@@ -1,9 +1,9 @@
-#' Checks a MTD object
+#' Checks an MTD object
 #'
-#' Verifies if a MTD object is correctly structured, containing all the necessary
+#' Verifies if an MTD object is correctly structured, containing all the necessary
 #' parameters and if these parameters satisfy their respective constraints.
 #'
-#' @param MTD A MTD object.
+#' @param MTD an MTD object.
 #'
 checkMTD <- function(MTD){
 #checks for:

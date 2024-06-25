@@ -2,14 +2,14 @@
 % Please edit documentation in R/checkMTD.R
 \name{checkMTD}
 \alias{checkMTD}
-\title{Checks a MTD object}
+\title{Checks an MTD object}
 \usage{
 checkMTD(MTD)
 }
 \arguments{
-\item{MTD}{A MTD object.}
+\item{MTD}{an MTD object.}
 }
 \description{
-Verifies if a MTD object is correctly structured, containing all the necessary
+Verifies if an MTD object is correctly structured, containing all the necessary
 parameters and if these parameters satisfy their respective constraints.
 }

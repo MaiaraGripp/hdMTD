@@ -16,37 +16,40 @@ MTDmodel(
 )
 }
 \arguments{
-\item{Lambda}{The relevant lag set should consist of positive integers and will be sorted from smallest
-to greatest. The smallest number represents the latest (most recent) time in the past, and the greatest
-number represents the earliest time in the past.}
+\item{Lambda}{A numeric vector of positive integers representing the relevant lag set.
+The elements will be sorted from smallest to greatest. The smallest number represents the latest
+(most recent) time in the past, and the greatest number represents the earliest time in the past.}
 
-\item{A}{The states space.}
+\item{A}{A vector with positive integers representing the state space.}
 
 \item{lam0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
 
-\item{lamj}{A vector of weights for the distributions pj. Values must be in the range \verb{[0, 1)}. The order of weights must match the order
-of the sorted Lambda set.}
+\item{lamj}{A vector of weights for the distributions in the argument \code{pj}. Values must be
+in the range \verb{[0, 1)}. The first element in \code{lamj} must be the weight of the first
+element of the list \code{pj} and so on.}
 
-\item{pj}{A list with lenL matrices of size \verb{lenA x lenA}. Here, lenL represents the number of elements in Lambda, and lenA represents the number
-of elements in A.}
+\item{pj}{A list with \code{length(Lambda)} stochastic matrices.}
 
-\item{p0}{A vector with the independent distribution part of an MTD model. If not informed and argument indep_part=TRUE, the distribution will be sampled
-from a uniform distribution. If indep_part=FALSE, then there is no independent distribution and p0 entries will be set to zero. If you enter p0=0,
-then indep_part will be set to FALSE.}
+\item{p0}{A vector with the independent distribution part of an MTD model. If not informed
+and argument \code{indep_part=TRUE}, the distribution will be sampled from a uniform distribution.
+If \code{indep_part=FALSE}, then there is no independent distribution and \code{p0} entries will
+be set to zero. If you enter \code{p0=0}, then \code{indep_part} will be set to \code{FALSE}.}
 
-\item{single_matrix}{If TRUE all pj matrices are equal.}
+\item{single_matrix}{Logical. If \code{TRUE}, all matrices in list \code{pj} are equal.}
 
-\item{indep_part}{If FALSE there is no independent distribution and p0 is set to zero.}
+\item{indep_part}{Logical. If \code{FALSE} there is no independent distribution and \code{p0}
+is set to zero.}
 }
 \value{
-An MTD model as a MTD object.
+An MTD model as an MTD object.
 }
 \description{
-Given a set of parameters generates a Mixture transition distribution model as an object of class MTD.
+Given a set of parameters it generates an MTD model as an object of class MTD.
 }
 \details{
-This MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}}, which retrieves the model's oscillation, and \code{\link[=perfectSample]{perfectSample()}},
-which will perfectly sample a MTD Markov chain with the model's parameters
+This MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}}, which retrieves the
+model's oscillation, and \code{\link[=perfectSample]{perfectSample()}}, which will perfectly sample an MTD Markov chain
+with the model's parameters.
 }
 \examples{
 MTDmodel(Lambda=c(1,3),A=c(4,8,12))

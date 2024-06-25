@@ -7,16 +7,19 @@
 n_parameters(Lambda, A, single_matrix = FALSE, indep_part = TRUE)
 }
 \arguments{
-\item{Lambda}{The relevant lag set.}
+\item{Lambda}{A numeric vector of positive integers representing the relevant lag set.
+The elements will be sorted from smallest to greatest. The smallest number represents the latest
+(most recent) time in the past, and the greatest number represents the earliest time in the past.}
 
-\item{A}{The state space.}
+\item{A}{A vector with positive integers representing the state space.}
 
-\item{single_matrix}{If TRUE all p_j matrices are equal.}
+\item{single_matrix}{Logical. If \code{TRUE}, the model depends on any past in \code{Lambda}
+through the same stochastic matrix.}
 
-\item{indep_part}{If FALSE independent distribution is set to zero.}
+\item{indep_part}{Logical. If \code{FALSE} there is no independent distribution.}
 }
 \value{
-The number of parameters in a MTD model.
+The number of parameters in an MTD model.
 }
 \description{
 Calculates the number of parameters in an MTD model with a relevant lag set Lambda and state space A.

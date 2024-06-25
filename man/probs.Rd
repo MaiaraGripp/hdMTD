@@ -7,25 +7,27 @@
 probs(X, S, matrixform = FALSE, A = NULL, warning = FALSE)
 }
 \arguments{
-\item{X}{A MTD Markov Chain.}
+\item{X}{A vector or single-column data frame containing a chain sample.}
 
-\item{S}{The estimated relevant lags set.}
+\item{S}{A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.}
 
-\item{matrixform}{If TRUE, the function returns probability estimates in the form of a stochastic matrix.}
+\item{matrixform}{Logical. If \code{TRUE}, the probability estimates outputted by this function
+come in the form of a stochastic matrix.}
 
-\item{A}{The state space. "A" only needs to be informed if X does not already contain all elements of "A"}
+\item{A}{A vector with positive integers representing the state space. If not informed,
+this function will set \code{A=unique(X)}.}
 
-\item{warning}{If TRUE may return warnings.}
+\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}..}
 }
 \value{
-The MLE for a given MTD Markov Chain sample with relevant lags set S.
+The MLE for a given chain sample with relevant lags set \code{S}.
 }
 \description{
-Maximum likelihood estimators for a MTD Markov chain with relevant lag set S.
+Maximum likelihood estimators (MLE) for a MTD Markov chain with relevant lag set \code{S}.
 }
 \examples{
-X <- perfectSample(MTDmodel(Lambda=c(1,7),A=c(1,2)),N=500)
-probs(X,S=c(1,7))
-probs(X,S=c(1,7,9))
+X <- testChains[,3]
+probs(X,S=c(1,30))
+probs(X,S=c(1,15,30))
 
 }

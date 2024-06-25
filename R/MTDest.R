@@ -34,9 +34,8 @@
 #' and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
 #'
 #'
-#' @param X A vector or single-column data frame containing a MTD chain sample.
-#' @param S A numeric vector of positive integers from which this function will select
-#' a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}.
+#' @param X A vector or single-column data frame containing an MTD chain sample.
+#' @param S A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.
 #' @param M A stopping point for the EM algorithm. If \code{M=NULL} the algorithm will run
 #' for a total of \code{nIter} iteractions.
 #' @param init A list with initial parameters: \code{p0} (optional), \code{lambdas} (required),

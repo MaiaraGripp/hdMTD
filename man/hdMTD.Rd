@@ -19,11 +19,11 @@ each method's respective function for details.}
 for more information.}
 }
 \value{
-Returns a vector with the estimated relevant lag set for a MTD chain sample.
+Returns a vector with the estimated relevant lag set for an MTD chain sample.
 }
 \description{
 A function for inference in Mixture Transition Distribution (MTD) Markov chains. This function
-can use a selected \code{method} to perform estimation of the relevant lag set of a MTD chain sample.
+can use a selected \code{method} to perform estimation of the relevant lag set of an MTD chain sample.
 By default \code{method="FS"} (Forward Stepwise) which is specially useful in high dimension. The
 other available "methods" are "CUT", "FSC" (Forward Stepwise and Cut) which is an application of
 the "FS" method followed by the "CUT" method, and lastly the "BIC" (Bayesian Information Criterion)

@@ -1,20 +1,22 @@
 #' Estimated transition probabilities
 #'
-#' Maximum likelihood estimators for a MTD Markov chain with relevant lag set S.
+#' Maximum likelihood estimators (MLE) for a MTD Markov chain with relevant lag set \code{S}.
 #'
-#' @param X A MTD Markov Chain.
-#' @param S The estimated relevant lags set.
-#' @param matrixform If TRUE, the function returns probability estimates in the form of a stochastic matrix.
-#' @param A The state space. "A" only needs to be informed if X does not already contain all elements of "A"
-#' @param warning If TRUE may return warnings.
+#' @param X A vector or single-column data frame containing a chain sample.
+#' @param S A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.
+#' @param matrixform Logical. If \code{TRUE}, the probability estimates outputted by this function
+#' come in the form of a stochastic matrix.
+#' @param A A vector with positive integers representing the state space. If not informed,
+#' this function will set \code{A=unique(X)}.
+#' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}..
 #'
-#' @return The MLE for a given MTD Markov Chain sample with relevant lags set S.
+#' @return The MLE for a given chain sample with relevant lags set \code{S}.
 #' @export
 #'
 #' @examples
-#' X <- perfectSample(MTDmodel(Lambda=c(1,7),A=c(1,2)),N=500)
-#' probs(X,S=c(1,7))
-#' probs(X,S=c(1,7,9))
+#' X <- testChains[,3]
+#' probs(X,S=c(1,30))
+#' probs(X,S=c(1,15,30))
 #'
 probs <- function(X,S,matrixform=FALSE,A=NULL,warning=FALSE){
 ## Check X, S, A, matrixform

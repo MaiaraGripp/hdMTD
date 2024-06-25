@@ -2,46 +2,56 @@
 % Please edit documentation in R/oscillation.R
 \name{oscillation}
 \alias{oscillation}
-\title{Oscillations of a MTD Markov chain}
+\title{Oscillations of an MTD Markov chain}
 \usage{
 oscillation(x, ...)
 }
 \arguments{
-\item{x}{Must be a MTD object or a chain sample.}
+\item{x}{Must be an MTD object or a chain sample.}
 
 \item{...}{Additional parameters that might be required. Such as:
 
-S: If x is a chain sample,
-the user should provide a set of lags, that must be labeled as S, for which he wishes to estimate the oscillations.
-In this case d=max{S}.
+\code{S}: If \code{x} is a chain sample the user should provide a set of lags
+for which he wishes to estimate the oscillations. It must be labeled as \code{S}, an in
+this scenario the function takes an upper bound for the order as \code{d=max{S}}.
 
-A: If x is a chain sample, and there may be elements is A that did not appear in x, the state space A should be
-specified, and it must be labeled as A.}
+\code{A}: If \code{x} is a chain sample, and there may be elements in \code{A} that did not
+appear in \code{x}, the state space should be specified, and it must be labeled as \code{A}.}
 }
 \value{
-If the x parameter is an MTD object, it will provide the oscillations for
-each relevant element. In case x is a MTD chain sample, it estimates the oscillations
-for a user-inputted set S of lags.
+If the \code{x} parameter is an MTD object, it will provide the oscillations for
+each element in \code{Lambda}. In case \code{x} is a chain sample, it estimates the oscillations
+for a user-inputted set \code{S} of lags.
 }
 \description{
-Calculates the oscillations of a MTD model object or estimates the oscillations of a chain sample.
+Calculates the oscillations of an MTD model object or estimates the oscillations of a chain sample.
 }
 \details{
-The oscillations of a MTD model
-(\eqn{\delta_j} for \eqn{j in \Lambda}), are the product of the weight \eqn{\lambda_j}
-multiplied by the maximum of the total variation distances between the
-distributions in the matrix pj.
-\deqn{\delta_j = \lambda_j\max_{b,c \in \mathcal{A}} d_{TV}(p_j(\cdot | b), p_j(\cdot | c))}
+The oscillation for a certain lag \eqn{j} of an MTD model
+( {\eqn{\delta_j}: \eqn{j \in \Lambda} }), is the product of the weight \eqn{\lambda_j}
+multiplied by the maximum of the total variation distance between the distributions in a
+stochastic matrix \eqn{p_j}.
+\deqn{\delta_j = \lambda_j\max_{b,c \in \mathcal{A}} d_{TV}(p_j(\cdot | b), p_j(\cdot | c)).}
+So, if \code{x} is an MTD object, the parameters \eqn{\Lambda}, \eqn{\mathcal{A}}, \eqn{\lambda_j},
+and \eqn{p_j} are inputted through, respectively, the entries \code{Lambda}, \code{A},
+\code{lambdas} and the list \code{pj} of stochastic matrices. Hence, an oscillation \eqn{\delta_j}
+may be calculated for all \eqn{j \in \Lambda}.
 
-When estimating oscillations from a sample you must inform S, this way the transition distributions
-\eqn{\hat{p}(.|x_S)} will be estimated for all possible pasts x_S.
-\deqn{\delta_j = \max_{c_j,b_j \in \mathcal{A}} \frac{1}{N-d}\sum_{x_{S\setminus j} \in \mathcal{A}^{S\setminus j }} N(x_{S\setminus j})d_{TV}(\hat{p}(\cdot | b_jx_{S\setminus j}), \hat{p}(\cdot | c_jx_{S\setminus j}))}
-where \eqn{d=\max{S}}.
+If we wish to estimate the oscillations from a sample, then \code{x} must be a chain,
+and \code{S}, a vector representing a set of lags, must be informed. This way the transition
+probabilities can be estimated. Let \eqn{\hat{p}(\cdot| x_S)} symbolize an estimated distribution
+in \eqn{\mathcal{A}} given a certain past \eqn{x_S} ( which is a sequence of elements of
+\eqn{\mathcal{A}} where each element occurred at a lag in \code{S}), and
+\eqn{\hat{p}(\cdot|b_jx_S)} an estimated distribution given past \eqn{x_S} and that the symbol
+\eqn{b\in\mathcal{A}} occurred at lag \eqn{j}.
+If \eqn{N} is the sample size, \eqn{d=}\code{max{S}} and \eqn{N(x_S)} is the
+number of times the sequence \eqn{x} appeared in the at the lags in \code{S}, then
+\deqn{\delta_j = \max_{c_j,b_j \in \mathcal{A}} \frac{1}{N-d}\sum_{x_{S} \in \mathcal{A}^{S}} N(x_S)d_{TV}(\hat{p}(. | b_jx_S), \hat{p}(. | c_jx_S) )}
+is the estimated oscillation for a lag \eqn{j \in \{1,\dots,d\}\setminus}\code{S}. Note that \eqn{\mathcal{A}^S} is the space of
+sequences of \eqn{\mathcal{A}} indexed by \code{S}.
 }
 \examples{
 oscillation( MTDmodel(Lambda=c(1,4),A=c(2,3) ) )
-oscillation(MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01 ) )
-oscillation(MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5)) )
 oscillation(MTDmodel(Lambda=c(1,4),A=c(2,3),lam0=0.01,lamj=c(0.49,0.5),
 pj=list(matrix(c(0.1,0.9,0.9,0.1),ncol=2)), single_matrix=TRUE))
 

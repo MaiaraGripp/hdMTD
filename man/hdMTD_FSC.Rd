@@ -48,7 +48,7 @@ Returns a vector with the estimated relevant lag set using FSC algorithm.
 }
 \description{
 A function for inference in MTD Markov chains with FSC method. This function estimates the relevant
-lag set \eqn{\Lambda} of a MTD model through the FSC algorithm.
+lag set \eqn{\Lambda} of an MTD model through the FSC algorithm.
 }
 \details{
 The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in

@@ -1,26 +1,29 @@
 #' Creates an MTD model
 #'
-#' Given a set of parameters generates a Mixture transition distribution model as an object of class MTD.
+#' Given a set of parameters it generates an MTD model as an object of class MTD.
 #'
-#' @param Lambda The relevant lag set should consist of positive integers and will be sorted from smallest
-#'  to greatest. The smallest number represents the latest (most recent) time in the past, and the greatest
-#'   number represents the earliest time in the past.
-#' @param A The states space.
+#' @param Lambda A numeric vector of positive integers representing the relevant lag set.
+#' The elements will be sorted from smallest to greatest. The smallest number represents the latest
+#'  (most recent) time in the past, and the greatest number represents the earliest time in the past.
+#' @param A A vector with positive integers representing the state space.
 #' @param lam0 The weight of the independent distribution, must be a value in `[0,1)`.
-#' @param lamj A vector of weights for the distributions pj. Values must be in the range `[0, 1)`. The order of weights must match the order
-#'  of the sorted Lambda set.
-#' @param pj A list with lenL matrices of size `lenA x lenA`. Here, lenL represents the number of elements in Lambda, and lenA represents the number
-#'  of elements in A.
-#' @param p0 A vector with the independent distribution part of an MTD model. If not informed and argument indep_part=TRUE, the distribution will be sampled
-#' from a uniform distribution. If indep_part=FALSE, then there is no independent distribution and p0 entries will be set to zero. If you enter p0=0,
-#' then indep_part will be set to FALSE.
-#' @param single_matrix If TRUE all pj matrices are equal.
-#' @param indep_part If FALSE there is no independent distribution and p0 is set to zero.
+#' @param lamj A vector of weights for the distributions in the argument \code{pj}. Values must be
+#' in the range `[0, 1)`. The first element in \code{lamj} must be the weight of the first
+#' element of the list \code{pj} and so on.
+#' @param pj A list with \code{length(Lambda)} stochastic matrices.
+#' @param p0 A vector with the independent distribution part of an MTD model. If not informed
+#' and argument \code{indep_part=TRUE}, the distribution will be sampled from a uniform distribution.
+#' If \code{indep_part=FALSE}, then there is no independent distribution and \code{p0} entries will
+#' be set to zero. If you enter \code{p0=0}, then \code{indep_part} will be set to \code{FALSE}.
+#' @param single_matrix Logical. If \code{TRUE}, all matrices in list \code{pj} are equal.
+#' @param indep_part Logical. If \code{FALSE} there is no independent distribution and \code{p0}
+#' is set to zero.
 #'
-#' @details This MTD object can be used by functions such as [oscillation()], which retrieves the model's oscillation, and [perfectSample()],
-#'  which will perfectly sample a MTD Markov chain with the model's parameters
+#' @details This MTD object can be used by functions such as [oscillation()], which retrieves the
+#'  model's oscillation, and [perfectSample()], which will perfectly sample an MTD Markov chain
+#'  with the model's parameters.
 #'
-#' @return An MTD model as a MTD object.
+#' @return An MTD model as an MTD object.
 #' @importFrom stats runif
 #' @export
 #'

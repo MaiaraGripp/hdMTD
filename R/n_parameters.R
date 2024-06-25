@@ -2,12 +2,15 @@
 #'
 #' Calculates the number of parameters in an MTD model with a relevant lag set Lambda and state space A.
 #'
-#' @param Lambda The relevant lag set.
-#' @param A The state space.
-#' @param single_matrix If TRUE all p_j matrices are equal.
-#' @param indep_part If FALSE independent distribution is set to zero.
+#' @param Lambda A numeric vector of positive integers representing the relevant lag set.
+#' The elements will be sorted from smallest to greatest. The smallest number represents the latest
+#'  (most recent) time in the past, and the greatest number represents the earliest time in the past.
+#' @param A A vector with positive integers representing the state space.
+#' @param single_matrix Logical. If \code{TRUE}, the model depends on any past in \code{Lambda}
+#'  through the same stochastic matrix.
+#' @param indep_part Logical. If \code{FALSE} there is no independent distribution.
 #'
-#' @return The number of parameters in a MTD model.
+#' @return The number of parameters in an MTD model.
 n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE){
   lenA <- length(A)
   lenL <- length(Lambda)

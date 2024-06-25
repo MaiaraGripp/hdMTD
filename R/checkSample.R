@@ -3,7 +3,7 @@
 #' Checks if a sample is a suitable argument for some functions within
 #'the package.
 #'
-#' @param X A vector or a single-column data frame with a sample of a MTD chain.
+#' @param X A vector or a single-column data frame with a sample of an MTD chain.
 #'
 #' @return Returns the sample as a vector or identifies any possible sample problems.
 #'

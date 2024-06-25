@@ -1,7 +1,7 @@
 #' The Cut method for inference in MTD models
 #'
 #' A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to
-#'  estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+#'  estimate a relevant lag set \eqn{\Lambda} of an MTD model.
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
 #' @param d A positive integer representing an upper bound for the chain order.

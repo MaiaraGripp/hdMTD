@@ -1,7 +1,7 @@
 #' Forward Stepwise and Cut method for inference in MTD models
 #'
 #' A function for inference in MTD Markov chains with FSC method. This function estimates the relevant
-#' lag set \eqn{\Lambda} of a MTD model through the FSC algorithm.
+#' lag set \eqn{\Lambda} of an MTD model through the FSC algorithm.
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
 #' @param d A positive integer representing an upper bound for the chain order.

@@ -7,20 +7,27 @@
 PI(S, freqTabSj, x_S, lenX, d)
 }
 \arguments{
-\item{S}{A subset of 1:d}
+\item{S}{A numeric vector of positive integers. Typically, \code{S} is a subset of \code{1:d},
+and represents a set of relevant lags.}
 
-\item{freqTabSj}{A table with frequencies of sequences in a MTD Markov chain sample.}
+\item{freqTabSj}{A tibble with frequencies of sequences in a chain sample. Typically
+\code{freqTabSj} is an output from \code{\link[=freqTabSj]{freqTabSj()}}.}
 
-\item{x_S}{A specific sequence indexed by S.}
+\item{x_S}{A vector of size \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
+be set to \code{NULL}. \code{x_S} represents a sequence of symbols from \code{A} indexed by
+\code{S}. This sequence remains constant across the stationary distributions to be calculated,
+representing a fixed configuration of the past, while the observations in any other lag displayed
+in \code{freqTabSj} that are not in \code{S} may vary.}
 
-\item{lenX}{The length of the sample vector.}
+\item{lenX}{An integer positive number with the length of the sample vector.}
 
-\item{d}{The order of the chain.}
+\item{d}{A positive integer representing an upper bound for the chain order.}
 }
 \value{
-Returns a vector of estimated stationary distributions of a sequence x_S
-with the element x_j ( for j in S)varying across the entire state space.
+Returns a vector of estimated stationary distributions for a set of sequences. However, these
+sequences might have a fixed part of elements \code{x_S} common among them and other elements varying
+across the entire state space.
 }
 \description{
-Estimated stationary distribution vector for each x_j and past x_S.
+An estimated stationary distribution vector for any given sequence.
 }

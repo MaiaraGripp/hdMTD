@@ -2,26 +2,25 @@
 % Please edit documentation in R/perfectSample.R
 \name{perfectSample}
 \alias{perfectSample}
-\title{Perfect Sample.}
+\title{Perfectly samples an MTD Markov chain}
 \usage{
 perfectSample(MTD, N = NULL)
 }
 \arguments{
-\item{MTD}{An MTD object. The state space A in the MTD object must be sorted}
+\item{MTD}{An MTD object, see \code{\link[=MTDmodel]{MTDmodel()}} for properly generating a MTD object.}
 
-\item{N}{The sample size. If NULL sample size will be set to 1000.}
+\item{N}{The sample size. If \code{NULL} sample size will be set to 1000.}
 }
 \value{
 Returns a sample from o MTD model (the first element is the most recent).
 }
 \description{
-Perfectly samples a MTD Markov chain.
+Samples an MTD Markov Chain from the stationary distribution.
 }
 \details{
-Samples a MTD Markov Chain from stationary distribution.
-
 This perfect sample algorithm requires that the MTD model has
-an independent distribution and a positive weight for it.
+an independent distribution and a positive weight (i.e., \code{MTD$lambdas["lam0"]>0} which
+means \eqn{\lambda_0>0}).
 }
 \examples{
 perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )

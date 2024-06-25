@@ -7,7 +7,7 @@
 checkSample(X)
 }
 \arguments{
-\item{X}{A vector or a single-column data frame with a sample of a MTD chain.}
+\item{X}{A vector or a single-column data frame with a sample of an MTD chain.}
 }
 \value{
 Returns the sample as a vector or identifies any possible sample problems.

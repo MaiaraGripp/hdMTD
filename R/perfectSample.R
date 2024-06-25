@@ -1,14 +1,14 @@
-#' Perfectly samples a MTD Markov chain.
+#' Perfectly samples an MTD Markov chain
 #'
-#' Samples a MTD Markov Chain from stationary distribution.
+#' Samples an MTD Markov Chain from the stationary distribution.
 #'
-#' @title Perfect Sample.
-#' @param MTD An MTD object. The state space A in the MTD object must be sorted
-#' @param N The sample size. If NULL sample size will be set to 1000.
+#' @param MTD An MTD object, see [MTDmodel()] for properly generating a MTD object.
+#' @param N The sample size. If \code{NULL} sample size will be set to 1000.
 #' @return Returns a sample from o MTD model (the first element is the most recent).
 #'
 #' @details This perfect sample algorithm requires that the MTD model has
-#' an independent distribution and a positive weight for it.
+#' an independent distribution and a positive weight (i.e., \code{MTD$lambdas["lam0"]>0} which
+#' means \eqn{\lambda_0>0}).
 #'
 #' @export perfectSample
 #'

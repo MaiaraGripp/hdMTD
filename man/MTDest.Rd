@@ -16,10 +16,9 @@ MTDest(
 )
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a MTD chain sample.}
+\item{X}{A vector or single-column data frame containing an MTD chain sample.}
 
-\item{S}{A numeric vector of positive integers from which this function will select
-a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}.}
+\item{S}{A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.}
 
 \item{M}{A stopping point for the EM algorithm. If \code{M=NULL} the algorithm will run
 for a total of \code{nIter} iteractions.}

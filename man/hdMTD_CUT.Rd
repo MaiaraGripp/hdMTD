@@ -50,7 +50,7 @@ Returns a set of relevant lags estimated using the CUT algorithm.
 }
 \description{
 A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to
-estimate a relevant lag set \eqn{\Lambda} of a MTD model.
+estimate a relevant lag set \eqn{\Lambda} of an MTD model.
 }
 \details{
 The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
