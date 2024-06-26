@@ -66,26 +66,25 @@ of the penalized likelihood for the outputted lag sets if \code{BICvalue = TRUE}
 \description{
 A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chains using
 Bayesian Information Criterion (BIC). This means that this method selects the set of lags
-that minimizes a penalized log likelihood for a given sample.
+that minimizes a penalized log likelihood for a given sample, see \emph{References} below for
+details on the method.
 }
 \details{
-Note that the upper bound for the order of the chain \code{d} affects the estimation of
-the transition probabilities. If we run the function with a certain order parameter \code{d},
-only the sequences of size \code{d} that appeared in the sample will be counted. Therefore all
-transition probabilities, and hence all BIC values, will be calculated with respect to that
-\code{d}. If we use another value for \code{d} to run the function, even if the output
-agrees with the one of the previous run, it's BIC value might change a little.
-
 Note that the upper bound for the order of the chain (\code{d}) affects the estimation
 of the transition probabilities. If we run the function with a certain order parameter \code{d},
 only the sequences of size \code{d} that appeared in the sample will be counted. Therefore,
 all transition probabilities, and hence all BIC values, will be calculated with respect to
 that \code{d}. If we use another value for \code{d} to run the function, even if the output
-agrees with that of the previous run, its BIC value might change slightly.
+agrees with that of the previous run, its BIC value might change a little.
 }
 \examples{
 X <- testChains[,1]
 hdMTD_BIC (X,d=6,minl=1,maxl=1)
 hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
 
+}
+\references{
+Csiszar, Imre & Shields, P.C.. (2000). The consistency of the BIC Markov order
+estimator. Annals of Statistics - ANN STATIST. 28. 26-.
+\href{https://doi.org/10.1109/ISIT.2000.866316}{DOI 10.1109/ISIT.2000.866316}.
 }

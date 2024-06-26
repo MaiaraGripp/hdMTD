@@ -1,6 +1,6 @@
 #' The maximum total variation distance
 #'
-#' Calculates the total variation distance between any two rows of a stochastic matrix.
+#' Computes the total variation distance between any two rows of a stochastic matrix.
 #' Can analyze several pairs of rows at once, and if so, will return the greatest
 #' total variation distance calculated among the pairs.
 #'

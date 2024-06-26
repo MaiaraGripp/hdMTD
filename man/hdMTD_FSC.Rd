@@ -56,14 +56,14 @@ Mixture Transition Distribution (MTD) models. It consists
 in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
 This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}
 and are specially useful for inference in high-order MTD Markov chains.
-
-#'# Author(s):
-This method was developed in \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi},
-(2022), "Sparse markov models for high-dimensional inference".
 }
 \examples{
 X <- testChains[,1]
 hdMTD_FSC(X,4,3,alpha=0.02)
 hdMTD_FSC(X,4,2,alpha=0.001)
 
+}
+\references{
+Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
+\href{https://arxiv.org/abs/2202.08007}{ arXiv:2202.08007}
 }

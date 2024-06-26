@@ -27,9 +27,9 @@
 #' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
 #' and are specially useful for inference in high-order MTD Markov chains.
 #'
-#'  #'# Author(s):
-#' This method was developed in [Ost and Takahashi](https://arxiv.org/abs/2202.08007),
-#' (2022), "Sparse markov models for high-dimensional inference".
+#' @references
+#' Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
+#' [ arXiv:2202.08007](https://arxiv.org/abs/2202.08007)
 #'
 #' @return Returns a vector with the estimated relevant lag set using FSC algorithm.
 #' @export

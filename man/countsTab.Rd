@@ -15,7 +15,7 @@ elements in the sequences, which is \eqn{d+1}. Here, \eqn{d} is often taken as t
 chain order or serves as an upper limit for it.}
 }
 \value{
-A tibble with every size \code{d+1} sequence present in the sample and its
+A tibble with all sequences of length \code{d+1} that appeared in the sample and its
 absolute frequency.
 }
 \description{

@@ -17,7 +17,7 @@ hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE, ...)
 this function will set \code{A=unique(X)}.}
 
 \item{elbowTest}{Logical. If TRUE, the function will use a special criterion to determine the size
-of the estimated relevant lag set. See \emph{Details} below for more information.}
+of the estimated set of relevant lags. See \emph{Details} below for more information.}
 
 \item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.}
 
@@ -28,17 +28,14 @@ to \code{\link[=hdMTD_FS]{hdMTD_FS()}} through the \code{\link[=hdMTD]{hdMTD()}}
 Returns a vector with the estimated relevant lag set using FS algorithm.
 }
 \description{
-A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS)
-algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
+A function that estimates the set of relevant lags of an MTD model using the FS method.
 }
 \details{
 The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
-(FSC) algorithm for inference in Mixture Transition Distribution (MTD) models. Which consists in
-the application of the FS step followed by the CUT algorithm.
-This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}
-and are specially useful for inference in high-order MTD Markov chains. This specific function
-will only apply the FS step of the algorithm and return an estimated relevant lag set of size
-\code{l}.
+(FSC) algorithm for inference in Mixture Transition Distribution (MTD) models.
+This method was developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}
+This specific function will only apply the FS step of the algorithm and return an estimated
+relevant lag set of length \code{l}.
 
 If the algorithm determines that there are multiple lags equally important and more
 important than all others, it will sample one of them uniformly.
@@ -60,14 +57,13 @@ the function will store a vector with the value of these greatest \eqn{\nu} at e
 then look at this vector and identify the position of the smallest \eqn{\nu} among them. The
 output will only keep the lags that came before the one responsible for this \eqn{\nu} value.
 }
-\section{Author(s):}{
-This method was developed in \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi},
-(2022), "Sparse markov models for high-dimensional inference".
-}
-
 \examples{
 X <- testChains[,1]
 hdMTD_FS(X,d=5,l=2)
 hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
 
+}
+\references{
+Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
+\href{https://arxiv.org/abs/2202.08007}{ arXiv:2202.08007}
 }

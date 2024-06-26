@@ -14,7 +14,7 @@
 n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE){
   lenA <- length(A)
   lenL <- length(Lambda)
-  n_parameters <- lenL-1 #number of lambda params if lambda0=0
+  n_parameters <- lenL-1 #number of lambda params if lam0=0
   if (indep_part) { #then lambda0 > 0
     n_parameters <- n_parameters+lenA  # number of params with lambda0 (+1) and p_0 distribution (+lenA-1)
   }

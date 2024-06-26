@@ -71,13 +71,6 @@ the weights, the first entry must be the weight for \code{p0}, and then one entr
 for each element in \code{pj} list. If your MTD model does not have an independent
 distribution \code{p0}, set \code{init$lambda[1]=0}.
 }
-\section{Author(s):}{
-This function was created based on the following article:
-Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
-in the Mixture Transition Distribution model. Journal of Statistical Computation
-and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
-}
-
 \examples{
 # Simulating data.
 # Model:
@@ -96,4 +89,10 @@ MTDest(X,S=c(1,10),init=init,iter = TRUE)
 MTDest(X,S=c(1,10),init=init,iter = TRUE,nIter=5)
 MTDest(X,S=c(1,10),init=init,oscillations = TRUE)
 
+}
+\references{
+This function was created based on the following article:
+Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
+in the Mixture Transition Distribution model. Journal of Statistical Computation
+and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
 }

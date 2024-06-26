@@ -26,8 +26,8 @@
 #' for each element in \code{pj} list. If your MTD model does not have an independent
 #' distribution \code{p0}, set \code{init$lambda[1]=0}.
 #'
-#'# Author(s):
 #'
+#' @references
 #' This function was created based on the following article:
 #' Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
 #' in the Mixture Transition Distribution model. Journal of Statistical Computation

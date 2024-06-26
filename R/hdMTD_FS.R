@@ -1,7 +1,6 @@
 #' The Forward Stepwise (FS) method for inference in MTD models
 #'
-#' A function for inference in MTD Markov chains with FS method. It applies the Forward Stepwise (FS)
-#'  algorithm to estimate a relevant lag set \eqn{\Lambda} for MTD models.
+#'  A function that estimates the set of relevant lags of an MTD model using the FS method.
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
 #' @param d A positive integer representing an upper bound for the chain order.
@@ -9,7 +8,7 @@
 #' @param A A vector with positive integers representing the state space. If not informed,
 #' this function will set \code{A=unique(X)}.
 #' @param elbowTest Logical. If TRUE, the function will use a special criterion to determine the size
-#' of the estimated relevant lag set. See *Details* below for more information.
+#' of the estimated set of relevant lags. See *Details* below for more information.
 #' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.
 #' @param ... Other parameters. This is used to accommodate any additional argument passed
 #' to [hdMTD_FS()] through the [hdMTD()] function.
@@ -17,12 +16,10 @@
 #' @importFrom utils combn
 #'
 #' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
-#' (FSC) algorithm for inference in Mixture Transition Distribution (MTD) models. Which consists in
-#' the application of the FS step followed by the CUT algorithm.
-#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
-#' and are specially useful for inference in high-order MTD Markov chains. This specific function
-#' will only apply the FS step of the algorithm and return an estimated relevant lag set of size
-#'  \code{l}.
+#' (FSC) algorithm for inference in Mixture Transition Distribution (MTD) models.
+#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
+#' This specific function will only apply the FS step of the algorithm and return an estimated
+#' relevant lag set of length \code{l}.
 #'
 #' @details If the algorithm determines that there are multiple lags equally important and more
 #' important than all others, it will sample one of them uniformly.
@@ -43,9 +40,9 @@
 #' then look at this vector and identify the position of the smallest \eqn{\nu} among them. The
 #' output will only keep the lags that came before the one responsible for this \eqn{\nu} value.
 #'
-#'# Author(s):
-#'  This method was developed in [Ost and Takahashi](https://arxiv.org/abs/2202.08007),
-#' (2022), "Sparse markov models for high-dimensional inference".
+#' @references
+#' Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
+#' [ arXiv:2202.08007](https://arxiv.org/abs/2202.08007)
 #'
 #' @return Returns a vector with the estimated relevant lag set using FS algorithm.
 #' @export

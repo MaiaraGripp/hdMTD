@@ -2,8 +2,8 @@
 #'
 #' A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chains using
 #' Bayesian Information Criterion (BIC). This means that this method selects the set of lags
-#' that minimizes a penalized log likelihood for a given sample.
-#'
+#' that minimizes a penalized log likelihood for a given sample, see *References* below for
+#' details on the method.
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
 #' @param d A positive integer representing an upper bound for the chain order.
@@ -34,19 +34,16 @@
 #' @param ... Other parameters. This is used to accommodate any additional argument passed
 #' to [hdMTD_BIC()] through the [hdMTD()] function.
 #'
-#' @details Note that the upper bound for the order of the chain \code{d} affects the estimation of
-#' the transition probabilities. If we run the function with a certain order parameter \code{d},
-#' only the sequences of size \code{d} that appeared in the sample will be counted. Therefore all
-#' transition probabilities, and hence all BIC values, will be calculated with respect to that
-#'\code{d}. If we use another value for \code{d} to run the function, even if the output
-#' agrees with the one of the previous run, it's BIC value might change a little.
-#'
 #' @details Note that the upper bound for the order of the chain (\code{d}) affects the estimation
 #' of the transition probabilities. If we run the function with a certain order parameter \code{d},
 #' only the sequences of size \code{d} that appeared in the sample will be counted. Therefore,
 #' all transition probabilities, and hence all BIC values, will be calculated with respect to
 #'that \code{d}. If we use another value for \code{d} to run the function, even if the output
-#' agrees with that of the previous run, its BIC value might change slightly.
+#' agrees with that of the previous run, its BIC value might change a little.
+#'
+#' @references Csiszar, Imre & Shields, P.C.. (2000). The consistency of the BIC Markov order
+#' estimator. Annals of Statistics - ANN STATIST. 28. 26-.
+#' [DOI 10.1109/ISIT.2000.866316](https://doi.org/10.1109/ISIT.2000.866316).
 #'
 #' @return Returns a vector with the estimated relevant lag set using BIC. It might return more
 #' than one set if \code{minl < maxl} and \code{byl = TRUE}. Additionally, it can return the value

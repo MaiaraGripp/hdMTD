@@ -1,9 +1,14 @@
-#' Checks an MTD object
+#' Checks a class MTD object
 #'
-#' Verifies if an MTD object is correctly structured, containing all the necessary
-#' parameters and if these parameters satisfy their respective constraints.
+#' Verifies if an object of class MTD is correctly structured, containing all the necessary
+#' parameters, and if these parameters satisfy their respective constraints.
 #'
-#' @param MTD an MTD object.
+#' @details A properly defined class MTD object can be created through the [MTDmodel()].
+#' To verify the correct structure and instances of a class MTD object, please check [MTDmodel()]
+#' documentation.
+#'
+#' @param MTD An object of class MTD. Must be properly structured as such. See *Details* below for
+#' more information.
 #'
 checkMTD <- function(MTD){
 #checks for:

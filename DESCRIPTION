@@ -1,10 +1,10 @@
 Package: hdMTD
 Type: Package
-Title: Inference in Mixture Transition Distribution (MTD) Markov Chains with High-Dimensional Data
+Title: Inference for high-dimensional Mixture Transition Distribution (MTD) models
 Version: 0.1.0
 Author: Maiara Gripp
 Maintainer: Maiara Gripp <maiaragripp@gmail.com>
-Description: Estimates the set of relevant lags from an MTD chain sample and can also perfectly sample an MTD chain.
+Description: Provides several statistical tools to estimate the parameters of MTD models. It includes an algorithm to exactly simulate samples of an MTD model from its stationary distribution.
 URL: https://github.com/MaiaraGripp/hdMTD
 License: MIT + file LICENSE
 Encoding: UTF-8

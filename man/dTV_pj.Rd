@@ -24,7 +24,7 @@ variation distance along with the pair of row indices in \code{pj} representing 
 distributions with the greatest distance.
 }
 \description{
-Calculates the total variation distance between any two rows of a stochastic matrix.
+Computes the total variation distance between any two rows of a stochastic matrix.
 Can analyze several pairs of rows at once, and if so, will return the greatest
 total variation distance calculated among the pairs.
 }

@@ -49,8 +49,7 @@ to \code{\link[=hdMTD_CUT]{hdMTD_CUT()}} through the \code{\link[=hdMTD]{hdMTD()
 Returns a set of relevant lags estimated using the CUT algorithm.
 }
 \description{
-A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to
-estimate a relevant lag set \eqn{\Lambda} of an MTD model.
+A function that estimates the set of relevant lags of an MTD model using the CUT method.
 }
 \details{
 The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
@@ -60,14 +59,13 @@ This method and its steps where developed by \href{https://arxiv.org/abs/2202.08
 and are specially useful for inference in high-order MTD Markov chains. This specific function
 will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 }
-\section{Author(s):}{
-This method was developed in \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi},
-(2022), "Sparse markov models for high-dimensional inference".
-}
-
 \examples{
 X <- testChains[,3]
 hdMTD_CUT(X,4,alpha=0.02,mu=1,xi=0.4)
 hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
 
+}
+\references{
+Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
+\href{https://arxiv.org/abs/2202.08007}{ arXiv:2202.08007}
 }

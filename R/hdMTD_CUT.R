@@ -1,7 +1,6 @@
 #' The Cut method for inference in MTD models
 #'
-#' A function for inference in MTD Markov chains with CUT method. It applies CUT algorithm to
-#'  estimate a relevant lag set \eqn{\Lambda} of an MTD model.
+#' A function that estimates the set of relevant lags of an MTD model using the CUT method.
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
 #' @param d A positive integer representing an upper bound for the chain order.
@@ -30,9 +29,9 @@
 #' and are specially useful for inference in high-order MTD Markov chains. This specific function
 #' will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 #'
-#'# Author(s):
-#' This method was developed in [Ost and Takahashi](https://arxiv.org/abs/2202.08007),
-#' (2022), "Sparse markov models for high-dimensional inference".
+#' @references
+#' Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
+#' [ arXiv:2202.08007](https://arxiv.org/abs/2202.08007)
 #'
 #' @return Returns a set of relevant lags estimated using the CUT algorithm.
 #' @export
