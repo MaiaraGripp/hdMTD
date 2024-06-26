@@ -3,7 +3,7 @@
 \docType{data}
 \name{sleepscoring}
 \alias{sleepscoring}
-\title{Data with sleeping patterns.}
+\title{Data with sleeping patterns}
 \format{
 A tbl_df object with 136,925 rows representing the sleeping patterns of 151 patients.
 
@@ -13,7 +13,7 @@ A tbl_df object with 136,925 rows representing the sleeping patterns of 151 pati
 \item{Time}{Time each measurement was made.}
 \item{Recorging.onset}{Time, in seconds, since the beginning of the recordings.}
 \item{Duration}{The duration of each lag between recordings, in seconds.}
-\item{SleepStage}{The annotated sleeping stage. 'W' refers to awake, 'R' to REM sleep, and 'N1', 'N2', and 'N3' refer to non-REM stages 1, 2, and 3 respectively}
+\item{SleepStage}{The annotated sleeping stage. 'W' refers to wakefulness, 'R' to REM sleep, and 'N1', 'N2', and 'N3' refer to non-REM stages 1, 2, and 3 respectively.}
 \item{ConscientLevel}{A measurement of the level of consciousness during different sleep stages. 0 indicates Wake, 1 represents REM sleep, and 2, 3, and 4 correspond to N1, N2, and N3 stages respectively.}
 }
 }

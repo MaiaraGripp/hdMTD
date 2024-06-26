@@ -101,6 +101,7 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
     for (k in 1:nrow_subx) { #runs through all sequences x of size |S|-1 ( i.e. x_{S\j})
       Q[k,] <- dTV_sample(S=Sminusj,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[k,])
       R[k,] <- sx(S=Sminusj,freqTab=b_Sja,lenA=lenA,x_S=subx[k,],mu=mu,alpha=alpha,xi=xi)
+      #see auxiliary function sx() below.
     }
     # Q: a matrix for all total var distances when changing the element in past j
     # R: a matrix with thresholds for the entries in Q
@@ -112,14 +113,39 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
     assign(paste0("sx_Sj",j),R)
 
     dTV_txy[z] <- max(Q-txy(R=R,A_pairs=A_pairs,A_pairsPos=A_pairsPos))
-    #see txy() below
+    #see auxiliary function txy() below
   }
   S <- sort(S,decreasing = TRUE)
   S <- S[which(dTV_txy>0)]
   S
 }
 
-#local auxiliary function
+############################################################
+# Local auxiliary functions for calculating the CUT threshold:
+############################################################
+  # sx(): Returns a threshold with respect to some sequence x_S
+sx <- function(S,freqTab,lenA,x_S,mu,alpha,xi){
+  filtr_S <- paste0("x",S)
+  B <- freqTab
+  B$test <- apply(B %>%
+                    dplyr::select_at(filtr_S),1,is_xS,x_S)
+  C <- dplyr::filter(B,test==TRUE)
+  Nx <- C$Nx_Sj[seq(1,nrow(C),by=lenA)]
+  result <- numeric(lenA)
+  for (k in 1:lenA) {
+    sums <- 0
+    for (i in 1:lenA) {
+      sums = sums +
+        sqrt(( C$qax_Sj[i+(k-1)*lenA] +
+                 alpha/Nx[k])*mu/(2*mu-exp(mu)+1))
+    }
+    result[k]=sqrt(0.5*alpha*(1+xi)/Nx[k])*sums+alpha*lenA/(6*Nx[k])
+  }
+  result
+}
+
+# tyx(): txy = sx + sy is the threshold that determines if the difference
+# between a distribution conditioned on x_S and another conditioned on y_S is indeed relevant.
 txy <- function(R,A_pairs,A_pairsPos){
   tn <- matrix(0,nrow=nrow(R),ncol=nrow(A_pairs))
   for (s in 1:nrow(A_pairs)) {

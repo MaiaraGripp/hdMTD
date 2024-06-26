@@ -1,4 +1,4 @@
-#' Data with sleeping patterns.
+#' Data with sleeping patterns
 #'
 #' The dataset contains 136,925 rows and 7 columns, representing the sleeping patterns of 151 patients
 #' over the course of one night, with measurements taken at 30-second intervals. It is a collection of 151
@@ -15,7 +15,7 @@
 #'   \item{Time}{Time each measurement was made.}
 #'   \item{Recorging.onset}{Time, in seconds, since the beginning of the recordings.}
 #'   \item{Duration}{The duration of each lag between recordings, in seconds.}
-#'   \item{SleepStage}{The annotated sleeping stage. 'W' refers to awake, 'R' to REM sleep, and 'N1', 'N2', and 'N3' refer to non-REM stages 1, 2, and 3 respectively}
+#'   \item{SleepStage}{The annotated sleeping stage. 'W' refers to wakefulness, 'R' to REM sleep, and 'N1', 'N2', and 'N3' refer to non-REM stages 1, 2, and 3 respectively.}
 #'   \item{ConscientLevel}{A measurement of the level of consciousness during different sleep stages. 0 indicates Wake, 1 represents REM sleep, and 2, 3, and 4 correspond to N1, N2, and N3 stages respectively.}
 #' }
 #'

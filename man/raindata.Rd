@@ -3,7 +3,7 @@
 \docType{data}
 \name{raindata}
 \alias{raindata}
-\title{Rain data set for the city of Canberra, Australia.}
+\title{Rain data set for the city of Canberra, Australia}
 \format{
 A data frame with 3525 rows and 2 columns. Each row corresponds
 to a day specified in column 1 ("Date"). The value in column 2 ("RainToday")
@@ -15,8 +15,10 @@ is 0 if no rain was recorded in the city of Canberra that day, and 1 otherwise.
 }
 }
 \source{
-{This data set was acquired at https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package
-but it's original source is Data source: http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data.
+{This data set was acquired at
+https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package
+but it's original source is Data source:
+http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data.
 Copyright Commonwealth of Australia 2010, Bureau of Meteorology.}
 }
 \usage{
