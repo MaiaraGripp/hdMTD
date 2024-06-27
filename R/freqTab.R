@@ -1,6 +1,6 @@
-#' A tibble of probabilities and frequencies of sample sequences
+#' A tibble with probabilities and frequencies of sample sequences
 #'
-#' A tibble with the sample sequences frequencies and the estimated
+#' A tibble with the sample sequences, their frequencies and the estimated
 #' transition probabilities.
 #'
 #' @details Within this function, both arguments \code{S} and \code{j} perform the same role of

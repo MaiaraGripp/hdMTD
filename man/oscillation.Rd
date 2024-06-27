@@ -28,7 +28,7 @@ Calculates the oscillations of an MTD model object or estimates the oscillations
 }
 \details{
 The oscillation for a certain lag \eqn{j} of an MTD model
-( {\eqn{\delta_j}: \eqn{j \in \Lambda} }), is the product of the weight \eqn{\lambda_j}
+( \eqn{ \{ \delta_j:\ j \in \Lambda \} }), is the product of the weight \eqn{\lambda_j}
 multiplied by the maximum of the total variation distance between the distributions in a
 stochastic matrix \eqn{p_j}.
 \deqn{\delta_j = \lambda_j\max_{b,c \in \mathcal{A}} d_{TV}(p_j(\cdot | b), p_j(\cdot | c)).}
@@ -44,7 +44,7 @@ in \eqn{\mathcal{A}} given a certain past \eqn{x_S} ( which is a sequence of ele
 \eqn{\mathcal{A}} where each element occurred at a lag in \code{S}), and
 \eqn{\hat{p}(\cdot|b_jx_S)} an estimated distribution given past \eqn{x_S} and that the symbol
 \eqn{b\in\mathcal{A}} occurred at lag \eqn{j}.
-If \eqn{N} is the sample size, \eqn{d=}\code{max{S}} and \eqn{N(x_S)} is the
+If \eqn{N} is the sample size, \eqn{d=}\code{max(S)} and \eqn{N(x_S)} is the
 number of times the sequence \eqn{x} appeared in the at the lags in \code{S}, then
 \deqn{\delta_j = \max_{c_j,b_j \in \mathcal{A}} \frac{1}{N-d}\sum_{x_{S} \in \mathcal{A}^{S}} N(x_S)d_{TV}(\hat{p}(. | b_jx_S), \hat{p}(. | c_jx_S) )}
 is the estimated oscillation for a lag \eqn{j \in \{1,\dots,d\}\setminus}\code{S}. Note that \eqn{\mathcal{A}^S} is the space of

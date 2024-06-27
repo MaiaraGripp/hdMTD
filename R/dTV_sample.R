@@ -30,17 +30,21 @@
 #' @param A A vector with positive integers. Must have at least two different entries. \code{A}
 #' represents the state space. You may leave \code{A=NULL} (default) if you provide the function
 #' with the arguments \code{lenA} and \code{A_pairs} (see description below).
-#' @param base  A data frame that must have \code{length(S)+1} columns representing past symbols,
-#' one column for the present symbols, and a column with the transition probabilities. Each
-#' row depicts a past sequence, a present symbol, and the probability of seeing this symbol after
-#' that sequence occurred at times \code{S} and \code{j}. Given a \code{x_S} past sequence,
-#' \code{base} must have at least every probability conditioned on \code{x_S} with the element
-#' in lag \code{j} and the present varying across \code{A}, so at least \code{lenA^2} rows.
-#' Since this function was created to estimate total variation distances between distributions
-#' calculated through the [freqTab()] function, \code{base} is typically an output from [freqTab()]
-#' (the \code{base} format must match that of an output from [freqTab()] with the argument
-#' \code{complete=TRUE}); please check the [freqTab()] documentation and the *Details* section for
-#' further information).
+#' @param base  A data frame where each rows first \code{length(S)+2} columns represent a length
+#' \code{length(S)+2} sequence of elements from \code{A}. The first column symbol represents the
+#' one further in the past and so on until the symbol in column \code{length(S)+2} is the latest
+#' in the sequence. Also, the data frame must have a column with the transition probabilities
+#' from the sequence in the first \code{length(S)+1} columns to the symbol at column \code{length(S)+2}.
+#' In other words, each row depicts a past sequence, a present symbol, and the probability of seeing
+#' this symbol after that sequence occurred at times \code{S} and \code{j}. Given a \code{x_S}
+#' past sequence, \code{base} must have at least every transition probability conditioned in
+#' past \code{x_S}. This means that there must be \code{length(A)^2} rows with sequence \code{x_S},
+#' (since the element in column \code{S+2} and the element in column 'xj' must vary across all
+#' elements of \code{A}). Since this function was created to estimate total variation distances
+#' between distributions calculated through the [freqTab()] function, \code{base} is typically
+#' an output from [freqTab()] (the \code{base} format must match that of an output from [freqTab()]
+#' with the argument \code{complete=TRUE}). Please check the [freqTab()] documentation and the
+#' *Details* section for further information.
 #' @param lenA An integer greater than 1 representing the lengt of the state space A, i.e.,
 #'  \code{lenA <- length(A)}. If \code{A} is provided, there is no need to input \code{lenA}.
 #' @param A_pairs A matrix with all possible pairs of elements from \code{A}. If \code{A} is provided,

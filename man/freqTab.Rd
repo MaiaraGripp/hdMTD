@@ -2,7 +2,7 @@
 % Please edit documentation in R/freqTab.R
 \name{freqTab}
 \alias{freqTab}
-\title{A tibble of probabilities and frequencies of sample sequences}
+\title{A tibble with probabilities and frequencies of sample sequences}
 \usage{
 freqTab(S, j = NULL, A, countsTab, complete = TRUE)
 }
@@ -34,7 +34,7 @@ The remaining columns show the sample frequencies of the sequences and the MLE (
 of the transition probabilities.
 }
 \description{
-A tibble with the sample sequences frequencies and the estimated
+A tibble with the sample sequences, their frequencies and the estimated
 transition probabilities.
 }
 \details{

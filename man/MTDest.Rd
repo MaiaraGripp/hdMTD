@@ -41,7 +41,7 @@ this function will set \code{A=unique(X)}.}
 for the updated model along with the estimated parameters.}
 }
 \value{
-A list with the estimated parameters of the MTD model
+A list with the estimated parameters of the MTD model.
 }
 \description{
 Estimation of MTD parameters through the Expectation Maximization (EM) algorithm.

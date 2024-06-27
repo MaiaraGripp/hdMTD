@@ -9,7 +9,7 @@
 #' called \code{Nxa}, will contain the number of times each of these
 #' sequences appeared in the sample. The number of rows in the outputted
 #' tibble depends on \code{X}, since each row represents an unique length
-#' \eqn{d+1} sequence that actually appeared in the chain. Let \eqn{|A|} be
+#' \code{d+1} sequence that actually appeared in the chain. Let \eqn{|A|} be
 #' the number of elements in the state space, and \eqn{d+1} the length of the
 #' sequences, the number of rows varies between \eqn{1} and \eqn{|A|^{d+1}}.
 #' Note that the function won't accept \code{X} or \code{d} with
@@ -18,7 +18,7 @@
 #' @param X A vector or single-column data frame with a sample from a chain.
 #' The first element must be the most recent.
 #' @param d Numeric, must be a positive integer. Specifies the number of
-#' elements in the sequences, which is \eqn{d+1}. Here, \eqn{d} is often taken as the
+#' elements in the sequences, which is \code{d+1}. Here, \code{d} is often taken as the
 #' chain order or serves as an upper limit for it.
 #'
 #' @return A tibble with all sequences of length \code{d+1} that appeared in the sample and its

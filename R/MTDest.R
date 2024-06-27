@@ -53,7 +53,7 @@
 #'
 #' @export
 #'
-#' @return A list with the estimated parameters of the MTD model
+#' @return A list with the estimated parameters of the MTD model.
 #'
 #' @examples
 #' # Simulating data.
