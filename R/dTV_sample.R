@@ -45,7 +45,7 @@
 #' an output from [freqTab()] (the \code{base} format must match that of an output from [freqTab()]
 #' with the argument \code{complete=TRUE}). Please check the [freqTab()] documentation and the
 #' *Details* section for further information.
-#' @param lenA An integer greater than 1 representing the lengt of the state space A, i.e.,
+#' @param lenA An integer greater than 1 representing the length of the state space A, i.e.,
 #'  \code{lenA <- length(A)}. If \code{A} is provided, there is no need to input \code{lenA}.
 #' @param A_pairs A matrix with all possible pairs of elements from \code{A}. If \code{A} is provided,
 #' there is no need to input \code{A_pairs}.

@@ -64,7 +64,7 @@ than one set if \code{minl < maxl} and \code{byl = TRUE}. Additionally, it can r
 of the penalized likelihood for the outputted lag sets if \code{BICvalue = TRUE}.
 }
 \description{
-A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chains using
+A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chain using
 Bayesian Information Criterion (BIC). This means that this method selects the set of lags
 that minimizes a penalized log likelihood for a given sample, see \emph{References} below for
 details on the method.
@@ -84,7 +84,7 @@ hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
 
 }
 \references{
-Csiszar, Imre & Shields, P.C.. (2000). The consistency of the BIC Markov order
-estimator. Annals of Statistics - ANN STATIST. 28. 26-.
-\href{https://doi.org/10.1109/ISIT.2000.866316}{DOI 10.1109/ISIT.2000.866316}.
+Imre Csiszár, Paul C. Shields. "The consistency of the BIC Markov order estimator."
+The Annals of Statistics, 28(6) 1601-1619 December2000.
+\href{https://doi.org/10.1214/aos/1015957472}{DOI 10.1214/aos/1015957472}.
 }

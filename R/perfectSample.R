@@ -4,7 +4,7 @@
 #'
 #' @param MTD An MTD object, see [MTDmodel()] for properly generating a MTD object.
 #' @param N The sample size. If \code{NULL} sample size will be set to 1000.
-#' @return Returns a sample from o MTD model (the first element is the most recent).
+#' @return Returns a sample from an MTD model (the first element is the most recent).
 #'
 #' @details This perfect sample algorithm requires that the MTD model has
 #' an independent distribution and a positive weight (i.e., \code{MTD$lambdas["lam0"]>0} which

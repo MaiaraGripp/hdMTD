@@ -30,7 +30,7 @@
 #'  \eqn{\hat{p}(\cdot|b_jx_S)} an estimated distribution given past \eqn{x_S} and that the symbol
 #'  \eqn{b\in\mathcal{A}} occurred at lag \eqn{j}.
 #'  If \eqn{N} is the sample size, \eqn{d=}\code{max(S)} and \eqn{N(x_S)} is the
-#'  number of times the sequence \eqn{x} appeared in the at the lags in \code{S}, then
+#'  number of times the sequence \eqn{x_S} appeared in the sample, then
 #' \deqn{\delta_j = \max_{c_j,b_j \in \mathcal{A}} \frac{1}{N-d}\sum_{x_{S} \in \mathcal{A}^{S}} N(x_S)d_{TV}(\hat{p}(. | b_jx_S), \hat{p}(. | c_jx_S) )}
 #' is the estimated oscillation for a lag \eqn{j \in \{1,\dots,d\}\setminus}\code{S}. Note that \eqn{\mathcal{A}^S} is the space of
 #' sequences of \eqn{\mathcal{A}} indexed by \code{S}.

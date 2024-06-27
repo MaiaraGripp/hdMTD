@@ -24,7 +24,7 @@ Returns a vector with the estimated relevant lag set from a sample of an MTD mod
 \description{
 A function for inference in Mixture Transition Distribution (MTD) models. This function
 can use a selected \code{method} to perform estimation of the relevant lag set from a sample of
-an MTD model. By default \code{method="FS"} (Forward Stepwise) which is specially useful
+an MTD model. By default \code{method="FS"} (Forward Stepwise) which is especially useful
 in high dimension. The other available "methods" are "CUT", "FSC" (Forward Stepwise and Cut)
 which is an application of the "FS" method followed by the "CUT" method, and lastly the "BIC"
 (Bayesian Information Criterion) method. For more information on these methods see \emph{Details}

@@ -24,12 +24,12 @@
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
 #' Mixture Transition Distribution (MTD) models. It consists
 #' in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-#' This method and its steps where developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
+#' This method and its steps where developed by [Ost and Takahashi](http://jmlr.org/papers/v24/22-0266.html)
 #' and are specially useful for inference in high-order MTD Markov chains.
 #'
 #' @references
-#' Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
-#' [ arXiv:2202.08007](https://arxiv.org/abs/2202.08007)
+#' Ost, G. and Takahashi, D. Y. (2023), "Sparse markov models for high-dimensional inference",
+#' Journal of Machine Learning Research 24(279), 1-54. [URL: http://jmlr.org/papers/v24/22-0266.html](http://jmlr.org/papers/v24/22-0266.html)
 #'
 #' @return Returns a vector with the estimated relevant lag set using FSC algorithm.
 #' @export

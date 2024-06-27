@@ -1,6 +1,6 @@
 #' The Bayesian Information Criterion (BIC) method for inference in MTD models
 #'
-#' A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chains using
+#' A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chain using
 #' Bayesian Information Criterion (BIC). This means that this method selects the set of lags
 #' that minimizes a penalized log likelihood for a given sample, see *References* below for
 #' details on the method.
@@ -41,9 +41,9 @@
 #'that \code{d}. If we use another value for \code{d} to run the function, even if the output
 #' agrees with that of the previous run, its BIC value might change a little.
 #'
-#' @references Csiszar, Imre & Shields, P.C.. (2000). The consistency of the BIC Markov order
-#' estimator. Annals of Statistics - ANN STATIST. 28. 26-.
-#' [DOI 10.1109/ISIT.2000.866316](https://doi.org/10.1109/ISIT.2000.866316).
+#' @references Imre Csiszár, Paul C. Shields. "The consistency of the BIC Markov order estimator."
+#'  The Annals of Statistics, 28(6) 1601-1619 December2000.
+#' [DOI 10.1214/aos/1015957472](https://doi.org/10.1214/aos/1015957472).
 #'
 #' @return Returns a vector with the estimated relevant lag set using BIC. It might return more
 #' than one set if \code{minl < maxl} and \code{byl = TRUE}. Additionally, it can return the value

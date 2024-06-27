@@ -12,7 +12,7 @@ perfectSample(MTD, N = NULL)
 \item{N}{The sample size. If \code{NULL} sample size will be set to 1000.}
 }
 \value{
-Returns a sample from o MTD model (the first element is the most recent).
+Returns a sample from an MTD model (the first element is the most recent).
 }
 \description{
 Samples an MTD Markov Chain from the stationary distribution.

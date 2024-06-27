@@ -36,7 +36,7 @@ an output from \code{\link[=freqTab]{freqTab()}} (the \code{base} format must ma
 with the argument \code{complete=TRUE}). Please check the \code{\link[=freqTab]{freqTab()}} documentation and the
 \emph{Details} section for further information.}
 
-\item{lenA}{An integer greater than 1 representing the lengt of the state space A, i.e.,
+\item{lenA}{An integer greater than 1 representing the length of the state space A, i.e.,
 \code{lenA <- length(A)}. If \code{A} is provided, there is no need to input \code{lenA}.}
 
 \item{A_pairs}{A matrix with all possible pairs of elements from \code{A}. If \code{A} is provided,

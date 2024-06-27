@@ -17,7 +17,7 @@
 #'
 #' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
 #' (FSC) algorithm for inference in Mixture Transition Distribution (MTD) models.
-#' This method was developed by [Ost and Takahashi](https://arxiv.org/abs/2202.08007)
+#' This method was developed by [Ost and Takahashi](http://jmlr.org/papers/v24/22-0266.html)
 #' This specific function will only apply the FS step of the algorithm and return an estimated
 #' relevant lag set of length \code{l}.
 #'
@@ -35,8 +35,8 @@
 #' output will only keep the lags that came before the one responsible for this \eqn{\nu} value.
 #'
 #' @references
-#' Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
-#' [ arXiv:2202.08007](https://arxiv.org/abs/2202.08007)
+#' Ost, G. and Takahashi, D. Y. (2023), "Sparse markov models for high-dimensional inference",
+#' Journal of Machine Learning Research 24(279), 1-54. [URL: http://jmlr.org/papers/v24/22-0266.html](http://jmlr.org/papers/v24/22-0266.html)
 #'
 #' @return Returns a vector with the estimated relevant lag set using FS algorithm.
 #' @export

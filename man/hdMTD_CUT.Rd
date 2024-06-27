@@ -27,10 +27,10 @@ is not provided, by default \code{S=1:d}.}
 
 \item{alpha}{A positive real number, \code{alpha}, appears in a threshold used in the CUT
 step to determine if two distributions are different enough. The larger the \code{alpha},
-he greater the distance required to consider that there is a difference between a set
+the greater the distance required to consider that there is a difference between a set
 of distributions.}
 
-\item{mu}{A positive real number between 0 and 3. \code{mu}is also a component of the same
+\item{mu}{A positive real number between 0 and 3. \code{mu} is also a component of the same
 threshold as \code{alpha}.}
 
 \item{xi}{A positive real number, \code{xi} is also a component of the same threshold as
@@ -55,7 +55,7 @@ A function that estimates the set of relevant lags of an MTD model using the CUT
 The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
 Mixture Transition Distribution (MTD) models. It consists
 in the application of the "Forward Stepwise" (FS) step followed by the CUT algorithm.
-This method and its steps where developed by \href{https://arxiv.org/abs/2202.08007}{Ost and Takahashi}
+This method and its steps where developed by \href{http://jmlr.org/papers/v24/22-0266.html}{Ost and Takahashi}
 and are specially useful for inference in high-order MTD Markov chains. This specific function
 will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 }
@@ -66,6 +66,6 @@ hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
 
 }
 \references{
-Ost, G. and Takahashi, D. (2022), ‘Sparse markov models for high-dimensional inference’.
-\href{https://arxiv.org/abs/2202.08007}{ arXiv:2202.08007}
+Ost, G. and Takahashi, D. Y. (2023), "Sparse markov models for high-dimensional inference",
+Journal of Machine Learning Research 24(279), 1-54. \href{http://jmlr.org/papers/v24/22-0266.html}{URL: http://jmlr.org/papers/v24/22-0266.html}
 }
