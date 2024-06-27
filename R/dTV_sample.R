@@ -41,11 +41,11 @@
 #' (the \code{base} format must match that of an output from [freqTab()] with the argument
 #' \code{complete=TRUE}); please check the [freqTab()] documentation and the *Details* section for
 #' further information).
-#' @param lenA An integer greater than 1 representing the size of the state space A, i.e.,
+#' @param lenA An integer greater than 1 representing the lengt of the state space A, i.e.,
 #'  \code{lenA <- length(A)}. If \code{A} is provided, there is no need to input \code{lenA}.
 #' @param A_pairs A matrix with all possible pairs of elements from \code{A}. If \code{A} is provided,
 #' there is no need to input \code{A_pairs}.
-#' @param x_S A vector of size \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
+#' @param x_S A vector of length \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
 #'  be set to \code{NULL}. \code{x_S} represents a sequence of symbols from \code{A} indexed by
 #'  \code{S}. This sequence remains constant across the conditional distributions to be compared,
 #'  representing the fixed configuration of the past.

@@ -10,22 +10,22 @@
 #' @param S A numeric vector of positive integers from which this function will select
 #' a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}. If \code{S}
 #' is not provided, by default \code{S=1:d}.
-#' @param minl A positive integer. \code{minl} represents the smallest size of any relevant lag
+#' @param minl A positive integer. \code{minl} represents the smallest length of any relevant lag
 #'  set this function might return. If \code{minl == maxl}, this function will return exactly
 #'  \code{minl} lags in its output, specifically the subset of \code{S} with \code{minl} elements
 #'  that has the smallest BIC. If \code{minl < maxl}, the function will consider subsets ranging
-#'  from size \code{minl} to size \code{maxl} when searching for the subset of \code{S} with
+#'  from length \code{minl} to length \code{maxl} when searching for the subset of \code{S} with
 #'  the smallest BIC.
 #' @param maxl A positive integer equal to or greater than \code{minl} but less than the number
 #'  of elements in \code{S} (\code{maxl = length(S)} is accepted but in this case the output will
-#'  always be \code{S}). \code{maxl} represents the largest size of any relevant lag set this
+#'  always be \code{S}). \code{maxl} represents the largest length of any relevant lag set this
 #'  function might return.
 #' @param xi The BIC penalization term constant. Defaulted to 1/2. A smaller \code{xi} `(near 0)`
 #' reduces the impact of overparameterization.
 #' @param A A vector with positive integers representing the state space. If not informed,
 #' this function will set \code{A=unique(X)}.
 #' @param byl Logical. If \code{TRUE}, the function will look for the set with smallest BIC by each
-#' size (from  \code{minl} to \code{maxl}), and return the set with smallest BIC for each size.
+#' length (from  \code{minl} to \code{maxl}), and return the set with smallest BIC for each length.
 #' If \code{minl==maxl} setting \code{byl=TRUE} or \code{FALSE} makes no difference, since the
 #' function will only calculate the BIC for sets with \code{maxl} elements in the relevant lag set.
 #' @param BICvalue Logical. If \code{TRUE}, the function will also return the calculated values of
@@ -36,7 +36,7 @@
 #'
 #' @details Note that the upper bound for the order of the chain (\code{d}) affects the estimation
 #' of the transition probabilities. If we run the function with a certain order parameter \code{d},
-#' only the sequences of size \code{d} that appeared in the sample will be counted. Therefore,
+#' only the sequences of length \code{d} that appeared in the sample will be counted. Therefore,
 #' all transition probabilities, and hence all BIC values, will be calculated with respect to
 #'that \code{d}. If we use another value for \code{d} to run the function, even if the output
 #' agrees with that of the previous run, its BIC value might change a little.
@@ -109,12 +109,12 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
 
 ## Calculating penalized loglikelihood
   if(maxl==minl){
-        nCombs <- choose(lenS,minl) #number of possible sets with size minl of elements of S
+        nCombs <- choose(lenS,minl) #number of possible sets with length minl of elements of S
         tryCombs <- matrix( c( rep(0,nCombs), rep(n_parameters(1:minl,A)*log(length(X))*xi,nCombs) ),
                             byrow = T,nrow = 2 )
         #since minl=maxl the number of parameters is the same, and the penalty is the same for any set
         aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
-        #aux is a vector with all possible sets of size minl with elements of S
+        #aux is a vector with all possible sets of length minl with elements of S
         for ( k in 1:nCombs ) {
           G <- as.numeric(unlist(strsplit(aux[k], ",")))
           b <- freqTab(S=G,j=NULL,A=A,countsTab=base,complete = FALSE)

@@ -31,13 +31,13 @@ checkMTD <- function(MTD){
   if( !is.numeric(MTD$p0) ||
       !is.vector(MTD$p0)  ||
       !all(MTD$p0>=0)      )stop("p0 must be a numeric nonnegative vector.")
-  if( !length(MTD$p0) %in% c(1,lenA) )stop("p0 must be either 0 or a vector of size ",lenA)
+  if( !length(MTD$p0) %in% c(1,lenA) )stop("p0 must be either 0 or a vector of length ",lenA)
   if( round(sum(MTD$p0),3)!=1 & sum(MTD$p0)!=0 )stop("Either each element in p0 is 0 or they must sum up to 1.")
   #parameter: lambdas
   if( !is.numeric(MTD$lambdas)     ||
       round(sum(MTD$lambdas),3)!=1 ||
       !all(MTD$lambdas>=0)         ||
-      length(MTD$lambdas)!=(lenL+1) )stop("lambdas must be a vector of size ",lenL+1, "(the same size of the vector of relevant lags Lambda + 1), with nonnegative numbers that must add up to 1. The first element of the lambdas vector is the weight for the independent distribution p0, if your MTD model doesn't have and independent distribution set lambdas[1]=0.")
+      length(MTD$lambdas)!=(lenL+1) )stop("lambdas must be a vector of length ",lenL+1, "(the same length of the vector of relevant lags Lambda + 1), with nonnegative numbers that must add up to 1. The first element of the lambdas vector is the weight for the independent distribution p0, if your MTD model doesn't have and independent distribution set lambdas[1]=0.")
   #parameter: pj
   if(!is.list(MTD$pj)                ||
      length(MTD$pj)!=lenL            ||

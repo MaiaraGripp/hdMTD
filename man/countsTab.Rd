@@ -19,7 +19,7 @@ A tibble with all sequences of length \code{d+1} that appeared in the sample and
 absolute frequency.
 }
 \description{
-Creates a tibble containing all size \code{d+1} sequences present in the
+Creates a tibble containing all length \code{d+1} sequences present in the
 sample along with their absolute frequencies.
 }
 \details{
@@ -28,9 +28,9 @@ each row, the first \code{d+1} columns will display a sequence
 (of \code{d+1} elements) that appeared in the sample. The last column,
 called \code{Nxa}, will contain the number of times each of these
 sequences appeared in the sample. The number of rows in the outputted
-tibble depends on \code{X}, since each row represents an unique size
+tibble depends on \code{X}, since each row represents an unique length
 \eqn{d+1} sequence that actually appeared in the chain. Let \eqn{|A|} be
-the number of elements in the state space, and \eqn{d+1} the size of the
+the number of elements in the state space, and \eqn{d+1} the length of the
 sequences, the number of rows varies between \eqn{1} and \eqn{|A|^{d+1}}.
 Note that the function won't accept \code{X} or \code{d} with
 \code{length(X)<=d+1}.

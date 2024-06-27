@@ -32,13 +32,13 @@ calculated through the \code{\link[=freqTab]{freqTab()}} function, \code{base} i
 \code{complete=TRUE}); please check the \code{\link[=freqTab]{freqTab()}} documentation and the \emph{Details} section for
 further information).}
 
-\item{lenA}{An integer greater than 1 representing the size of the state space A, i.e.,
+\item{lenA}{An integer greater than 1 representing the lengt of the state space A, i.e.,
 \code{lenA <- length(A)}. If \code{A} is provided, there is no need to input \code{lenA}.}
 
 \item{A_pairs}{A matrix with all possible pairs of elements from \code{A}. If \code{A} is provided,
 there is no need to input \code{A_pairs}.}
 
-\item{x_S}{A vector of size \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
+\item{x_S}{A vector of length \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
 be set to \code{NULL}. \code{x_S} represents a sequence of symbols from \code{A} indexed by
 \code{S}. This sequence remains constant across the conditional distributions to be compared,
 representing the fixed configuration of the past.}

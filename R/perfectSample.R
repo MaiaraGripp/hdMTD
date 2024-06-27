@@ -39,7 +39,7 @@ perfectSample.MTD <- function(MTD,N=NULL){
   a_k <- cumsum(MTD$lambdas)
   acum_p0 <- cumsum(MTD$p0)
   chain <- NULL
-  repeat{ # Runs the perfect sample algorithm until we obtain a sample that contains a size d sequence
+  repeat{ # Runs the perfect sample algorithm until we obtain a sample that contains a length d sequence
 # of observations with no gaps between them.
 
     chain <- c(NA,chain) # initiate first chain element as NA
@@ -73,7 +73,7 @@ perfectSample.MTD <- function(MTD,N=NULL){
         chain[Yt[i-1]] <- MTD$A[which(acum_p_KtRow>runif(1))[1]]
       }
     }
-    if( all( !is.na(chain[1:max(MTD$Lambda)]) ) ){ break } #stops when we get a whole sequence of size d without gaps
+    if( all( !is.na(chain[1:max(MTD$Lambda)]) ) ){ break } #stops when we get a whole sequence of length d without gaps
   }
   chain <- chain[1:max(MTD$Lambda)]
 

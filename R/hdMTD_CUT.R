@@ -97,7 +97,7 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
     Sminusj <- dec_S[ -which( dec_S == j ) ]
     Q <- matrix(0,ncol=nrowA_pairs,nrow = nrow_subx)
     R <- matrix(0,ncol = lenA, nrow = nrow_subx)
-    for (k in 1:nrow_subx) { #runs through all sequences x of size |S|-1 ( i.e. x_{S\j})
+    for (k in 1:nrow_subx) { #runs through all sequences x of (length(S)-1) ( i.e. x_{S\j})
       Q[k,] <- dTV_sample(S=Sminusj,j=j,lenA=lenA,base=b_Sja,A_pairs=A_pairs,x_S=subx[k,])
       R[k,] <- sx(S=Sminusj,freqTab=b_Sja,lenA=lenA,x_S=subx[k,],mu=mu,alpha=alpha,xi=xi)
       #see auxiliary function sx() below.

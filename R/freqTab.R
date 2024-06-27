@@ -68,7 +68,7 @@ freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
   if ( ( nrow(freqTab) < lenA^(lenSj+1) ) && complete ){
 ## However adding those sequences might create too big a dataframe, so it must test for that.
     Tablexa <- try(expand.grid(rep(list(A),lenSj+1))[,order((lenSj+1):1)],silent = TRUE)
-    if(class(Tablexa)=="try-error"){stop(paste0("The dataset with all sequences of size |S| is too large."))}
+    if(class(Tablexa)=="try-error"){stop(paste0("The dataset with all sequences of size length(S) is too large."))}
 
     list1 <- apply( freqTab[,1:(lenSj+1)],1,paste0,collapse="" )
     list2 <- apply( Tablexa, 1, paste0,collapse="" )

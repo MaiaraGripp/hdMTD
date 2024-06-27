@@ -74,7 +74,7 @@ MTDmodel <- function(Lambda,
   if(length(p0)!=0){ #p0!=NULL
     if( !is.numeric(p0) ||
         !all(p0>=0) ||
-        length(p0)!=lenA)stop("p0 must be 0 or a vector of size ",lenA, " consisting of nonnegative numbers.")
+        length(p0)!=lenA)stop("p0 must be 0 or a vector of length ",lenA, " consisting of nonnegative numbers.")
     if( round(sum(p0),3)!=1 & sum(p0)!=0 )stop("Either each element in p0 is 0 or they must sum up to 1.")
   }else{
     p0 <- stats::runif(lenA)
@@ -95,7 +95,7 @@ MTDmodel <- function(Lambda,
   if(length(lamj)!=0){
     if( !is.numeric(lamj) ||
         !lenL==length(lamj) ||
-        !all(lamj>0) ) stop(paste0("lamj must be a vector of size ",lenL, ", numeric and nonnegative."))
+        !all(lamj>0) ) stop(paste0("lamj must be a vector of length ",lenL, ", numeric and nonnegative."))
     if(length(lam0)==0){
       lambdas <- c(1-sum(lamj),lamj)
     }else{
@@ -147,17 +147,17 @@ MTDmodel <- function(Lambda,
 ## Calculating P
   #initiating
   subx <- try(expand.grid(rep(list(seq(1:lenA)),lenL)),silent = TRUE) #all possible sequences x_{Lambda}
-  if(class(subx)=="try-error"){stop(paste0("For lenL=",lenL," the dataset with all pasts sequences (x of size lenL) with elements of A is too large."))}
+  if(class(subx)=="try-error"){stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))}
   subx <- subx[,order(lenL:1)]
   P <- matrix(0,ncol = lenA,nrow = lenAL)
 
   if (lenL==1) {
-    for (i in 1:lenAL) { # runs in all pasts of sizeL with elements of A (the lines of P)
+    for (i in 1:lenAL) { # runs in all pasts of length(Lambda) with elements of A (the lines of P)
       P[i,] <- lambdas%*%rbind(p0,pj[[1]][i,])
     }
     rownames(P) <- A
   }else{
-    for (i in 1:lenAL) { # runs in all pasts of sizeL with elements of A (the lines of P)
+    for (i in 1:lenAL) { # runs in all pasts of length(Lambda)  with elements of A (the lines of P)
       aux <- matrix(0,ncol=lenA,nrow = lenL)
       for (j in 1:lenL) {
         aux[j,] <- pj[[j]][subx[i,(lenL+1-j)],] # the lines in aux are each from a different pj

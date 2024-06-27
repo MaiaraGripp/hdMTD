@@ -44,7 +44,7 @@ probs <- function(X,S,matrixform=FALSE,A=NULL,warning=FALSE){
   base <- freqTab(S=S,A=A,countsTab=base,complete=TRUE)
   probs <- cbind(apply(base[,1:lenS],1,paste0,collapse=""),base[,lenS+1])
   probs <- cbind(probs,base$qax_Sj)
-  names(probs) <- c(paste("past_{",paste0(-S,collapse = ","),"}"),"a_0","p(a|past)")
+  names(probs) <- c(paste("past_{",paste0(-S,collapse = ","),"}"),"a","p(a|past)")
 
   if(matrixform){
     Pest <- probs$`p(a|past)`

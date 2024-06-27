@@ -6,7 +6,7 @@
 #' and represents a set of relevant lags.
 #' @param freqTabSj A tibble with frequencies of sequences in a chain sample. Typically
 #' \code{freqTabSj} is an output from [freqTabSj()].
-#' @param x_S A vector of size \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
+#' @param x_S A vector of length \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
 #'  be set to \code{NULL}. \code{x_S} represents a sequence of symbols from \code{A} indexed by
 #'  \code{S}. This sequence remains constant across the stationary distributions to be calculated,
 #'  representing a fixed configuration of the past, while the observations in any other lag displayed
