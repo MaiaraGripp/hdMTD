@@ -108,6 +108,8 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
   if(!is.logical(byl)){stop("byl must me a logical argument")}
   if(!is.logical(BICvalue)){stop("BICvalue must me a logical argument")}
   if(!is.logical(warning)){stop("warning must me a logical argument")}
+  if(!is.logical(indep_part)){stop("indep_part must me a logical argument")}
+  if(!is.logical(single_matrix)){stop("single_matrix must me a logical argument")}
 
   A <- sort(A)
   lenS <- length(S)
