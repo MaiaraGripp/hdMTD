@@ -25,6 +25,7 @@
 #'
 #' @return An MTD model as an MTD object.
 #' @importFrom stats runif
+#' @importFrom methods is
 #' @export
 #'
 #' @examples
@@ -147,7 +148,7 @@ MTDmodel <- function(Lambda,
 ## Calculating P
   #initiating
   subx <- try(expand.grid(rep(list(seq(1:lenA)),lenL)),silent = TRUE) #all possible sequences x_{Lambda}
-  if(class(subx)=="try-error"){stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))}
+  if( is(subx,"try-error") ){stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))}
   subx <- subx[,order(lenL:1)]
   P <- matrix(0,ncol = lenA,nrow = lenAL)
 

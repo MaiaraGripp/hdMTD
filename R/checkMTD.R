@@ -9,12 +9,13 @@
 #'
 #' @param MTD An object of class MTD. Must be properly structured as such. See *Details* below for
 #' more information.
+#' @importFrom methods is
 #'
 checkMTD <- function(MTD){
 #checks for:
   #structure: list + MTD class
   if(!is.list(MTD)    ||
-     class(MTD)!="MTD" )stop("MTD must be an object of class MTD which is a list with especific parameters. The use of MTDmodel() function in order to create MTD is recommended.")
+     !is(MTD,"MTD") )stop("MTD must be an object of class MTD which is a list with especific parameters. The use of MTDmodel() function in order to create MTD is recommended.")
   #parameter: Lambda
   if( any(MTD$Lambda<=0)   ||
      !all(MTD$Lambda%%1==0)||

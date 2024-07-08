@@ -39,6 +39,7 @@
 #' Journal of Machine Learning Research 24(279), 1-54. [URL: http://jmlr.org/papers/v24/22-0266.html](http://jmlr.org/papers/v24/22-0266.html)
 #'
 #' @return Returns a vector with the estimated relevant lag set using FS algorithm.
+#' @importFrom methods is
 #' @export
 #' @examples
 #' X <- testChains[,1]
@@ -69,7 +70,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
   }
   #test if l is valid but creates too big a table
   xa=try(expand.grid(rep(list(A),l)),silent = TRUE)
-  if(class(xa)=="try-error"){stop(paste0("The dataset with all sequences of length l is too large. Please try a lower value for l."))}
+  if(is(xa,"try-error")){stop(paste0("The dataset with all sequences of length l is too large. Please try a lower value for l."))}
 
 
   A <- sort(A)
