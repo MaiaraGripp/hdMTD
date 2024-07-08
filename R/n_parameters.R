@@ -6,9 +6,11 @@
 #' The elements will be sorted from smallest to greatest. The smallest number represents the latest
 #'  (most recent) time in the past, and the greatest number represents the earliest time in the past.
 #' @param A A vector with positive integers representing the state space.
-#' @param single_matrix Logical. If \code{TRUE}, the model depends on any past in \code{Lambda}
-#'  through the same stochastic matrix.
-#' @param indep_part Logical. If \code{FALSE} there is no independent distribution.
+#' @param single_matrix Logical. If \code{TRUE}, the chain sample is thought to come from an MTD model
+#' where the stochastic matrices \eqn{p_j} are constant across all lags \eqn{j\in \Lambda}. So there
+#' are fewer parameters in the penalization term
+#' @param indep_part Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
+#' reduces the number of parameters in the penalization term.
 #'
 #' @return The number of parameters in an MTD model.
 n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE){

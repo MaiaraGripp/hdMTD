@@ -13,10 +13,12 @@ The elements will be sorted from smallest to greatest. The smallest number repre
 
 \item{A}{A vector with positive integers representing the state space.}
 
-\item{single_matrix}{Logical. If \code{TRUE}, the model depends on any past in \code{Lambda}
-through the same stochastic matrix.}
+\item{single_matrix}{Logical. If \code{TRUE}, the chain sample is thought to come from an MTD model
+where the stochastic matrices \eqn{p_j} are constant across all lags \eqn{j\in \Lambda}. So there
+are fewer parameters in the penalization term}
 
-\item{indep_part}{Logical. If \code{FALSE} there is no independent distribution.}
+\item{indep_part}{Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
+reduces the number of parameters in the penalization term.}
 }
 \value{
 The number of parameters in an MTD model.

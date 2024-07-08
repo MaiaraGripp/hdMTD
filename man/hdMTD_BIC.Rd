@@ -14,6 +14,8 @@ hdMTD_BIC(
   A = NULL,
   byl = FALSE,
   BICvalue = FALSE,
+  single_matrix = FALSE,
+  indep_part = TRUE,
   warning = FALSE,
   ...
 )
@@ -52,6 +54,14 @@ function will only calculate the BIC for sets with \code{maxl} elements in the r
 
 \item{BICvalue}{Logical. If \code{TRUE}, the function will also return the calculated values of
 the BIC for the estimated relevant lag sets.}
+
+\item{single_matrix}{Logical. If \code{TRUE}, the chain sample is thought to come from an MTD model
+where the stochastic matrices \eqn{p_j} are constant across all lags \eqn{j\in \Lambda}. In practice,
+this means the user believes the stochastic matrices for every lag in \code{S} are the same, which reduces
+the number of parameters in the penalization term.}
+
+\item{indep_part}{Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
+reduces the number of parameters in the penalization term.}
 
 \item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.}
 

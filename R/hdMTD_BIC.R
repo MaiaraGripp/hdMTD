@@ -30,6 +30,12 @@
 #' function will only calculate the BIC for sets with \code{maxl} elements in the relevant lag set.
 #' @param BICvalue Logical. If \code{TRUE}, the function will also return the calculated values of
 #'  the BIC for the estimated relevant lag sets.
+#' @param single_matrix Logical. If \code{TRUE}, the chain sample is thought to come from an MTD model
+#' where the stochastic matrices \eqn{p_j} are constant across all lags \eqn{j\in \Lambda}. In practice,
+#' this means the user believes the stochastic matrices for every lag in \code{S} are the same, which reduces
+#' the number of parameters in the penalization term.
+#' @param indep_part Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
+#' reduces the number of parameters in the penalization term.
 #' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.
 #' @param ... Other parameters. This is used to accommodate any additional argument passed
 #' to [hdMTD_BIC()] through the [hdMTD()] function.
@@ -56,7 +62,8 @@
 #'hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
 #'
 hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
-                          xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,warning=FALSE,...){
+                      xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,
+                      single_matrix=FALSE,indep_part=TRUE,warning=FALSE,...){
   #Checking inputs
   X <- checkSample(X)
   if(length(A)==0){
@@ -110,9 +117,12 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
 ## Calculating penalized loglikelihood
   if(maxl==minl){
         nCombs <- choose(lenS,minl) #number of possible sets with length minl of elements of S
-        tryCombs <- matrix( c( rep(0,nCombs), rep(n_parameters(1:minl,A)*log(length(X))*xi,nCombs) ),
-                            byrow = T,nrow = 2 )
-        #since minl=maxl the number of parameters is the same, and the penalty is the same for any set
+        tryCombs <- matrix( c(rep(0,nCombs),
+                              rep(n_parameters(Lambda=1:minl,
+                                               A=A,
+                                               single_matrix=single_matrix,
+                                               indep_part=indep_part)*log(length(X))*xi,nCombs)
+                             ),byrow = T,nrow = 2 )
         aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
         #aux is a vector with all possible sets of length minl with elements of S
         for ( k in 1:nCombs ) {
@@ -135,7 +145,12 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
         for (i in minl:maxl) {
           nCombs <- choose(lenS,i)
           tryCombs[[cont]] <- matrix( rep(0,2*nCombs) ,byrow = T,nrow = 2 )
-          tryCombs[[cont]][2,] <- n_parameters(Lambda=(1:i),A)*log(length(X))*xi
+          tryCombs[[cont]][2,] <- n_parameters(Lambda=(1:i),
+                                               A=A,
+                                               single_matrix = single_matrix,
+                                               indep_part = indep_part)*log(length(X))*xi
+        # n_parameters(Lambda=(1:i),...)=n_parameters(Lambda=Z,...)
+        # where Z is any other size i subset of lags of (1:d).
           aux <- apply(t(combn(S,i)), 1, paste0,collapse=",")
           for ( k in 1:nCombs) {
             G <- as.numeric(unlist(strsplit(aux[k], ",")))
@@ -148,7 +163,7 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
         }
           if(maxl-minl==1){ #this solves a problem that may occur if all vectors in
             #tryCombs list have the same length. If that is the case, the function sapply
-            #will format pML differently and remove the colnames, which we cant have...
+            #will format pML differently and remove the colnames, which we can't have...
             if( ncol(tryCombs[[1]])==ncol(tryCombs[[2]]) ){
              tryCombs[[2]] <- cbind(tryCombs[[2]],tryCombs[[2]][,1])
              colnames(tryCombs[[2]])[ncol(tryCombs[[2]])] <- colnames(tryCombs[[2]])[1]
