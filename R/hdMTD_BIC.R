@@ -116,7 +116,7 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
   S <- sort(S)
   base <- countsTab(X,d)
 
-## Calculating penalized loglikelihood
+## Calculating penalized log-likelihood
   if(maxl==minl){
         nCombs <- choose(lenS,minl) #number of possible sets with length minl of elements of S
         tryCombs <- matrix( c(rep(0,nCombs),
