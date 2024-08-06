@@ -90,6 +90,7 @@ dTV_sample <- function(S,j,A=NULL,base,lenA=NULL,A_pairs=NULL,x_S){
     lenA <- length(A)
     A_pairs <- t(utils::combn(A,2))
     }
+  S <- sort(S,decreasing = TRUE)
   lenS <- length(S)
   if(lenS==0){x_S <- NULL}else{
     if(length(x_S)!=lenS || !all(x_S %in% A_pairs)){stop("The number of elements in x_S vector must match the number of elements in S, and x_S must be a sequence with elements of A.")}
