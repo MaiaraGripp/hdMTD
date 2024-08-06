@@ -60,7 +60,7 @@
 #'  of elements in \code{A}.Therefore, the vector contains as many entries as there are
 #'  distinct pairs with elements of \code{A}.
 #'
-#' @importFrom dplyr %>%
+#' @import dplyr
 #' @export
 #' @examples
 #' #creating base argument through freqTab function.
@@ -99,9 +99,10 @@ dTV_sample <- function(S,j,A=NULL,base,lenA=NULL,A_pairs=NULL,x_S){
   nrowA_pairs <- nrow(A_pairs)
   if ( is.numeric(S) ) {
       filtr_S <- paste0("x",S)
-      B <- base
-      B$test <- apply(B %>% dplyr::select_at(filtr_S),1,is_xS,x_S)
-      C <- dplyr::filter(B,test==TRUE)
+      C <- base %>%
+        mutate(test = apply(select(., all_of(filtr_S)), 1, is_xS, y = x_S)) %>%
+        filter(test == TRUE) %>%
+        select(-test)
     }else{
       C <- base
     }

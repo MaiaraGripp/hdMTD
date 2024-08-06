@@ -125,10 +125,11 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
   # sx(): Returns a threshold with respect to some sequence x_S
 sx <- function(S,freqTab,lenA,x_S,mu,alpha,xi){
   filtr_S <- paste0("x",S)
-  B <- freqTab
-  B$test <- apply(B %>%
-                    dplyr::select_at(filtr_S),1,is_xS,x_S)
-  C <- dplyr::filter(B,test==TRUE)
+  C <- freqTab %>%
+    mutate(test = apply(select(., all_of(filtr_S)), 1, is_xS, y = x_S)) %>%
+    filter(test == TRUE) %>%
+    select(-test)
+
   Nx <- C$Nx_Sj[seq(1,nrow(C),by=lenA)]
   result <- numeric(lenA)
   for (k in 1:lenA) {
