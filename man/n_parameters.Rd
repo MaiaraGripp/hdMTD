@@ -4,7 +4,13 @@
 \alias{n_parameters}
 \title{Number of Parameters in an MTD Model}
 \usage{
-n_parameters(Lambda, A, single_matrix = FALSE, indep_part = TRUE)
+n_parameters(
+  Lambda,
+  A,
+  single_matrix = FALSE,
+  indep_part = TRUE,
+  zeta = length(Lambda)
+)
 }
 \arguments{
 \item{Lambda}{A numeric vector of positive integers representing the relevant lag set.
@@ -19,6 +25,12 @@ are fewer parameters in the penalization term}
 
 \item{indep_part}{Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
 reduces the number of parameters in the penalization term.}
+
+\item{zeta}{A positive integer representing the number of distinct matrices \eqn{p_j}
+in the MTD. By default, it is set to \code{length(Lambda)}, which is the maximum
+allowable value and indicates that each matrix \eqn{p_j}, \eqn{j \in \Lambda},
+is distinct. If \code{zeta=1}, all matrices \eqn{p_j} are identical; if
+\code{zeta=2}, there are two types of matrices \eqn{p_j}, and so on.}
 }
 \value{
 The number of parameters in an MTD model.

@@ -151,8 +151,7 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
                                                A=A,
                                                single_matrix = single_matrix,
                                                indep_part = indep_part)*log(length(X))*xi
-        # n_parameters(Lambda=(1:i),...)=n_parameters(Lambda=Z,...)
-        # where Z is any other size i subset of lags of (1:d).
+
           aux <- apply(t(combn(S,i)), 1, paste0,collapse=",")
           for ( k in 1:nCombs) {
             G <- as.numeric(unlist(strsplit(aux[k], ",")))
