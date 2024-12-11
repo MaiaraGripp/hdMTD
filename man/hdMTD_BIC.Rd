@@ -9,7 +9,7 @@ hdMTD_BIC(
   d,
   S = 1:d,
   minl = 1,
-  maxl = max(S),
+  maxl = length(S),
   xi = 1/2,
   A = NULL,
   byl = FALSE,

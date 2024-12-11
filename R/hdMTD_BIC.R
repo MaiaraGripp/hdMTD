@@ -61,7 +61,7 @@
 #'hdMTD_BIC (X,d=6,minl=1,maxl=1)
 #'hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
 #'
-hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=max(S),
+hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=length(S),
                       xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,
                       single_matrix=FALSE,indep_part=TRUE,warning=FALSE,...){
   #Checking inputs
