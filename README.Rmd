@@ -1,0 +1,77 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+```
+
+# hdMTD
+
+## Overview
+
+hdMTD is a package designed for conducting inference in Mixture Transition Distribution (MTD) models, which can represent higher-order Markov models as a convex mixture of single-step Markov chains. The algorithms employed here are primarily built upon the work of [Ost and Takahashi (2023)](https://arxiv.org/abs/2202.08007) in their paper titled "Sparse Markov Models for High-Dimensional Inference."
+
+## Installation
+
+```{r, eval = FALSE}
+remotes::install_github("MaiaraGripp/hdMTD")
+```
+
+## Usage
+
+Given a sample from an MTD chain, the hdMTD() function estimates the relevant lag set $\Lambda$ using a specified method and a suitable set of parameters. The available methods include the *FSC* algorithm developed by [Ost and Takahashi (2023)](https://arxiv.org/abs/2202.08007), FSC's first step, referred to as *FS* method, its second step, referred to as *CUT* method, and a Bayesian Information Criterion (*BIC*) method.
+Furthermore, the package can perform the following tasks:
+
+* Create an object of class MTD with all the parameters necessary to define a proper MTD model using the `MTDmodel()` function. Such objects can be used to sample an MTD Markov Chain from its invariant distribution with the `perfectSample()` function.
+* Calculate the oscillations of an MTD object or estimate them from a chain sample using the `oscillations()` function.
+* Compute the Maximum Likelihood Estimates (MLE) of the transition probabilities for a chain sample given a relevant lag set with the `probs()` function.
+* Determine the absolute frequency of each sequence of size $d$ that appears in a sample using the `countsTab()` function.
+* Group such frequencies to consider only sequences time-indexed by a subset of ${-1, \dots, -d}$ with the `freqTabSj()` function.
+* Lastly, `MTDest()` function uses a Expectation Maximization (EM) algorithm based on [Lèbre and Bourguinon (2008)](https://doi.org/10.1080/00949650701266666), to estimate the parameter set of an MTD model given a sample and a set of initial parameters.
+
+```{r example}
+
+library(hdMTD)
+
+set.seed(1234)
+Lambda <- c(1,10) #relevant lag set
+A <- c(0,1) #state space
+MTD <- MTDmodel(Lambda = Lambda,A=A);MTD # MTD object
+
+oscillation(MTD)
+
+X <- perfectSample(MTD=MTD,N=1000);X[1:10] # MTD chain sampled from invariant dist.
+
+S1 <- hdMTD(X=X,d=15,method = "FS",l=3);S1 # estimate a relevant lag set of size 3 with the "Foward Stepwise" method.
+S2 <- hdMTD(X,d=max(S1),method = "BIC",S=S1, minl=1, maxl=3, xi=0.3);S2# estimate a relevant lag set with the "BIC" method.
+
+probs(X,S=S2) #estimates the MLE transition probabilities given S2.
+```
+
+## Data sets
+
+This package includes two real-data sets that where acquired externaly. The raindata set was acquired at [Kaggle](https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package) but it's original source is Data source:[Australian Bureau of Meteorology] (http://www.bom.gov.au/climate/dwo/) and (http://www.bom.gov.au/climate/data). Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
+
+## References
+
+If you use our package in your work, please cite the following article:
+
+
+Function MTDest was based on the ideas of the following article:
+
+Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation in the Mixture Transition Distribution model. Journal of Statistical Computation and Simulation. 78. [Link to Article](https://doi.org/10.1080/00949650701266666)
+
+
+
+
+
+
+
+
