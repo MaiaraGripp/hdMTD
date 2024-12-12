@@ -58,7 +58,7 @@ S3 <- hdMTD(X,d=12,method = "BIC", minl=1, maxl=3, byl=TRUE, BICvalue=TRUE);S3
 
 S4 <- hdMTD(X,d=20,method = "CUT",S=S1);S4# estimate a relevant lag set with the "CUT" method using FS output.
 
-probs(X,S=S4) #estimates the MLE transition probabilities given S2.
+p <- probs(X,S=S4, matrixform = TRUE);p #estimates the MLE transition probabilities given the CUT output.
 
 init <- list(
   'lambdas'= c(0.05,0.3,0.3,0.35),
@@ -74,7 +74,6 @@ init <- list(
 )
 
 MTDest(X,S=c(1,5,10),init=init, iter = TRUE)
-MTDest(X,S=c(1,5,10),M=NULL,nIter=15,init=init, oscillations = TRUE)
 ## Estimating P (transition probabilities)
 estParam <- MTDest(X,S=c(1,15,30),init=init)
 estMTD <- MTDmodel(Lambda,A,lam0=estParam$lambdas[1],
