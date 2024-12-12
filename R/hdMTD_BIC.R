@@ -36,6 +36,13 @@
 #' the number of parameters in the penalization term.
 #' @param indep_part Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
 #' reduces the number of parameters in the penalization term.
+#' @param zeta A positive integer representing the number of distinct matrices \eqn{p_j}
+#' in the MTD. By default, it is equal to \code{maxl}, which is the maximum
+#' allowable value and indicates that all matrices \eqn{p_j} are distinct. If
+#' \code{zeta=1}, all matrices \eqn{p_j} are identical; if \code{zeta=2}
+#' there exists two groups of distinct matrices and so on. When \code{minl<maxl},
+#' for each \eqn{minl\leq l\leq maxl}, \code{zeta=min(zeta,l)}. If \code{single_matrix=TRUE}
+#' then \code{zeta} is set to 1.
 #' @param warning Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.
 #' @param ... Other parameters. This is used to accommodate any additional argument passed
 #' to [hdMTD_BIC()] through the [hdMTD()] function.
@@ -63,7 +70,8 @@
 #'
 hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=length(S),
                       xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,
-                      single_matrix=FALSE,indep_part=TRUE,warning=FALSE,...){
+                      single_matrix=FALSE,indep_part=TRUE,
+                      zeta=maxl,warning=FALSE,...){
   #Checking inputs
   X <- checkSample(X)
   if(length(A)==0){
@@ -110,7 +118,16 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=length(S),
   if(!is.logical(warning)){stop("warning must me a logical argument")}
   if(!is.logical(indep_part)){stop("indep_part must me a logical argument")}
   if(!is.logical(single_matrix)){stop("single_matrix must me a logical argument")}
-
+  if(single_matrix==FALSE){
+    if ( is.na(zeta) ||
+         !is.numeric(zeta) ||
+         zeta%%1 != 0 ||
+         zeta>maxl ||
+         zeta<1 ) {
+      stop("The zeta value is not valid. zeta should be a positive integer
+           representing the number of distinct matrices pj in the MTD.")
+    }
+  }
   A <- sort(A)
   lenS <- length(S)
   S <- sort(S)
@@ -123,7 +140,8 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=length(S),
                               rep(n_parameters(Lambda=1:minl,
                                                A=A,
                                                single_matrix=single_matrix,
-                                               indep_part=indep_part)*log(length(X))*xi,nCombs)
+                                               indep_part=indep_part,
+                                               zeta=zeta)*log(length(X))*xi,nCombs)
                              ),byrow = T,nrow = 2 )
         aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
         #aux is a vector with all possible sets of length minl with elements of S
@@ -150,7 +168,8 @@ hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=length(S),
           tryCombs[[cont]][2,] <- n_parameters(Lambda=(1:i),
                                                A=A,
                                                single_matrix = single_matrix,
-                                               indep_part = indep_part)*log(length(X))*xi
+                                               indep_part = indep_part,
+                                               zeta=min(zeta,i))*log(length(X))*xi
 
           aux <- apply(t(combn(S,i)), 1, paste0,collapse=",")
           for ( k in 1:nCombs) {

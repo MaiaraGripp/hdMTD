@@ -16,6 +16,7 @@ hdMTD_BIC(
   BICvalue = FALSE,
   single_matrix = FALSE,
   indep_part = TRUE,
+  zeta = maxl,
   warning = FALSE,
   ...
 )
@@ -62,6 +63,14 @@ the number of parameters in the penalization term.}
 
 \item{indep_part}{Logical. If \code{FALSE} there is no independent distribution and \eqn{\lambda_0=0} which
 reduces the number of parameters in the penalization term.}
+
+\item{zeta}{A positive integer representing the number of distinct matrices \eqn{p_j}
+in the MTD. By default, it is equal to \code{maxl}, which is the maximum
+allowable value and indicates that all matrices \eqn{p_j} are distinct. If
+\code{zeta=1}, all matrices \eqn{p_j} are identical; if \code{zeta=2}
+there exists two groups of distinct matrices and so on. When \code{minl<maxl},
+for each \eqn{minl\leq l\leq maxl}, \code{zeta=min(zeta,l)}. If \code{single_matrix=TRUE}
+then \code{zeta} is set to 1.}
 
 \item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.}
 
