@@ -7,15 +7,18 @@
 checkMTD(MTD)
 }
 \arguments{
-\item{MTD}{An object of class MTD. Must be properly structured as such. See \emph{Details} below for
-more information.}
+\item{MTD}{An object of class MTD.}
 }
 \description{
-Verifies if an object of class MTD is correctly structured, containing all the necessary
-parameters, and if these parameters satisfy their respective constraints.
+Verifies if an object of class MTD is correctly structured, containing all
+the necessary parameters, and if these parameters satisfy their respective
+constraints.
 }
 \details{
-A properly defined class MTD object can be created through the \code{\link[=MTDmodel]{MTDmodel()}}.
-To verify the correct structure and instances of a class MTD object, please check \code{\link[=MTDmodel]{MTDmodel()}}
-documentation.
+This package includes a function called \code{\link[=MTDmodel]{MTDmodel()}}, which outputs
+a properly structured MTD object that does not require additional checks.
+However, since the user can create the MTD object manually, this \code{\link[=checkMTD]{checkMTD()}}
+is used within the functions that use MTD objects as inputs to prevent errors.
+The correct structure and instances of a class MTD object are detailed in the
+\code{\link[=MTDmodel]{MTDmodel()}} function documentation.
 }
