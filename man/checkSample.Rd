@@ -7,12 +7,12 @@
 checkSample(X)
 }
 \arguments{
-\item{X}{A vector or a single-column data frame with a sample of an MTD chain.}
+\item{X}{A numeric vector, a single-column data frame, a list, or a matrix
+with a single row or a single column.}
 }
 \value{
 Returns the sample as a vector or identifies any possible sample problems.
 }
 \description{
-Checks if a sample is a suitable argument for some functions within
-the package.
+Checks if a sample is a suitable argument for some functions within the package.
 }

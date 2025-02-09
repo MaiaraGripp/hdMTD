@@ -34,8 +34,9 @@
 #' countsTab(testChains[,1],2)
 #'
 countsTab <-function(X,d){
-  ## Checks parameters
+
   X <- unlist(X)
+  # Checks if the sample is suitable.
   X <- checkSample(X)
   if(!is.numeric(d) || d%%1!=0 || d<=0 )stop("d must be a positive integer number")
   if (length(X)<=d+1) { stop("The sample size must be greater than d+1.") }
