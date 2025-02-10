@@ -2,43 +2,40 @@
 % Please edit documentation in R/countsTab.R
 \name{countsTab}
 \alias{countsTab}
-\title{A tibble with sample sequences counts}
+\title{Counts sequences of length d+1 in a sample}
 \usage{
 countsTab(X, d)
 }
 \arguments{
-\item{X}{A vector or single-column data frame with a sample from a chain.
-The first element must be the most recent.}
+\item{X}{A numeric vector, a single-column data frame, or a list with a
+sample from a Markov chain. The first element must be the most recent observation.}
 
-\item{d}{Numeric, must be a positive integer. Specifies the number of
-elements in the sequences, which is \code{d+1}. Here, \code{d} is often taken as the
-chain order or serves as an upper limit for it.}
+\item{d}{A positive integer specifying the number of elements in each sequence,
+which will be \code{d+1}. Typically, \code{d} represents the chain order or
+serves as an upper limit for it.}
 }
 \value{
-A tibble with all sequences of length \code{d+1} that appeared in the sample and its
-absolute frequency.
+A tibble with all observed sequences of length \code{d+1} and their
+absolute frequencies.
 }
 \description{
-Creates a tibble containing all length \code{d+1} sequences present in the
-sample along with their absolute frequencies.
+Creates a tibble containing all unique sequences of length \code{d+1} found in
+the sample, along with their absolute frequencies.
 }
 \details{
-The function will generate a tibble with \code{d+2} columns. For
-each row, the first \code{d+1} columns will display a sequence
-(of \code{d+1} elements) that appeared in the sample. The last column,
-called \code{Nxa}, will contain the number of times each of these
-sequences appeared in the sample. The number of rows in the outputted
-tibble depends on \code{X}, since each row represents an unique length
-\code{d+1} sequence that actually appeared in the chain. Let \eqn{|A|} be
-the number of elements in the state space, and \eqn{d+1} the length of the
-sequences, the number of rows varies between \eqn{1} and \eqn{|A|^{d+1}}.
-Note that the function won't accept \code{X} or \code{d} with
-\code{length(X)<=d+1}.
+The function generates a tibble with \code{d+2} columns. In the first
+\code{d+1} columns, each row displays a unique sequence of size \code{d+1}
+observed in the sample. The last column, called \code{Nxa}, contains the
+number of times each of these sequences appeared in the sample.
+
+The number of rows in the output varies between \eqn{1} and \eqn{|A|^{d+1}},
+where \eqn{|A|} is the number of unique states in \code{X}, since it depends
+on the number of unique sequences that appear in the sample.
 }
 \examples{
 countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
 
-#Using test data.
-countsTab(testChains[,1],2)
+# Using test data.
+countsTab(testChains[, 1],2)
 
 }
