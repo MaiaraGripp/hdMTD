@@ -1,0 +1,115 @@
+# validation.R - Input validation functions for the package
+#
+# This file contains helper functions for validating inputs in various functions
+# within the package. These functions are not exported and are used internally
+# to ensure that user inputs are correctly formatted and consistent.
+
+
+
+#########################################################################
+
+checkMTD <- function(MTD){
+  # Verifies if an object of class MTD is correctly structured, containing
+  # all the necessary parameters, and if these parameters satisfy their
+  # respective constraints. Verifies if the object is a list with class MTD.
+  if (!is.list(MTD))
+    stop("MTD must be a list. Try using MTDmodel() to create an MTD.")
+  if (!is(MTD, "MTD"))
+    stop("MTD must be an object of class MTD. Try using MTDmodel() to create an MTD.")
+
+  # Checks if Lambda is a numeric vector of positive integers in ascending order
+  if (any(MTD$Lambda <= 0) || !all(MTD$Lambda%%1 == 0) || !is.vector(MTD$Lambda))
+    stop("Lambda must be a numeric vector of positive integers. Try using MTDmodel() to create an MTD.")
+  if (any(sort(MTD$Lambda) != MTD$Lambda))
+    stop("Lambda must be sorted in ascending order. Try using MTDmodel() to create an MTD.")
+
+  lenL <- length(MTD$Lambda)
+
+  # Checks if A is a numeric vector of integers (length ≥ 2), sorted in
+  # ascending order
+  if (length(MTD$A) <= 1 || !is.vector(MTD$A) || any(MTD$A%%1 != 0))
+    stop("State space A must be a numeric vector containing at least two integers.
+Try using MTDmodel() to create an MTD.")
+  if (any(sort(MTD$A) != MTD$A))
+    stop("State space A must be sorted in ascending order. Try using MTDmodel() to create an MTD.")
+
+  lenA <- length(MTD$A)
+
+  # Checks if p0 is a numeric nonnegative vector of length 1 or length(A),
+  # summing to 1
+  if (!is.numeric(MTD$p0) || !is.vector(MTD$p0) || !all(MTD$p0 >= 0))
+    stop("p0 must be a nonnegative numeric vector. Try using MTDmodel() to create an MTD.")
+  if (!length(MTD$p0) %in% c(1, lenA))
+    stop(paste0("p0 must be either a scalar 0 or a numeric vector of length ",
+        lenA, ". Try using MTDmodel() to create an MTD."))
+  if (round(sum(MTD$p0), 3) != 1 & sum(MTD$p0) != 0)
+    stop("The elements in p0 must either sum to 1 or all be 0. Try using MTDmodel() to create an MTD.")
+
+  # Checks if lambdas is a numeric nonnegative vector of length
+  # (length(Lambda) + 1) that sums to 1
+  if (!is.numeric(MTD$lambdas) || round(sum(MTD$lambdas), 3) != 1 ||
+      !all(MTD$lambdas >= 0) || length(MTD$lambdas) != (lenL + 1))
+    stop(paste0("lambdas must be a vector of length ", lenL + 1, " (the number of
+  relevant lags in Lambda plus 1), consisting of nonnegative numbers that sum to 1.
+  The first element of the lambdas vector is the weight for the independent
+  distribution p0, if your MTD model does not include an independent distribution,
+  set lambdas[1] to 0. Try using MTDmodel() to create an MTD."
+    ))
+
+  # Checks if pj is a list with length(Lambda) elements, each containing a
+  # stochastic matrix of size length(A) x length(A)
+  if(!is.list(MTD$pj) || length(MTD$pj) != lenL ||
+     !all(sapply(MTD$pj, is.matrix)) || !all(sapply(MTD$pj,dim) == c(lenA,lenA)))
+    stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
+         "x",lenA,". Try using MTDmodel() to create an MTD."))
+  aux <- do.call(rbind, MTD$pj)
+  if(!is.numeric(aux) || !all(round(apply(aux, 1, sum),3) == 1) || !all(aux>=0))
+    stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
+    "x",lenA,". In other words, each matrix row must sum up to 1. Try using MTDmodel() to create an MTD."))
+}
+# Note: This package includes a function called MTDmodel(), which outputs
+# a properly structured MTD object that does not require additional checks.
+# However, since the user can create the MTD object manually, this checkMTD()
+# is used within the functions that use MTD objects as inputs to prevent errors.
+
+
+
+
+#########################################################################
+
+check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
+  # Validates the inputs in freqTab function.
+
+  if(!is.data.frame(countsTab))
+    stop("countsTab must be a tibble or a dataframe. Try using countsTab() function.")
+
+  if(!is.null(S) && length(S) > 0) {
+    if(!is.vector(S) || any(S %% 1 != 0) || any(S < 1))
+      stop("S must be a vector of positive integers or NULL.")
+  }
+
+  if(!is.null(j) && length(j) > 0) {
+    if(length(j) != 1 || j %% 1 != 0 || j %in% S)
+      stop("j must be a single integer not present in S.")
+  }
+
+  Sj <- c(S, j)
+  if(length(Sj) == 0)
+    stop("The set {S}U{j} can't be NULL.")
+
+  d <- ncol(countsTab) - 2
+  if(max(Sj) > d)
+    stop("The set {S}U{j} cannot have an element greater than d.")
+
+  if(!is.logical(complete))
+    stop("Complete must be a logical argument.")
+
+  if(!all(unique(unlist(countsTab[, -(d+2)])) %in% A))
+    stop("A must contain all elements that appear in the countsTab sequences.")
+
+  if(length(A) <= 1 || any(A %% 1 != 0))
+    stop("State space A must be a numeric vector with at least two integers.")
+
+}
+
+#########################################################################
