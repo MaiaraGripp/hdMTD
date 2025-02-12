@@ -4,7 +4,8 @@
 # within the package. These functions are not exported and are used internally
 # to ensure that user inputs are correctly formatted and consistent.
 
-
+# 1 - checkMTD()
+# 2 - check_freqTab_inputs()
 
 #########################################################################
 

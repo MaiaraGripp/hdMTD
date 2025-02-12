@@ -53,7 +53,12 @@ oscillation.MTD <- function(x,...){
   checkMTD(x)
   lenA <- length(x$A) #number of rows/cols in each p_j
   rows <- t(utils::combn(lenA,2))
-  y <- x$lambdas[-1]*sapply(x$pj,dTV_pj,rows)
+
+  dTV_pj <- function(pj, rows) {
+    apply(rows, 1, function(r) sum(abs( pj[r[1], ] - pj[r[2], ] )) / 2) |> max()
+  }
+
+  y <- x$lambdas[-1] * sapply(x$pj, dTV_pj, rows)
   names(y) <- paste0("-",x$Lambda)
   y
 }
