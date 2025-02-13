@@ -1,4 +1,4 @@
-test_that("freqTabSj works correctly", {
+test_that("groupTab works correctly", {
   # Create sample data for testing
   Lambda <- c(1,3,5)
   S <- c(1, 5)
@@ -11,7 +11,7 @@ test_that("freqTabSj works correctly", {
   fTab <- freqTab(S,j,A,cTab)
 
   # Test for a valid input
-  result <- freqTabSj(S, j, fTab, lenX=length(X), d)
+  result <- groupTab(S, j, fTab, lenX=length(X), d)
 
   # Check the result
   expect_equal(class(result)[1], "tbl_df")

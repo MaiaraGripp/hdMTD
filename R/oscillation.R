@@ -49,16 +49,19 @@ oscillation <- function(x,...){ UseMethod("oscillation") }
 
 #' @export
 oscillation.MTD <- function(x,...){
-## check Inputs
+  # check Input
   checkMTD(x)
-  lenA <- length(x$A) #number of rows/cols in each p_j
-  rows <- t(utils::combn(lenA,2))
+  lenA <- length(x$A) # number of rows in each pj matrix
+  rows <- t(utils::combn(lenA,2)) # all possible pairs of (different) pj rows
 
   dTV_pj <- function(pj, rows) {
+    # In a matrix pj, each row is a distribution. dTV_pj calculates the total
+    # variation distance between each pair of distributions and returns their maximum.
     apply(rows, 1, function(r) sum(abs( pj[r[1], ] - pj[r[2], ] )) / 2) |> max()
   }
 
-  y <- x$lambdas[-1] * sapply(x$pj, dTV_pj, rows)
+  # For each j in Lambda, oscillation_j = \lambda_j * dTV_pj
+  y <- x$lambdas[-1] * sapply(x$pj, dTV_pj, rows) # oscillations for each j
   names(y) <- paste0("-",x$Lambda)
   y
 }
@@ -103,7 +106,7 @@ oscillation.default <- function(x,...){
     }
     b_Sja <- freqTab(S=Z,j=j,A=A,countsTab=base)
     if(lenS>1){
-      b_S <- freqTabSj(S=Z,j=NULL,b_Sja,lenX=lenX,d=S[1])
+      b_S <- groupTab(S=Z,j=NULL,b_Sja,lenX=lenX,d=S[1])
       PositiveNx_S <- which(b_S$Nx_Sj>0) #position in b_S of the x_Z that appear in sample
       subx <- b_S[PositiveNx_S,-lenS] # list of all x_Z
     }else{

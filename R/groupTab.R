@@ -17,14 +17,14 @@
 #'  and the maximum likelihood estimator (MLE) of the transition probabilities.
 #' @importFrom dplyr %>%
 #'
-freqTabSj <- function(S,j,freqTab,lenX,d){
+groupTab <- function(S,j,freqTab,lenX,d){
   Sj <- sort(c(S,j),decreasing = TRUE)
   if ( is.numeric(Sj) ) {
-    freqTabSj <- freqTab %>%
+    groupTab <- freqTab %>%
                   dplyr::group_by_at(paste0("x",Sj)) %>%
                   dplyr::summarise(Nx_Sj=sum(Nxa_Sj), .groups="drop")
-    freqTabSj
+    return(groupTab)
   }else{
-    matrix(c(0,lenX-d),ncol=2)
+    return(matrix(c(0,lenX-d),ncol=2))
   }
 }

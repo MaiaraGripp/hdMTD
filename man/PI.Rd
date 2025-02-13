@@ -4,20 +4,20 @@
 \alias{PI}
 \title{Estimated stationary distribution.}
 \usage{
-PI(S, freqTabSj, x_S, lenX, d)
+PI(S, groupTab, x_S, lenX, d)
 }
 \arguments{
 \item{S}{A numeric vector of positive integers. Typically, \code{S} is a subset of \code{1:d},
 and represents a set of relevant lags.}
 
-\item{freqTabSj}{A tibble with frequencies of sequences in a chain sample. Typically
-\code{freqTabSj} is an output from \code{\link[=freqTabSj]{freqTabSj()}}.}
+\item{groupTab}{A tibble with frequencies of sequences in a chain sample. Typically
+\code{groupTab} is an output from \code{\link[=groupTab]{groupTab()}}.}
 
 \item{x_S}{A vector of length \code{length(S)} or \code{NULL}. If \code{S=NULL}, \code{x_S} will
 be set to \code{NULL}. \code{x_S} represents a sequence of symbols from \code{A} indexed by
 \code{S}. This sequence remains constant across the stationary distributions to be calculated,
 representing a fixed configuration of the past, while the observations in any other lag displayed
-in \code{freqTabSj} that are not in \code{S} may vary.}
+in \code{groupTab} that are not in \code{S} may vary.}
 
 \item{lenX}{An integer positive number with the length of the sample vector.}
 

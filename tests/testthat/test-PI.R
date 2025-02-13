@@ -8,7 +8,7 @@ test_that("Test for the PI function", {
   S <- c(1,5)
   cTab <- countsTab(X,5)
   fTab <- freqTab(S=S,j=3,A=A,countsTab=cTab)
-  fTabSj <- freqTabSj(S=Lambda,j=5,freqTab = fTab,lenX=lenX,d=d)
+  fTabSj <- groupTab(S=Lambda,j=5,freqTab = fTab,lenX=lenX,d=d)
   x_S <- c(0,1)
   # Replace with your test values
   result <- PI(S=S, fTabSj, x_S, lenX, d)

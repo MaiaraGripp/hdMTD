@@ -101,8 +101,8 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
     for (z in 1:lenSc) { # runs in all elements in the complement o S i.e. (1:d)\S
       j <- Sc[z]
       b_Sja <- freqTab(S=S,j=j,A=A,countsTab=base)
-      b_Sj <- freqTabSj(S=S,j=j,b_Sja,lenX=lenX,d=d)
-      b_S <- freqTabSj(S=S,j=NULL,b_Sja,lenX=lenX,d=d) #if S=NULL: b_S<-matrix(c(0,lenX-d),ncol=2)
+      b_Sj <- groupTab(S=S,j=j,b_Sja,lenX=lenX,d=d)
+      b_S <- groupTab(S=S,j=NULL,b_Sja,lenX=lenX,d=d) #if S=NULL: b_S<-matrix(c(0,lenX-d),ncol=2)
       ncolb_S <- ncol(b_S)
 
       if( lenS > 0) {
@@ -118,7 +118,7 @@ hdMTD_FS <- function(X,d,l,A=NULL,elbowTest=FALSE,warning=FALSE,...){
         t <- PositNx_S[k]
         cont <- 0
 
-        PIs <- PI(S=dec_S,freqTabSj=b_Sj,x_S=subx[t,],lenX=lenX,
+        PIs <- PI(S=dec_S,groupTab=b_Sj,x_S=subx[t,],lenX=lenX,
                   d=d)
 
         dTVs <- dTV_sample(S=dec_S,j=j,lenA=lenA,base=b_Sja,
