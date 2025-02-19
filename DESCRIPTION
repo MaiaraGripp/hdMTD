@@ -16,6 +16,7 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     dplyr,
-    methods
+    methods,
+    purrr
 Depends: 
     R (>= 2.10)
