@@ -12,7 +12,9 @@
 checkMTD <- function(MTD){
   # Verifies if an object of class MTD is correctly structured, containing
   # all the necessary parameters, and if these parameters satisfy their
-  # respective constraints. Verifies if the object is a list with class MTD.
+  # respective constraints.
+
+  #Verifies if the object is a list with class MTD.
   if (!is.list(MTD))
     stop("MTD must be a list. Try using MTDmodel() to create an MTD.")
   if (!is(MTD, "MTD"))
@@ -71,11 +73,11 @@ Try using MTDmodel() to create an MTD.")
 # Note: This package includes a function called MTDmodel(), which outputs
 # a properly structured MTD object that does not require additional checks.
 # However, since the user can create the MTD object manually, this checkMTD()
-# is used within the functions that use MTD objects as inputs to prevent errors.
+# is used, within the functions that use MTD objects as inputs, to prevent errors.
 
 
-
-
+#########################################################################
+#########################################################################
 #########################################################################
 
 check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
@@ -108,9 +110,62 @@ check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
   if(!all(unique(unlist(countsTab[, -(d+2)])) %in% A))
     stop("A must contain all elements that appear in the countsTab sequences.")
 
-  if(length(A) <= 1 || any(A %% 1 != 0))
-    stop("State space A must be a numeric vector with at least two integers.")
+  if(length(A) <= 1 || any(A %% 1 != 0) || length(A)!=length(unique(A)) )
+    stop("A must be a vector of length greater than 1 composed of unique integers.")
 
 }
 
 #########################################################################
+#########################################################################
+#########################################################################
+
+check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
+  # Validates the inputs in dTV_sample function.
+
+  if( length(S) > 0 ){
+      if( !is.vector(S) || any(S%%1 != 0) || any(S<1) ) {
+        stop("S must be a positive integer vector, a number or NULL.")
+      }
+      if( length(x_S)!=length(S) ) {
+        stop("x_S must be a sequence of length(S) elements.")
+      }
+  } else {
+      if( !is.null(S) ) {
+        stop("S must be a positive integer vector, a number or NULL.")
+      }
+  }
+
+  if( length(j)!=1 || j%%1!=0 || j %in% S || j < 1 ) {
+    stop("j must be a integer number in the complement of S.")
+    }
+
+  if( is.null(A) ){
+      if( length(lenA)==0 || length(A_pairs)==0 ) {
+        stop("Either the state space A must be provided, or both lenA (the number of elements in A) and A_pairs (all possible pairs of elements from A) must be provided.")
+      }
+      if( !is.numeric(lenA) || lenA<2 || lenA%%1!=0 ) {
+        stop("lenA must be an integer number >= 2.")
+      }
+      if( !is.matrix(A_pairs) || ncol(A_pairs)!=2 || any(A_pairs%%1 != 0) ) {
+        stop("A_pairs must be a matrix with two columns containing unique integer pairs.")
+      }
+      if( length(S)>0 && !all(x_S %in% A_pairs) ) {
+        stop("x_S must be a sequence of elements from the state space A.")
+      }
+  } else {
+      if( length(A)<=1 || !is.vector(A) || any( A%%1 !=0 ) || length(A)!=length(unique(A)) ) {
+        stop("A must be a vector of length greater than 1 composed of unique integers.")
+      }
+      if( length(lenA)!=0 || length(A_pairs)!=0 ) {
+        warning("Since the state space A was provided, this function will set lenA <- length(A) and A_pairs <-  t(utils::combn(A, 2))}, even if you have provided at least one of them.")
+      }
+      if( length(S)>0 && !all(x_S %in% A) ) {
+        stop("x_S must be a sequence of elements from A.")
+      }
+  }
+}
+
+#########################################################################
+#########################################################################
+#########################################################################
+

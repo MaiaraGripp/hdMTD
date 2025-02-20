@@ -67,6 +67,7 @@
   PI <- function(S, groupTab, x_S, lenX, d) {
 
     if ( length(S) > 0 ) {
+    # Filters groupTab by x_S.
       filtr_S <- paste0("x", S)
       groupTab <- groupTab %>%
         dplyr::mutate(match = purrr::pmap_lgl(dplyr::pick(dplyr::all_of(filtr_S)), ~ all(c(...) == x_S))) %>%
@@ -76,6 +77,12 @@
     PI <- matrix(groupTab$Nx_Sj/(lenX-d),ncol = 1)
     colnames(PI) <- paste0(x_S,collapse = "")
     PI
+  }
+  # Note. PI is used in hdMTD_FS.R.
+
+
+  is_xS <- function(x,y) {
+    return( all( x == y ) )
   }
 
 
