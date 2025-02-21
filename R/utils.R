@@ -1,10 +1,19 @@
-# Internal functions:
+# utils.R - Internal functions for the package
+#
+# This file contains auxiliary functions used within the package.
+# These functions are not exported and are used internally to run some
+# simple algorithm or calculation.
 
-#     groupTab
-#     PI
-#     is_xS
-#     n_parameters
+# 1 - groupTab()
+# 2 - PI()
+# 3 - is_xS()
+# 4 - n_parameters()
 
+# At the end of each auxiliary function bellow there is
+# a note naming the functions that use it.
+
+###########################################################
+###########################################################
 ###########################################################
 
 # groupTab: groups and summarizes a frequency table by a given set of lags.
@@ -44,6 +53,8 @@
   }
   # Note. groupTab is used in: oscillation.R, hdMTD_FS.R.
 
+###########################################################
+###########################################################
 ###########################################################
 
 # PI: Estimates the empirical stationary distribution for a given sequence.

@@ -9,25 +9,26 @@ probs(X, S, matrixform = FALSE, A = NULL, warning = FALSE)
 \arguments{
 \item{X}{A vector or single-column data frame containing a chain sample.}
 
-\item{S}{A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.}
+\item{S}{A numeric vector of positive integers representing a set of relevant lags.}
 
-\item{matrixform}{Logical. If \code{TRUE}, the probability estimates outputted by this function
-come in the form of a stochastic matrix.}
+\item{matrixform}{Logical. If \code{TRUE}, the output is formatted as a stochastic transition matrix.}
 
-\item{A}{A vector with positive integers representing the state space. If not informed,
-this function will set \code{A=unique(X)}.}
+\item{A}{A numeric vector representing the state space, consisting of distinct integers.
+If not provided, this function will set \code{A = unique(X)}.}
 
-\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}..}
+\item{warning}{Logical. If \code{TRUE}, the function warns the user when the state space is automatically set as \code{A = unique(X)}.}
 }
 \value{
-The MLE for a given chain sample with relevant lags set \code{S}.
+The MLE estimates for the given chain sample, conditioned on the relevant lags in \code{S}.
+If \code{matrixform = TRUE}, the result is a stochastic matrix.
 }
 \description{
-Maximum likelihood estimators (MLE) for a MTD Markov chain with relevant lag set \code{S}.
+Computes the Maximum likelihood estimators (MLE) for an MTD Markov chain with
+relevant lag set \code{S}.
 }
 \examples{
-X <- testChains[,3]
-probs(X,S=c(1,30))
-probs(X,S=c(1,15,30))
+X <- testChains[, 3]
+probs(X, S = c(1, 30))
+probs(X, S = c(1, 15, 30))
 
 }

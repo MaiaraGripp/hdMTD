@@ -6,6 +6,8 @@
 
 # 1 - checkMTD()
 # 2 - check_freqTab_inputs()
+# 3 - check_dTVsample_inputs()
+# 4 - check_probs_inputs()
 
 #########################################################################
 
@@ -143,17 +145,17 @@ check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
       if( length(lenA)==0 || length(A_pairs)==0 ) {
         stop("Either the state space A must be provided, or both lenA (the number of elements in A) and A_pairs (all possible pairs of elements from A) must be provided.")
       }
-      if( !is.numeric(lenA) || lenA<2 || lenA%%1!=0 ) {
+      if( !is.numeric(lenA) || lenA < 2 || lenA %% 1 != 0 ) {
         stop("lenA must be an integer number >= 2.")
       }
-      if( !is.matrix(A_pairs) || ncol(A_pairs)!=2 || any(A_pairs%%1 != 0) ) {
+      if( !is.matrix(A_pairs) || ncol(A_pairs) != 2 || any(A_pairs%%1 != 0) ) {
         stop("A_pairs must be a matrix with two columns containing unique integer pairs.")
       }
       if( length(S)>0 && !all(x_S %in% A_pairs) ) {
         stop("x_S must be a sequence of elements from the state space A.")
       }
   } else {
-      if( length(A)<=1 || !is.vector(A) || any( A%%1 !=0 ) || length(A)!=length(unique(A)) ) {
+      if( length(A)<=1 || !is.vector(A) || any( A%%1 != 0 ) || length(A)!=length(unique(A)) ) {
         stop("A must be a vector of length greater than 1 composed of unique integers.")
       }
       if( length(lenA)!=0 || length(A_pairs)!=0 ) {
@@ -169,3 +171,29 @@ check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
 #########################################################################
 #########################################################################
 
+
+ check_probs_inputs <- function(X, S, matrixform, A, warning) {
+   # Validates the inputs in probs function.
+
+   if( length(S) < 1 || !is.numeric(S) || any( S%%1 != 0) ){
+     stop("S must be a numeric vector with at least one integer.")
+   }
+
+   if( length(A) > 0 ){
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
+        stop("A must be a vector of distinct integers and length >=2.")
+     }
+     if ( !all( A %in% unique(X) ) ) {
+        warning("Some elements in A do not appear in the sample.")
+     }
+     if ( !all( unique(X) %in% A ) ) {
+        stop("The sample contains elements that do not appear in A.")
+     }
+   } else if (warning) {
+     warning("States space A not provided. The function will set A <- sort(unique(X)).")
+   }
+
+   if(!is.logical(matrixform)){
+     stop("matrixform should be either TRUE or FALSE.")
+   }
+ }
