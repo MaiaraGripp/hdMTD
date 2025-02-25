@@ -7,24 +7,44 @@
 probs(X, S, matrixform = FALSE, A = NULL, warning = FALSE)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a chain sample.}
+\item{X}{A vector or single-column data frame containing a sample of a Markov chain.}
 
-\item{S}{A numeric vector of positive integers representing a set of relevant lags.}
+\item{S}{A numeric vector of unique positive integers. Typically, \code{S} represents
+a set of relevant lags.}
 
-\item{matrixform}{Logical. If \code{TRUE}, the output is formatted as a stochastic transition matrix.}
+\item{matrixform}{Logical. If \code{TRUE}, the output is formatted as a stochastic
+transition matrix.}
 
-\item{A}{A numeric vector representing the state space, consisting of distinct integers.
-If not provided, this function will set \code{A = unique(X)}.}
+\item{A}{A numeric vector of distinct integers representing the state space.
+If not provided, this function will set \code{A <- sort(unique(X))}.}
 
-\item{warning}{Logical. If \code{TRUE}, the function warns the user when the state space is automatically set as \code{A = unique(X)}.}
+\item{warning}{Logical. If \code{TRUE}, the function warns the user when the state
+space is automatically set as \code{A <- sort(unique(X))}.}
 }
 \value{
-The MLE estimates for the given chain sample, conditioned on the relevant lags in \code{S}.
-If \code{matrixform = TRUE}, the result is a stochastic matrix.
+A data frame or a matrix containing estimated transition probabilities:
+\itemize{
+\item If \code{matrixform = FALSE}, the function returns a data frame with three columns:
+\itemize{
+\item The past sequence \eqn{x_S} (a concatenation of past states).
+\item The current state \eqn{a}.
+\item The estimated probability \eqn{\hat{p}(a | x_S)}.
+}
+\item If \code{matrixform = TRUE}, the function returns a stochastic transition matrix,
+where rows correspond to past sequences \eqn{x_S} and columns correspond to states in \code{A}.
+}
 }
 \description{
-Computes the Maximum likelihood estimators (MLE) for an MTD Markov chain with
+Computes the Maximum Likelihood estimators (MLE) for an MTD Markov chain with
 relevant lag set \code{S}.
+}
+\details{
+The probabilities are estimated as:
+\deqn{\hat{p}(a | x_S) = \frac{N(x_S a)}{N(x_S)}}
+where \eqn{N(x_S a)} is the number of times the sequence \eqn{x_S} appeared in the sample
+followed by \eqn{a}, and \eqn{N(x_S)} is the number of times \eqn{x_S} appeared
+(followed by any state). If \eqn{N(x_S) = 0}, the probability is set to \eqn{1 / |A|}
+(assuming a uniform distribution over \code{A}).
 }
 \examples{
 X <- testChains[, 3]

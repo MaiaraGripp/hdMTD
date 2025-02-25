@@ -175,8 +175,8 @@ check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
  check_probs_inputs <- function(X, S, matrixform, A, warning) {
    # Validates the inputs in probs function.
 
-   if( length(S) < 1 || !is.numeric(S) || any( S%%1 != 0) ){
-     stop("S must be a numeric vector with at least one integer.")
+   if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) || length(S) != length(unique(S)) ){
+     stop("S must be a numeric vector of unique positive integers with length >= 1.")
    }
 
    if( length(A) > 0 ){
