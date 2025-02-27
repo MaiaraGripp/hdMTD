@@ -11,21 +11,21 @@ hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE, ...)
 
 \item{d}{A positive integer representing an upper bound for the chain order.}
 
-\item{l}{A positive integer that sets the number of elements in the output vector.}
+\item{l}{A positive integer specifying the number of lags to be selected as relevant.}
 
 \item{A}{A vector with positive integers representing the state space. If not informed,
-this function will set \code{A=unique(X)}.}
+this function will set \code{A <- sort(unique(X))}.}
 
-\item{elbowTest}{Logical. If TRUE, the function will use a special criterion to determine the length
-of the estimated set of relevant lags. See \emph{Details} below for more information.}
+\item{elbowTest}{Logical. If TRUE, the function applies an alternative stopping criterion to
+determine the length of the set of relevant lags. See \emph{Details} for more information.}
 
-\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.}
+\item{warning}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
-\item{...}{Other parameters. This is used to accommodate any additional argument passed
-to \code{\link[=hdMTD_FS]{hdMTD_FS()}} through the \code{\link[=hdMTD]{hdMTD()}} function.}
+\item{...}{... Additional arguments (not used in this function, but maintained for compatibility).
+This is used to accommodate any additional argument passed to \code{\link[=hdMTD_FS]{hdMTD_FS()}} through the \code{\link[=hdMTD]{hdMTD()}} function.}
 }
 \value{
-Returns a vector with the estimated relevant lag set using FS algorithm.
+A numeric vector containing the estimated relevant lag set using FS algorithm.
 }
 \description{
 A function that estimates the set of relevant lags of an MTD model using the FS method.
@@ -37,18 +37,15 @@ This method was developed by \href{http://jmlr.org/papers/v24/22-0266.html}{Ost 
 This specific function will only apply the FS step of the algorithm and return an estimated
 relevant lag set of length \code{l}.
 
-If the algorithm determines that there are multiple lags equally important and more
-important than all others, it will sample one of them uniformly.
+This method iteratively selects the most relevant lags based on a certain quantity \eqn{\nu}.
+In the first step, the lag in \code{1:d} with the greatest \eqn{\nu} is deemed important.
+This lag is included in the output, and using this knowledge, the function proceeds to seek
+the next important lag (the one with the highest \eqn{\nu} among the remaining ones).
+The process stops when the output vector reaches length \code{l} if \code{elbowTest=FALSE}.
 
-If \code{elbowTest=TRUE}, the function will use a new criterion to determine the length of
-the estimated relevant lag set. In the FS algorithm, a certain quantity \eqn{\nu} is calculated
-for each lag in \code{1:d}, and the lag with the greatest \eqn{\nu} is deemed important. This lag
-is included in the output, and using this knowledge, the function proceeds to seek the next
-important lag (the one with the highest \eqn{\nu} among the remaining ones). The process stops
-when the output vector reaches length \code{l} if \code{elbowTest=FALSE}. If \code{elbowTest=TRUE},
-the function will store a vector with the value of these greatest \eqn{\nu} at each step. It will
-then look at this vector and identify the position of the smallest \eqn{\nu} among them. The
-output will only keep the lags that came before the one responsible for this \eqn{\nu} value.
+If \code{elbowTest = TRUE}, the function will store these maximum \eqn{\nu} values
+at each iteration, and output only the lags that appear before the one with smallest
+\eqn{\nu} among them.
 }
 \examples{
 X <- testChains[,1]

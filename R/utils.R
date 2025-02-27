@@ -38,17 +38,16 @@
     Sj <- sort(c(S,j), decreasing = TRUE) # The set of lags
 
     if ( length(Sj) > 0 ) {
-
       # Summarizes freqTab by lags in Sj
       groupTab <- freqTab %>%
-                    dplyr::group_by_at(paste0("x",Sj)) %>%
-                    dplyr::summarise(Nx_Sj=sum(Nxa_Sj), .groups="drop")
+        dplyr::group_by_at(paste0("x", Sj)) %>%
+        dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups="drop")
 
       return(groupTab)
 
     } else {
-      # If no lags are provided, returns a default matrix [0,lenX-d]
-      return(matrix(c(0,lenX-d),ncol=2))
+      # If no lags are provided, returns a default dataframe.
+      return( data.frame(x = 0, Nx_Sj = lenX - d) )
     }
   }
   # Note. groupTab is used in: oscillation.R, hdMTD_FS.R.
@@ -65,7 +64,8 @@
 # probabilities.
 #
 # Arguments:
-# - S: A numeric vector of past lags. Determines which columns in `groupTab` should be used for filtering.
+# - S: A numeric vector of past lags. Determines which columns in `groupTab` should
+#   be used for filtering.
 # - groupTab: A tibble containing sequence frequencies (`Nx_Sj` column).
 # - x_S: A vector representing a specific sequence of states in lags `S`.
 # - lenX: Sample size (integer).
@@ -86,7 +86,7 @@
         dplyr::select(-match)
     }
     PI <- matrix(groupTab$Nx_Sj/(lenX-d),ncol = 1)
-    colnames(PI) <- paste0(x_S,collapse = "")
+    colnames(PI) <- "freq"
     PI
   }
   # Note. PI is used in hdMTD_FS.R.

@@ -8,6 +8,7 @@
 # 2 - check_freqTab_inputs()
 # 3 - check_dTVsample_inputs()
 # 4 - check_probs_inputs()
+# 5 - check_hdMTD_FS_inputs()
 
 #########################################################################
 
@@ -32,8 +33,8 @@ checkMTD <- function(MTD){
 
   # Checks if A is a numeric vector of integers (length ≥ 2), sorted in
   # ascending order
-  if (length(MTD$A) <= 1 || !is.vector(MTD$A) || any(MTD$A%%1 != 0))
-    stop("State space A must be a numeric vector containing at least two integers.
+  if (length(MTD$A) <= 1 || !is.vector(MTD$A) || any(MTD$A%%1 != 0) || length(MTD$A)!=length(unique(MTD$A)))
+    stop("State space A must be a vector (length >= 2) of unique integers.
 Try using MTDmodel() to create an MTD.")
   if (any(sort(MTD$A) != MTD$A))
     stop("State space A must be sorted in ascending order. Try using MTDmodel() to create an MTD.")
@@ -83,7 +84,7 @@ Try using MTDmodel() to create an MTD.")
 #########################################################################
 
 check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
-  # Validates the inputs in freqTab function.
+  # Validates the inputs in freqTab() function.
 
   if(!is.data.frame(countsTab))
     stop("countsTab must be a tibble or a dataframe. Try using countsTab() function.")
@@ -121,8 +122,8 @@ check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
 #########################################################################
 #########################################################################
 
-check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
-  # Validates the inputs in dTV_sample function.
+check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
+  # Validates the inputs in dTV_sample() function.
 
   if( length(S) > 0 ){
       if( !is.vector(S) || any(S%%1 != 0) || any(S<1) ) {
@@ -173,7 +174,7 @@ check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
 
 
  check_probs_inputs <- function(X, S, matrixform, A, warning) {
-   # Validates the inputs in probs function.
+   # Validates the inputs in probs() function.
 
    if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) || length(S) != length(unique(S)) ){
      stop("S must be a numeric vector of unique positive integers with length >= 1.")
@@ -197,3 +198,38 @@ check_dTVsample_inputs <- function(S,j,A,base,lenA,A_pairs,x_S) {
      stop("matrixform should be either TRUE or FALSE.")
    }
  }
+
+ #########################################################################
+ #########################################################################
+ #########################################################################
+
+ check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
+   # Validates the inputs in hdMTD_FS() function.
+
+   if( length(d) != 1 || !is.numeric(d) || d<2 || (d %% 1)!=0 ){
+     stop("The order d must be an integer equal to or greater than 2.")
+   }
+
+   if( length(l) != 1 || !is.numeric(l) || l%%1 != 0 || l>d ) {
+     stop("The l value is not valid for FS method. l should be a positive integer smaller or equal to d.")
+   }
+
+   if( length(A) > 0 ){
+       if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
+         stop("A must be a vector of distinct integers and length >=2.")
+       }
+       if ( !all( A %in% unique(X) ) ) {
+         warning("Some elements in A do not appear in the sample.")
+       }
+       if ( !all( unique(X) %in% A ) ) {
+         stop("The sample contains elements that do not appear in A.")
+       }
+   } else if (warning) {
+      warning("States space A not provided. The function will set A <- sort(unique(X)).")
+   }
+
+   if(!is.logical(elbowTest)){
+     stop("elbowTest should be either TRUE or FALSE.")
+   }
+ }
+
