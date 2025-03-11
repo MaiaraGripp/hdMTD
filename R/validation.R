@@ -9,6 +9,7 @@
 # 3 - check_dTVsample_inputs()
 # 4 - check_probs_inputs()
 # 5 - check_hdMTD_FS_inputs()
+# 6 - check_hdMTD_CUT_inputs()
 
 #########################################################################
 
@@ -206,11 +207,11 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
  check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
    # Validates the inputs in hdMTD_FS() function.
 
-   if( length(d) != 1 || !is.numeric(d) || d<2 || (d %% 1)!=0 ){
+   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
      stop("The order d must be an integer equal to or greater than 2.")
    }
 
-   if( length(l) != 1 || !is.numeric(l) || l%%1 != 0 || l>d ) {
+   if( length(l) != 1 || !is.numeric(l) || l%%1 != 0 || l > d ) {
      stop("The l value is not valid for FS method. l should be a positive integer smaller or equal to d.")
    }
 
@@ -233,3 +234,45 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    }
  }
 
+
+ #########################################################################
+ #########################################################################
+ #########################################################################
+
+ check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
+   # Validates the inputs in hdMTD_CUT() function.
+
+   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
+     stop("The order d must be an integer equal to or greater than 2.")
+   }
+
+   if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
+      length(S) != length(unique(S)) || any( S <= 0)) {
+     stop("S must be a vector of distinct positive integers containing at least 2 values.")
+   }
+
+   if( length(A) > 0 ){
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
+       stop("A must be a vector of distinct integers and length >=2.")
+     }
+     if ( !all( A %in% unique(X) ) ) {
+       warning("Some elements in A do not appear in the sample.")
+     }
+     if ( !all( unique(X) %in% A ) ) {
+       stop("The sample contains elements that do not appear in A.")
+     }
+   } else if (warning) {
+     warning("States space A not provided. The function will set A <- sort(unique(X)).")
+   }
+
+   if ( is.na(alpha) || !is.numeric(alpha) || alpha <= 0 || length(alpha) != 1 ) {
+     stop("alpha must be a positive real number.")
+   }
+   if ( is.na(mu) || !is.numeric(mu) || mu <= 0 || mu <= (exp(mu) - 1)/2 || length(mu) != 1 ) {
+     stop("mu must be a positive real number smaller than (exp(mu)-1)/2.")
+   }
+   if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
+     stop("xi must be a positive real number.")
+   }
+
+ }

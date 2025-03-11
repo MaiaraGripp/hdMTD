@@ -6,7 +6,7 @@
 
 # 1 - groupTab()
 # 2 - PI()
-# 3 - is_xS()
+# 3 - sx()
 # 4 - n_parameters()
 
 # At the end of each auxiliary function bellow there is
@@ -50,7 +50,7 @@
       return( data.frame(x = 0, Nx_Sj = lenX - d) )
     }
   }
-  # Note. groupTab is used in: oscillation.R, hdMTD_FS.R.
+  # groupTab is used in: oscillation.R, hdMTD_FS.R.
 
 ###########################################################
 ###########################################################
@@ -89,11 +89,48 @@
     colnames(PI) <- "freq"
     PI
   }
-  # Note. PI is used in hdMTD_FS.R.
+  # PI is used in hdMTD_FS.R.
+
+###########################################################
+###########################################################
+###########################################################
+
+# sx: Computes thresholds for the CUT method in MTD models
+#
+# This function calculates the threshold used in the CUT step of the MTD inference algorithm.
+# It computes a quantity that determines whether the variation in distributions across lagged states
+# is significant, based on the provided parameters `mu`, `alpha`, and `xi`.
+#
+# Arguments:
+# - S: A numeric vector of past lags. Determines which columns in `freqTab` should be used for filtering.
+# - freqTab: An output of freqTab() function, i.e. a tibble containing frequency counts
+#  (`Nx_Sj` column) and conditional probabilities (`qax_Sj`).
+# - lenA: The number of distinct states in the state space.
+# - x_S: A vector representing a specific sequence of states in lags `S`.
+# - mu: A positive real number between 0 and 3, influencing the threshold calculation.
+# - alpha: A positive real number controlling the sensitivity of the threshold.
+# - xi: A positive real number affecting the threshold scaling.
+#
+# Returns:
+# - A numeric vector of length `lenA`, where each entry represents the computed threshold
+# for a specific state.
 
 
-  is_xS <- function(x,y) {
-    return( all( x == y ) )
-  }
+  sx <- function(S, freqTab, lenA, x_S, mu, alpha, xi){
+    filtr_S <- paste0("x",S)
+    C <- freqTab %>%
+      mutate(match = purrr::pmap_lgl(pick(all_of(filtr_S)), ~ all(c(...) == x_S))) %>%
+      filter(match) %>%
+      select(-match)
+
+    Nx <- C$Nx_Sj[seq(1, nrow(C), by = lenA)]
+
+    prob_adjusted <- sqrt((C$qax_Sj + alpha / rep(Nx, each = lenA)) * mu / (2 * mu - exp(mu) + 1))
+    sum <- colSums(matrix(prob_adjusted, nrow = lenA))
+
+    return(sqrt(0.5 * alpha * (1 + xi) / Nx) * sum + alpha * lenA / (6 * Nx))
+  } # sx is used in hdMTD_CUT.R.
+
+
 
 
