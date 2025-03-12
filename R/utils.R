@@ -131,6 +131,49 @@
     return(sqrt(0.5 * alpha * (1 + xi) / Nx) * sum + alpha * lenA / (6 * Nx))
   } # sx is used in hdMTD_CUT.R.
 
+###########################################################
+###########################################################
+###########################################################
+
+# n_parameters: Computes the number of parameters in an MTD model.
+#
+# This function calculates the number of parameters in an MTD model based on the
+# relevant lag set `Lambda`, the state space `A`, and model constraints.
+#
+# Arguments:
+# - Lambda: A numeric vector of positive integers representing the relevant lag set.
+#   The elements are sorted in increasing order, where the smallest number
+#   represents the most recent past time, and the largest represents the earliest past time.
+# - A: A vector of positive integers representing the state space.
+# - single_matrix: Logical. If TRUE, the MTD model assumes a single stochastic
+#   matrix `p_j` shared across all lags in `Lambda`, reducing the number of parameters.
+# - indep_part: Logical. If FALSE, the independent distribution is not included,
+#   meaning `lambda_0 = 0`, which reduces the number of parameters.
+# - zeta: A positive integer indicating the number of distinct matrices `p_j`
+#   in the MTD model. The default value is `length(Lambda)`, meaning each lag has
+#   its own matrix. If `zeta = 1`, all matrices `p_j` are identical; if `zeta = 2`,
+#   there are two distinct types, and so on.
+#
+# Returns:
+# - An integer representing the total number of parameters in the MTD model.
+#
+# Notes:
+# - If `single_matrix = TRUE`, `zeta` is automatically set to 1.
 
 
+  n_parameters <- function(Lambda, A,
+                           single_matrix = FALSE,
+                           indep_part = TRUE,
+                           zeta = ifelse(single_matrix, 1, length(Lambda))){
+    lenA <- length(A)
+    lenL <- length(Lambda)
+
+    n_parameters <- lenL-1 # Number of free weight parameters if lam0 = 0
+    if (indep_part) {
+      n_parameters <- n_parameters + lenA  # adds 1 ( for lam0) plus lenA - 1 ( for p0)
+    }
+    n_parameters <- n_parameters + lenA * (lenA - 1) * zeta
+    # lenA*(lenA-1) is the number of free parameters in each matrix pj. zeta is the number of distinct matrices pj
+    n_parameters
+  }
 

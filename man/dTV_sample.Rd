@@ -56,10 +56,10 @@ match, and a column named qax_Sj, containing transition distributions, must be
 present). For more details on the output structure of \code{\link[=freqTab]{freqTab()}}, refer to its
 documentation..
 
-If you provide the state space \code{A}, the function calculates \code{lenA <- length(A)}
-and \code{A_pairs <- t(utils::combn(A, 2))}. Alternatively, you can input \code{lenA} and
-\code{A_pairs} directly and let \code{A <- NULL}, which is useful in loops to
-improve efficiency.
+If you provide the state space \code{A}, the function calculates:
+\code{lenA <- length(A)} and \code{A_pairs <- t(utils::combn(A, 2))}.
+Alternatively, you can input \code{lenA} and \code{A_pairs} directly and let
+\code{A <- NULL}, which is useful in loops to improve efficiency.
 }
 \examples{
 #creating base argument through freqTab function.
