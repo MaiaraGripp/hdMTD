@@ -139,8 +139,8 @@ check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, 
   if ( !is.null(pj) ) {
     if ( !is.list(pj) ) stop("pj must be either NULL or a list of matrices.")
     if ( any( lapply(pj, is.matrix) == FALSE ) ) stop("pj must be either NULL or a list of matrices.")
-    if ( single_matrix & length(pj) != 1 ) stop("Since single_matrix=TRUE, pj must be NULL or have only one stochastic matrix.")
-    if ( !single_matrix & length(pj) != length(Lambda) ) stop("pj must be NULL or be a list with ", length(Lambda), "matrices.")
+    if ( single_matrix && length(pj) != 1 ) stop("Since single_matrix=TRUE, pj must be NULL or be a list with a single stochastic matrix.")
+    if ( !single_matrix && length(pj) != length(Lambda) ) stop("pj must be NULL or be a list with ", length(Lambda), "matrices.")
     aux <- do.call(rbind,pj)
     if( !all(round(apply(aux, 1, sum), 3) == 1)  || !all(aux >= 0) || !is.numeric(aux) ||
         ncol(aux) != length(A) || any(sapply(pj, dim) != length(A)) ) {

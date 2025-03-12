@@ -2,7 +2,7 @@
 % Please edit documentation in R/MTDmodel.R
 \name{MTDmodel}
 \alias{MTDmodel}
-\title{Creates an MTD model}
+\title{Creates a Mixture Transition Distribution (MTD) Model}
 \usage{
 MTDmodel(
   Lambda,
@@ -18,38 +18,47 @@ MTDmodel(
 \arguments{
 \item{Lambda}{A numeric vector of positive integers representing the relevant lag set.
 The elements will be sorted from smallest to greatest. The smallest number represents the latest
-(most recent) time in the past, and the greatest number represents the earliest time in the past.}
+(most recent) time in the past, and the largest number represents the earliest time in the past.}
 
 \item{A}{A vector with nonnegative integers representing the state space.}
 
-\item{lam0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
+\item{lam0}{A numeric value in \verb{[0,1)}, representing the weight of the independent distribution.}
 
-\item{lamj}{A vector of weights for the distributions in the argument \code{pj}. Values must be
-in the range \verb{[0, 1)}. The first element in \code{lamj} must be the weight of the first
-element of the list \code{pj} and so on.}
+\item{lamj}{A numeric vector of weights for the transition probability matrices in \code{pj}.
+Values must be in the range \verb{[0, 1)}, and their sum with \code{lam0} must be equal to 1.
+The first element in \code{lamj} must be the weight for the first element in \code{Lambda} and so on.}
 
-\item{pj}{A list with \code{length(Lambda)} stochastic matrices.}
+\item{pj}{A list with \code{length(Lambda)} stochastic matrices, each of size \verb{length(A) x length(A)}.
+The first matrix in \code{pj} must refer to the first element in \code{Lambda} and so on.}
 
-\item{p0}{A vector with the independent distribution part of an MTD model. If not informed
-and argument \code{indep_part=TRUE}, the distribution will be sampled from a uniform distribution.
+\item{p0}{A probability vector for the independent component of the MTD model. If \code{NULL}
+and \code{indep_part=TRUE}, the distribution will be sampled from a uniform distribution.
 If \code{indep_part=FALSE}, then there is no independent distribution and \code{p0} entries will
-be set to zero. If you enter \code{p0=0}, then \code{indep_part} will be set to \code{FALSE}.}
+be set to zero. If you enter \code{p0=0}, \code{indep_part} is set to \code{FALSE}.}
 
-\item{single_matrix}{Logical. If \code{TRUE}, all matrices in list \code{pj} are equal.}
+\item{single_matrix}{Logical. If \code{TRUE}, all matrices in list \code{pj} are identical.}
 
-\item{indep_part}{Logical. If \code{FALSE} there is no independent distribution and \code{p0}
-is set to zero.}
+\item{indep_part}{Logical. If \code{FALSE}, the model does not include an independent distribution
+and \code{p0} is set to zero.}
 }
 \value{
-An MTD model as an MTD object.
+A list of class \code{MTD} containing:
+\describe{
+\item{\code{P}}{The transition probability matrix of the MTD model.}
+\item{\code{lambdas}}{A vector with MTD weights (\code{lam0} and \code{lamj}).}
+\item{\code{pj}}{A list of stochastic matrices defining conditional transition probabilities.}
+\item{\code{p0}}{The independent probability distribution.}
+\item{\code{Lambda}}{The vector of relevant lags.}
+\item{\code{A}}{The state space.}
+}
 }
 \description{
-Given a set of parameters it generates an MTD model as an object of class MTD.
+Generates an MTD model as an object of class \code{MTD} given a set of parameters.
 }
 \details{
-This MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}}, which retrieves the
-model's oscillation, and \code{\link[=perfectSample]{perfectSample()}}, which will perfectly sample an MTD Markov chain
-with the model's parameters.
+The resulting MTD object can be used by functions such as \code{\link[=oscillation]{oscillation()}}, which retrieves the
+model's oscillation, and \code{\link[=perfectSample]{perfectSample()}}, which will sample an MTD Markov chain from its invariant
+distribution.
 }
 \examples{
 MTDmodel(Lambda=c(1,3),A=c(4,8,12))
