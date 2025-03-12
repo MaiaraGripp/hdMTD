@@ -80,7 +80,6 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
       R[k, ] <- sx(S = Sminusj, freqTab = b_Sja, lenA = lenA, x_S = subx[k,],
                    mu = mu, alpha = alpha, xi = xi)
       # sx is a quantity used to calculate thresholds. See function sx() in utils.R.
-      # Each row in R refers to a sequence x_S, the columns represent different symbols at lag j.
     }
 
     txy <- matrix(0, nrow = nrow(R), ncol = nrow(A_pairs))

@@ -18,7 +18,7 @@
 #'  \eqn{complement} of \code{S}. Both \code{S} and \code{j} cannot be \code{NULL}
 #'  at the same time. Both \code{S} and \code{j} cannot be \code{NULL} at the same
 #'  time. See *Details* for further information.
-#' @param A A vector with positive integers. Must have at least two different entries.
+#' @param A A vector with nonnegative integers. Must have at least two different entries.
 #' \code{A} represents the state space.
 #' @param countsTab A tibble or a data frame with all sequences of length d+1 that
 #'  appear in the sample, and their absolute frequency. This tibble is typically

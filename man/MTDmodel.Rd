@@ -20,7 +20,7 @@ MTDmodel(
 The elements will be sorted from smallest to greatest. The smallest number represents the latest
 (most recent) time in the past, and the greatest number represents the earliest time in the past.}
 
-\item{A}{A vector with positive integers representing the state space.}
+\item{A}{A vector with nonnegative integers representing the state space.}
 
 \item{lam0}{The weight of the independent distribution, must be a value in \verb{[0,1)}.}
 

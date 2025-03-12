@@ -17,7 +17,7 @@ Both \code{S} and \code{j} cannot be \code{NULL} at the same time.}
 at the same time. Both \code{S} and \code{j} cannot be \code{NULL} at the same
 time. See \emph{Details} for further information.}
 
-\item{A}{A vector with positive integers. Must have at least two different entries.
+\item{A}{A vector with nonnegative integers. Must have at least two different entries.
 \code{A} represents the state space.}
 
 \item{countsTab}{A tibble or a data frame with all sequences of length d+1 that

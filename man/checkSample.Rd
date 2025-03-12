@@ -8,7 +8,7 @@ checkSample(X)
 }
 \arguments{
 \item{X}{A vector, a single-column data frame, a list, or a matrix with a
-single row or a single column. Must be composed by integers.}
+single row or a single column. Must be composed by nonnegative integers.}
 }
 \value{
 Returns the sample as a vector or identifies any possible sample problems.

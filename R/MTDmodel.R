@@ -1,3 +1,4 @@
+
 #' Creates an MTD model
 #'
 #' Given a set of parameters it generates an MTD model as an object of class MTD.
@@ -5,7 +6,7 @@
 #' @param Lambda A numeric vector of positive integers representing the relevant lag set.
 #' The elements will be sorted from smallest to greatest. The smallest number represents the latest
 #'  (most recent) time in the past, and the greatest number represents the earliest time in the past.
-#' @param A A vector with positive integers representing the state space.
+#' @param A A vector with nonnegative integers representing the state space.
 #' @param lam0 The weight of the independent distribution, must be a value in `[0,1)`.
 #' @param lamj A vector of weights for the distributions in the argument \code{pj}. Values must be
 #' in the range `[0, 1)`. The first element in \code{lamj} must be the weight of the first
@@ -45,110 +46,96 @@ MTDmodel <- function(Lambda,
                      single_matrix = FALSE,
                      indep_part = TRUE)
 {
-## Check Lambda and A
-  if(!is.numeric(Lambda) ||
-     any(Lambda<=0) ||
-     !all(Lambda%%1==0)||
-     !is.vector(Lambda))stop("Lambda must be a numeric vector with positive integers.")
-  if( length(A)<=1   ||
-      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
+  # The user may set indep_part to FALSE by providing p0=0 or p0 as a vector of 0
+  if( length(p0) != 0 & all(p0 == 0) & indep_part == TRUE ){
+    indep_part <- FALSE
+    warning("Since p0=0 indep_part will be set to FALSE")
+  }
+
+  # Validates MTDmodel inputs
+  check_MTDmodel_inputs(Lambda, A, lam0, lamj, pj, p0, single_matrix, indep_part)
+
+  # Warns if Lambda needs to be sorted and lamj was provided since their order must match
+  if( any( Lambda != sort(Lambda) ) & length(lamj) != 0 ) {
+    warning("The Lambda set will be ordered from smallest to largest, the user should match the order of lamj accordingly.")
+  }
   # Sorting
-  if( all(sort(Lambda)!=Lambda) & length(lamj)!=0 )warning("The Lambda set will be ordered from smallest to greatest, be carefull with matching order of lamj accordingly.")
   Lambda <- sort(Lambda)
   A <- sort(A)
-## Gathering some inputs
+
   lenA <- length(A)
   lenL <- length(Lambda)
   lenAL <- lenA^lenL
 
-## Check indep_part and p0 (independent distribution)
-  if(!is.logical(indep_part)) stop("Argument indep_part must be TRUE or FALSE.")
-  if( length(p0)!=0 & all(p0==0) & indep_part==TRUE ){
-    indep_part <- FALSE
-    warning("Since p0=0 indep_part will be set to FALSE")
-  }
-  if(!indep_part){
+  # If indep_part is FALSE sets p0 <- c(0,...,0)
+  if( !indep_part ){
     p0 <- rep(0,lenA)
-    if(length(lam0)!=0 && lam0!=0 )warning("Since indep_part=FALSE lam0 will be set to 0 and p0 will be a vector of 0.")
+    # If the user provides lam0!=0 but indep_part=FALSE, warns that lam0 <- 0
+    if( length( lam0 ) != 0 && lam0 != 0 ) {
+      warning("Since indep_part=FALSE lam0 will be set to 0 and p0 will be a vector of 0.")
+    }
     lam0 <- 0
   }
-  if(length(p0)!=0){ #p0!=NULL
-    if( !is.numeric(p0) ||
-        !all(p0>=0) ||
-        length(p0)!=lenA)stop("p0 must be 0 or a vector of length ",lenA, " consisting of nonnegative numbers.")
-    if( round(sum(p0),3)!=1 & sum(p0)!=0 )stop("Either each element in p0 is 0 or they must sum up to 1.")
-  }else{
+  # If p0 is not provided samples a distribution from uniforms
+  if ( is.null(p0) ) {
     p0 <- stats::runif(lenA)
     p0 <- p0/sum(p0)
   }
   names(p0) <- c(paste0("p0(",A,")"))
 
-## init lambdas and check lam0
-  lambdas <- numeric(lenL+1)
-  if(length(lam0)!=0){
-    if( length(lam0) > 1 ||
-        !is.numeric(lam0) ||
-        lam0 < 0 ||
-        lam0 >= 1) stop("lam0 must be a number in the range [0,1) .")
+  lambdas <- numeric(lenL+1) # init vector for MTD weights
+  if( !is.null(lam0) ){
     lambdas[1] <- lam0
   }
-## check lamj
-  if(length(lamj)!=0){
-    if( !is.numeric(lamj) ||
-        !lenL==length(lamj) ||
-        !all(lamj>0) ) stop(paste0("lamj must be a vector of length ",lenL, ", numeric and nonnegative."))
-    if(length(lam0)==0){
+  if( !is.null(lamj) ){
+    if( is.null(lam0) ){
       lambdas <- c(1-sum(lamj),lamj)
-    }else{
+    } else {
       lambdas <- c(lambdas[1],lamj)
     }
-  }else{ #if lamj=NULL, sample:
-    if(length(lam0)==0){
+  } else {
+    if( is.null(lam0) ){
       lambdas <- runif(lenL+1)
       lambdas <- lambdas/sum(lambdas)
-    }else{
+    } else {
       aux <- runif(lenL)
       aux <- (1-lambdas[1])*(aux/sum(aux))
       lambdas <- c(lambdas[1],aux)
     }
   }
-  if(round(sum(lambdas),6)!=1) stop("The sum of weights lam0 + [lamj] must sum up to 1. If indep_part=FALSE, lam0 will be set to 0, so be careful in case lamj was inputted.")
+  # check if weights add to 1
+  if( round(sum(lambdas), 5) != 1) stop("The sum of weights lam0 + sum(lamj) must be equal to 1.")
   names(lambdas) <- c("lam0",paste0("lam-", Lambda) )
 
-## check single_matrix and pj
-  if(!is.logical(single_matrix))stop("Argument single_matrix must be TRUE OR FALSE.")
-  if(single_matrix){
-    if( !(length(pj)%in%c(0,1)) )stop("If single_matrix=TRUE pj must be a list with a single matrix or NULL.")
-  }else{
-    if( !(length(pj)%in%c(0,lenL)) )stop(paste0("If single_matrix=FALSE pj must be NULL or a list with ",lenL, " matrices."))
-  }
-  if(length(pj)!=0){
-    if(!is.list(pj)) stop("pj must be a list.")
-    aux <- do.call(rbind,pj)
-    if( !all(round(apply(aux, 1, sum),2)==1)  ||
-        !all(aux>=0) ||
-        !is.numeric(aux) ||
-        ncol(aux)!=lenA ||
-        any(sapply(pj,dim)!=lenA)) stop(paste0("pj must be a list of stochastic matrices ", lenA, "x",lenA))
-  }else{ #if pj=NULL
+  # generate pj matrices if pj is not provided
+  if( is.null(pj) ){
     pj <- list()
-    for (j in 1:lenL) {
-      R <- matrix(runif(lenA^2),ncol=lenA,nrow = lenA)
-      R <- R/apply(R,1,sum)
-      pj[[j]] <- R #each [[]] is a matrix pj, lenA x lenA, forall j in Lambda
-      colnames(pj[[j]])=rownames(pj[[j]]) <- A
+    if ( !single_matrix ) { # generates lenL matrices
+      for ( j in seq_len(lenL) ) {
+        R <- matrix(runif(lenA^2), ncol = lenA, nrow = lenA)
+        R <- R/apply(R, 1, sum)
+        pj[[j]] <- R
+        colnames(pj[[j]]) <- rownames(pj[[j]]) <- A
+      }
+    } else { # generates 1 matrix
+      R <- matrix(runif(lenA^2), ncol = lenA, nrow = lenA)
+      R <- R/apply(R, 1, sum)
+      pj[[1]] <- R
+      colnames(pj[[1]]) <- rownames(pj[[1]]) <- A
     }
   }
-  if(single_matrix && lenL>=2){
+  if( single_matrix && lenL >= 2 ){ # repeats the informed or generated matrix for all lags
     for (j in 2:lenL) {
       pj[[j]] <- pj[[1]]
     }
   }
   names(pj) <- paste0("p-",Lambda)
-## Calculating P
-  #initiating
+
+  # Calculating P (the transition matrix)
   subx <- try(expand.grid(rep(list(seq(1:lenA)),lenL)),silent = TRUE) #all possible sequences x_{Lambda}
-  if( is(subx,"try-error") ){stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))}
+  if( inherits(subx,"try-error") ){
+    stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))
+    }
   subx <- subx[,order(lenL:1)]
   P <- matrix(0,ncol = lenA,nrow = lenAL)
 
@@ -193,3 +180,4 @@ print.MTD <- function(x, ...){
   print(x[ind])
   return(invisible(x))
 }
+
