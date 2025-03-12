@@ -6,8 +6,8 @@
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param S A numeric vector of distinct positive integers from which this function will select
 #' a set of relevant lags. Should be a subset of \code{1:d}. Default is \code{1:d}.
-#' @param A A vector with positive integers representing the state space. Default is
-#'  \code{sort(unique(X))}.
+#' @param A A vector with positive integers representing the state space. If not informed,
+#' this function will set \code{A <- sort(unique(X))}.
 #' @param alpha A positive real number used in the CUT threshold (which determines if two
 #' distributions can be considered different). The larger the \code{alpha}, the greater
 #' the distance required to consider that there is a difference between a set of distributions.
@@ -16,7 +16,7 @@
 #' @param xi A positive real number, \code{xi} is also a component of the same threshold as
 #'  \code{alpha}.
 #' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
-#' @param ... ... Additional arguments (not used in this function, but maintained for compatibility).
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
 #'
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
 #' Mixture Transition Distribution (MTD) models. It consists

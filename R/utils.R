@@ -160,7 +160,6 @@
 # Notes:
 # - If `single_matrix = TRUE`, `zeta` is automatically set to 1.
 
-
   n_parameters <- function(Lambda, A,
                            single_matrix = FALSE,
                            indep_part = TRUE,
@@ -175,5 +174,5 @@
     n_parameters <- n_parameters + lenA * (lenA - 1) * zeta
     # lenA*(lenA-1) is the number of free parameters in each matrix pj. zeta is the number of distinct matrices pj
     n_parameters
-  }
+  } # n_parameters is used in hdMTD_BIC.R.
 

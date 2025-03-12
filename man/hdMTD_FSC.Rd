@@ -4,17 +4,7 @@
 \alias{hdMTD_FSC}
 \title{Forward Stepwise and Cut method for inference in MTD models}
 \usage{
-hdMTD_FSC(
-  X,
-  d,
-  l,
-  alpha = 0.05,
-  mu = 1,
-  xi = 0.5,
-  A = NULL,
-  warning = FALSE,
-  ...
-)
+hdMTD_FSC(X, d, l, alpha = 0.05, mu = 1, xi = 0.5, A = NULL, ...)
 }
 \arguments{
 \item{X}{A vector or single-column data frame containing a chain sample.}
@@ -23,25 +13,20 @@ hdMTD_FSC(
 
 \item{l}{A positive integer that sets the number of elements in the output vector.}
 
-\item{alpha}{A positive real number, \code{alpha}, appears in a threshold used in the CUT
-step to determine if two distributions are different enough. The larger the \code{alpha},
-he greater the distance required to consider that there is a difference between a set
-of distributions.}
+\item{alpha}{A positive real number used in the CUT threshold (which determines if two
+distributions can be considered different). The larger the \code{alpha}, the greater
+the distance required to consider that there is a difference between a set of distributions.}
 
-\item{mu}{A positive real number between 0 and 3. \code{mu}is also a component of the same
-threshold as \code{alpha}.}
+\item{mu}{A positive real number such that \eqn{\code{mu}>(e^{\code{mu}}-1)/2}. \code{mu}
+is also a component of the same threshold as \code{alpha}.}
 
 \item{xi}{A positive real number, \code{xi} is also a component of the same threshold as
-\code{alpha} and \code{mu}.}
+\code{alpha}.}
 
 \item{A}{A vector with positive integers representing the state space. If not informed,
-this function will set \code{A=unique(X)}.}
+this function will set \code{A <- sort(unique(X))}.}
 
-\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as
-\code{A=unique(X)}.}
-
-\item{...}{Other parameters. This is used to accommodate any additional argument passed
-to \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} through the \code{\link[=hdMTD]{hdMTD()}} function.}
+\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}).}
 }
 \value{
 Returns a vector with the estimated relevant lag set using FSC algorithm.
