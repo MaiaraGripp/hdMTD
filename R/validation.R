@@ -11,6 +11,8 @@
 # 5 - check_probs_inputs()
 # 6 - check_hdMTD_FS_inputs()
 # 7 - check_hdMTD_CUT_inputs()
+# 8 - check_hdMTD_BIC_inputs()
+# 9 - check_MTDest_inputs()
 
 #########################################################################
 
@@ -113,7 +115,7 @@ check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, 
     if ( all(p0 >= 0) ) {
       if ( sum(p0) != 0 && round(sum(p0),5) != 1 ) {
         stop("p0 must add to 1 or be NULL or a vector of 0.")
-        if ( sum(p0) == 1 && length(p0) != length(A) ) {
+        if ( round(sum(p0),5) == 1 && length(p0) != length(A) ) {
           stop("If a distribution p0 is provided it must add to 1 and have a probability
           for each element in A.")
         }
@@ -128,7 +130,7 @@ check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, 
   }
 
   if ( !is.null(lamj) ) {
-    if( !is.numeric(lamj) || length(lamj)!=length(Lambda) || !all(lamj > 0) || sum(lamj)>1 ) {
+    if( !is.numeric(lamj) || length(lamj) != length(Lambda) || !all(lamj > 0) || sum(lamj)>1 ) {
       stop(paste0("lamj must be NULL or a vector of positive numbers. The length of lamj must be ",length(Lambda),
                   " and sum(lamj) cannot be greater than 1."))
     }
@@ -226,10 +228,10 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
         stop("x_S must be a sequence of elements from the state space A.")
       }
   } else {
-      if( length(A)<=1 || !is.vector(A) || any( A%%1 != 0 ) || length(A)!=length(unique(A)) ) {
+      if( length(A) <= 1 || !is.vector(A) || any( A %% 1 != 0 ) || length(A) != length(unique(A)) ) {
         stop("A must be a vector of length greater than 1 composed of unique integers.")
       }
-      if( length(lenA)!=0 || length(A_pairs)!=0 ) {
+      if( length(lenA) != 0 || length(A_pairs) != 0 ) {
         warning("Since the state space A was provided, this function will set lenA <- length(A) and A_pairs <-  t(utils::combn(A, 2))}, even if you have provided at least one of them.")
       }
       if( length(S)>0 && !all(x_S %in% A) ) {
@@ -343,5 +345,63 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
      stop("xi must be a positive real number.")
    }
+ }
 
+ #########################################################################
+ #########################################################################
+ #########################################################################
+
+ check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
+   # Validates the inputs of MTDest() function
+
+   if(!is.numeric(S) || any(S <= 0) || !all(S %% 1 == 0) ||
+      !is.vector(S) || length(S) != length(unique(S)) || any(sort(S) != S) ) {
+     stop("S must be a vector of unique positive integers sorted from smallest to largest.")
+   }
+
+   if (!is.null(A)) {
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
+       stop("A must be a vector of distinct integers and length >=2.")
+     }
+     if ( !all( A %in% unique(X) ) ) {
+       warning("Some elements in A do not appear in the sample.")
+     }
+     if ( !all( unique(X) %in% A ) ) {
+       stop("The sample contains elements that do not appear in A.")
+     }
+   }
+
+   if(!is.list(init)){
+     stop("init must be a list with the initial parameters for the EM algorithm.")
+   }
+   if(!all(names(init) %in% c("p0", "pj", "lambdas"))){
+     stop("The init list entrances must be labeled 'p0', 'pj', and 'lambdas', and at least 'pj' and 'lambdas' must be provided.")
+   }
+
+   if( is.null(init$lambdas) || length(init$lambdas) != (length(S) + 1) || !all(init$lambdas >= 0)) {
+     stop("The parameter init$lambdas must be a numeric, non-negative vector of length ", length(S)+1)
+   }
+
+   if (is.null(init$pj) || length(init$pj) != length(S) || !is.list(init$pj)) {
+     stop("The parameter init$pj must be a list with ", length(S), " matrices.")
+   }
+
+   if( length(init$p0) == 0 && init$lambdas[1] > 0) {
+     stop("You did not provide a distribution init$p0, but provided a positive weight for it (init$lambdas[1]>0).")
+   }
+   if( length(init$p0) != 0 && sum(init$p0) > 0 && init$lambdas[1] == 0) {
+     stop("You have provided values for init$p0, but provided weight 0 for them (init$lambdas[1]=0).")
+   }
+
+   if (!is.logical(oscillations)) stop("oscillations must be TRUE or FALSE.")
+   if (!is.logical(iter)) stop("Iter must be TRUE or FALSE.")
+
+   if( length(nIter) != 1 || !is.numeric(nIter) || nIter %% 1 != 0 || nIter <= 0 ){
+     stop("nIter must be a positive integer.")
+     }
+   if(!is.null(M)){
+     if(length(M) != 1 || !is.numeric(M) || M <= 0 ){
+       stop("M is either NULL or a positive real number.")
+       }
+   }
  }

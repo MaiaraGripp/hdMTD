@@ -19,11 +19,11 @@ Samples an MTD Markov Chain from the stationary distribution.
 }
 \details{
 This perfect sample algorithm requires that the MTD model has
-an independent distribution and a positive weight (i.e., \code{MTD$lambdas["lam0"]>0} which
+an independent distribution (p0) with a positive weight (i.e., \code{MTD$lambdas["lam0"]>0} which
 means \eqn{\lambda_0>0}).
 }
 \examples{
-perfectSample(MTDmodel(Lambda=c(1,4),A=c(0,2)),N=200 )
-perfectSample(MTDmodel(Lambda=c(2,5),A=c(1,2,3)),N=1000 )
+perfectSample(MTDmodel(Lambda=c(1,4), A = c(0,2)), N = 200 )
+perfectSample(MTDmodel(Lambda=c(2,5), A = c(1,2,3)), N = 1000 )
 
 }

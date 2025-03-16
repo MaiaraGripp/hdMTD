@@ -55,9 +55,9 @@
 #' pbase <- freqTab(S=NULL,j=1,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
 #' dTV_sample(S=NULL,j=1,A=c(1,2,3),base=pbase)
 #'
-dTV_sample <- function(S,j,A=NULL,base,lenA=NULL,A_pairs=NULL,x_S){
+dTV_sample <- function(S, j, A = NULL, base, lenA = NULL, A_pairs = NULL, x_S){
 
-  check_dTVsample_inputs(S,j,A,base,lenA,A_pairs,x_S)
+  check_dTVsample_inputs(S, j, A, base, lenA, A_pairs, x_S)
 
   # If S is empty, set x_S to NULL
   if(length(S) == 0) x_S <- NULL
