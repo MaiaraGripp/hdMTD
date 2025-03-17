@@ -13,6 +13,7 @@
 # 7 - check_hdMTD_CUT_inputs()
 # 8 - check_hdMTD_BIC_inputs()
 # 9 - check_MTDest_inputs()
+# 10 - check_oscillation_inputs()
 
 #########################################################################
 
@@ -253,8 +254,8 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    }
 
    if( length(A) > 0 ){
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
-        stop("A must be a vector of distinct integers and length >=2.")
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+        stop("A must be a vector of distinct nonnegative integers and length >=2.")
      }
      if ( !all( A %in% unique(X) ) ) {
         warning("Some elements in A do not appear in the sample.")
@@ -287,8 +288,8 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    }
 
    if( length(A) > 0 ){
-       if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
-         stop("A must be a vector of distinct integers and length >=2.")
+       if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+         stop("A must be a vector of distinct nonnegative integers and length >=2.")
        }
        if ( !all( A %in% unique(X) ) ) {
          warning("Some elements in A do not appear in the sample.")
@@ -306,9 +307,9 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
  }
 
 
- #########################################################################
- #########################################################################
- #########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
 
  check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
    # Validates the inputs in hdMTD_CUT() function.
@@ -323,8 +324,8 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    }
 
    if( length(A) > 0 ){
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
-       stop("A must be a vector of distinct integers and length >=2.")
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0)) {
+       stop("A must be a vector of distinct nonnegative integers and length >=2.")
      }
      if ( !all( A %in% unique(X) ) ) {
        warning("Some elements in A do not appear in the sample.")
@@ -347,9 +348,9 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    }
  }
 
- #########################################################################
- #########################################################################
- #########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
 
  check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
    # Validates the inputs of MTDest() function
@@ -360,8 +361,8 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
    }
 
    if (!is.null(A)) {
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) ) {
-       stop("A must be a vector of distinct integers and length >=2.")
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+       stop("A must be a vector of distinct nonnegative integers and length >=2.")
      }
      if ( !all( A %in% unique(X) ) ) {
        warning("Some elements in A do not appear in the sample.")
@@ -403,5 +404,29 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
      if(length(M) != 1 || !is.numeric(M) || M <= 0 ){
        stop("M is either NULL or a positive real number.")
        }
+   }
+ }
+
+#########################################################################
+#########################################################################
+#########################################################################
+
+ check_oscillation_inputs <- function(x, params){
+
+   if(length(params$S) < 1 || !is.numeric(params$S) || any( params$S %% 1 != 0) || any( params$S < 1) ){
+     stop("The user must inform a set of lags (labeled as S) for which to estimate the oscillations.
+    S must be an integer or a vector of positive integer numbers.")
+   }
+   if(!is.null(params$A)) {
+     if( length(params$A) <= 1 || any( params$A%%1 != 0 ) ||
+         length(params$A) != length(unique(params$A)) || any(params$A < 0) ) {
+       stop("A must be a vector of distinct nonnegative integers with length >=2.")
+     }
+     if ( !all( params$A %in% unique(x) ) ) {
+       warning("Some elements in A do not appear in the sample.")
+     }
+     if ( !all( unique(x) %in% params$A ) ) {
+       stop("The sample contains elements that do not appear in A.")
+     }
    }
  }

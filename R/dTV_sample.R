@@ -59,19 +59,19 @@ dTV_sample <- function(S, j, A = NULL, base, lenA = NULL, A_pairs = NULL, x_S){
 
   check_dTVsample_inputs(S, j, A, base, lenA, A_pairs, x_S)
 
-  # If S is empty, set x_S to NULL
-  if(length(S) == 0) x_S <- NULL
-
   # If A is provided, compute lenA and A_pairs
   if( !is.null(A) ){
     A <- sort(A)
     lenA <- length(A)
     A_pairs <- t(utils::combn(A, 2))
   }
+  nrowA_pairs <- nrow(A_pairs)
 
   S <- sort(S,decreasing = TRUE)
   lenS <- length(S)
-  nrowA_pairs <- nrow(A_pairs)
+  # If S is empty, set x_S to NULL
+  if(lenS == 0) x_S <- NULL
+
 
   # Filters base according to x_S if S is not NULL
   if (!is.null(S)) {

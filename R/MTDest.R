@@ -120,6 +120,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   }
 
   # The EM algorithm
+
   contInt <- 0
   distlogL <- NULL
 
@@ -135,9 +136,9 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
 
     # Compute log likelihood
     if(any(baseSja$Nxa_Sj == 0)){
-    # If TRUE is possible that some probabilities in the initial P matrix are 0.
-    # Then calculating log(P(a|x))*N(xa) for the log likelihood will result in -inf*0=Nan.
-    # To prevent this use the auxiliary function prodinf (see utils.R). With it -inf*0=0.
+    # If TRUE is possible that some probabilities in initMTD$P are also 0, and
+    # log(P(a|x))*N(xa) = log(0)*0 = -inf*0 = Nan. To prevent this use the auxiliary
+    # function prodinf (see utils.R). With it, terms resulting from -inf*0 are set to 0.
       initLogL <- sum( prodinf( log(as.vector(t(initMTD$P))) , baseSja$Nxa_Sj ) )
     }else{
       initLogL <- sum( log(as.vector(t(initMTD$P)))*baseSja$Nxa_Sj )

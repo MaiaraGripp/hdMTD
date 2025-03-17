@@ -177,14 +177,14 @@
   } # n_parameters is used in hdMTD_BIC.R.
 
 
-  ###########################################################
-  ###########################################################
-  ###########################################################
+###########################################################
+###########################################################
+###########################################################
 
 # prodinf: Computes the vector product between to vectors
 #
 # This function computes the product vector between to vectors x and y.
-# However, for each i such that x[i]=inf and y[i]=0, x[i] * y[i] = 0.
+# However, for each i such that |x[i]|=inf and y[i]=0, x[i] * y[i] = 0.
 #
 # Arguments:
 # - x: A numeric vector, may have inf values
