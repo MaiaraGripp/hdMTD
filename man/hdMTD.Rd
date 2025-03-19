@@ -11,42 +11,56 @@ hdMTD(X, d, method = "FS", ...)
 
 \item{d}{A positive integer representing an upper bound for the chain order.}
 
-\item{method}{A method for estimation of the relevant lag set. The available methods in this
-package are "FS" (default), "FSC", "CUT", and "BIC". Refer to the documentation of
-each method's respective function for details.}
+\item{method}{A character string indicating the method for estimating the relevant lag set.
+The available methods are: "FS" (default), "FSC", "CUT", and "BIC". See the \emph{Details} section
+and the documentation of the corresponding method functions for more information.}
 
-\item{...}{Additional arguments relevant to the selected method. Refer to the \emph{Details} section
-for more information.}
+\item{...}{Additional arguments for the selected method. If not specified, default values
+will be used (see \emph{Details} ).}
 }
 \value{
-Returns a vector with the estimated relevant lag set from a sample of an MTD model.
+A vector containing the estimated relevant lag set.
 }
 \description{
-A function for inference in Mixture Transition Distribution (MTD) models. This function
-can use a selected \code{method} to perform estimation of the relevant lag set from a sample of
-an MTD model. By default \code{method="FS"} (Forward Stepwise) which is especially useful
-in high dimension. The other available "methods" are "CUT", "FSC" (Forward Stepwise and Cut)
-which is an application of the "FS" method followed by the "CUT" method, and lastly the "BIC"
-(Bayesian Information Criterion) method. For more information on these methods see \emph{Details}
-and the documentation of their specific functions.
+This function estimates the relevant lag set in a Mixture Transition Distribution (MTD) model
+using one of the available methods. By default, it applies the Forward Stepwise ("FS") method,
+which is particularly useful in high-dimensional settings.
+The available methods are:
+\itemize{
+\item "FS" (Forward Stepwise): selects the lags by a criteria that depends on their oscillations.
+\item "CUT": a method that selects the relevant lag set based on a predefined threshold.
+\item "FSC" (Forward Stepwise and Cut): applies the "FS" method followed by the "CUT" method.
+\item "BIC": selects the lag set using the Bayesian Information Criterion.
+}
 }
 \details{
-This function allows the user to call any of the "\code{hdMTD_(method)}" functions
-by specifying the "method" as an argument.
-For example, if the \code{\link[=hdMTD]{hdMTD()}} function is used with \code{method="FSC"} it will call the
-\code{\link[=hdMTD_FSC]{hdMTD_FSC()}} function. Note that, in this case, any extra parameters must match those used
-by \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}. Each method may use a different set of parameters, and they can be passed
-to \code{\link[=hdMTD]{hdMTD()}} through the \code{...} argument. In order to see which parameters can be passed
-for each method see the documentation of the "\code{hdMTD_(method)}" function:
+The function dynamically calls the corresponding method function (e.g., \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} for
+\code{method = "FSC"}). Additional parameters specific to each method can be provided via \code{...},
+and default values are used for unspecified parameters.
+
+#' This function serves as a wrapper for the method-specific functions:
 \itemize{
-\item For "FS" method, extra parameters are listed in the documentation of \code{\link[=hdMTD_FS]{hdMTD_FS()}}.
-\item For "FSC" method, extra parameters are listed in the documentation of \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}.
-\item For "CUT" method, extra parameters are listed in the documentation of \code{\link[=hdMTD_CUT]{hdMTD_CUT()}}.
-\item For "BIC" method, extra parameters are listed in the documentation of \code{\link[=hdMTD_BIC]{hdMTD_BIC()}}.
+\item \code{\link[=hdMTD_FS]{hdMTD_FS()}}, for \code{method = "FS"}
+\item \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}, for \code{method = "FSC"}
+\item \code{\link[=hdMTD_CUT]{hdMTD_CUT()}}, for \code{method = "CUT"}
+\item \code{\link[=hdMTD_BIC]{hdMTD_BIC()}}, for \code{method = "BIC"}
+}
+
+Any additional parameters (\code{...}) must match those accepted by the corresponding method function.
+If a parameter value is not explicitly provided, a default value is used.
+The main default parameters are:
+\itemize{
+\item \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
+\item \code{l = d}. Required in "FS" or "FSC" methods.
+\item \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
+\item \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
+\item \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
+All default values are specified in the documentation of the method-specific functions.
 }
 }
 \examples{
 X <- testChains[,1]
-hdMTD(X=X,d=5, method = "FS",l=2)
-hdMTD(X=X,d=5, method = "BIC",xi=1, minl=3, maxl=3)
+hdMTD(X = X, d = 5, method = "FS", l = 2)
+hdMTD(X = X, d = 5, method = "BIC", xi = 1, minl = 3, maxl = 3)
+
 }

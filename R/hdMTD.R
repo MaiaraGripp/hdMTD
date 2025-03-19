@@ -1,77 +1,96 @@
 #' Inference in MTD models
 #'
-#' A function for inference in Mixture Transition Distribution (MTD) models. This function
-#' can use a selected \code{method} to perform estimation of the relevant lag set from a sample of
-#' an MTD model. By default \code{method="FS"} (Forward Stepwise) which is especially useful
-#' in high dimension. The other available "methods" are "CUT", "FSC" (Forward Stepwise and Cut)
-#' which is an application of the "FS" method followed by the "CUT" method, and lastly the "BIC"
-#' (Bayesian Information Criterion) method. For more information on these methods see *Details*
-#' and the documentation of their specific functions.
+#' This function estimates the relevant lag set in a Mixture Transition Distribution (MTD) model
+#' using one of the available methods. By default, it applies the Forward Stepwise ("FS") method,
+#' which is particularly useful in high-dimensional settings.
+#'  The available methods are:
+#' - "FS" (Forward Stepwise): selects the lags by a criteria that depends on their oscillations.
+#' - "CUT": a method that selects the relevant lag set based on a predefined threshold.
+#' - "FSC" (Forward Stepwise and Cut): applies the "FS" method followed by the "CUT" method.
+#' - "BIC": selects the lag set using the Bayesian Information Criterion.
 #'
+#' The function dynamically calls the corresponding method function (e.g., [hdMTD_FSC()] for
+#' \code{method = "FSC"}). Additional parameters specific to each method can be provided via `...`,
+#' and default values are used for unspecified parameters.
 #'
-#' @details This function allows the user to call any of the "\code{hdMTD_(method)}" functions
-#' by specifying the "method" as an argument.
-#' For example, if the [hdMTD()] function is used with \code{method="FSC"} it will call the
-#'  [hdMTD_FSC()] function. Note that, in this case, any extra parameters must match those used
-#'  by [hdMTD_FSC()]. Each method may use a different set of parameters, and they can be passed
-#'  to [hdMTD()] through the \code{...} argument. In order to see which parameters can be passed
-#'  for each method see the documentation of the "\code{hdMTD_(method)}" function:
-#' \itemize{
-#' \item For "FS" method, extra parameters are listed in the documentation of [hdMTD_FS()].
-#' \item For "FSC" method, extra parameters are listed in the documentation of [hdMTD_FSC()].
-#' \item For "CUT" method, extra parameters are listed in the documentation of [hdMTD_CUT()].
-#' \item For "BIC" method, extra parameters are listed in the documentation of [hdMTD_BIC()].
-#' }
+#' @details
+#' #' This function serves as a wrapper for the method-specific functions:
+#' - [hdMTD_FS()], for \code{method = "FS"}
+#' - [hdMTD_FSC()], for \code{method = "FSC"}
+#' - [hdMTD_CUT()], for \code{method = "CUT"}
+#' - [hdMTD_BIC()], for \code{method = "BIC"}
+#'
+#' Any additional parameters (`...`) must match those accepted by the corresponding method function.
+#' If a parameter value is not explicitly provided, a default value is used.
+#' The main default parameters are:
+#' - \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
+#' - \code{l = d}. Required in "FS" or "FSC" methods.
+#' - \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
+#' - \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
+#' - \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
+#' All default values are specified in the documentation of the method-specific functions.
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
 #' @param d A positive integer representing an upper bound for the chain order.
-#' @param method A method for estimation of the relevant lag set. The available methods in this
-#' package are "FS" (default), "FSC", "CUT", and "BIC". Refer to the documentation of
-#' each method's respective function for details.
-#' @param ... Additional arguments relevant to the selected method. Refer to the *Details* section
-#'  for more information.
+#' @param method  A character string indicating the method for estimating the relevant lag set.
+#' The available methods are: "FS" (default), "FSC", "CUT", and "BIC". See the *Details* section
+#' and the documentation of the corresponding method functions for more information.
+#' @param ... Additional arguments for the selected method. If not specified, default values
+#' will be used (see *Details* ).
 #'
-#' @return Returns a vector with the estimated relevant lag set from a sample of an MTD model.
+#' @return A vector containing the estimated relevant lag set.
 #' @export
 #'
 #' @examples
 #' X <- testChains[,1]
-#' hdMTD(X=X,d=5, method = "FS",l=2)
-#' hdMTD(X=X,d=5, method = "BIC",xi=1, minl=3, maxl=3)
-hdMTD <- function(X,d,method="FS", ...){
+#' hdMTD(X = X, d = 5, method = "FS", l = 2)
+#' hdMTD(X = X, d = 5, method = "BIC", xi = 1, minl = 3, maxl = 3)
+#'
+hdMTD <- function(X, d, method="FS", ...){
 
-  if( !method %in% c("FSC","FS","CUT","BIC") ){stop("The chosen method is unknown")}
-  fmtd <-  match.fun(paste0("hdMTD_",method))
-  fmtd_params <- names(formals(fmtd))
+  if( !method %in% c("FSC", "FS", "CUT", "BIC") ){
+    stop("The chosen method is unknown")
+  }
+
+  fmtd <-  match.fun(paste0("hdMTD_", method))
+  fmtd_params <- names(formals(fmtd)) # names of parameters need for method
 
   params <- list(...)
-  if( method=="FS" | method=="FSC" ){
-    while ( is.na(params$l) ||
-            !is.numeric(params$l) ||
-            params$l%%1 != 0 ||
-            params$l>d ) {
-      cat("The value of l is not valid or has not been declared for the FS step. It should be a positive integer less than or equal to d.")
-      params$l <- readline(prompt = "Please enter a valid l: ")
-      params$l <- suppressWarnings(as.numeric(params$l))
-    }
-  }
 
-  dparams <- list(S=seq(1,d,1),l=d,alpha=0.05,mu=1,xi=0.5,minl=d,maxl=d,
-                         A=NULL,byl=FALSE,BICvalue=FALSE,elbowTest=FALSE,warning=FALSE)
+  # List of default parameters
+  dparams <- list(S = seq(1,d,1),l = d, alpha = 0.05,
+                  mu = 1, xi = 0.5, minl = 1,
+                  maxl = d, A = NULL,
+                  byl = FALSE, BICvalue = FALSE,
+                  single_matrix = FALSE, indep_part = TRUE,
+                  zeta = d, elbowTest = FALSE,
+                  warning = FALSE)
 
-  if(length(params)!=0){
+  if( length(params) != 0){
     if( !all(names(params) %in% fmtd_params) ){
-      stop( paste0("Some parameters do not match those used in hdMTD_.",
-                   method," function. Please check hdMTD_",method,"() documentation.") )
+      stop(paste0("Some of the parameters names provided do not match those used in hdMTD_.",
+                  method," function. Please check hdMTD_",method,"() documentation."))
     }
     params_names <- names(params)
-    dparams[params_names] <- params
+    dparams[params_names] <- params # Replace default parameters with informed ones
+
+    if ( method == "BIC"){
+      if( !"maxl" %in% params_names ){
+        dparams$maxl <- length(dparams$S) # Default maxl to length(S)
+      }
+      if( !"zeta" %in% params_names ){ # Default zeta to maxl
+        dparams$zeta <- dparams$maxl
+      }
+    }
   }
-  fmtd(X=X,d=d,S=dparams$S,l=dparams$l,
-       alpha=dparams$alpha,mu=dparams$mu,
-       xi=dparams$xi,minl=dparams$minl,
-       maxl=dparams$maxl,A=dparams$A,
-       byl=dparams$byl,BICvalue=dparams$BICvalue,
-       elbowTest=dparams$elbowTest,
-       warning=dparams$warning)
+
+  fmtd(X = X, d = d, S = dparams$S, l = dparams$l,
+       alpha = dparams$alpha, mu = dparams$mu,
+       xi = dparams$xi, minl = dparams$minl,
+       maxl = dparams$maxl, A = dparams$A,
+       byl = dparams$byl, BICvalue = dparams$BICvalue,
+       single_matrix = dparams$single_matrix,
+       indep_part = dparams$indep_part,
+       zeta = dparams$zeta, elbowTest = dparams$elbowTest,
+       warning = dparams$warning)
 }
