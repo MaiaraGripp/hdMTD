@@ -163,9 +163,10 @@
   n_parameters <- function(Lambda, A,
                            single_matrix = FALSE,
                            indep_part = TRUE,
-                           zeta = ifelse(single_matrix, 1, length(Lambda))){
+                           zeta = length(Lambda)){
     lenA <- length(A)
     lenL <- length(Lambda)
+    if (single_matrix) { zeta <- 1}
 
     n_parameters <- lenL-1 # Number of free weight parameters if lam0 = 0
     if (indep_part) {

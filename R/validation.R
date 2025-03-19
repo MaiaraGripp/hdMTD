@@ -20,9 +20,9 @@
 checkMTD <- function(MTD){
   # Verifies if an object of class MTD is correctly structured, containing
   # all the necessary parameters, and if these parameters satisfy their
-  # respective constraints.
+  # respective constraints
 
-  #Verifies if the object is a list with class MTD.
+  #Verifies if the object is a list with class MTD
   if (!is.list(MTD)) {
     stop("MTD must be a list. Try using MTDmodel() to create an MTD.")
   }
@@ -91,7 +91,7 @@ checkMTD <- function(MTD){
 # Note: This package includes a function called MTDmodel(), which outputs
 # a properly structured MTD object that does not require additional checks.
 # However, since the user can create the MTD object manually, this checkMTD()
-# is used, within the functions that use MTD objects as inputs, to prevent errors.
+# is used, within the functions that use MTD objects as inputs, to prevent errors
 
 
 #########################################################################
@@ -99,7 +99,7 @@ checkMTD <- function(MTD){
 #########################################################################
 
 check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, indep_part){
-  # Validates the inputs in MTDmodel() function.
+  # Validates the inputs in MTDmodel() function
 
   if(!is.numeric(Lambda) || any(Lambda <= 0) || !all(Lambda %% 1 == 0) ||
      !is.vector(Lambda) || length(Lambda) != length(unique(Lambda)) ) {
@@ -157,7 +157,7 @@ check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, 
 #########################################################################
 
 check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
-  # Validates the inputs in freqTab() function.
+  # Validates the inputs in freqTab() function
 
   if(!is.data.frame(countsTab)) {
     stop("countsTab must be a tibble or a dataframe. Try using countsTab() function.")
@@ -196,7 +196,7 @@ check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
 #########################################################################
 
 check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
-  # Validates the inputs in dTV_sample() function.
+  # Validates the inputs in dTV_sample() function
 
   if( length(S) > 0 ){
       if( !is.vector(S) || any(S%%1 != 0) || any(S<1) ) {
@@ -247,9 +247,10 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 
 
  check_probs_inputs <- function(X, S, matrixform, A, warning) {
-   # Validates the inputs in probs() function.
+   # Validates the inputs in probs() function
 
-   if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) || length(S) != length(unique(S)) ){
+   if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) ||
+       length(S) != length(unique(S)) || !is.vector(S) ){
      stop("S must be a numeric vector of unique positive integers with length >= 1.")
    }
 
@@ -277,7 +278,7 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
  #########################################################################
 
  check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
-   # Validates the inputs in hdMTD_FS() function.
+   # Validates the inputs in hdMTD_FS() function
 
    if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
      stop("The order d must be an integer equal to or greater than 2.")
@@ -312,14 +313,14 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 #########################################################################
 
  check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
-   # Validates the inputs in hdMTD_CUT() function.
+   # Validates the inputs in hdMTD_CUT() function
 
    if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
      stop("The order d must be an integer equal to or greater than 2.")
    }
 
    if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
-      length(S) != length(unique(S)) || any( S <= 0)) {
+      length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
      stop("S must be a vector of distinct positive integers containing at least 2 values.")
    }
 
@@ -351,6 +352,72 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 #########################################################################
 #########################################################################
 #########################################################################
+
+
+ check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
+                                    xi, A, byl, BICvalue,
+                                    single_matrix, indep_part,
+                                    zeta, warning) {
+   # Validates the inputs of hdMTD_BIC() function
+
+   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
+     stop("The order d must be an integer equal to or greater than 2.")
+   }
+
+   if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
+      length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
+     stop("S must be a vector of distinct positive integers containing at least 2 values.")
+   }
+
+   if( length(A) > 0 ){
+     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+       stop("A must be a vector of distinct nonnegative integers and length >=2.")
+     }
+     if ( !all( A %in% unique(X) ) ) {
+       warning("Some elements in A do not appear in the sample.")
+     }
+     if ( !all( unique(X) %in% A ) ) {
+       stop("The sample contains elements that do not appear in A.")
+     }
+   } else if (warning) {
+     warning("States space A not provided. The function will set A <- sort(unique(X)).")
+   }
+
+   if ( length(minl) != 1 || !is.numeric(minl) || minl %% 1 != 0 ||
+        minl > length(S) || minl <=0 ) {
+     stop("minl should be a positive integer less than or equal to the number of elements in S.")
+   }
+   if ( length(maxl) != 1 || !is.numeric(maxl) || maxl %% 1 != 0 ||
+        maxl > length(S) || maxl < minl) {
+     stop("maxl should be a positive integer less than or equal to the number of elements in S, and greater than or equal to minl.")
+   }
+   if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
+     stop("xi must be a positive real number.")
+   }
+
+   if(!is.logical(byl)) stop("byl must be TRUE or FALSE.")
+   if(!is.logical(BICvalue)) stop("BICvalue must be TRUE or FALSE.")
+   if(!is.logical(single_matrix)) stop("single_matrix must be TRUE or FALSE.")
+
+   if(!single_matrix){
+     if ( is.na(zeta) || length(zeta) != 1 || !is.numeric(zeta) ||
+          zeta %% 1 != 0 || zeta > maxl || zeta < 1 ) {
+       stop("The zeta value is not valid. zeta should be a positive integer
+           representing the number of distinct matrices pj in the MTD.")
+     }
+   } # if single_matrix=TRUE the function n_parameters() sets zeta <- 1.
+
+   if(!is.logical(indep_part)) stop("indep_part must be TRUE or FALSE.")
+   if(!is.logical(warning)) stop("warning must be TRUE or FALSE.")
+
+
+ }
+
+
+#########################################################################
+#########################################################################
+#########################################################################
+
 
  check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
    # Validates the inputs of MTDest() function
@@ -412,6 +479,7 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 #########################################################################
 
  check_oscillation_inputs <- function(x, params){
+   # Validates the inputs of oscillation.default() function.
 
    if(length(params$S) < 1 || !is.numeric(params$S) || any( params$S %% 1 != 0) || any( params$S < 1) ){
      stop("The user must inform a set of lags (labeled as S) for which to estimate the oscillations.

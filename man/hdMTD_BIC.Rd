@@ -7,7 +7,7 @@
 hdMTD_BIC(
   X,
   d,
-  S = 1:d,
+  S = seq_len(d),
   minl = 1,
   maxl = length(S),
   xi = 1/2,
@@ -97,9 +97,9 @@ that \code{d}. If we use another value for \code{d} to run the function, even if
 agrees with that of the previous run, its BIC value might change a little.
 }
 \examples{
-X <- testChains[,1]
-hdMTD_BIC (X,d=6,minl=1,maxl=1)
-hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
+X <- testChains[, 1]
+hdMTD_BIC (X, d = 6, minl = 1, maxl = 1)
+hdMTD_BIC (X,d = 3,minl = 1, maxl = 2, BICvalue = TRUE)
 
 }
 \references{

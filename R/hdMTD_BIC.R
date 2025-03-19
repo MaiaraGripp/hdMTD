@@ -1,3 +1,4 @@
+
 #' The Bayesian Information Criterion (BIC) method for inference in MTD models
 #'
 #' A function for estimating the relevant lag set \eqn{\Lambda} of a Markov chain using
@@ -64,154 +65,115 @@
 #' @export
 #'
 #' @examples
-#' X <- testChains[,1]
-#'hdMTD_BIC (X,d=6,minl=1,maxl=1)
-#'hdMTD_BIC (X,d=3,minl=1,maxl=2,BICvalue = TRUE)
+#' X <- testChains[, 1]
+#' hdMTD_BIC (X, d = 6, minl = 1, maxl = 1)
+#' hdMTD_BIC (X,d = 3,minl = 1, maxl = 2, BICvalue = TRUE)
 #'
-hdMTD_BIC <- function(X,d,S=1:d,minl=1,maxl=length(S),
-                      xi=1/2,A=NULL,byl=FALSE,BICvalue=FALSE,
-                      single_matrix=FALSE,indep_part=TRUE,
-                      zeta=maxl,warning=FALSE,...){
-  #Checking inputs
+hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
+                      xi = 1/2, A = NULL, byl = FALSE, BICvalue = FALSE,
+                      single_matrix = FALSE, indep_part = TRUE,
+                      zeta = maxl, warning = FALSE,...){
+  # Validate inputs
   X <- checkSample(X)
-  if(length(A)==0){
-    if(warning==TRUE){
-      warning("States space A is not informed. Code will set A <- sort(unique(X)).")
-    }
-    A <- sort(unique(X))
-  }
-  if( length(A)<=1   ||
-      any(A%%1 !=0)   )stop("States space A must be a numeric vector with at least two integers.")
-  if ( !all( unique(X) %in% A ) ) {
-    stop("Check the states space, it must include all states that occur in the sample.")
-  }
-  if( !is.numeric(d) ||
-      d<2 ||
-      (d %% 1)!=0  ||
-      d<max(S)){stop("The order d must be an integer number greater than 2 or the greatest element in S.")
-    }
-  if(length(S) < 2  ||
-     length(dim(S))!=0 ||
-     any( S%%1 != 0) ){stop("S must be a vector of at least 2 integer numbers.")
-    }
-  if ( is.na(minl) ||
-       !is.numeric(minl) ||
-       minl%%1 != 0 ||
-       minl>length(S) ||
-       minl <=0 ) {
-      stop("The minl value is not valid. minl should be a positive integer lower or equal to the number of elements in S.")
-  }
-  if ( is.na(maxl) ||
-       !is.numeric(maxl) ||
-       maxl%%1 != 0 ||
-       maxl>length(S) ||
-       maxl<minl) {
-    stop("The maxl value is not valid. maxl should be a positive integer lower or equal to the number of elements in S, and greater or equal to minl.")
-  }
-  while ( is.na(xi) || !is.numeric(xi) || xi <= 0 ) {
-    cat("The BIC constant xi value is not valid. xi should be a positive number.")
-    xi <- readline(prompt = "Please enter a valid xi: ")
-    xi <- suppressWarnings(as.numeric(xi))
-  }
-  if(!is.logical(byl)){stop("byl must me a logical argument")}
-  if(!is.logical(BICvalue)){stop("BICvalue must me a logical argument")}
-  if(!is.logical(warning)){stop("warning must me a logical argument")}
-  if(!is.logical(indep_part)){stop("indep_part must me a logical argument")}
-  if(!is.logical(single_matrix)){stop("single_matrix must me a logical argument")}
-  if(single_matrix==FALSE){
-    if ( is.na(zeta) ||
-         !is.numeric(zeta) ||
-         zeta%%1 != 0 ||
-         zeta>maxl ||
-         zeta<1 ) {
-      stop("The zeta value is not valid. zeta should be a positive integer
-           representing the number of distinct matrices pj in the MTD.")
-    }
-  }
+  check_hdMTD_BIC_inputs(X, d, S, minl, maxl, xi, A, byl, BICvalue, single_matrix,
+                         indep_part, zeta, warning)
+
+  # Set the state space if not provided
+  if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
+
   A <- sort(A)
   lenS <- length(S)
   S <- sort(S)
-  base <- countsTab(X,d)
+  base <- countsTab(X, d)
 
-## Calculating penalized log-likelihood
-  if(maxl==minl){
-        nCombs <- choose(lenS,minl) #number of possible sets with length minl of elements of S
-        tryCombs <- matrix( c(rep(0,nCombs),
-                              rep(n_parameters(Lambda=1:minl,
-                                               A=A,
-                                               single_matrix=single_matrix,
-                                               indep_part=indep_part,
-                                               zeta=zeta)*log(length(X))*xi,nCombs)
-                             ),byrow = T,nrow = 2 )
-        aux <- apply(t(combn(S,minl)), 1, paste0,collapse=",")
-        #aux is a vector with all possible sets of length minl with elements of S
-        for ( k in 1:nCombs ) {
-          G <- as.numeric(unlist(strsplit(aux[k], ",")))
-          b <- freqTab(S=G,j=NULL,A=A,countsTab=base,complete = FALSE)
-          tryCombs[1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
-        }
-        colnames(tryCombs) <- aux
-        rownames(tryCombs) <- c("log_ML","penalty")
-        pML <- apply(tryCombs,2,sum) # -loglikelihood + penalty
-        pML <- sort(pML)[1] # max
-        if(!BICvalue){
-          pML <- as.numeric(unlist(strsplit(names(pML), ",")))
-        }
-      }else{ #maxl>minl
-        tryCombs <- list()
-        cont <- 1
-        # does the same thing as when minl=maxl but for all minl<=l<=maxl.
-        # So tryCombs is now a list, and the penalty changes with l
-        for (i in minl:maxl) {
-          nCombs <- choose(lenS,i)
-          tryCombs[[cont]] <- matrix( rep(0,2*nCombs) ,byrow = T,nrow = 2 )
-          tryCombs[[cont]][2,] <- n_parameters(Lambda=(1:i),
-                                               A=A,
-                                               single_matrix = single_matrix,
-                                               indep_part = indep_part,
-                                               zeta=min(zeta,i))*log(length(X))*xi
+  # Compute penalized log-likelihood
+  if(maxl == minl){
 
-          aux <- apply(t(combn(S,i)), 1, paste0,collapse=",")
-          for ( k in 1:nCombs) {
-            G <- as.numeric(unlist(strsplit(aux[k], ",")))
-            b <- freqTab(S=G,j=NULL,A=A,countsTab=base,complete = FALSE)
-            tryCombs[[cont]][1,k] <- -sum(b$Nxa_Sj*log(b$qax_Sj))
-          }
-          colnames(tryCombs[[cont]]) <- aux
-          rownames(tryCombs[[cont]]) <- c("log_ML","penalty")
-          cont <- cont+1
-        }
-          if(maxl-minl==1){ #this solves a problem that may occur if all vectors in
-            #tryCombs list have the same length. If that is the case, the function sapply
-            #will format pML differently and remove the colnames, which we can't have...
-            if( ncol(tryCombs[[1]])==ncol(tryCombs[[2]]) ){
-             tryCombs[[2]] <- cbind(tryCombs[[2]],tryCombs[[2]][,1])
-             colnames(tryCombs[[2]])[ncol(tryCombs[[2]])] <- colnames(tryCombs[[2]])[1]
-            }
-          }
-        pML <- sapply(tryCombs, apply, 2,sum)
+    nCombs <- choose(lenS, minl) # Number of size minl subsets of S
+    Combs <- t(combn(S, minl)) # All size minl subsets of S
 
-          if(byl){
-            smallest <- names(unlist(pML))[order(unlist(pML))][1]
-            nam <- sapply(sapply(pML, orderedNames), dplyr::first )
-            pML <- sapply(sapply(pML,sort),dplyr::first)
-            pML <- c( pML,unlist(pML)[order(unlist(pML))][1] )
-            names(pML) <- c(nam,paste0("smallest: ",smallest))
-              if(!BICvalue){
-                pML <- names(pML)
-              }
-          }else{
-            pML <- unlist(pML)[order(unlist(pML))][1]
-              if(!BICvalue){
-                pML <- as.numeric(unlist(strsplit(names(pML), ",")))
-              }
-          }
+    tryCombs <- matrix(rep(0, 2*nCombs), byrow = T, nrow = 2)
+    # tryCombs[1, ] will store log likelihoods for each possible size minl subset
+    # of S as set of relevant lags. tryCombs[2, ] will store their penalization term
+    colnames(tryCombs) <- apply(Combs, 1, paste0, collapse = ",")
+    rownames(tryCombs) <- c("log_ML","penalty")
+
+    # Compute the number of parameters in an MTD with minl relevant lags
+    n_param <- n_parameters(Lambda = seq_len(minl),
+                            A = A,
+                            single_matrix = single_matrix,
+                            indep_part = indep_part,
+                            zeta = zeta)
+    # Compute penalizations
+    tryCombs[2, ] <- n_param * log(length(X)) * xi
+
+    # Compute log likelihoods for each size minl subset of S as set of relevant lags.
+    for ( k in seq_len(nCombs) ) {
+      b <- freqTab(S = Combs[k, ], j = NULL, A = A, countsTab = base, complete = FALSE)
+      tryCombs[1, k] <- - sum(b$Nxa_Sj * log(b$qax_Sj))
     }
-   pML
+
+    pML <- colSums(tryCombs) # -loglikelihood + penalty
+    pML <- sort(pML)[1] # min (did not use min(pML) since names(min(pML))=NULL)
+
+    if(!BICvalue){ # only names(pML) is stored
+      pML <- as.numeric(unlist(strsplit(names(pML), ",")))
+    }
+
+    # If maxl > minl the function repeats the algorithm above for all minl<=i<=maxl
+    # as the sizes of subsets of S
+  }else{
+
+    tryCombs <- list() # Initiate a list of matrices tryCombs
+
+    for (i in minl:maxl) {
+      cont <- i - minl + 1
+
+      nCombs <- choose(lenS,i) # Number of size i subsets of S
+      Combs <- t(combn(S, i)) # All size i subsets of S
+
+      tryCombs[[cont]] <- matrix(rep(0, 2*nCombs), byrow = T, nrow = 2)
+      colnames(tryCombs[[cont]]) <- apply(Combs, 1, paste0, collapse = ",")
+      rownames(tryCombs[[cont]]) <- c("log_ML", "penalty")
+
+      # Compute the number of parameters in an MTD with i relevant lags
+      n_param <- n_parameters(Lambda = seq_len(i),
+                              A = A,
+                              single_matrix = single_matrix,
+                              indep_part = indep_part,
+                              zeta = min(zeta, i))
+      # Compute penalizations
+      tryCombs[[cont]][2, ] <- n_param * log(length(X)) * xi
+
+      # Compute log likelihoods for each size i subset of S as set of relevant lags.
+      for ( k in seq_len(nCombs) ) {
+        b <- freqTab(S = Combs[k, ], j = NULL, A = A, countsTab = base, complete = FALSE)
+        tryCombs[[cont]][1, k] <- - sum(b$Nxa_Sj * log(b$qax_Sj))
+      }
+    }
+
+    pML <- sapply(tryCombs, colSums, simplify = FALSE) # -loglikelihood + penalty
+            # simplify needs to be FALSE because if lenS is odd, minl=(lenS-1)/2
+            # and maxl=minl+1 all matrices in tryCombs will have the same ncol.
+
+    pML <- sapply(pML, function(x) sort(x)[1]) # Lowest BIC value per set size
+
+    if(byl){
+      smallest <- pML[order(pML)][1] # Set with the lowest BIC
+      pML <- c(pML, smallest)
+      names(pML)[length(pML)] <- paste0("smallest: ",names(smallest))
+      if(!BICvalue){
+        pML <- names(pML)
+      }
+    }else{
+      pML <- sort(pML)[1]
+      if(!BICvalue){
+        pML <- as.numeric(unlist(strsplit(names(pML), ",")))
+      }
+    }
+  }
+  pML
 }
 
-orderedNames <- function(x){
-  names(x[order(x)])
-}
 
 
