@@ -33,9 +33,9 @@ where \eqn{|A|} is the number of unique states in \code{X}, since it depends
 on the number of unique sequences that appear in the sample.
 }
 \examples{
-countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
+countsTab(c(1,2,2,1,2,1,1,2,1,2), 3)
 
 # Using test data.
-countsTab(testChains[, 1],2)
+countsTab(testChains[, 1], 2)
 
 }

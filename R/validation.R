@@ -16,6 +16,10 @@
 # 10 - check_oscillation_inputs()
 
 #########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
 
 checkMTD <- function(MTD){
   # Verifies if an object of class MTD is correctly structured, containing
@@ -97,6 +101,8 @@ checkMTD <- function(MTD){
 #########################################################################
 #########################################################################
 #########################################################################
+#########################################################################
+#########################################################################
 
 check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, indep_part){
   # Validates the inputs in MTDmodel() function
@@ -155,6 +161,8 @@ check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, 
 #########################################################################
 #########################################################################
 #########################################################################
+#########################################################################
+#########################################################################
 
 check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
   # Validates the inputs in freqTab() function
@@ -191,6 +199,8 @@ check_freqTab_inputs <- function(S, j, A, countsTab, complete) {
   }
 }
 
+#########################################################################
+#########################################################################
 #########################################################################
 #########################################################################
 #########################################################################
@@ -244,257 +254,265 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 #########################################################################
 #########################################################################
 #########################################################################
+#########################################################################
+#########################################################################
 
-
- check_probs_inputs <- function(X, S, matrixform, A, warning) {
+check_probs_inputs <- function(X, S, matrixform, A, warning) {
    # Validates the inputs in probs() function
 
-   if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) ||
-       length(S) != length(unique(S)) || !is.vector(S) ){
-     stop("S must be a numeric vector of unique positive integers with length >= 1.")
-   }
+  if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) ||
+      length(S) != length(unique(S)) || !is.vector(S) ){
+    stop("S must be a numeric vector of unique positive integers with length >= 1.")
+  }
 
-   if( length(A) > 0 ){
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
-        stop("A must be a vector of distinct nonnegative integers and length >=2.")
-     }
-     if ( !all( A %in% unique(X) ) ) {
-        warning("Some elements in A do not appear in the sample.")
-     }
-     if ( !all( unique(X) %in% A ) ) {
-        stop("The sample contains elements that do not appear in A.")
-     }
-   } else if (warning) {
-     warning("States space A not provided. The function will set A <- sort(unique(X)).")
-   }
+  if( length(A) > 0 ){
+    if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+      stop("A must be a vector of distinct nonnegative integers and length >=2.")
+    }
+    if ( !all( A %in% unique(X) ) ) {
+      warning("Some elements in A do not appear in the sample.")
+    }
+    if ( !all( unique(X) %in% A ) ) {
+      stop("The sample contains elements that do not appear in A.")
+    }
+  } else if (warning) {
+    warning("States space A not provided. The function will set A <- sort(unique(X)).")
+  }
 
-   if(!is.logical(matrixform)){
-     stop("matrixform should be either TRUE or FALSE.")
-   }
- }
-
- #########################################################################
- #########################################################################
- #########################################################################
-
- check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
-   # Validates the inputs in hdMTD_FS() function
-
-   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
-     stop("The order d must be an integer equal to or greater than 2.")
-   }
-
-   if( length(l) != 1 || !is.numeric(l) || l%%1 != 0 || l > d ) {
-     stop("The l value is not valid for FS method. l should be a positive integer smaller or equal to d.")
-   }
-
-   if( length(A) > 0 ){
-       if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
-         stop("A must be a vector of distinct nonnegative integers and length >=2.")
-       }
-       if ( !all( A %in% unique(X) ) ) {
-         warning("Some elements in A do not appear in the sample.")
-       }
-       if ( !all( unique(X) %in% A ) ) {
-         stop("The sample contains elements that do not appear in A.")
-       }
-   } else if (warning) {
-      warning("States space A not provided. The function will set A <- sort(unique(X)).")
-   }
-
-   if(!is.logical(elbowTest)){
-     stop("elbowTest should be either TRUE or FALSE.")
-   }
- }
-
+  if(!is.logical(matrixform)){
+    stop("matrixform should be either TRUE or FALSE.")
+  }
+}
 
 #########################################################################
 #########################################################################
 #########################################################################
+#########################################################################
+#########################################################################
 
- check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
-   # Validates the inputs in hdMTD_CUT() function
+check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
+  # Validates the inputs in hdMTD_FS() function
 
-   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
-     stop("The order d must be an integer equal to or greater than 2.")
-   }
+  if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
+    stop("The order d must be an integer equal to or greater than 2.")
+  }
 
-   if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
-      length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
-     stop("S must be a vector of distinct positive integers containing at least 2 values.")
-   }
+  if( length(l) != 1 || !is.numeric(l) || l%%1 != 0 || l > d ) {
+    stop("The l value is not valid for FS method. l should be a positive integer smaller or equal to d.")
+  }
 
-   if( length(A) > 0 ){
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0)) {
-       stop("A must be a vector of distinct nonnegative integers and length >=2.")
-     }
-     if ( !all( A %in% unique(X) ) ) {
-       warning("Some elements in A do not appear in the sample.")
-     }
-     if ( !all( unique(X) %in% A ) ) {
-       stop("The sample contains elements that do not appear in A.")
-     }
-   } else if (warning) {
-     warning("States space A not provided. The function will set A <- sort(unique(X)).")
-   }
+  if( length(A) > 0 ){
+    if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+      stop("A must be a vector of distinct nonnegative integers and length >=2.")
+    }
+    if ( !all( A %in% unique(X) ) ) {
+      warning("Some elements in A do not appear in the sample.")
+    }
+    if ( !all( unique(X) %in% A ) ) {
+      stop("The sample contains elements that do not appear in A.")
+    }
+  } else if (warning) {
+    warning("States space A not provided. The function will set A <- sort(unique(X)).")
+  }
 
-   if ( is.na(alpha) || !is.numeric(alpha) || alpha <= 0 || length(alpha) != 1 ) {
-     stop("alpha must be a positive real number.")
-   }
-   if ( is.na(mu) || !is.numeric(mu) || mu <= 0 || mu <= (exp(mu) - 1)/2 || length(mu) != 1 ) {
-     stop("mu must be a positive real number smaller than (exp(mu)-1)/2.")
-   }
-   if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
-     stop("xi must be a positive real number.")
-   }
- }
+  if(!is.logical(elbowTest)){
+    stop("elbowTest should be either TRUE or FALSE.")
+  }
+}
 
 #########################################################################
 #########################################################################
 #########################################################################
+#########################################################################
+#########################################################################
 
+check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
+  # Validates the inputs in hdMTD_CUT() function
 
- check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
-                                    xi, A, byl, BICvalue,
-                                    single_matrix, indep_part,
-                                    zeta, warning) {
-   # Validates the inputs of hdMTD_BIC() function
+  if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
+    stop("The order d must be an integer equal to or greater than 2.")
+  }
 
-   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
-     stop("The order d must be an integer equal to or greater than 2.")
-   }
+  if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
+     length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
+    stop("S must be a vector of distinct positive integers containing at least 2 values.")
+  }
 
-   if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
-      length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
-     stop("S must be a vector of distinct positive integers containing at least 2 values.")
-   }
+  if( length(A) > 0 ){
+    if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0)) {
+      stop("A must be a vector of distinct nonnegative integers and length >=2.")
+    }
+    if ( !all( A %in% unique(X) ) ) {
+      warning("Some elements in A do not appear in the sample.")
+    }
+    if ( !all( unique(X) %in% A ) ) {
+      stop("The sample contains elements that do not appear in A.")
+    }
+  } else if (warning) {
+    warning("States space A not provided. The function will set A <- sort(unique(X)).")
+  }
 
-   if( length(A) > 0 ){
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
-       stop("A must be a vector of distinct nonnegative integers and length >=2.")
-     }
-     if ( !all( A %in% unique(X) ) ) {
-       warning("Some elements in A do not appear in the sample.")
-     }
-     if ( !all( unique(X) %in% A ) ) {
-       stop("The sample contains elements that do not appear in A.")
-     }
-   } else if (warning) {
-     warning("States space A not provided. The function will set A <- sort(unique(X)).")
-   }
+  if ( is.na(alpha) || !is.numeric(alpha) || alpha <= 0 || length(alpha) != 1 ) {
+    stop("alpha must be a positive real number.")
+  }
+  if ( is.na(mu) || !is.numeric(mu) || mu <= 0 || mu <= (exp(mu) - 1)/2 || length(mu) != 1 ) {
+    stop("mu must be a positive real number smaller than (exp(mu)-1)/2.")
+  }
+  if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
+    stop("xi must be a positive real number.")
+  }
+}
 
-   if ( length(minl) != 1 || !is.numeric(minl) || minl %% 1 != 0 ||
-        minl > length(S) || minl <=0 ) {
-     stop("minl should be a positive integer less than or equal to the number of elements in S.")
-   }
-   if ( length(maxl) != 1 || !is.numeric(maxl) || maxl %% 1 != 0 ||
-        maxl > length(S) || maxl < minl) {
-     stop("maxl should be a positive integer less than or equal to the number of elements in S, and greater than or equal to minl.")
-   }
-   if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
-     stop("xi must be a positive real number.")
-   }
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
 
-   if(!is.logical(byl)) stop("byl must be TRUE or FALSE.")
-   if(!is.logical(BICvalue)) stop("BICvalue must be TRUE or FALSE.")
-   if(!is.logical(single_matrix)) stop("single_matrix must be TRUE or FALSE.")
+check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
+                                   xi, A, byl, BICvalue,
+                                   single_matrix, indep_part,
+                                   zeta, warning) {
+  # Validates the inputs of hdMTD_BIC() function
 
-   if(!single_matrix){
-     if ( is.na(zeta) || length(zeta) != 1 || !is.numeric(zeta) ||
-          zeta %% 1 != 0 || zeta > maxl || zeta < 1 ) {
-       stop("The zeta value is not valid. zeta should be a positive integer
+  if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
+    stop("The order d must be an integer equal to or greater than 2.")
+  }
+
+  if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
+     length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
+    stop("S must be a vector of distinct positive integers containing at least 2 values.")
+  }
+
+  if( length(A) > 0 ){
+    if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+      stop("A must be a vector of distinct nonnegative integers and length >=2.")
+    }
+    if ( !all( A %in% unique(X) ) ) {
+      warning("Some elements in A do not appear in the sample.")
+    }
+    if ( !all( unique(X) %in% A ) ) {
+      stop("The sample contains elements that do not appear in A.")
+    }
+  } else if (warning) {
+    warning("States space A not provided. The function will set A <- sort(unique(X)).")
+  }
+
+  if ( length(minl) != 1 || !is.numeric(minl) || minl %% 1 != 0 ||
+       minl > length(S) || minl <=0 ) {
+    stop("minl should be a positive integer less than or equal to the number of elements in S.")
+  }
+  if ( length(maxl) != 1 || !is.numeric(maxl) || maxl %% 1 != 0 ||
+       maxl > length(S) || maxl < minl) {
+    stop("maxl should be a positive integer less than or equal to the number of elements in S, and greater than or equal to minl.")
+  }
+  if ( is.na(xi) || !is.numeric(xi) || xi <= 0 || length(xi) != 1 ) {
+    stop("xi must be a positive real number.")
+  }
+
+  if(!is.logical(byl)) stop("byl must be TRUE or FALSE.")
+  if(!is.logical(BICvalue)) stop("BICvalue must be TRUE or FALSE.")
+  if(!is.logical(single_matrix)) stop("single_matrix must be TRUE or FALSE.")
+
+  if(!single_matrix){
+    if ( is.na(zeta) || length(zeta) != 1 || !is.numeric(zeta) ||
+         zeta %% 1 != 0 || zeta > maxl || zeta < 1 ) {
+      stop("The zeta value is not valid. zeta should be a positive integer
            representing the number of distinct matrices pj in the MTD.")
-     }
-   } # if single_matrix=TRUE the function n_parameters() sets zeta <- 1.
+    }
+  } # if single_matrix=TRUE the function n_parameters() sets zeta <- 1.
 
-   if(!is.logical(indep_part)) stop("indep_part must be TRUE or FALSE.")
-   if(!is.logical(warning)) stop("warning must be TRUE or FALSE.")
-
-
- }
+  if(!is.logical(indep_part)) stop("indep_part must be TRUE or FALSE.")
+  if(!is.logical(warning)) stop("warning must be TRUE or FALSE.")
 
 
-#########################################################################
-#########################################################################
-#########################################################################
-
-
- check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
-   # Validates the inputs of MTDest() function
-
-   if(!is.numeric(S) || any(S <= 0) || !all(S %% 1 == 0) ||
-      !is.vector(S) || length(S) != length(unique(S)) || any(sort(S) != S) ) {
-     stop("S must be a vector of unique positive integers sorted from smallest to largest.")
-   }
-
-   if (!is.null(A)) {
-     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
-       stop("A must be a vector of distinct nonnegative integers and length >=2.")
-     }
-     if ( !all( A %in% unique(X) ) ) {
-       warning("Some elements in A do not appear in the sample.")
-     }
-     if ( !all( unique(X) %in% A ) ) {
-       stop("The sample contains elements that do not appear in A.")
-     }
-   }
-
-   if(!is.list(init)){
-     stop("init must be a list with the initial parameters for the EM algorithm.")
-   }
-   if(!all(names(init) %in% c("p0", "pj", "lambdas"))){
-     stop("The init list entrances must be labeled 'p0', 'pj', and 'lambdas', and at least 'pj' and 'lambdas' must be provided.")
-   }
-
-   if( is.null(init$lambdas) || length(init$lambdas) != (length(S) + 1) || !all(init$lambdas >= 0)) {
-     stop("The parameter init$lambdas must be a numeric, non-negative vector of length ", length(S)+1)
-   }
-
-   if (is.null(init$pj) || length(init$pj) != length(S) || !is.list(init$pj)) {
-     stop("The parameter init$pj must be a list with ", length(S), " matrices.")
-   }
-
-   if( length(init$p0) == 0 && init$lambdas[1] > 0) {
-     stop("You did not provide a distribution init$p0, but provided a positive weight for it (init$lambdas[1]>0).")
-   }
-   if( length(init$p0) != 0 && sum(init$p0) > 0 && init$lambdas[1] == 0) {
-     stop("You have provided values for init$p0, but provided weight 0 for them (init$lambdas[1]=0).")
-   }
-
-   if (!is.logical(oscillations)) stop("oscillations must be TRUE or FALSE.")
-   if (!is.logical(iter)) stop("Iter must be TRUE or FALSE.")
-
-   if( length(nIter) != 1 || !is.numeric(nIter) || nIter %% 1 != 0 || nIter <= 0 ){
-     stop("nIter must be a positive integer.")
-     }
-   if(!is.null(M)){
-     if(length(M) != 1 || !is.numeric(M) || M <= 0 ){
-       stop("M is either NULL or a positive real number.")
-       }
-   }
- }
+}
 
 #########################################################################
 #########################################################################
 #########################################################################
+#########################################################################
+#########################################################################
 
- check_oscillation_inputs <- function(x, params){
-   # Validates the inputs of oscillation.default() function.
 
-   if(length(params$S) < 1 || !is.numeric(params$S) || any( params$S %% 1 != 0) || any( params$S < 1) ){
-     stop("The user must inform a set of lags (labeled as S) for which to estimate the oscillations.
+check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
+  # Validates the inputs of MTDest() function
+
+  if(!is.numeric(S) || any(S <= 0) || !all(S %% 1 == 0) ||
+     !is.vector(S) || length(S) != length(unique(S)) || any(sort(S) != S) ) {
+    stop("S must be a vector of unique positive integers sorted from smallest to largest.")
+  }
+
+  if (!is.null(A)) {
+    if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
+      stop("A must be a vector of distinct nonnegative integers and length >=2.")
+    }
+    if ( !all( A %in% unique(X) ) ) {
+      warning("Some elements in A do not appear in the sample.")
+    }
+    if ( !all( unique(X) %in% A ) ) {
+      stop("The sample contains elements that do not appear in A.")
+    }
+  }
+
+  if(!is.list(init)){
+    stop("init must be a list with the initial parameters for the EM algorithm.")
+  }
+  if(!all(names(init) %in% c("p0", "pj", "lambdas"))){
+    stop("The init list entrances must be labeled 'p0', 'pj', and 'lambdas', and at least 'pj' and 'lambdas' must be provided.")
+  }
+
+  if( is.null(init$lambdas) || length(init$lambdas) != (length(S) + 1) || !all(init$lambdas >= 0)) {
+    stop("The parameter init$lambdas must be a numeric, non-negative vector of length ", length(S)+1)
+  }
+
+  if (is.null(init$pj) || length(init$pj) != length(S) || !is.list(init$pj)) {
+    stop("The parameter init$pj must be a list with ", length(S), " matrices.")
+  }
+
+  if( length(init$p0) == 0 && init$lambdas[1] > 0) {
+    stop("You did not provide a distribution init$p0, but provided a positive weight for it (init$lambdas[1]>0).")
+  }
+  if( length(init$p0) != 0 && sum(init$p0) > 0 && init$lambdas[1] == 0) {
+    stop("You have provided values for init$p0, but provided weight 0 for them (init$lambdas[1]=0).")
+  }
+
+  if (!is.logical(oscillations)) stop("oscillations must be TRUE or FALSE.")
+  if (!is.logical(iter)) stop("Iter must be TRUE or FALSE.")
+
+  if( length(nIter) != 1 || !is.numeric(nIter) || nIter %% 1 != 0 || nIter <= 0 ){
+    stop("nIter must be a positive integer.")
+  }
+  if(!is.null(M)){
+    if(length(M) != 1 || !is.numeric(M) || M <= 0 ){
+      stop("M is either NULL or a positive real number.")
+    }
+  }
+}
+
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+
+check_oscillation_inputs <- function(x, params){
+  # Validates the inputs of oscillation.default() function.
+
+  if(length(params$S) < 1 || !is.numeric(params$S) || any( params$S %% 1 != 0) || any( params$S < 1) ){
+    stop("The user must inform a set of lags (labeled as S) for which to estimate the oscillations.
     S must be an integer or a vector of positive integer numbers.")
-   }
-   if(!is.null(params$A)) {
-     if( length(params$A) <= 1 || any( params$A%%1 != 0 ) ||
-         length(params$A) != length(unique(params$A)) || any(params$A < 0) ) {
-       stop("A must be a vector of distinct nonnegative integers with length >=2.")
-     }
-     if ( !all( params$A %in% unique(x) ) ) {
-       warning("Some elements in A do not appear in the sample.")
-     }
-     if ( !all( unique(x) %in% params$A ) ) {
-       stop("The sample contains elements that do not appear in A.")
-     }
-   }
- }
+  }
+  if(!is.null(params$A)) {
+    if( length(params$A) <= 1 || any( params$A%%1 != 0 ) ||
+        length(params$A) != length(unique(params$A)) || any(params$A < 0) ) {
+      stop("A must be a vector of distinct nonnegative integers with length >=2.")
+    }
+    if ( !all( params$A %in% unique(x) ) ) {
+      warning("Some elements in A do not appear in the sample.")
+    }
+    if ( !all( unique(x) %in% params$A ) ) {
+      stop("The sample contains elements that do not appear in A.")
+    }
+  }
+}

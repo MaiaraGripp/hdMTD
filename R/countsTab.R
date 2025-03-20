@@ -24,16 +24,16 @@
 #' @importFrom dplyr %>%
 #'
 #' @examples
-#' countsTab(c(1,2,2,1,2,1,1,2,1,2),3)
+#' countsTab(c(1,2,2,1,2,1,1,2,1,2), 3)
 #'
 #' # Using test data.
-#' countsTab(testChains[, 1],2)
+#' countsTab(testChains[, 1], 2)
 #'
 countsTab <-function(X,d){
   # Validate and process the input sample (X)
   X <- checkSample(X)
   # Checks if d is a positive integer
-  if (!is.numeric(d) || d %% 1 != 0 || d <= 0)
+  if (!is.numeric(d) || d%%1 != 0 || d <= 0)
       stop("d must be a positive integer.")
   # Ensures the sample size is sufficient
   if (length(X) <= d )
@@ -43,18 +43,17 @@ countsTab <-function(X,d){
   d1 <- d + 1
   X <- rev(X)  # Reverses the sample so the output is read from left to right
 
-
   if(n - d >= d1){
       # If there are d1 or more sequences of size d1 in the sample
       X_list <- vector("list", d1) # List to store d1 matrices with d1 columns
-      for (i in 1:d1) {
-          aux <- (n - (i - 1)) %% d1
+      for (i in seq_len(d1)) {
+          aux <- (n - (i - 1))%%d1
           X_list[[i]] <- matrix(X[i:(n - aux)], ncol = d1, byrow = TRUE)
       }
   } else {
       # If there are fewer sequences, store the available ones
       X_list <- vector("list", n-d)
-      for (i in 1:(n - d)) {
+      for (i in seq_len(n - d)) {
           X_list[[i]] <- X[i:(i + d)]
       }
   }

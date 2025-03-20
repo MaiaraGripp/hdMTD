@@ -41,39 +41,44 @@
 #' freqTab(S=c(1,4),j=2,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
 #' #Equivalent to freqTab(S=c(1,2,4),j=NULL,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
 #'
-freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
+freqTab <- function(S, j=NULL, A, countsTab, complete = TRUE){
 
-  check_freqTab_inputs(S, j, A, countsTab, complete) # Input validation (defined in validation.R)
+  # Validate inputs
+  check_freqTab_inputs(S, j, A, countsTab, complete)
 
-  Sj <- sort(c(S,j),decreasing = TRUE)
-  d <- ncol(countsTab)-2
+  Sj <- sort(c(S, j), decreasing = TRUE)
+  d <- ncol(countsTab) - 2
   A <- sort(A)
   lenSj <- length(Sj)
   lenA <- length(A)
-  filtrs <- c(paste0("x",Sj),"a")
+  filtrs <- c(paste0("x", Sj), "a")
 
   # Summarize countsTab and computes counts
   freqTab <- countsTab %>%
-                dplyr::group_by_at(filtrs) %>%
-                dplyr::summarise(Nxa_Sj=sum(Nxa), .groups="drop")
+      dplyr::group_by_at(filtrs) %>%
+      dplyr::summarise(Nxa_Sj = sum(Nxa), .groups = "drop")
 
-  if ( ( nrow(freqTab) < lenA^(lenSj+1) ) && complete ){
-  # If there are sequences that did not appear in sample and complete=TRUE.
+  # If needed, complete the table with sequences that did not appear in the sample
+  if ((nrow(freqTab) < lenA^(lenSj + 1)) && complete){
 
     # Try to generate all possible sequences of length lenSj+1 with elements of A
     Tablexa <- try(expand.grid(rep(list(A), lenSj+1))[, order((lenSj+1):1)], silent = TRUE)
-    if (inherits(Tablexa, "try-error")) # if it fails, lenA^(lenSj+1) is too large
-      stop("The dataset is too large. Consider reducing the number of lags in S if possible.")
+    if (inherits(Tablexa, "try-error")) {
+      stop("The dataset is too large. Consider reducing the number of lags in S.")
+    }
 
     # Identify sequences missing from the sample
-    list1 <- apply( freqTab[,1:(lenSj+1)],1,paste0,collapse="" ) # list with sequences that appeared in sample
-    list2 <- apply( Tablexa, 1, paste0,collapse="" ) # list with all possible sequences
-    Tablexa <- Tablexa[ match(setdiff(list2,list1),list2),] # a list with all sequences that did not appear in the sample
+    list1 <- apply(freqTab[, seq_len(lenSj+1)], 1, paste0, collapse = "") # A list
+# with sequences that appeared in sample
+    list2 <- apply(Tablexa, 1, paste0, collapse = "") # A list with all possible sequences
+    Tablexa <- Tablexa[match(setdiff(list2, list1), list2), ] # A list with all sequences
+# that did not appear in the sample
+
 
     # Add the missing sequences with 0 frequency
-    Tablexa <- cbind(Tablexa,0)
+    Tablexa <- cbind(Tablexa, 0)
     colnames(Tablexa) <- colnames(freqTab)
-    freqTab <- rbind(freqTab,Tablexa)
+    freqTab <- rbind(freqTab, Tablexa)
     freqTab <- dplyr::arrange_at(freqTab, filtrs)
   }
 
@@ -81,7 +86,7 @@ freqTab <- function(S,j=NULL,A,countsTab,complete=TRUE){
   freqTab <- freqTab %>%
     dplyr::group_by_at(paste0("x", Sj)) %>%
     dplyr::mutate(Nx_Sj = sum(Nxa_Sj)) %>%
-    dplyr::mutate(qax_Sj = dplyr::if_else(Nx_Sj>0, Nxa_Sj/Nx_Sj, 1/lenA)) %>%
+    dplyr::mutate(qax_Sj = dplyr::if_else(Nx_Sj > 0, Nxa_Sj/Nx_Sj, 1/lenA)) %>%
     dplyr::ungroup()
 
   dplyr::as_tibble(freqTab)

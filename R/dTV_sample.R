@@ -60,45 +60,46 @@ dTV_sample <- function(S, j, A = NULL, base, lenA = NULL, A_pairs = NULL, x_S){
   check_dTVsample_inputs(S, j, A, base, lenA, A_pairs, x_S)
 
   # If A is provided, compute lenA and A_pairs
-  if( !is.null(A) ){
+  if(!is.null(A)){
     A <- sort(A)
     lenA <- length(A)
     A_pairs <- t(utils::combn(A, 2))
   }
   nrowA_pairs <- nrow(A_pairs)
 
-  S <- sort(S,decreasing = TRUE)
+  S <- sort(S, decreasing = TRUE)
   lenS <- length(S)
   # If S is empty, set x_S to NULL
-  if(lenS == 0) x_S <- NULL
+  if(lenS == 0) { x_S <- NULL }
 
 
   # Filters base according to x_S if S is not NULL
   if (!is.null(S)) {
     filtr_S <- paste0("x", S)
     base <- base %>%
-      mutate(match = purrr::pmap_lgl(pick(all_of(filtr_S)), ~ all(c(...) == x_S))) %>%
+      mutate(match = purrr::pmap_lgl(pick(all_of(filtr_S)),~ all(c(...) == x_S))) %>%
       filter(match) %>%
       select(-match)
   }
 
   # Check if base contains the expected number of rows
-  if(nrow(base)!=lenA^2) {
+  if(nrow(base) != lenA^2) {
     stop("The base does not contain all required distributions conditioned on x_S.")
   }
 
   # Compute total variation distances
-  filtr_j <- paste0("x",j)
-  disTV <- matrix(0,ncol=nrowA_pairs)
+  filtr_j <- paste0("x", j)
+  disTV <- matrix(0, ncol = nrowA_pairs)
 
   for (i in seq_len(nrowA_pairs)) {
     # Filter rows where column `xj` matches one of the elements in the current pair from A_pairs
-    D <- base %>% dplyr::filter(.data[[filtr_j]] %in% A_pairs[i, ])
+    D <- base %>%
+        dplyr::filter(.data[[filtr_j]] %in% A_pairs[i, ])
     # Compute total variation distance between the two distributions defined by the pair
-    disTV[i] <- sum(abs(D$qax_Sj[1:lenA]-D$qax_Sj[(lenA+1):(2*lenA)]))/2
+    disTV[i] <- sum(abs(D$qax_Sj[seq_len(lenA)] - D$qax_Sj[(lenA + 1):(2 * lenA)]))/2
   }
-  colnames(disTV) <- apply(A_pairs, 1, paste0, collapse="x")
-  rownames(disTV) <- paste0(x_S,collapse = "")
+  colnames(disTV) <- apply(A_pairs, 1, paste0, collapse = "x")
+  rownames(disTV) <- paste0(x_S, collapse = "")
   disTV
 }
 
