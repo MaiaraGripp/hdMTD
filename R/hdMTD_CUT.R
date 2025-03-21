@@ -16,7 +16,7 @@
 #' @param xi A positive real number, \code{xi} is also a component of the same threshold as
 #'  \code{alpha}.
 #' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
-#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
 #' Mixture Transition Distribution (MTD) models. It consists
@@ -38,61 +38,65 @@
 #'
 hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE,...){
 
-  # Validate and preprocess the input sample
-  X <- checkSample(X)
-  check_hdMTD_CUT_inputs(X, d, S, alpha, mu, xi, A, warning)
+    # Validate and preprocess the input sample
+    X <- checkSample(X)
+    check_hdMTD_CUT_inputs(X, d, S, alpha, mu, xi, A, warning)
 
-  # Set the state space if not provided
-  if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
+    # Set the state space if not provided
+    if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
 
-  lenA <- length(A)
-  lenS <- length(S)
-  dec_S <- sort(S, decreasing = TRUE)
+    lenA <- length(A)
+    lenS <- length(S)
+    dec_S <- sort(S, decreasing = TRUE)
 
-  # Generate all possible past sequences of length |S|-1
-  subx <- as.matrix(expand.grid(rep(list(A), lenS - 1))[, (lenS - 1):1], ncol = lenS - 1)
-  nrow_subx <- nrow(subx)
+    # Generate all possible past sequences of length |S|-1
+    subx <- as.matrix(expand.grid(rep(list(A), lenS - 1))[, (lenS - 1):1],
+                      ncol = lenS - 1)
+    nrow_subx <- nrow(subx)
 
-  # Generate pairs of states for comparison
-  A_pairs <- t(utils::combn(A, 2))
-  A_pairsPos <- t(utils::combn(seq_len(lenA), 2))
-  nrowA_pairs <- nrow(A_pairs)
+    # Generate pairs of states for comparison
+    A_pairs <- t(utils::combn(A, 2))
+    A_pairsPos <- t(utils::combn(seq_len(lenA), 2))
+    nrowA_pairs <- nrow(A_pairs)
 
-  # Compute frequency tables
-  base <- countsTab(X = X, d = d)
-  b_Sja <- freqTab(S = S, A = A, countsTab = base)
+    # Compute frequency tables
+    base <- countsTab(X = X, d = d)
+    b_Sja <- freqTab(S = S, A = A, countsTab = base)
 
-  # Compute total variation distances (dTVs) and thresholds
-  dTV_txy <- numeric(lenS)
-  for (z in seq_len(lenS)) {
-    j <- dec_S[z] # selects j (a lag from S)
-    Sminusj <- dec_S[dec_S != j]
+    # Compute total variation distances (dTVs) and thresholds
+    dTV_txy <- numeric(lenS)
+    for (z in seq_len(lenS)) {
+      j <- dec_S[z] # selects j (a lag from S)
+      Sminusj <- dec_S[dec_S != j]
 
-    Q <- matrix(0,ncol=nrowA_pairs,nrow = nrow_subx)
-    R <- matrix(0,ncol = lenA, nrow = nrow_subx)
+      Q <- matrix(0,ncol=nrowA_pairs,nrow = nrow_subx)
+      R <- matrix(0,ncol = lenA, nrow = nrow_subx)
 
-    for (k in seq_len(nrow_subx)) {
-      # Each k refers to a  different sequence of elements from A indexed by S\{j} (x_S\j)
-      Q[k, ] <- dTV_sample(S = Sminusj, j = j, lenA = lenA, base = b_Sja,
-                          A_pairs = A_pairs, x_S = subx[k, ])
-      # Computes dTVs between distributions ( given sequences x_S where the symbol at lag j varies)
+      for (k in seq_len(nrow_subx)) {
+        # Each k refers to a  different sequence of elements from A indexed
+        # by S\{j} (x_S\j)
+        Q[k, ] <- dTV_sample(S = Sminusj, j = j, lenA = lenA, base = b_Sja,
+                            A_pairs = A_pairs, x_S = subx[k, ])
+        # Computes dTVs between distributions ( given sequences x_S where the
+        # symbol at lag j varies)
 
-      R[k, ] <- sx(S = Sminusj, freqTab = b_Sja, lenA = lenA, x_S = subx[k,],
-                   mu = mu, alpha = alpha, xi = xi)
-      # sx is a quantity used to calculate thresholds. See function sx() in utils.R.
+        R[k, ] <- sx(S = Sminusj, freqTab = b_Sja, lenA = lenA, x_S = subx[k,],
+                     mu = mu, alpha = alpha, xi = xi)
+        # sx is a quantity used to calculate thresholds. See function sx() in utils.R.
+      }
+
+      txy <- matrix(0, nrow = nrow(R), ncol = nrow(A_pairs))
+      for (s in seq_len(nrowA_pairs)) {
+          txy[, s] <- rowSums(R[, A_pairsPos[s, ]])
+          # txy = sx + sy is the threshold for comparing distributions
+          # conditioned in x_S and in y_S ( x_S and y_S are equal sequences
+          # except for the symbol in lag j)
+      }
+
+      dTV_txy[z] <- max(Q - txy) # The largest dTV minus its threshold referent to lag j
     }
 
-    txy <- matrix(0, nrow = nrow(R), ncol = nrow(A_pairs))
-    for (s in seq_len(nrowA_pairs)) {
-      txy[, s] <- rowSums(R[, A_pairsPos[s, ]])
-    # txy = sx + sy is the threshold for comparing distributions conditioned in x_S
-    # and in y_S ( x_S and y_S are equal sequences except for the symbol in lag j)
-    }
-
-    dTV_txy[z] <- max(Q - txy) # The largest dTV minus its threshold referent to lag j
-  }
-
-  dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
+    dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
 }
 
 

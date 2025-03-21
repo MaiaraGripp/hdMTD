@@ -46,9 +46,9 @@
 #' hdMTD(X = X, d = 5, method = "FS", l = 2)
 #' hdMTD(X = X, d = 5, method = "BIC", xi = 1, minl = 3, maxl = 3)
 #'
-hdMTD <- function(X, d, method="FS", ...){
+hdMTD <- function(X, d, method = "FS", ...){
 
-  if( !method %in% c("FSC", "FS", "CUT", "BIC") ){
+  if(!method %in% c("FSC", "FS", "CUT", "BIC")){
     stop("The chosen method is unknown")
   }
 
@@ -58,39 +58,32 @@ hdMTD <- function(X, d, method="FS", ...){
   params <- list(...)
 
   # List of default parameters
-  dparams <- list(S = seq(1,d,1),l = d, alpha = 0.05,
-                  mu = 1, xi = 0.5, minl = 1,
-                  maxl = d, A = NULL,
-                  byl = FALSE, BICvalue = FALSE,
-                  single_matrix = FALSE, indep_part = TRUE,
-                  zeta = d, elbowTest = FALSE,
-                  warning = FALSE)
+  dparams <- list(S = seq(1, d, 1), l = d, alpha = 0.05, mu = 1, xi = 0.5,
+                  minl = 1, maxl = d, A = NULL, byl = FALSE, BICvalue = FALSE,
+                  single_matrix = FALSE, indep_part = TRUE, zeta = d,
+                  elbowTest = FALSE, warning = FALSE)
 
-  if( length(params) != 0){
-    if( !all(names(params) %in% fmtd_params) ){
-      stop(paste0("Some of the parameters names provided do not match those used in hdMTD_.",
-                  method," function. Please check hdMTD_",method,"() documentation."))
-    }
-    params_names <- names(params)
-    dparams[params_names] <- params # Replace default parameters with informed ones
+  if(length(params) != 0){
+      if(!all(names(params) %in% fmtd_params)){
+          stop(paste0("Some of the parameter names provided do not match those used in hdMTD_", method, " function.
+                      Please check hdMTD_", method, "() documentation."))
+      }
+      params_names <- names(params)
+      dparams[params_names] <- params # Replace default parameters with informed ones
 
-    if ( method == "BIC"){
-      if( !"maxl" %in% params_names ){
-        dparams$maxl <- length(dparams$S) # Default maxl to length(S)
+      if ( method == "BIC"){
+          if( !"maxl" %in% params_names ){
+            dparams$maxl <- length(dparams$S) # Default maxl to length(S)
+          }
+          if( !"zeta" %in% params_names ){
+            dparams$zeta <- dparams$maxl # Default zeta to maxl
+          }
       }
-      if( !"zeta" %in% params_names ){ # Default zeta to maxl
-        dparams$zeta <- dparams$maxl
-      }
-    }
   }
 
-  fmtd(X = X, d = d, S = dparams$S, l = dparams$l,
-       alpha = dparams$alpha, mu = dparams$mu,
-       xi = dparams$xi, minl = dparams$minl,
-       maxl = dparams$maxl, A = dparams$A,
-       byl = dparams$byl, BICvalue = dparams$BICvalue,
-       single_matrix = dparams$single_matrix,
-       indep_part = dparams$indep_part,
-       zeta = dparams$zeta, elbowTest = dparams$elbowTest,
-       warning = dparams$warning)
+  fmtd(X = X, d = d, S = dparams$S, l = dparams$l, alpha = dparams$alpha,
+       mu = dparams$mu, xi = dparams$xi, minl = dparams$minl, maxl = dparams$maxl,
+       A = dparams$A, byl = dparams$byl, BICvalue = dparams$BICvalue,
+       single_matrix = dparams$single_matrix, indep_part = dparams$indep_part,
+       zeta = dparams$zeta, elbowTest = dparams$elbowTest, warning = dparams$warning)
 }

@@ -26,7 +26,7 @@ is also a component of the same threshold as \code{alpha}.}
 \item{A}{A vector with positive integers representing the state space. If not informed,
 this function will set \code{A <- sort(unique(X))}.}
 
-\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}).}
+\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
 }
 \value{
 Returns a vector with the estimated relevant lag set using FSC algorithm.

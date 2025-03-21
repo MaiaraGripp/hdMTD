@@ -205,6 +205,6 @@
       }
     }
     prinf
-  }
+  } # prodinf is used in MTDest.R.
 
 

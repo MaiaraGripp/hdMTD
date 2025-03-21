@@ -31,11 +31,10 @@ a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}. If \code{
 is not provided, by default \code{S=1:d}.}
 
 \item{minl}{A positive integer. \code{minl} represents the smallest length of any relevant lag
-set this function might return. If \code{minl == maxl}, this function will return exactly
-\code{minl} lags in its output, specifically the subset of \code{S} with \code{minl} elements
-that has the smallest BIC. If \code{minl < maxl}, the function will consider subsets ranging
-from length \code{minl} to length \code{maxl} when searching for the subset of \code{S} with
-the smallest BIC.}
+set this function might return. If \code{minl == maxl}, this function will return the
+subset of \code{S} of length \code{minl} with the lowest BIC. If \code{minl < maxl}, the function
+will consider subsets ranging from length \code{minl} to length \code{maxl} when searching for
+the subset of \code{S} with the smallest BIC.}
 
 \item{maxl}{A positive integer equal to or greater than \code{minl} but less than the number
 of elements in \code{S} (\code{maxl = length(S)} is accepted but in this case the output will
@@ -46,7 +45,7 @@ function might return.}
 reduces the impact of overparameterization.}
 
 \item{A}{A vector with positive integers representing the state space. If not informed,
-this function will set \code{A=unique(X)}.}
+this function will set \code{A=sort(unique(X))}.}
 
 \item{byl}{Logical. If \code{TRUE}, the function will look for the set with smallest BIC by each
 length (from  \code{minl} to \code{maxl}), and return the set with smallest BIC for each length.
@@ -65,17 +64,12 @@ the number of parameters in the penalization term.}
 reduces the number of parameters in the penalization term.}
 
 \item{zeta}{A positive integer representing the number of distinct matrices \eqn{p_j}
-in the MTD. By default, it is equal to \code{maxl}, which is the maximum
-allowable value and indicates that all matrices \eqn{p_j} are distinct. If
-\code{zeta=1}, all matrices \eqn{p_j} are identical; if \code{zeta=2}
-there exists two groups of distinct matrices and so on. When \code{minl<maxl},
-for each \code{minl} \eqn{\leq} \code{l} \eqn{\leq} \code{maxl}, \code{zeta=min(zeta,l)}. If \code{single_matrix=TRUE}
-then \code{zeta} is set to 1.}
+in the MTD, which affects the number of parameters in the penalization term. Defaulted
+to \code{maxl}. See more in \emph{Details}.}
 
-\item{warning}{Logical. If \code{TRUE}, informs the user if the state space was set as \code{A=unique(X)}.}
+\item{warning}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
-\item{...}{Other parameters. This is used to accommodate any additional argument passed
-to \code{\link[=hdMTD_BIC]{hdMTD_BIC()}} through the \code{\link[=hdMTD]{hdMTD()}} function.}
+\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
 }
 \value{
 Returns a vector with the estimated relevant lag set using BIC. It might return more
@@ -95,6 +89,13 @@ only the sequences of length \code{d} that appeared in the sample will be counte
 all transition probabilities, and hence all BIC values, will be calculated with respect to
 that \code{d}. If we use another value for \code{d} to run the function, even if the output
 agrees with that of the previous run, its BIC value might change a little.
+
+The parameter \code{zeta} indicates the the number of distinct matrices pj in the MTD.
+If \code{zeta = 1}, all matrices \eqn{p_j} are identical; if \code{zeta = 2} there exists
+two groups of distinct matrices and so on. The largest value for \code{zeta} is \code{maxl}
+since this is the largest number of matrices \eqn{p_j}. When \code{minl<maxl},
+for each \code{minl} \eqn{\leq} \code{l} \eqn{\leq} \code{maxl}, \code{zeta = min(zeta,l)}.
+If \code{single_matrix = TRUE} then \code{zeta} is set to 1.
 }
 \examples{
 X <- testChains[, 1]
