@@ -38,37 +38,35 @@
 #' probs(X, S = c(1, 30))
 #' probs(X, S = c(1, 15, 30))
 #'
-probs <- function( X, S, matrixform=FALSE, A=NULL, warning=FALSE ){
+probs <- function(X, S, matrixform = FALSE, A = NULL, warning = FALSE){
 
-  X <- checkSample(X) # Validate and preprocess the input sample
-  check_probs_inputs( X, S, matrixform, A, warning ) # Validate input parameters. See validation.R.
+    X <- checkSample(X) # Validate and preprocess the input sample
+    check_probs_inputs(X, S, matrixform, A, warning) # Validate input parameters
 
-  # Set the state space if not provided
-  if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
+    # Set the state space if not provided
+    if (length(A) == 0) {A <- sort(unique(X))} else {A <- sort(A)}
 
-  S <- sort(S,decreasing = TRUE) # Ensure S is sorted in decreasing order
-  lenS <- length(S)
+    S <- sort(S, decreasing = TRUE) # Ensure S is sorted in decreasing order
+    lenS <- length(S)
 
-  # Compute frequency tables
-  base <- countsTab(X,max(S))
-  base <- freqTab(S=S,A=A,countsTab=base,complete=TRUE)
+    # Compute frequency tables
+    base <- countsTab(X, max(S))
+    base <- freqTab(S = S, A = A, countsTab = base, complete = TRUE)
 
-  # Construct output data frame
-  probs <- data.frame(
-    apply(base[, 1:lenS], 1, paste0, collapse = ""), # Concatenated past states
-    base[, lenS + 1], # Current state
-    base$qax_Sj # Estimated probability
-  )
-  names(probs) <- c(paste("past_{",paste0(-S,collapse = ","),"}"),"a","p(a|past)")
+    # Construct output data frame
+    probs <- data.frame(apply(base[, seq_len(lenS)], 1, paste0, collapse = ""),
+                        base[, lenS + 1], base$qax_Sj)
+    # probs = | Concatenated past states | Current state | Estimated probability |
+    names(probs) <- c(paste("past_{", paste0(-S, collapse = ","),"}"), "a", "p(a|past)")
 
-  # Convert output to stochastic matrix if requested
-  if(matrixform){
-    Pest <- probs$`p(a|past)`
-    dim(Pest) <- c(length(A),length(A)^lenS)
-    Pest <- t(Pest)
-    colnames(Pest) <- A
-    rownames(Pest) <- unique(probs[,1])
-    probs <- Pest
-  }
-  return(probs)
+    # Convert output to stochastic matrix if requested
+    if (matrixform) {
+        Pest <- probs$`p(a|past)`
+        dim(Pest) <- c(length(A), length(A)^lenS)
+        Pest <- t(Pest)
+        colnames(Pest) <- A
+        rownames(Pest) <- unique(probs[, 1])
+        probs <- Pest
+    }
+    return(probs)
 }

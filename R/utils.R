@@ -8,6 +8,7 @@
 # 2 - PI()
 # 3 - sx()
 # 4 - n_parameters()
+# 5 - prodinf()
 
 # At the end of each auxiliary function bellow there is
 # a note naming the functions that use it.
@@ -33,24 +34,24 @@
 # - A tibble grouped by lags in `Sj` with summed absolute frequencies.
 # - If `S` and `j` are NULL or empty, returns a 1-row matrix [0, lenX - d].
 
-  groupTab <- function(S,j,freqTab,lenX,d){
+groupTab <- function(S, j, freqTab, lenX, d){
 
-    Sj <- sort(c(S,j), decreasing = TRUE) # The set of lags
+    Sj <- sort(c(S, j), decreasing = TRUE) # The set of lags
 
-    if ( length(Sj) > 0 ) {
-      # Summarizes freqTab by lags in Sj
-      groupTab <- freqTab %>%
-        dplyr::group_by_at(paste0("x", Sj)) %>%
-        dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups="drop")
+    if (length(Sj) > 0) {
+        # Summarizes freqTab by lags in Sj
+        groupTab <- freqTab %>%
+            dplyr::group_by_at(paste0("x", Sj)) %>%
+            dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups="drop")
 
-      return(groupTab)
+        return(groupTab)
 
     } else {
       # If no lags are provided, returns a default dataframe.
       return( data.frame(x = 0, Nx_Sj = lenX - d) )
     }
-  }
-  # groupTab is used in: oscillation.R, hdMTD_FS.R.
+}
+# groupTab is used in: oscillation.R, hdMTD_FS.R.
 
 ###########################################################
 ###########################################################
@@ -75,21 +76,22 @@
 # - A numeric matrix (column vector) with estimated stationary probabilities.
 #   The column name corresponds to the concatenated elements of `x_S`.
 
-  PI <- function(S, groupTab, x_S, lenX, d) {
+PI <- function(S, groupTab, x_S, lenX, d) {
 
-    if ( length(S) > 0 ) {
-    # Filters groupTab by x_S.
-      filtr_S <- paste0("x", S)
-      groupTab <- groupTab %>%
-        dplyr::mutate(match = purrr::pmap_lgl(dplyr::pick(dplyr::all_of(filtr_S)), ~ all(c(...) == x_S))) %>%
-        dplyr::filter(match) %>%
-        dplyr::select(-match)
+    if (length(S) > 0) {
+        # Filters groupTab by x_S.
+        filtr_S <- paste0("x", S)
+        groupTab <- groupTab %>%
+            dplyr::mutate(match = purrr::pmap_lgl(dplyr::pick(dplyr::all_of(filtr_S)),
+                ~ all(c(...) == x_S))) %>%
+            dplyr::filter(match) %>%
+            dplyr::select(-match)
     }
     PI <- matrix(groupTab$Nx_Sj/(lenX-d),ncol = 1)
     colnames(PI) <- "freq"
     PI
-  }
-  # PI is used in hdMTD_FS.R.
+}
+# PI is used in hdMTD_FS.R.
 
 ###########################################################
 ###########################################################
@@ -116,20 +118,21 @@
 # for a specific state.
 
 
-  sx <- function(S, freqTab, lenA, x_S, mu, alpha, xi){
-    filtr_S <- paste0("x",S)
+sx <- function(S, freqTab, lenA, x_S, mu, alpha, xi){
+    filtr_S <- paste0("x", S)
     C <- freqTab %>%
-      mutate(match = purrr::pmap_lgl(pick(all_of(filtr_S)), ~ all(c(...) == x_S))) %>%
-      filter(match) %>%
-      select(-match)
+        dplyr::mutate(match = purrr::pmap_lgl(pick(all_of(filtr_S)), ~all(c(...) ==
+            x_S))) %>%
+        dplyr::filter(match) %>%
+        dplyr::select(-match)
 
     Nx <- C$Nx_Sj[seq(1, nrow(C), by = lenA)]
 
-    prob_adjusted <- sqrt((C$qax_Sj + alpha / rep(Nx, each = lenA)) * mu / (2 * mu - exp(mu) + 1))
+    prob_adjusted <- sqrt((C$qax_Sj + alpha/rep(Nx, each = lenA)) * mu/(2 * mu - exp(mu) + 1))
     sum <- colSums(matrix(prob_adjusted, nrow = lenA))
 
-    return(sqrt(0.5 * alpha * (1 + xi) / Nx) * sum + alpha * lenA / (6 * Nx))
-  } # sx is used in hdMTD_CUT.R.
+    return(sqrt(0.5 * alpha * (1 + xi)/Nx) * sum + alpha * lenA/(6 * Nx))
+} # sx is used in hdMTD_CUT.R.
 
 ###########################################################
 ###########################################################
@@ -160,22 +163,20 @@
 # Notes:
 # - If `single_matrix = TRUE`, `zeta` is automatically set to 1.
 
-  n_parameters <- function(Lambda, A,
-                           single_matrix = FALSE,
-                           indep_part = TRUE,
-                           zeta = length(Lambda)){
+n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE, zeta = length(Lambda))
+{
     lenA <- length(A)
     lenL <- length(Lambda)
-    if (single_matrix) { zeta <- 1}
+    if (single_matrix) {zeta <- 1}
 
-    n_parameters <- lenL-1 # Number of free weight parameters if lam0 = 0
+    n_parameters <- lenL - 1 # Number of free weight parameters if lam0 = 0
     if (indep_part) {
-      n_parameters <- n_parameters + lenA  # adds 1 ( for lam0) plus lenA - 1 ( for p0)
+        n_parameters <- n_parameters + lenA  # adds 1 ( for lam0) plus lenA - 1 ( for p0)
     }
     n_parameters <- n_parameters + lenA * (lenA - 1) * zeta
     # lenA*(lenA-1) is the number of free parameters in each matrix pj. zeta is the number of distinct matrices pj
     n_parameters
-  } # n_parameters is used in hdMTD_BIC.R.
+} # n_parameters is used in hdMTD_BIC.R.
 
 
 ###########################################################
@@ -195,16 +196,16 @@
 # - A size x vector with the product between x and y. Whenever inf*0 occurs the output
 # is set to 0.
 
-  prodinf <- function(x,y){
+prodinf <- function(x, y){
     prinf <- numeric(length(x))
-    for ( i in seq_len(length(x)) ) {
-      if (is.infinite(x[i]) && y[i] == 0) {
-        prinf[i] <- 0
-      } else {
-        prinf[i] <- x[i] * y[i]
-      }
+    for (i in seq_len(length(x))) {
+        if (is.infinite(x[i]) && y[i] == 0) {
+          prinf[i] <- 0
+        } else {
+          prinf[i] <- x[i] * y[i]
+        }
     }
     prinf
-  } # prodinf is used in MTDest.R.
+} # prodinf is used in MTDest.R.
 
 
