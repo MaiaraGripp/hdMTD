@@ -15,7 +15,8 @@ hdMTD_FSC(X, d, l, alpha = 0.05, mu = 1, xi = 0.5, A = NULL, ...)
 
 \item{alpha}{A positive real number used in the CUT threshold (which determines if two
 distributions can be considered different). The larger the \code{alpha}, the greater
-the distance required to consider that there is a difference between a set of distributions.}
+the distance required to consider that there is a difference between a set of distributions.
+Defaulted to 0.05.}
 
 \item{mu}{A positive real number such that \eqn{\code{mu}>(e^{\code{mu}}-1)/2}. \code{mu}
 is also a component of the same threshold as \code{alpha}.}

@@ -29,6 +29,10 @@ checkSample <- function(X){
   if (is.list(X)) {
       X <- unlist(X)
   }
+
+  # Ensure X is a simple numeric vector
+  X <- as.vector(X)
+
   # Basic validation checks
   if (length(X) <= 1) stop("Insufficient sample size.")
   if (!is.numeric(X)) stop("X must be a numeric dataset.")
