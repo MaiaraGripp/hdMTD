@@ -16,7 +16,7 @@ MTDest(
 )
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing an MTD chain sample.}
+\item{X}{A vector or single-column data frame containing an MTD chain sample (\code{X[1]} is the most recent).}
 
 \item{S}{A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.}
 

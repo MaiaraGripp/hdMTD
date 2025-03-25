@@ -3,7 +3,7 @@
 #' Computes the Maximum Likelihood estimators (MLE) for an MTD Markov chain with
 #' relevant lag set \code{S}.
 #'
-#' @param X A vector or single-column data frame containing a sample of a Markov chain.
+#' @param X A vector or single-column data frame containing a sample of a Markov chain (`X[1]` is the most recent).
 #' @param S A numeric vector of unique positive integers. Typically, \code{S} represents
 #' a set of relevant lags.
 #' @param matrixform Logical. If \code{TRUE}, the output is formatted as a stochastic

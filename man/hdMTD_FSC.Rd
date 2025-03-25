@@ -7,7 +7,7 @@
 hdMTD_FSC(X, d, l, alpha = 0.05, mu = 1, xi = 0.5, A = NULL, ...)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a chain sample.}
+\item{X}{A vector or single-column data frame containing a chain sample (\code{X[1]} is the most recent).}
 
 \item{d}{A positive integer representing an upper bound for the chain order.}
 

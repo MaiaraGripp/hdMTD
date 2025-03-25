@@ -2,7 +2,7 @@
 #'
 #'  A function that estimates the set of relevant lags of an MTD model using the FS method.
 #'
-#' @param X A vector or single-column data frame containing a chain sample.
+#' @param X A vector or single-column data frame containing a chain sample (`X[1]` is the most recent).
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param l A positive integer specifying the number of lags to be selected as relevant.
 #' @param A A vector with positive integers representing the state space. If not informed,

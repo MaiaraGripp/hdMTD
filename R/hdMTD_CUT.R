@@ -2,7 +2,7 @@
 #'
 #' A function that estimates the set of relevant lags of an MTD model using the CUT method.
 #'
-#' @param X A vector or single-column data frame containing a chain sample.
+#' @param X A vector or single-column data frame containing a chain sample (`X[1]` is the most recent).
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param S A numeric vector of distinct positive integers from which this function will select
 #' a set of relevant lags. Should be a subset of \code{1:d}. Default is \code{1:d}.

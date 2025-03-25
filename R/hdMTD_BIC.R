@@ -6,7 +6,7 @@
 #' that minimizes a penalized log likelihood for a given sample, see *References* below for
 #' details on the method.
 #'
-#' @param X A vector or single-column data frame containing a chain sample.
+#' @param X A vector or single-column data frame containing a chain sample (`X[1]` is the most recent).
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param S A numeric vector of positive integers from which this function will select
 #' a set of relevant lags. Typically, \code{S} is a subset of \code{1:d}. If \code{S}

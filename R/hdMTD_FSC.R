@@ -3,7 +3,7 @@
 #' A function for inference in MTD Markov chains with FSC method. This function estimates the relevant
 #' lag set \eqn{\Lambda} of an MTD model through the FSC algorithm.
 #'
-#' @param X A vector or single-column data frame containing a chain sample.
+#' @param X A vector or single-column data frame containing a chain sample (`X[1]` is the most recent).
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param l A positive integer that sets the number of elements in the output vector.
 #' @param A A vector with positive integers representing the state space. If not informed,

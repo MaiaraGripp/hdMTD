@@ -34,7 +34,7 @@
 #' and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
 #'
 #'
-#' @param X A vector or single-column data frame containing an MTD chain sample.
+#' @param X A vector or single-column data frame containing an MTD chain sample (`X[1]` is the most recent).
 #' @param S A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.
 #' @param M A stopping point for the EM algorithm. If \code{M=NULL} the algorithm will run
 #' for a total of \code{nIter} iteractions.
