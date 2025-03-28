@@ -5,12 +5,20 @@
 
 ## Overview
 
-hdMTD is a package designed for conducting inference in Mixture
-Transition Distribution (MTD) models, which can represent higher-order
-Markov models as a convex mixture of single-step Markov chains. The
-algorithms employed here are primarily built upon the work of [Ost and
-Takahashi (2023)](http://jmlr.org/papers/v24/22-0266.html) in their
-paper titled “Sparse Markov Models for High-Dimensional Inference.”
+hdMTD is an R programming language package for the estimation of
+parameters in Mixture Transition Distribution (MTD) models. An MTD is a
+Markov chain with transition probabilities represented as a convex
+combination of conditional distributions. Given a sample from an MTD
+chain, hdMTD can estimate the relevant past set using various methods,
+such as Bayesian Information Criterion (BIC) and the Forward Stepwise
+and CUT (FSC) algorithm, which is efficient in estimating the set of
+relevant lags even in high-dimension, i.e., when dependence extends to
+pasts so distant that they may be close to the sample size. The package
+also computes the Maximum Likelihood Estimate (MLE) for transition
+probabilities, estimates oscillations, determines MTD parameters through
+the Expectation-Maximization (EM) algorithm, and can also simulate an
+MTD sample from its invariant distribution using the perfect sample
+algorithm.
 
 ## Installation
 
@@ -18,44 +26,58 @@ paper titled “Sparse Markov Models for High-Dimensional Inference.”
 remotes::install_github("MaiaraGripp/hdMTD")
 ```
 
-## Usage
+## **Usage**
 
-Given a sample from an MTD chain, the hdMTD() function estimates the
-relevant lag set $\Lambda$ using a specified method and a suitable set
-of parameters. The available methods include the *FSC* algorithm
-developed by [Ost and Takahashi
-(2023)](http://jmlr.org/papers/v24/22-0266.html), FSC’s first step,
-referred to as *FS* method, its second step, referred to as *CUT*
-method, and a Bayesian Information Criterion (*BIC*) method.
-Furthermore, the package can perform the following tasks:
+Given a sample from an MTD chain, the `hdMTD()` function estimates the
+relevant lag set $\Lambda$ using a specified method and suitable
+parameters. The available methods include:
 
-- Create an object of class MTD with all the parameters necessary to
-  define a proper MTD model using the `MTDmodel()` function. Such
-  objects can be used to sample an MTD Markov Chain from its invariant
-  distribution with the `perfectSample()` function.
-- Calculate the oscillations of an MTD object or estimate them from a
-  chain sample using the `oscillations()` function.
-- Compute the Maximum Likelihood Estimates (MLE) of the transition
-  probabilities for a chain sample given a relevant lag set with the
-  `probs()` function.
-- Determine the absolute frequency of each sequence of size $d$ that
-  appears in a sample using the `countsTab()` function.
-- Group such frequencies to consider only sequences time-indexed by a
-  subset of ${-1, \dots, -d}$ with the `freqTabSj()` function.
-- Lastly, `MTDest()` function uses a Expectation Maximization (EM)
+- The *FSC* algorithm developed by [Ost and Takahashi
+  (2023)](http://jmlr.org/papers/v24/22-0266.html).  
+- The first step of *FSC*, referred to as the *FS* method.  
+- The second step of *FSC*, known as the *CUT* method.  
+- A Bayesian Information Criterion ( *BIC* ) approach.
+
+Additionally, the package provides the following functionalities:
+
+### **Model Definition and Sampling**
+
+- Create an `MTD` object with all parameters necessary to define an MTD
+  model using `MTDmodel()`.  
+- Generate a perfect sample from the invariant distribution of an MTD
+  Markov chain using `perfectSample()`.
+
+### **Estimation and Computation**
+
+- Compute the oscillations of an `MTD` object or estimate them from a
+  chain sample using `oscillations()`.  
+- Obtain the Maximum Likelihood Estimates (MLE) of transition
+  probabilities for a given set of lags using `probs()`.  
+- Compute the absolute frequency of all observed sequences of length $d$
+  in a sample using `countsTab()`. Aggregate these frequencies to
+  consider only sequences indexed by subsets of $\{1, \dots, d\}$ using
+  `freqTab()`.
+
+### **Parameter Estimation**
+
+- Estimate the parameters of an MTD model from a sample using
+  `MTDest()`, which implements an Expectation-Maximization (EM)
   algorithm based on [Lèbre and Bourguinon
-  (2008)](https://doi.org/10.1080/00949650701266666), to estimate the
-  parameter set of an MTD model given a sample and a set of initial
-  parameters.
+  (2008)](https://doi.org/10.1080/00949650701266666).
 
 ``` r
 
 library(hdMTD)
-
 set.seed(1234)
-Lambda <- c(1,5,10) #relevant lag set
-A <- c(0,1) #state space
-MTD <- MTDmodel(Lambda = Lambda,A=A);MTD # MTD object
+
+## 1. Simulating an MTD Markov Chain:
+
+Lambda <- c(1, 5, 10) # Set of relevant lags Λ = {-10, -5, -1}
+A <- c(0, 1) # State space
+
+# Create an MTD model
+MTD <- MTDmodel(Lambda = Lambda, A = A)
+MTD # An MTD class object
 #> $P
 #>             0         1
 #> 000 0.3796866 0.6203134
@@ -98,38 +120,74 @@ MTD <- MTDmodel(Lambda = Lambda,A=A);MTD # MTD object
 #> $A
 #> [1] 0 1
 
+# Compute oscillations for the MTD model
 oscillation(MTD)
 #>         -1         -5        -10 
 #> 0.06779938 0.10684048 0.05927337
 
-X <- perfectSample(MTD=MTD,N=1000);X[1:10] # MTD chain sampled from invariant dist.
+# Generate a sample from the MTD
+X <- perfectSample(MTD = MTD, N = 1000)
+X[1:10] # Display the last 10 sampled states (X[1] is the latest sampled state).
 #>  [1] 1 0 0 0 1 0 1 0 0 1
 
-S1 <- hdMTD(X=X,d=15,method = "FS",l=3);S1 # estimate a relevant lag set of size 3 with the "Foward Stepwise" method.
+## 2. Inference on MTD Markov Chains
+
+oscillation(X, S = c(1, 10)) # Estimated oscillations for lags -10 and -1
+#>         -1        -10 
+#> 0.04735179 0.06575918
+
+# Estimate the set of relevant lags using the "Forward Stepwise" (FS) method
+S1 <- hdMTD(X = X, d = 15, method = "FS", l = 3)
+S1 # Estimated lags (size l=3)
 #> [1]  5 10  1
 
-S2 <- hdMTD(X,d=max(S1),method = "BIC",S=S1, minl=1, maxl=3);S2# estimate a relevant lag set with the "BIC" method using FS output.
+# Alternative equivalent function:
+# S1 <- hdMTD_FS(X = X, d = 15, l = 3)
+
+# Refining the estimated lags using "BIC"
+S2 <- hdMTD(X, d = max(S1), method = "BIC", S = S1, minl = 1, maxl = 3)
+S2 # Estimated set of relevant lags with the "BIC" method using "FS" output.
 #> [1] 5
 
-S3 <- hdMTD(X,d=12,method = "BIC", minl=1, maxl=3, byl=TRUE, BICvalue=TRUE);S3
+# Alternative equivalent function:
+# S2 <- hdMTD_BIC(X, d = max(S1), S = S1, minl = 1, maxl = 3)
+
+# "BIC" estimation for sets of relevant lags
+S3 <- hdMTD(X, d = 12, method = "BIC", minl = 1, maxl = 3, byl = TRUE, BICvalue = TRUE)
+S3 # Sets of relevant lags (subsets of 1:12) with sizes from size 1 to 3 with lowest BIC.
 #>           5        5,10      5,7,10 smallest: 5 
 #>    668.7065    675.4400    682.0869    668.7065
-# estimate a relevant lag set with the "BIC" method.
 
-S4 <- hdMTD(X,d=20,method = "CUT",S=S1);S4# estimate a relevant lag set with the "CUT" method using FS output.
-#> [1] 10  5  1
+# "CUT" estimation for sets of relevant lags given S1
+S4 <- hdMTD(X, d = 20, method = "CUT", S = S1, alpha = 0.1)
+S4 # Estimated set of relevant lags with the "CUT" method using "FS" output.
+#> [1] 10  5
 
-p <- probs(X,S=S4, matrixform = TRUE);p #estimates the MLE transition probabilities given the CUT output.
-#>             0         1
-#> 000 0.4062500 0.5937500
-#> 001 0.3611111 0.6388889
-#> 010 0.3086420 0.6913580
-#> 011 0.3358779 0.6641221
-#> 100 0.4444444 0.5555556
-#> 101 0.5528455 0.4471545
-#> 110 0.3245033 0.6754967
-#> 111 0.3884298 0.6115702
+# # "FSC" method combining FS and CUT
+S5 <- hdMTD(X, d = 20, method = "FSC", l=3, alpha = 0.01);
+S5 # Estimated set of relevant lags with the "FSC".
+#> [1] 5
 
+# Validation: S5 should match the result of running "FS" on the first half of the sample
+# and "CUT" on the second half
+all.equal(S5, hdMTD_CUT(X[501:1000], d = 20,
+                    S = hdMTD_FS(X[1:500], d = 20, l=3), alpha = 0.01))
+#> [1] TRUE
+
+## 3. Estimating Transition Probabilities
+
+# Estimate the transition probability matrix given a sample and set of relevant lags
+p <- probs(X, S = S4, matrixform = TRUE)
+p # MLE given the CUT output as set of relevant lags
+#>            0         1
+#> 00 0.3779070 0.6220930
+#> 01 0.3254717 0.6745283
+#> 10 0.5070423 0.4929577
+#> 11 0.3638677 0.6361323
+
+## 4. Estimating MTD Parameters with the Expectation-Maximization (EM) Algorithm
+
+# Initial parameter values for the EM algorithm
 init <- list(
   'lambdas'= c(0.05,0.3,0.3,0.35),
   'p0' = c(0.5,0.5),
@@ -143,7 +201,8 @@ init <- list(
   )
 )
 
-MTDest(X,S=c(1,5,10),init=init, iter = TRUE)
+# Estimate the MTD model parameters
+estParam <- MTDest(X,S=c(1,5,10),init=init, iter = TRUE); estParam
 #> $lambdas
 #>      lam-0      lam-1      lam-5     lam-10 
 #> 0.04889442 0.29599651 0.30684622 0.34826285 
@@ -175,53 +234,76 @@ MTDest(X,S=c(1,5,10),init=init, iter = TRUE)
 #> $distlogL
 #>  [1] 28.863219344  2.133782102  1.082393935  0.549555520  0.279169153
 #>  [6]  0.141869452  0.072120503  0.036675669  0.018657448  0.009494794
-## Estimating P (transition probabilities)
-estParam <- MTDest(X,S=c(1,15,30),init=init)
-estMTD <- MTDmodel(Lambda,A,lam0=estParam$lambdas[1],
-         lamj = estParam$lambdas[-1],p0=estParam$p0,
-         pj=estParam$pj)
+
+# Build the estimated MTD model using the inferred parameters
+estMTD <- MTDmodel(Lambda, A,
+                   lam0 = estParam$lambdas[1],
+                   lamj = estParam$lambdas[-1],
+                   p0 = estParam$p0,
+                   pj = estParam$pj)
+# Display the estimated transition probability matrix
 estMTD$P
 #>             0         1
-#> 000 0.3205668 0.6794332
-#> 001 0.3759126 0.6240874
-#> 010 0.4008207 0.5991793
-#> 011 0.4561665 0.5438335
-#> 100 0.2868808 0.7131192
-#> 101 0.3422266 0.6577734
-#> 110 0.3671347 0.6328653
-#> 111 0.4224804 0.5775196
+#> 000 0.3816913 0.6183087
+#> 001 0.4244988 0.5755012
+#> 010 0.2810198 0.7189802
+#> 011 0.3238273 0.6761727
+#> 100 0.4519112 0.5480888
+#> 101 0.4947187 0.5052813
+#> 110 0.3512397 0.6487603
+#> 111 0.3940471 0.6059529
 ```
 
 ## Data sets
 
-This package includes three real-data sets that where acquired
-externaly.
+This package includes **three real-world data sets** acquired from
+external sources and **one simulated data set** (`testChains`), which
+was generated using the `perfectSample` function.
 
-The raindata set was acquired at
-[Kaggle](https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package)
-but it’s original source is Data source:\[Australian Bureau of
-Meteorology\] (<http://www.bom.gov.au/climate/dwo/>) and
-(<http://www.bom.gov.au/climate/data>). Copyright Commonwealth of
-Australia 2010, Bureau of Meteorology.
+- **`raindata`**: This dataset was obtained from
+  [Kaggle](https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package),
+  but its original source is the **Australian Bureau of Meteorology**  
+  ([Data Source](http://www.bom.gov.au/climate/dwo/), [Climate
+  Data](http://www.bom.gov.au/climate/data)).  
+  **Copyright:** Commonwealth of Australia 2010, Bureau of Meteorology.
 
-The sleepscoring data was acquired at the Haaglanden Medisch Centrum
-(HMC, The Netherlands) sleep center, and is available at Physionet.org.
-URL <https://doi.org/10.13026/t79q-fr32>.
+- **`sleepscoring`**: This dataset was collected at the **Haaglanden
+  Medisch Centrum (HMC, The Netherlands) Sleep Center** and is publicly
+  available on **PhysioNet**  
+  ([DOI: 10.13026/t79q-fr32](https://doi.org/10.13026/t79q-fr32)).
 
-The tempdata data set was acquired at INMET, the National Institute of
-Meteorology in Brazil <https://bdmep.inmet.gov.br/>.
+- **`tempdata`**: This dataset was obtained from **INMET** (National
+  Institute of Meteorology, Brazil) and is available at [INMET Data
+  Portal](https://bdmep.inmet.gov.br/).
+
+------------------------------------------------------------------------
 
 ## References
 
-If you use our package in your work, please cite the following articles:
+The methods implemented in this package are based on the following
+works:
 
-Ost G, Takahashi DY (2023). “Sparse Markov Models for High-dimensional
-Inference.” Journal of Machine Learning Research, 24(279), 1–54. URL
-<http://jmlr.org/papers/v24/22-0266.html>
+- **“FS”, “CUT”, and “FSC” methods:**  
+  These functions are based on: **Ost G, Takahashi DY (2023).** *Sparse
+  Markov Models for High-Dimensional Inference.*  
+  *Journal of Machine Learning Research, 24(279), 1–54.*  
+  [URL:
+  http://jmlr.org/papers/v24/22-0266.html](http://jmlr.org/papers/v24/22-0266.html)
 
-Function MTDest was based on the ideas of the following article:
+- **“BIC” method:**  
+  This function is based on the well-known **Bayesian Information
+  Criterion (BIC) method** for model selection:  
+  **Imre Csiszár & Paul C. Shields (2000).** *The Consistency of the BIC
+  Markov Order Estimator.*  
+  *The Annals of Statistics, 28(6), 1601-1619.*  
+  [DOI: 10.1214/aos/1015957472](https://doi.org/10.1214/aos/1015957472)
 
-Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for
-estimation in the Mixture Transition Distribution model. Journal of
-Statistical Computation and Simulation. 78. [Link to
-Article](https://doi.org/10.1080/00949650701266666)
+- **`MTDest` function (Expectation-Maximization method):**  
+  The `MTDest` function applies the **Expectation-Maximization (EM)
+  algorithm** for parameter estimation in **Mixture Transition
+  Distribution (MTD) models**, based on the following paper:  
+  **Lebre, Sophie & Bourguignon, Pierre-Yves (2008).** *An EM Algorithm
+  for Estimation in the Mixture Transition Distribution Model.*  
+  *Journal of Statistical Computation and Simulation, 78.*  
+  [DOI:
+  10.1080/00949650701266666](https://doi.org/10.1080/00949650701266666)

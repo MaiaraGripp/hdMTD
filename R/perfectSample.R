@@ -122,7 +122,7 @@ perfectSample.MTD <- function(MTD, N = NULL) {
             chain[1] <- MTD$A[ which(cum_p_KtRow > runif(1))[1] ]
         }
     }
-    chain # Returns X1...XN
+    chain
 }
 
 #' @export
