@@ -55,8 +55,7 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE,...){
     if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
 
     # Try to generate all possible sequences of length l with elements of A
-    xa <- try(expand.grid(rep(list(A), l)),silent = TRUE)
-    if(inherits(xa,"try-error")) { # if it fails, the dataset is too large
+    if(inherits(try(expand.grid(rep(list(A), l)),silent = TRUE),"try-error")) {
       stop(paste0("The dataset with all sequences of length l is too large. Try reducing l."))
     }
 
@@ -84,7 +83,7 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE,...){
           j <- Sc[z] # choose one of the available lags
 
           # Tables with frequencies given pasts in the selected lag set S
-          b_Sja <- freqTab(S = S,j = j,A = A,countsTab = base) # given lag j and present state
+          b_Sja <- freqTab(S = S, j = j, A = A, countsTab = base) # given lag j and present state
           b_Sj <- groupTab(S = S, j = j, b_Sja, lenX = lenX, d = d) # given j but without present state
           b_S <- groupTab(S = S, j = NULL, b_Sja, lenX = lenX, d = d) # if S is NULL bs <- [0,lenX-d]
           # groupTab() is defined at utils.R
