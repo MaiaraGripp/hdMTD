@@ -81,6 +81,8 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
 
   if (is.null(A)) { A <- sort(unique(X)) } else { A <- sort(A) }
 
+  lenA <- length(A)
+
   indep <- TRUE
   if (length(init$p0) == 0 || all(init$p0 == 0)) {
       if (init$lambdas[1] == 0 ) {
@@ -99,7 +101,6 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   S <- sort(S, decreasing = TRUE)
   lenS <- length(S)
   lenX <- length(X)
-  lenA <- length(A)
 
   S0 <- c(S, 0)
   lenS0 <- lenS + 1
