@@ -91,7 +91,8 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
 
   # Creates an MTD object and validates inputs
   initMTD <- MTDmodel(Lambda = S, A = A, lam0 = init$lambdas[1],
-                      lamj = init$lambdas[-1], pj = init$pj, p0 = init$p0)
+                      lamj = init$lambdas[-1], pj = init$pj,
+                      p0 = init$p0, indep_part = ifelse(all(init$p0==0), FALSE, TRUE))
   checkMTD(initMTD)
 
   rS <- S
@@ -129,8 +130,9 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   # maximum number of iterations (nIter) is reached.
   repeat{
 
-        initMTD <- MTDmodel(rS, A, lam0 = init$lambdas[1], lamj = init$lambdas[-1],
-                            pj = init$pj, p0 = init$p0)
+        initMTD <- suppressWarnings(
+          MTDmodel(rS, A, lam0 = init$lambdas[1], lamj = init$lambdas[-1],
+                   pj = init$pj, p0 = init$p0))
 
         # Compute log likelihood
         if(any(baseSja$Nxa_Sj == 0)){
@@ -221,8 +223,9 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
         # end_pj is the list with updated pj matrices
 
         # Compute updated MTD model
-        endMTD <- MTDmodel(rS, A, lam0 = end_lambdas[1], lamj = end_lambdas[-1],
-                           pj = end_pj, p0 = end_p0)
+        endMTD <- suppressWarnings(
+          MTDmodel(rS, A, lam0 = end_lambdas[1], lamj = end_lambdas[-1],
+                           pj = end_pj, p0 = end_p0))
         endlist <- list("lambdas" = end_lambdas, "pj" = end_pj, "p0" = end_p0)
 
         # Compute updated log likelihood

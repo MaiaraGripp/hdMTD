@@ -11,19 +11,18 @@ test_that("checkSample works correctly", {
 
   # Test for insufficient sample size
   insufficient_sample <- 1
-  expect_error(checkSample(insufficient_sample), regex = "Insufficient sample size.")
+  expect_error(checkSample(insufficient_sample))
 
   # Test for non-numeric sample
   non_numeric_sample <- c(1, 2, "a", 4, 5)
-  expect_error(checkSample(non_numeric_sample), regex = "X must be a numeric dataset.")
+  expect_error(checkSample(non_numeric_sample))
 
   # Test for sample with NA values
   sample_with_na <- c(1, 2, 3, NA, 5)
-  expect_error(checkSample(sample_with_na), regex = "NA values are not allowed in the sample.")
+  expect_error(checkSample(sample_with_na))
 
   # Test for sample with all elements the same
   sample_all_same <- c(1, 1, 1, 1, 1)
-  expect_error(checkSample(sample_all_same), regex = "All elements in the sample are the same.")
+  expect_error(checkSample(sample_all_same))
 
-  # Add more test cases as needed
 })

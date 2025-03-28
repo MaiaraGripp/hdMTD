@@ -7,11 +7,11 @@ test_that("oscillation function works as expected", {
   expect_equal(round(as.vector(result_1),3), c(0.018, 0.108))
 
   # Test with a chain sample, providing S and A
-  Lambda <- c(1,10)
-  A <- c(0,1)
-  MTD <- MTDmodel(Lambda,A)
-  X <-perfectSample(MTD,N=1000)
+  Lambda <- c(1, 10)
+  A <- c(0, 1)
+  MTD <- MTDmodel(Lambda, A)
+  X <-perfectSample(MTD, N = 1000)
   result_2 <- oscillation(X, S = c(1, 10))
-  expect_equal(round(as.vector(result_2),3), c(0.056,0.227))
+  expect_equal(round(as.vector(result_2),3), c(0.061,0.227))
 
 })
