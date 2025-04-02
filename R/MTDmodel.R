@@ -65,17 +65,16 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
     lenL <- length(Lambda)
     lenAL <- lenA^lenL
 
-    # If the user provides p0 to a zero vector, automatically set indep_part to FALSE
+    # If the user provides p0 as a zero vector, automatically set indep_part to FALSE
     if (!is.null(p0) && all(p0 == 0) && indep_part) {
       indep_part <- FALSE
-      warning("Since p0 = 0, indep_part is set to FALSE.")
     }
 
       # If indep_part is FALSE, enforce p0 as a zero vector and set lam0 = 0
     if ( !indep_part ) {
         p0 <- rep(0, lenA)
         if( !is.null(lam0) && lam0 != 0 ) {
-            warning("Since indep_part = FALSE, lam0 is set to 0 and p0 is a zero vector.")
+            warning("Since indep_part = FALSE (p0 is a zero vector), lam0 is set to 0.")
         }
         lam0 <- 0
     }
