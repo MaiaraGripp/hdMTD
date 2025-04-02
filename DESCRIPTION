@@ -1,6 +1,6 @@
 Package: hdMTD
 Type: Package
-Title: Inference for high-dimensional Mixture Transition Distribution (MTD) models
+Title: Inference for High-Dimensional Mixture Transition Distribution (MTD) Models
 Version: 0.1.0
 Author: Maiara Gripp
 Maintainer: Maiara Gripp <maiara@dme.ufrj.br>
