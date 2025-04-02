@@ -26,8 +26,10 @@
 #' will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 #'
 #' @references
-#' Ost, G. and Takahashi, D. Y. (2023), "Sparse markov models for high-dimensional inference",
-#' Journal of Machine Learning Research 24(279), 1-54. [URL: http://jmlr.org/papers/v24/22-0266.html](http://jmlr.org/papers/v24/22-0266.html)
+#' Ost, G. & Takahashi, D. Y. (2023).
+#' Sparse Markov models for high-dimensional inference.
+#' *Journal of Machine Learning Research*, *24*(279), 1-54.
+#' \url{http://jmlr.org/papers/v24/22-0266.html}
 #'
 #' @return Returns a set of relevant lags estimated using the CUT algorithm.
 #' @export

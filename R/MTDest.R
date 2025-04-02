@@ -28,10 +28,10 @@
 #'
 #'
 #' @references
-#' This function was created based on the following article:
-#' Lebre, Sophie & Bourguignon, Pierre-Yves. (2008). An EM algorithm for estimation
-#' in the Mixture Transition Distribution model. Journal of Statistical Computation
-#' and Simulation. 78. \url{https://doi.org/10.1080/00949650701266666}.
+#' Lebre, Sophie and Bourguignon, Pierre-Yves. (2008).
+#' An EM algorithm for estimation in the Mixture Transition Distribution model.
+#' *Journal of Statistical Computation and Simulation*, *78*(1), 1-15.
+#' \doi{10.1080/00949650701266666}
 #'
 #'
 #' @param X A vector or single-column data frame containing an MTD chain sample (`X[1]` is the most recent).

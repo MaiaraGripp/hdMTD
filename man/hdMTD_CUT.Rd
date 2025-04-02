@@ -62,6 +62,8 @@ hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
 
 }
 \references{
-Ost, G. and Takahashi, D. Y. (2023), "Sparse markov models for high-dimensional inference",
-Journal of Machine Learning Research 24(279), 1-54. \href{http://jmlr.org/papers/v24/22-0266.html}{URL: http://jmlr.org/papers/v24/22-0266.html}
+Ost, G. & Takahashi, D. Y. (2023).
+Sparse Markov models for high-dimensional inference.
+\emph{Journal of Machine Learning Research}, \emph{24}(279), 1-54.
+\url{http://jmlr.org/papers/v24/22-0266.html}
 }

@@ -30,8 +30,10 @@
 #' \eqn{\nu} among them.
 #'
 #' @references
-#' Ost, G. and Takahashi, D. Y. (2023), "Sparse markov models for high-dimensional inference",
-#' Journal of Machine Learning Research 24(279), 1-54. [URL: http://jmlr.org/papers/v24/22-0266.html](http://jmlr.org/papers/v24/22-0266.html)
+#' Ost, G. & Takahashi, D. Y. (2023).
+#' Sparse Markov models for high-dimensional inference.
+#' *Journal of Machine Learning Research*, *24*(279), 1-54.
+#' \url{http://jmlr.org/papers/v24/22-0266.html}
 #'
 #' @return A numeric vector containing the estimated relevant lag set using FS algorithm.
 #'

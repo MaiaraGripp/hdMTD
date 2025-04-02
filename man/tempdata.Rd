@@ -19,11 +19,10 @@ central-western part of the country.
 }
 }
 \source{
-{This data set was acquired at INMET, the
-National Institute of Meteorology in Brazil
-https://bdmep.inmet.gov.br/. The measurements were made by
-an automatic station in Brasília (latitude -15.79, longitude -470.93,
-altitude 1159.54)}
+Meteorological data provided by INMET (National Institute of Meteorology, Brazil).
+Data collected from automatic weather station in Brasília
+(latitude: -15.79°, longitude: -47.93°, altitude: 1159.54 m).
+Available at: \url{https://bdmep.inmet.gov.br/}
 }
 \usage{
 tempdata

@@ -18,11 +18,20 @@ A tbl_df object with 136,925 rows representing the sleeping patterns of 151 pati
 }
 }
 \source{
-{Alvarez-Estevez D, Rijsman RM (2022). Haaglanden Medisch Centrum sleep staging database (version 1.1). PhysioNet. URL https://doi.org/10.13026/t79q-fr32.}
+Alvarez-Estevez, D. & Rijsman, R. M. (2022).
+Haaglanden Medisch Centrum sleep staging database (version 1.1).
+PhysioNet. \doi{10.13026/t79q-fr32}
 
-{Alvarez-Estevez D, Rijsman RM (2021). Inter-database validation of a deep learning approach for automatic sleep scoring. PLOS ONE, 16(8), 1–27. URL https://doi.org/10.1371/journal.pone.0256111.}
+Alvarez-Estevez, D. & Rijsman, R. M. (2021).
+Inter-database validation of a deep learning approach for automatic sleep scoring.
+\emph{PLOS ONE}, \emph{16}(8), 1-27. \doi{10.1371/journal.pone.0256111}
 
-{Goldberger AL, Amaral LAN, Glass L, Hausdorff JM, Ivanov PC, Mark RG, Mietus JE, Moody GB, Peng CK, Stanley HE (2000). PhysioBank, PhysioToolkit, and PhysioNet: Components of a New Research Resource for Complex Physiologic Signals. Circulation, 101(23), e215–e220.}
+Goldberger, A. L., Amaral, L. A. N., Glass, L., Hausdorff, J. M.,
+Ivanov, P. C., Mark, R. G., Mietus, J. E., Moody, G. B.,
+Peng, C. K. & Stanley, H. E. (2000).
+PhysioBank, PhysioToolkit, and PhysioNet: Components of a new research
+resource for complex physiologic signals.
+\emph{Circulation}, \emph{101}(23), e215-e220. \doi{10.1161/01.CIR.101.23.e215}
 }
 \usage{
 sleepscoring
@@ -32,9 +41,6 @@ The dataset contains 136,925 rows and 7 columns, representing the sleeping patte
 over the course of one night, with measurements taken at 30-second intervals. It is a collection of 151
 whole-night polysomno-graphic (PSG) sleep recordings (85 Male, 66 Female, mean age of 53.9 ± 15.4)
 collected during 2018 at the Haaglanden Medisch Centrum (HMC, The Netherlands) sleep center.
-}
-\details{
-This dataset was acquired at Physionet.org. URL https://doi.org/10.13026/t79q-fr32.
 }
 \examples{
 data(sleepscoring)

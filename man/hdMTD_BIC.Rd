@@ -104,7 +104,8 @@ hdMTD_BIC (X,d = 3,minl = 1, maxl = 2, BICvalue = TRUE)
 
 }
 \references{
-Imre Csiszár, Paul C. Shields. "The consistency of the BIC Markov order estimator."
-The Annals of Statistics, 28(6) 1601-1619 December2000.
-\href{https://doi.org/10.1214/aos/1015957472}{DOI 10.1214/aos/1015957472}.
+Imre Csiszár, Paul C. Shields.
+The consistency of the BIC Markov order estimator.
+\emph{The Annals of Statistics}, \emph{28}(6), 1601-1619.
+\doi{10.1214/aos/1015957472}
 }

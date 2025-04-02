@@ -56,9 +56,11 @@
 #' for each \code{minl} \eqn{\leq} \code{l} \eqn{\leq} \code{maxl}, \code{zeta = min(zeta,l)}.
 #' If \code{single_matrix = TRUE} then \code{zeta} is set to 1.
 #'
-#' @references Imre Csiszár, Paul C. Shields. "The consistency of the BIC Markov order estimator."
-#'  The Annals of Statistics, 28(6) 1601-1619 December2000.
-#' [DOI 10.1214/aos/1015957472](https://doi.org/10.1214/aos/1015957472).
+#' @references
+#' Imre Csiszár, Paul C. Shields.
+#' The consistency of the BIC Markov order estimator.
+#' *The Annals of Statistics*, *28*(6), 1601-1619.
+#' \doi{10.1214/aos/1015957472}
 #'
 #' @return Returns a vector with the estimated relevant lag set using BIC. It might return more
 #' than one set if \code{minl < maxl} and \code{byl = TRUE}. Additionally, it can return the value

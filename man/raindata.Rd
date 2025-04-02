@@ -15,11 +15,13 @@ is 0 if no rain was recorded in the city of Canberra that day, and 1 otherwise.
 }
 }
 \source{
-{This data set was acquired at
-https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package
-but it's original source is Data source:
-http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data.
-Copyright Commonwealth of Australia 2010, Bureau of Meteorology.}
+Weather data sourced from Australian Bureau of Meteorology:
+\url{http://www.bom.gov.au/climate/dwo/} and
+\url{http://www.bom.gov.au/climate/data}.
+
+Accessed via Kaggle: \url{https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package}
+
+Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
 }
 \usage{
 raindata

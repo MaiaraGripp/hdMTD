@@ -14,11 +14,14 @@
 #' }
 #'
 #'
-#' @source {This data set was acquired at
-#' https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package
-#' but it's original source is Data source:
-#' http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data.
-#' Copyright Commonwealth of Australia 2010, Bureau of Meteorology.}
+#' @source
+#' Weather data sourced from Australian Bureau of Meteorology:
+#' \url{http://www.bom.gov.au/climate/dwo/} and
+#' \url{http://www.bom.gov.au/climate/data}.
+#'
+#' Accessed via Kaggle: \url{https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package}
+#'
+#' Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
 #'
 #' @examples
 #' data(raindata)
