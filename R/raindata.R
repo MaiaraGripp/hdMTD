@@ -14,10 +14,8 @@
 #' }
 #'
 #'
-#' @source
-#' Weather data sourced from Australian Bureau of Meteorology:
-#' \url{http://www.bom.gov.au/climate/dwo/} and
-#' \url{http://www.bom.gov.au/climate/data}.
+#' @source {Weather data sourced from Australian Bureau of Meteorology
+#' http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data}
 #'
 #' Accessed via Kaggle: \url{https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package}
 #'
