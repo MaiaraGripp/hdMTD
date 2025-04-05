@@ -125,7 +125,3 @@ perfectSample.MTD <- function(MTD, N = NULL) {
     chain
 }
 
-#' @export
-perfectSample.default <- function(MTD,N){
-    print("The implemented perfect sample algorithm works only for MTD class objetcs.")
-}

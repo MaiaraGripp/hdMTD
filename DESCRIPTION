@@ -2,13 +2,7 @@ Package: hdMTD
 Type: Package
 Title: Inference for High-Dimensional Mixture Transition Distribution (MTD) Models
 Version: 0.1.0
-Authors@R: 
-    person(
-        given = "Maiara",
-        family = "Gripp",
-        email = "maiara@dme.ufrj.br",
-        role = c("aut", "cre")
-    )
+Authors@R: c(person(given = "Maiara", family = "Gripp", email = "maiara@dme.ufrj.br", role = c("aut", "cre")), person(given = "Guilherme", family = "Ost", email = "guilhermeost@im.ufrj.br", role = c("ths", "aut")),	person(given = "Giulio", family = "Iacobelli", email = "giulio@im.ufrj.br", role = c("ths", "aut")))
 Description: Provides several statistical tools to estimate the parameters of MTD models. It includes an algorithm to exactly simulate samples of an MTD model from its stationary distribution.
 URL: https://github.com/MaiaraGripp/hdMTD
 License: MIT + file LICENSE
