@@ -3,7 +3,7 @@ Type: Package
 Title: Inference for High-Dimensional Mixture Transition Distribution (MTD) Models
 Version: 0.1.0
 Authors@R: c(person(given = "Maiara", family = "Gripp", email = "maiara@dme.ufrj.br", role = c("aut", "cre")), person(given = "Guilherme", family = "Ost", email = "guilhermeost@im.ufrj.br", role = "ths"), person(given = "Giulio", family = "Iacobelli", email = "giulio@im.ufrj.br", role = "ths"))
-Description: Provides several statistical tools to estimate the parameters of MTD models. It also includes an algorithm to exactly simulate samples of an MTD model from its stationary distribution. For more details see Ost, G. and Takahashi, D. Y. (2023) <http://jmlr.org/papers/v24/22-0266.html>.
+Description: The hdMTD package estimates parameters in Mixture Transition Distribution (MTD) models, a class of high-order Markov chains. Having as input a sampled chain, the package selects the set of relevant pasts (lags) using either the Bayesian Information Criterion or the Forward Stepwise and CUT algorithms. Given the estimated lags, the package can also estimate other model parameters (e.g. transition probabilities and oscillations) via Maximum likelihood estimation or the Expectation-Maximization algorithm. Additionally, the hdMTD package includes a perfect sample algorithm that generates samples of an MTD model from its invariant distribution. For theory, see Ost & Takahashi (2023) <http://jmlr.org/papers/v24/22-0266.html>.
 URL: https://github.com/MaiaraGripp/hdMTD
 License: MIT + file LICENSE
 Encoding: UTF-8
