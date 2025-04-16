@@ -321,7 +321,8 @@ check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
 
   if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
      length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
-    stop("S must be a vector of distinct positive integers containing at least 2 values.")
+    stop("S must be a vector of distinct positive integers, less than or equal to d,
+         containing at least 2 values.")
   }
 
   if( length(A) > 0 ){
@@ -365,7 +366,8 @@ check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
 
   if(length(S) < 2 || !is.numeric(S) || any( S%%1 != 0) || max(S) > d ||
      length(S) != length(unique(S)) || any( S <= 0) || !is.vector(S)) {
-    stop("S must be a vector of distinct positive integers containing at least 2 values.")
+    stop("S must be a vector of distinct positive integers, less than or equal to d,
+         containing at least 2 values.")
   }
 
   if( length(A) > 0 ){

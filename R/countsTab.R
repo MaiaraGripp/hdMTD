@@ -29,7 +29,7 @@
 #' # Using test data.
 #' countsTab(testChains[, 1], 2)
 #'
-countsTab <-function(X,d){
+countsTab <-function(X, d){
   # Validate and process the input sample (X)
   X <- checkSample(X)
   # Checks if d is a positive integer
@@ -47,7 +47,7 @@ countsTab <-function(X,d){
       # If there are d1 or more sequences of size d1 in the sample
       X_list <- vector("list", d1) # List to store d1 matrices with d1 columns
       for (i in seq_len(d1)) {
-          aux <- (n - (i - 1))%%d1
+          aux <- (n - (i - 1)) %% d1
           X_list[[i]] <- matrix(X[i:(n - aux)], ncol = d1, byrow = TRUE)
       }
   } else {
