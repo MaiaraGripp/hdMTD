@@ -10,17 +10,13 @@ to a day specified in column 1 ("Date"). The value in column 2 ("RainToday")
 is 0 if no rain was recorded in the city of Canberra that day, and 1 otherwise.
 
 \describe{
-\item{Date}{The day}
-\item{RainToday}{1 if it rained that day, 0 otherwise.}
+\item{Date}{Date in YYYY-MM-DD format.}
+\item{RainToday}{Binary indicator (0 = no rain, 1 = rain).}
 }
 }
 \source{
-{Weather data sourced from Australian Bureau of Meteorology
-http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data}
-
-Accessed via Kaggle: \url{https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package}
-
-Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
+\strong{Original data source}: Australian Bureau of Meteorology (BOM).
+\strong{Accessed via}: Kaggle (\url{https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package}).
 }
 \usage{
 raindata
@@ -28,6 +24,11 @@ raindata
 \description{
 A data frame with the rainfall history in the city of Canberra, Australia.
 The data spans from 01/11/2007 to 25/06/2017.
+}
+\note{
+The original BOM data is subject to their Terms of Use.
+For direct access, visit the BOM website manually:
+\url{https://www.bom.gov.au/climate/data/} (may require browser access).
 }
 \examples{
 data(raindata)
