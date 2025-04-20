@@ -8,8 +8,7 @@ test_that("perfectSample function works as expected", {
 test_that("perfectSample function is not set for non-MTD objects.", {
   # Test with a non-MTD object
   non_MTD_object <- c(0, 2, 0, 2, 0)
-  output <- capture.output(message <- perfectSample(non_MTD_object, N = 200))
-  expect_equal(message, "The implemented perfect sample algorithm works only for MTD class objetcs.")
+  expect_error(perfectSample(non_MTD_object, N = 200))
 })
 test_that("perfectSample function does not work for MTD objects that lack an independent distribution.", {
   # Test with a non-MTD object
