@@ -1,4 +1,4 @@
-#' The Cut method for inference in MTD models
+#' The CUT method for inference in MTD models
 #'
 #' A function that estimates the set of relevant lags of an MTD model using the CUT method.
 #'

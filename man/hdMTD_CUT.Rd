@@ -2,7 +2,7 @@
 % Please edit documentation in R/hdMTD_CUT.R
 \name{hdMTD_CUT}
 \alias{hdMTD_CUT}
-\title{The Cut method for inference in MTD models}
+\title{The CUT method for inference in MTD models}
 \usage{
 hdMTD_CUT(
   X,
