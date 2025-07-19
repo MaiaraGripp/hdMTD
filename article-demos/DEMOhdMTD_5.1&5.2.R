@@ -116,14 +116,7 @@ oscillation(X, S = c(1, 15, 30))
 init <- list(
   'lambdas'= c(0.01, 0.33, 0.33, 0.33),
   'p0' = c(0.5, 0.5),
-  'pj' = list(
-    matrix(c(0.5, 0.5,
-             0.5, 0.5), ncol = 2, nrow = 2),
-    matrix(c(0.5, 0.5,
-             0.5, 0.5), ncol = 2, nrow = 2),
-    matrix(c(0.5, 0.5,
-             0.5, 0.5), ncol = 2, nrow = 2)
-  )
+  'pj' = rep(list(matrix(c(0.5, 0.5, 0.5, 0.5), ncol = 2, nrow = 2)), 3)
 )
 
 MTDest(X, S = c(1, 15, 30), init = init, iter = TRUE)
