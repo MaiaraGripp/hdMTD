@@ -1,4 +1,4 @@
-\# Replication Files for JSS Submission
+\# Replication Files for Submission
 
 
 
