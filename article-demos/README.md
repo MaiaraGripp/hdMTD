@@ -20,9 +20,9 @@ Authors: Maiara Gripp, Guilherme Ost, Giulio Iacobelli, Daniel Y. Takahashi
 
 \- `code.html`: Precompiled HTML output (using `knitr::spin()`) for quick inspection  
 
-\- `simulated\_data.rds`: Simulated dataset used in examples, preprocessed for efficiency  
+\- `simulated_data.rds`: Simulated dataset used in examples, preprocessed for efficiency  
 
-\- `results\_sequential\_selection.rds`: Preprocessed results for time-consuming analysis  
+\- `results_sequential_selection.rds`: Preprocessed results for time-consuming analysis  
 
 
 
