@@ -44,7 +44,7 @@ from raw simulations are also included, along with approximate runtimes on i7-12
 About the included code.html file:
 ====================================
 
-The file code.html in ReplicationMaterials.zip was generated with all computations fully executed — that is, no sections were commented out, and no preprocessed data was used.
+The file code.html was generated with all computations fully executed — that is, no sections were commented out, and no preprocessed data was used.
 
 ==========================
 Contact
