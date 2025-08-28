@@ -1,8 +1,19 @@
-## R CMD check results
+## Resubmission (hdMTD 0.1.1)
 
+- Relicensed the package from MIT to GPL-3.
+- Removed an unintended `README.md` from the package source.
+- Added `NEWS.md` documenting these changes.
+- No code/API changes.
+
+### R CMD check results (current)
+0 errors | 0 warnings | 0 notes
+
+---
+
+## Previous submission notes (for reference)
+
+R CMD check results
 0 errors | 0 warnings | 1 note
-
-* This is a new submission to CRAN.
 
 ## Acronym explanation
 
