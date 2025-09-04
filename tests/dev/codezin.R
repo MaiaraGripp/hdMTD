@@ -95,7 +95,7 @@ codezin_save_baseline <- function(path = "tests/codezin_baseline.rds") {
 }
 
 # Compara com baseline
-codezin_check <- function(path = "tests/codezin_baseline.rds", tol = 1e-8) {
+codezin_check <- function(path = "tests/dev/codezin_baseline.rds", tol = 1e-8) {
   if (!file.exists(path)) stop("Baseline não encontrada em ", path, ". Rode codezin_save_baseline() primeiro.")
   base <- readRDS(path)
   cur  <- codezin_collect()
