@@ -56,9 +56,16 @@ and are specially useful for inference in high-order MTD Markov chains. This spe
 will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 }
 \examples{
-X <- testChains[,3]
-hdMTD_CUT(X,4,alpha=0.02,mu=1,xi=0.4)
-hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
+# Simulate a chain from an MTD model
+set.seed(1)
+M <- MTDmodel(Lambda = c(1, 4), A = c(1, 3), lam0 = 0.05)
+X <- perfectSample(M, N = 400)
+
+# Apply CUT with custom alpha, mu, and xi
+hdMTD_CUT(X, d = 4, alpha = 0.02, mu = 1, xi = 0.4)
+
+# Apply CUT with selected lags and smaller alpha
+hdMTD_CUT(X, d = 6, S = c(1, 4, 6), alpha = 0.08)
 
 }
 \references{

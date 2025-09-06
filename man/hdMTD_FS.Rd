@@ -47,9 +47,16 @@ at each iteration, and output only the lags that appear before the one with smal
 \eqn{\nu} among them.
 }
 \examples{
-X <- testChains[,1]
-hdMTD_FS(X,d=5,l=2)
-hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
+# Simulate a chain from an MTD model
+set.seed(1)
+M <- MTDmodel(Lambda = c(1, 3), A = c(1, 2), lam0 = 0.05)
+X <- perfectSample(M, N = 400)
+
+# Forward Stepwise with l = 2
+hdMTD_FS(X, d = 5, l = 2)
+
+# Forward Stepwise with l = 3
+hdMTD_FS(X, d = 4, l = 3)
 
 }
 \references{

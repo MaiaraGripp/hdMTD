@@ -34,9 +34,14 @@
 #' @export
 #'
 #' @examples
-#' X <- testChains[, 3]
+#' # Simulate a chain from an MTD model
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 15, 30), A = c(1, 2, 3), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
+#'
+#' # Estimate probabilities for different subsets S
 #' probs(X, S = c(1, 30))
-#' probs(X, S = c(1, 15, 30))
+#' probs(X, S = c(1, 15, 30), matrixform = TRUE)
 #'
 probs <- function(X, S, matrixform = FALSE, A = NULL, warning = FALSE){
 

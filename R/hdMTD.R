@@ -42,8 +42,15 @@
 #' @export
 #'
 #' @examples
-#' X <- testChains[,1]
+#' # Simulate a chain from an MTD model
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 4), A = c(1, 3), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
+
+#' # Fit using Forward Stepwise (FS)
 #' hdMTD(X = X, d = 5, method = "FS", l = 2)
+
+#' # Fit using Bayesian Information Criterion (BIC)
 #' hdMTD(X = X, d = 5, method = "BIC", xi = 1, minl = 3, maxl = 3)
 #'
 hdMTD <- function(X, d, method = "FS", ...){

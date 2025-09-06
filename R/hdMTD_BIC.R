@@ -68,9 +68,16 @@
 #' @export
 #'
 #' @examples
-#' X <- testChains[, 1]
-#' hdMTD_BIC (X, d = 6, minl = 1, maxl = 1)
-#' hdMTD_BIC (X,d = 3,minl = 1, maxl = 2, BICvalue = TRUE)
+#' # Simulate a chain from an MTD model
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 3), A = c(1, 2), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
+#'
+#' # Fit using BIC with a single lag
+#' hdMTD_BIC(X, d = 6, minl = 1, maxl = 1)
+#'
+#' # Fit using BIC with lag selection and extract BIC value
+#' hdMTD_BIC(X, d = 3, minl = 1, maxl = 2, BICvalue = TRUE)
 #'
 hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
                       xi = 1/2, A = NULL, byl = FALSE, BICvalue = FALSE,

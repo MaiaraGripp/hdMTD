@@ -34,9 +34,16 @@
 #' @return Returns a set of relevant lags estimated using the CUT algorithm.
 #' @export
 #' @examples
-#' X <- testChains[,3]
-#' hdMTD_CUT(X,4,alpha=0.02,mu=1,xi=0.4)
-#' hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
+#' # Simulate a chain from an MTD model
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 4), A = c(1, 3), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
+#'
+#' # Apply CUT with custom alpha, mu, and xi
+#' hdMTD_CUT(X, d = 4, alpha = 0.02, mu = 1, xi = 0.4)
+#'
+#' # Apply CUT with selected lags and smaller alpha
+#' hdMTD_CUT(X, d = 6, S = c(1, 4, 6), alpha = 0.08)
 #'
 hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE,...){
 
