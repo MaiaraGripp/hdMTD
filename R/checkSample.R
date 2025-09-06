@@ -6,6 +6,8 @@
 #' single row or a single column. Must be composed by nonnegative integers.
 #'
 #' @return Returns the sample as a vector or identifies any possible sample problems.
+#' @keywords internal
+#' @noRd
 #'
 checkSample <- function(X){
   # Allow matrices with a single column or a single row
