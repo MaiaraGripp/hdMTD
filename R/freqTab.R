@@ -38,8 +38,18 @@
 #' @importFrom dplyr %>%
 #' @importFrom methods is
 #' @examples
-#' freqTab(S=c(1,4),j=2,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
-#' #Equivalent to freqTab(S=c(1,2,4),j=NULL,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
+#' # Reproducible simulated data
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 4), A = c(1, 2, 3), lam0 = 0.1)
+#' X <- perfectSample(M, N = 400)
+#' ct <- countsTab(X, d = 5)
+#'
+#' # Example with S non-empty and j specified
+#' freqTab(S = c(1, 4), j = 2, A = c(1, 2, 3), countsTab = ct)
+#'
+#' # Equivalent to calling with S = c(1,2,4) and j = NULL
+#' freqTab(S = c(1, 2, 4), j = NULL, A = c(1, 2, 3), countsTab = ct)
+
 #'
 freqTab <- function(S, j=NULL, A, countsTab, complete = TRUE){
 
