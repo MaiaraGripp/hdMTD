@@ -2,6 +2,7 @@
 
 - Internal helper function `checkSample()` is now hidden from `help(package = "hdMTD")` 
   by marking it with `@keywords internal`.
+- Replaced `any(is.na(X))` with `anyNA(X)` in `checkSample()` (recommended in R guidelines).
 - Changes documented at `NEWS.md`.
 
 ### R CMD check results (current)

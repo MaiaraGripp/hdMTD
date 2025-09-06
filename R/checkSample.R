@@ -38,7 +38,7 @@ checkSample <- function(X){
   # Basic validation checks
   if (length(X) <= 1) stop("Insufficient sample size.")
   if (!is.numeric(X)) stop("X must be a numeric dataset.")
-  if (any(is.na(X))) stop("NA values are not allowed in the sample.")
+  if (anyNA(X)) stop("NA values are not allowed in the sample.")
   if (length(unique(X)) == 1) stop("The sample must contain at least two distinct values.")
   if (any( X%%1 != 0 ) || any(X < 0)) stop("X must be composed of nonnegative integers.")
   X
