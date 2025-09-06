@@ -1,8 +1,11 @@
 ## Resubmission (hdMTD 0.1.2)
 
 - Internal helper function `checkSample()` is now hidden from `help(package = "hdMTD")` 
-  by marking it with `@keywords internal`.
+by marking it with `@keywords internal`.
 - Replaced `any(is.na(X))` with `anyNA(X)` in `checkSample()` (recommended in R guidelines).
+- Removed unused datasets (`raindata`, `sleepscoring`, `testChains`), which were not required for package functionality.
+- Updated examples to generate data using `perfectSample()` instead of relying on `testChains`.
+- These changes simplify the package and improve reproducibility.
 - Changes documented at `NEWS.md`.
 
 ### R CMD check results (current)
