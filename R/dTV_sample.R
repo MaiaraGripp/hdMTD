@@ -49,11 +49,18 @@
 #' @import purrr
 #' @export
 #' @examples
-#' #creating base argument through freqTab function.
-#' pbase <- freqTab(S=c(1,4),j=2,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
-#' dTV_sample(S=c(1,2),j=4,A=c(1,2,3),base=pbase,x_S=c(2,3))
-#' pbase <- freqTab(S=NULL,j=1,A=c(1,2,3),countsTab = countsTab(testChains[,2],d=5))
-#' dTV_sample(S=NULL,j=1,A=c(1,2,3),base=pbase)
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 4), A = c(1, 2, 3), lam0 = 0.1)
+#' X <- perfectSample(M, N = 400)
+#' ct <- countsTab(X, d = 5)
+#'
+#' # --- Case 1: S non-empty
+#' pbase <- freqTab(S = c(1, 4), j = 2, A = c(1, 2, 3), countsTab = ct)
+#' dTV_sample(S = c(1, 2), j = 4, A = c(1, 2, 3), base = pbase, x_S = c(2, 3))
+#'
+#' # --- Case 2: S = NULL
+#' pbase2 <- freqTab(S = NULL, j = 1, A = c(1, 2, 3), countsTab = ct)
+#' dTV_sample(S = NULL, j = 1, A = c(1, 2, 3), base = pbase2)
 #'
 dTV_sample <- function(S, j, A = NULL, base, lenA = NULL, A_pairs = NULL, x_S){
 
