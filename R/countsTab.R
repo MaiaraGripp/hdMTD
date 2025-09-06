@@ -24,10 +24,13 @@
 #' @importFrom dplyr %>%
 #'
 #' @examples
-#' countsTab(c(1,2,2,1,2,1,1,2,1,2), 3)
+#' countsTab(c(1,2,2,1,2,1,1,2,1,2), d = 3)
 #'
-#' # Using test data.
-#' countsTab(testChains[, 1], 2)
+#' # Using simulated data.
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 3), A = c(1, 2), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
+#' countsTab(X, d = 2)
 #'
 countsTab <-function(X, d){
   # Validate and process the input sample (X)
