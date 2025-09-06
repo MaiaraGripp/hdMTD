@@ -1,4 +1,17 @@
-## Resubmission (hdMTD 0.1.1)
+## Resubmission (hdMTD 0.1.2)
+
+- Internal helper function `checkSample()` is now hidden from `help(package = "hdMTD")` 
+  by marking it with `@keywords internal`.
+- Changes documented at `NEWS.md`.
+
+### R CMD check results (current)
+0 errors | 0 warnings | 0 notes
+
+---
+
+## Previous submission notes (for reference)
+
+version - hdMTD 0.1.1
 
 - Relicensed the package from MIT to GPL-3.
 - Removed an unintended `README.md` from the package source.
@@ -8,9 +21,7 @@
 ### R CMD check results (current)
 0 errors | 0 warnings | 0 notes
 
----
-
-## Previous submission notes (for reference)
+version - hdMTD 0.1.0
 
 R CMD check results
 0 errors | 0 warnings | 1 note
