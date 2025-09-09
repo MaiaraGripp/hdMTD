@@ -1,5 +1,8 @@
 # hdMTD 0.1.2
 
+## Improvements
+* `MTDest()` now returns an S3 object ("MTDest") with iteration diagnostics (optional) and logLik.
+
 ## Bug fixes
 * Internal helper function `checkSample()` is now hidden from `help(package = "hdMTD")`
   by marking it with `@keywords internal`.

@@ -1,5 +1,20 @@
 ## Resubmission (hdMTD 0.1.2)
 
+- `MTDest()`: now returns an S3 object ("MTDest") with iteration diagnostics (optional) and logLik.
+  - Solved inconsistencies:
+    a) When M was used to stop updates, the returned vector of delta log-likelihoods 
+       (now called deltaLogLik, formerly distLogL) had size = (number_of_updates + 1), 
+       because it included a last element smaller than M. Now, we've introduced the 
+       variable `lastComputedDelta`, ensuring that length(deltaLogLik) = number_of_updates, 
+       and we return `lastComputedDelta` separately. If `lastComputedDelta` differs from 
+       the last element in `deltaLogLik`, it means `lastComputedDelta < M` and the convergence 
+       criterion was met.
+    b) When the max number of iterations was reached (i.e., the `nIter` criterion was used), 
+       `oscillations` was being calculated using a model that was not updated with the final 
+       estimated parameters (fixed).
+    c) Improved performance: moved `indexa` out of the loop; avoided naming variables inside loops; 
+       pre-allocated memory for `deltaLogLik`.
+
 - Internal helper function `checkSample()` is now hidden from `help(package = "hdMTD")` 
 by marking it with `@keywords internal`.
 - Replaced `any(is.na(X))` with `anyNA(X)` in `checkSample()`.
