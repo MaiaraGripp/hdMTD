@@ -121,7 +121,6 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
                       p0 = init$p0, indep_part = ifelse(all(init$p0==0), FALSE, TRUE))
   checkMTD(initMTD)
 
-
   rS <- S
   S <- sort(S, decreasing = TRUE)
   lenS <- length(S)
@@ -204,7 +203,6 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
     NxaXPjxa <- Pj_xa_S * baseSja$Nxa_Sj
     colnames(NxaXPjxa) <- paste0("NXP", S0, "xa")
     end_lambdas <- apply(NxaXPjxa, 2, sum)/(lenX-S[1])
-    names(end_lambdas) <- paste0("lam-", S0)
     end_lambdas <- rev(end_lambdas)
     # end_lambdas is the updated lambdas vector
 
@@ -217,7 +215,6 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
                             dplyr::filter(a == A[i]))$NXP0xa)/end_p0[i]
       }
     }
-    names(end_p0) <- paste0("p_0(", A, ")")
     # end_p0 is the updated independent distribution p0
 
     # pj update
@@ -237,10 +234,8 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
                                 dplyr::select_at(paste0("NXP", S[j], "xa")))/aux_pj[i, k]
         }
       }
-      colnames(aux_pj) = rownames(aux_pj) <- A
       end_pj[[lenS - j + 1]] <- aux_pj
     }
-    names(end_pj) <- paste0("p_-",rev(S))
     # end_pj is the list with updated pj matrices
 
     # Computations
@@ -248,7 +243,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
     endMTD <- suppressWarnings(
       MTDmodel(rS, A, lam0 = end_lambdas[1], lamj = end_lambdas[-1],
                pj = end_pj, p0 = end_p0))
-    endlist <- list("lambdas" = end_lambdas, "pj" = end_pj, "p0" = end_p0)
+    endlist <- list("lambdas" = endMTD$lambdas, "pj" = endMTD$pj, "p0" = endMTD$p0)
 
     # Updated log-likelihood
     if (any(baseSja$Nxa_Sj == 0)) {
@@ -273,12 +268,16 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
     # Stop criteria 2 (max number of iteration)
     if (contInt == nIter) { break }
   }
-
-  # Outputs
-  out <- init
+  # Ensuring pj row and colnames are ok
+  for (i in seq_len(lenS)) {
+    colnames(init$pj[[i]]) = rownames(init$pj[[i]]) <- A
+  }
   # Recomputes MTD with final parameters
-  finalMTD <- MTDmodel(rS, A, lam0 = out$lambdas[1], lamj = out$lambdas[-1],
-                       pj = out$pj, p0 = out$p0)
+  finalMTD <- MTDmodel(rS, A, lam0 = init$lambdas[1], lamj = init$lambdas[-1],
+                       pj = init$pj, p0 = init$p0)
+  # Outputs
+  out <- list("lambdas" = finalMTD$lambdas, "pj" = finalMTD$pj, "p0" = finalMTD$p0)
+
   # Recomputes LogLik
   if (any(baseSja$Nxa_Sj == 0)) {
     out$logLik <- sum(prodinf(log(as.vector(t(finalMTD$P))), baseSja$Nxa_Sj))
@@ -301,4 +300,99 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   out
 }
 
+
+#' @export
+print.MTDest <- function(x, ...) {
+  cat("An object of class 'MTDest' (EM estimation of MTD model)\n")
+  cat("  Lags (-S):", paste(-x$S, collapse = ", "), "\n")
+  cat("  State space (A):", paste(x$A, collapse = ", "), "\n")
+  cat("  Final log-likelihood:", format(x$logLik, digits = 6), "\n")
+  if (!is.null(x$iterations)) {
+    cat("  Number of updates:", x$iterations, "\n")
+  }
+
+  invisible(x)
+}
+
+#' @export
+summary.MTDest <- function(object, ...) {
+  stopifnot(inherits(object, "MTDest"))
+
+  lenA <- length(object$A)
+  lenS <- length(object$S)
+  indep <- any(object$p0 != 0)
+
+  iterDiagnostics <- list(
+    iterations = if (!is.null(object$iterations)) object$iterations else NA_integer_,
+    lastComputedDelta = if (!is.null(object$lastComputedDelta)) object$lastComputedDelta else NA_real_,
+    deltaLogLik = if (!is.null(object$deltaLogLik)) object$deltaLogLik else NA_real_
+  )
+
+  out <- list(
+    call  = object$call,
+    S     = object$S,
+    A     = object$A,
+    lambdas = object$lambdas,
+    p0      = if (indep) object$p0 else NULL,
+    pj      = object$pj,
+    logLik  = object$logLik,
+    oscillations = object$oscillations,
+    diagnostics  = iterDiagnostics
+  )
+  class(out) <- "summary.MTDest"
+  out
+}
+
+#' @export
+print.summary.MTDest <- function(x, ...) {
+  cat("Summary of EM estimation for MTD model:\n")
+  if (!is.null(x$call)) cat("Call: "); if (!is.null(x$call)) print(x$call)
+  cat("\nLags (-S):", paste(-x$S, collapse = ", "),
+      "\nState space (A):", paste(x$A, collapse = ", "), "\n\n")
+
+  cat("Lambdas:\n")
+  print(x$lambdas)
+
+  if (!is.null(x$p0)) {
+    cat("\nIndependent distribution p0:\n")
+    print(x$p0)
+  } else {
+    cat("\nIndependent distribution p0: (none)\n")
+  }
+
+  cat("\nTransition matrices pj (one per lag):\n")
+  for (i in seq_along(x$pj)) {
+    cat(sprintf(" \n pj for lag j = %s:\n", -x$S[i]))
+    print(x$pj[[i]])
+  }
+
+  cat("\nLog-likelihood:", format(x$logLik, digits = 6), "\n")
+
+  if (!is.null(x$oscillations)) {
+    cat("\nOscillations:\n")
+    print(x$oscillations)
+  }
+
+  it  <- x$diagnostics$iterations
+  lcd  <- x$diagnostics$lastComputedDelta
+  if (!is.na(it) || !is.na(lcd)) {
+    cat("\nDiagnostics:\n")
+    cat("  Number of updates:", it, "\n")
+    cat("  Last computed delta logLik:", format(lcd, digits = 6), "\n")
+  }
+
+  invisible(x)
+}
+
+
+#' @export
+coef.MTDest <- function(object, ...) {
+  stopifnot(inherits(object, "MTDest"))
+  out <- list(
+    lambdas = object$lambdas,
+    p0      = object$p0,
+    pj      = object$pj
+  )
+  out
+}
 
