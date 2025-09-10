@@ -118,7 +118,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   # Creates an MTD object to validate inputs with checkMTD
   initMTD <- MTDmodel(Lambda = S, A = A, lam0 = init$lambdas[1],
                       lamj = init$lambdas[-1], pj = init$pj,
-                      p0 = init$p0, indep_part = ifelse(all(init$p0==0), FALSE, TRUE))
+                      p0 = init$p0, indep_part = indep)
   checkMTD(initMTD)
 
   rS <- S
