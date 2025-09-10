@@ -6,6 +6,7 @@
 \alias{summary.MTDest}
 \alias{print.summary.MTDest}
 \alias{coef.MTDest}
+\alias{logLik.MTDest}
 \title{Methods for objects of class \code{"MTDest"}}
 \usage{
 \method{print}{MTDest}(x, ...)
@@ -15,6 +16,8 @@
 \method{print}{summary.MTDest}(x, ...)
 
 \method{coef}{MTDest}(object, ...)
+
+\method{logLik}{MTDest}(object, ...)
 }
 \arguments{
 \item{x}{An object of class \code{"MTDest"} or \code{"summary.MTDest"},
@@ -36,6 +39,8 @@ distribution; log-likelihood; oscillations (if available); and
 iteration diagnostics (if available).}
 \item{\code{summary.MTDest}}{An object of class \code{"summary.MTDest"}.}
 \item{\code{coef.MTDest}}{A list with estimated \code{lambdas}, \code{pj}, and \code{p0}.}
+\item{\code{logLik.MTDest}}{ An object of class \code{"logLik"} with attributes
+\code{df} (number of free parameters) and \code{nobs} (effective sample size).}
 }
 }
 \description{
@@ -46,6 +51,8 @@ Summary method for EM fits of MTD models.
 Printing method for \code{"summary.MTDest"} objects.
 
 Extract coefficients from an \code{"MTDest"} fit.
+
+Extract log-likelihood from an \code{"MTDest"} fit.
 }
 \details{
 The \code{print.MTDest()} method displays a compact summary of the fitted model:
@@ -63,6 +70,14 @@ log-likelihood, oscillations (if available), and iteration diagnostics (if avail
 The \code{coef.MTDest()} method returns the fitted mixture weights
 (\code{lambdas}), the list of transition matrices (\code{pj}), and (if present)
 the independent distribution \code{p0}.
+
+Computes the log-likelihood and returns an object of class \code{"logLik"}
+with attributes: \code{nobs}, the effective sample size used for estimation,
+and \code{df}, number of free parameters estimated supposing all transition
+matrices pj to be distinct (multimatrix model). This enables \code{\link{AIC}}
+and \code{\link{BIC}} to work out of the box.
+Note: in the returned "logLik" object, \code{df} denotes the number of free
+parameters (not residual degrees of freedom).
 }
 \examples{
 set.seed(1)
@@ -80,9 +95,12 @@ fit <- MTDest(X, S = c(1, 3), init = init, iter = TRUE)
 print(fit)
 summary(fit)
 coef(fit)
+logLik(fit)
+BIC(fit)
 
 }
 \seealso{
 \code{\link{MTDest}}, \code{\link{summary.MTDest}},
-\code{\link{print.summary.MTDest}}, \code{\link{coef.MTDest}}
+\code{\link{print.summary.MTDest}}, \code{\link{coef.MTDest}},
+\code{\link{logLik}}, \code{\link{AIC}}, \code{\link{BIC}}
 }

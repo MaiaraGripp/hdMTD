@@ -20,13 +20,16 @@
 #'   \item{\code{print.summary.MTDest}}{Invisibly returns the \code{"summary.MTDest"} object,
 #'     after displaying its contents: lambdas; transition matrices; independent
 #'     distribution; log-likelihood; oscillations (if available); and
-#'      iteration diagnostics (if available).}
+#'     iteration diagnostics (if available).}
 #'   \item{\code{summary.MTDest}}{An object of class \code{"summary.MTDest"}.}
 #'   \item{\code{coef.MTDest}}{A list with estimated \code{lambdas}, \code{pj}, and \code{p0}.}
+#'   \item{\code{logLik.MTDest}}{ An object of class \code{"logLik"} with attributes
+#'     \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
 #' }
 #'
 #' @seealso \code{\link{MTDest}}, \code{\link{summary.MTDest}},
-#'   \code{\link{print.summary.MTDest}}, \code{\link{coef.MTDest}}
+#'   \code{\link{print.summary.MTDest}}, \code{\link{coef.MTDest}},
+#'    \code{\link{logLik}}, \code{\link{AIC}}, \code{\link{BIC}}
 #'
 #' @examples
 #' set.seed(1)
@@ -44,6 +47,8 @@
 #' print(fit)
 #' summary(fit)
 #' coef(fit)
+#' logLik(fit)
+#' BIC(fit)
 #'
 #' @name MTDest-methods
 #' @rdname MTDest-methods
@@ -159,3 +164,40 @@ coef.MTDest <- function(object, ...) {
   )
   out
 }
+
+#' @description Extract log-likelihood from an \code{"MTDest"} fit.
+#'
+#' @details
+#' Computes the log-likelihood and returns an object of class \code{"logLik"}
+#' with attributes: \code{nobs}, the effective sample size used for estimation,
+#' and \code{df}, number of free parameters estimated supposing all transition
+#' matrices pj to be distinct (multimatrix model). This enables \code{\link{AIC}}
+#' and \code{\link{BIC}} to work out of the box.
+#' Note: in the returned "logLik" object, \code{df} denotes the number of free
+#' parameters (not residual degrees of freedom).
+#'
+#' @rdname MTDest-methods
+#' @exportS3Method logLik MTDest
+logLik.MTDest <- function(object, ...) {
+  stopifnot(inherits(object, "MTDest"))
+
+  indep <- any(object$p0 != 0)
+
+  df <- n_parameters(
+    Lambda        = object$S,
+    A             = object$A,
+    single_matrix = FALSE,
+    indep_part    = indep,
+    zeta          = length(object$S)
+  )
+
+  n_eff <- if (!is.null(object$n_eff)) object$n_eff else NA_integer_
+
+  structure(
+    as.numeric(object$logLik),
+    df   = as.integer(df),
+    nobs = as.integer(n_eff),
+    class = "logLik"
+  )
+}
+

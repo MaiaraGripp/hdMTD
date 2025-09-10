@@ -50,17 +50,19 @@ An S3 object of class \code{"MTDest"} (a list) with at least the following eleme
 \item \code{lambdas}: estimated mixture weights (independent part first, if any).
 \item \code{pj}: list of estimated transition matrices \eqn{p_j}.
 \item \code{p0}: estimated independent distribution (if applicable).
-\item \code{S}: the lag set used for estimation.
-\item \code{A}: the state space used for estimation.
 \item \code{logLik}: log-likelihood of the final fitted model.
-\item \code{call}: the matched call.
-\item \code{oscillations} (optional): returned if \code{oscillations = TRUE}.
 \item \code{iterations}, \code{deltaLogLik}, \code{lastComputedDelta} (optional):
 returned if \code{iter = TRUE}. Here, \code{iterations} is the number of
 parameter updates performed; \code{deltaLogLik} stores the successive
 absolute log-likelihood changes for the accepted updates; and
 \code{lastComputedDelta} is the last computed change (which may be below
 \code{M} when the loop stops by convergence).
+\item \code{oscillations} (optional): returned if \code{oscillations = TRUE}.
+\item \code{call}: the matched call.
+\item \code{S}: the lag set used for estimation.
+\item \code{A}: the state space used for estimation.
+\item \code{n}: the sample size.
+\item \code{n_eff}: the effective sample size used for estimation.
 }
 }
 \description{
