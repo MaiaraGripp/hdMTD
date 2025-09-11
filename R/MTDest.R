@@ -55,6 +55,14 @@
 #' @param oscillations Logical. If \code{TRUE}, also compute oscillations for the
 #' fitted model (see \code{\link{oscillation}}).
 #'
+#' @seealso
+#' Methods for fitted objects: \code{\link{print.MTDest}},
+#' \code{\link{summary.MTDest}}, \code{\link{print.summary.MTDest}},
+#' \code{\link{coef.MTDest}}, \code{\link{logLik.MTDest}}.
+#' Model constructor and related utilities: \code{\link{MTDmodel}},
+#' \code{\link{oscillation}}.
+#' Coercion helper: \code{\link{as.MTD}}
+#'
 #' @export
 #'
 #' @return
