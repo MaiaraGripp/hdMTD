@@ -168,11 +168,10 @@ coef.MTDest <- function(object, ...) {
 #' @description Extract log-likelihood from an \code{"MTDest"} fit.
 #'
 #' @details
-#' Computes the log-likelihood and returns an object of class \code{"logLik"}
-#' with attributes: \code{nobs}, the effective sample size used for estimation,
-#' and \code{df}, number of free parameters estimated supposing all transition
-#' matrices pj to be distinct (multimatrix model). This enables \code{\link{AIC}}
-#' and \code{\link{BIC}} to work out of the box.
+#' The \code{logLik.MTDest()} computes the log-likelihood and returns an object
+#' of class \code{"logLik"} with attributes: \code{nobs}, the effective sample
+#' size used for estimation, and \code{df}, number of free parameters estimated
+#' supposing all transition matrices pj to be distinct (multimatrix model).
 #' Note: in the returned "logLik" object, \code{df} denotes the number of free
 #' parameters (not residual degrees of freedom).
 #'
