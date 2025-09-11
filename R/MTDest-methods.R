@@ -112,7 +112,7 @@ print.summary.MTDest <- function(x, ...) {
   cat("Summary of EM estimation for MTD model:\n")
   if (!is.null(x$call)) cat("Call: "); if (!is.null(x$call)) print(x$call)
 
-  cat("Lambdas:\n")
+  cat("\nLambdas:\n")
   print(x$lambdas)
 
   cat("\nTransition matrices pj (one per lag):\n")
@@ -135,7 +135,7 @@ print.summary.MTDest <- function(x, ...) {
     print(x$oscillations)
   }
 
-  cat("\nLags (-S):", paste(-x$S, collapse = ", "),
+  cat("\nLags (-S):", paste(-rev(x$S), collapse = ", "),
       "\nState space (A):", paste(x$A, collapse = ", "), "\n")
 
   if (!is.na(x$iterations) || !is.na(x$lastComputedDelta)) {
