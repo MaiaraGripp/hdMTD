@@ -87,7 +87,7 @@ an optional vector named \code{p0}, representing an independent
 distribution (the probability in the first entry of \code{p0} must be
 that of the smallest element in \code{A} and so on), a required list
 of matrices \code{pj}, containing a stochastic matrix for each
-element of \code{S} ( the first matrix corresponds to the smallest lag in
+element of \code{S} (the first matrix corresponds to the smallest lag in
 \code{S} and so on), and a vector named \code{lambdas} representing
 the weights, the first entry must be the weight for \code{p0}, and then one entry
 for each element in \code{pj} list. If your MTD model does not have an independent
@@ -97,7 +97,7 @@ distribution \code{p0}, set \code{init$lambdas[1]=0}.
 # Simulating data.
 set.seed(1)
 MTD <- MTDmodel(Lambda = c(1, 10), A = c(0, 1), lam0 = 0.01)
-X <- perfectSample(MTD, N = 2000)
+X <- perfectSample(MTD, N = 400)
 
 # Initial Parameters:
 init <- list(

@@ -20,7 +20,7 @@
 #' distribution (the probability in the first entry of \code{p0} must be
 #' that of the smallest element in \code{A} and so on), a required list
 #' of matrices \code{pj}, containing a stochastic matrix for each
-#' element of \code{S} ( the first matrix corresponds to the smallest lag in
+#' element of \code{S} (the first matrix corresponds to the smallest lag in
 #' \code{S} and so on), and a vector named \code{lambdas} representing
 #' the weights, the first entry must be the weight for \code{p0}, and then one entry
 #' for each element in \code{pj} list. If your MTD model does not have an independent
@@ -90,7 +90,7 @@
 #' # Simulating data.
 #' set.seed(1)
 #' MTD <- MTDmodel(Lambda = c(1, 10), A = c(0, 1), lam0 = 0.01)
-#' X <- perfectSample(MTD, N = 2000)
+#' X <- perfectSample(MTD, N = 400)
 #'
 #' # Initial Parameters:
 #' init <- list(
@@ -183,7 +183,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
     # - Step E (Expectation)
 
     # Creates a stochastic matrix with the lambdas
-    pSja <- matrix(rep(rev(init$lambdas), lenA^lenS0), byrow = T, ncol = lenS0)
+    pSja <- matrix(rep(rev(init$lambdas), lenA^lenS0), byrow = TRUE, ncol = lenS0)
 
     # pSja column referent to lam0 is multiplied by p0
     pSja[, lenS0] <- pSja[, lenS0] * init$p0
@@ -308,7 +308,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   out$A    <- A
   out$n    <- lenX
   out$n_eff<- lenX - max(rS)
-  class(out) <- c("MTDest", "list")
+  class(out) <- "MTDest"
   out
 }
 
