@@ -33,7 +33,7 @@ parameters back into \code{\link{MTDmodel}}.
     )
   )
   fit <- MTDest(X, S = c(1, 3), init = init) # estimates parameters from sample
-  m <- as.MTD(fit) # generates a MTD model from estimated parameters
+  m <- as.MTD(fit) # generates an MTD model from estimated parameters
   str(m, max.level = 1)
 }
 

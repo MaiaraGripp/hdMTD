@@ -151,8 +151,8 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
            There are sequences that appear in the sample for which
            the provided initial probability is zero.
            Run: 'MTDmodel( Lambda = S, A = sort(unique(X)), lam0 = init$lambdas[1],
-           lamj = init$lambdas[-1], pj = pj, p0 = init$p0 )$P' and verify if there
-           are null entries.")
+           lamj = init$lambdas[-1], pj = init$pj, p0 = init$p0 )$P' and verify if
+           there are null entries.")
     }
   }
 
