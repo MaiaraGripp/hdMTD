@@ -70,6 +70,10 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
       indep_part <- FALSE
     }
 
+    if (is.numeric(lam0) && lam0 == 0){
+      if (indep_part || any(p0 > 0)) warning("MTD has independent distribution but with zero weight (lam0 = 0).")
+    }
+
       # If indep_part is FALSE, enforce p0 as a zero vector and set lam0 = 0
     if ( !indep_part ) {
         p0 <- rep(0, lenA)
@@ -174,13 +178,4 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
     MTD
 }
 
-#' @export
-print.MTD <- function(x, ...) {
-    ind <- seq_along(x)
-    if (all(x$p0 == 0)) {
-      ind <- ind[-which(names(x) == "p0")]
-    }
-    print(x[ind])
-    return(invisible(x))
-}
 
