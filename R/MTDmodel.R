@@ -70,8 +70,9 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
       indep_part <- FALSE
     }
 
+    # If lam0 = 0 but there is independent dist warn user the weight is 0
     if (is.numeric(lam0) && lam0 == 0){
-      if (indep_part || any(p0 > 0)) warning("MTD has independent distribution but with zero weight (lam0 = 0).")
+      if (indep_part || any(p0 > 0)) warning("Since lam0 = 0, the generated MTD has independent distribution but with zero weight.")
     }
 
       # If indep_part is FALSE, enforce p0 as a zero vector and set lam0 = 0
@@ -173,7 +174,11 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
         rownames(P) <- apply(subx, 1, paste0, collapse = "")
     }
 
-    MTD <- list(P = P, lambdas = lambdas, pj = pj, p0 = p0, Lambda = Lambda, A = A)
+    MTD <- list(
+      P = P, lambdas = lambdas, pj = pj, p0 = p0,
+      Lambda = Lambda, A = A,
+      call = match.call()
+    )
     class(MTD) <- "MTD"
     MTD
 }
