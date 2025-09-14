@@ -1,0 +1,149 @@
+#' Methods for objects of class \code{"MTD"}
+#'
+#' @description
+#' Printing, summarizing, and coefficient-extraction methods for Mixture
+#' Transition Distribution (MTD) model objects.
+#'
+#' @details
+#' \code{print.MTD()} displays the relevant lag set (shown as negative integers)
+#' and the state space. For a detailed overview including mixture weights and a
+#' compact preview of the global transition matrix \eqn{P}, use \code{summary()}.
+#'
+#' @param x An object of class \code{"MTD"} or \code{"summary.MTD"},
+#'  depending on the method.
+#' @param object An object of class \code{"MTD"}.
+#' @param ... Further arguments passed to or from other methods (ignored).
+#'
+#' @return
+#' \describe{
+#'   \item{\code{print.MTD}}{Invisibly returns the \code{"MTD"} object, after
+#'         displaying its relevant lag set and state space.}
+#'   \item{\code{summary.MTD}}{An object of class \code{"summary.MTD"} with fields:
+#'         \code{order}, \code{states}, \code{lags}, \code{indep},
+#'         \code{lambdas}, \code{p0} (or \code{NULL}),
+#'         \code{P_dim}, and \code{P_head}.}
+#'   \item{\code{print.summary.MTD}}{Invisibly returns the
+#'         \code{"summary.MTD"} object after printing its contents.}
+#'   \item{\code{coef.MTD}}{A list with model parameters:
+#'         \code{lambdas}, \code{pj}, and \code{p0}.}
+#' }
+#'
+#' @seealso
+#' \code{\link{MTDmodel}}, \code{\link{MTDest}},
+#' \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
+#' \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
+#' \code{\link{summary.MTDest}}, \code{\link{coef.MTDest}},
+#' \code{\link{oscillation}}, \code{\link{perfectSample}}
+#'
+#' @examples
+#' \dontrun{
+#' set.seed(1)
+#' m <- MTDmodel(Lambda = c(1, 3), A = c(0, 1), lam0 = 0.05)
+#'
+#' print(m)       # compact display: lags (Z^-) and state space
+#' s <- summary(m)
+#' print(s)
+#'
+#' coef(m)        # list(lambdas = ..., pj = ..., p0 = ...)
+#' transitP(m)    # global transition matrix P
+#' pj(m); p0(m); lambdas(m); lags(m); Lambda(m); states(m)
+#' }
+#'
+#' @name MTD-methods
+NULL
+
+# ---- small internal helper for pretty vector printing (not exported) ----
+.mtd_fmt <- function(x, max_items = 20L) {
+  x <- as.vector(x)
+  n <- length(x)
+  if (n <= max_items) {
+    paste(x, collapse = ", ")
+  } else {
+    paste0(paste(x[seq_len(max_items)], collapse = ", "), ", ... (", n, " total)")
+  }
+}
+
+# --------------------------- print.MTD ---------------------------------
+
+#' @rdname MTD-methods
+#' @exportS3Method print MTD
+print.MTD <- function(x, ...) {
+  lg <- lags(x)
+  A  <- states(x)
+
+  cat("An object of class 'MTD'\n")
+  cat("  Relevant lags: ", .mtd_fmt(lg), "\n", sep = "")
+  cat("  State space (A): ", .mtd_fmt(A),  "\n", sep = "")
+  cat("  Use summary(x) for full description.\n")
+  cat("  Accessors: transitP(), lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
+  cat("  Methods:   coef(), oscillation(), perfectSample().\n")
+  invisible(x)
+}
+
+# ------------------------- summary.MTD ---------------------------------
+
+#' @rdname MTD-methods
+#' @exportS3Method summary MTD
+summary.MTD <- function(object, ...) {
+  checkMTD(object)  # robust validation
+
+  w   <- lambdas(object)
+  p0 <- p0(object)
+  indep_flag <- (sum(p0) > 0) && (w[1] > 0)
+  P <- transitP(object)
+
+  out <- list(
+    call    = if (!is.null(object$call)) object$call else NULL,
+    order   = max(Lambda(object)),
+    Lambda  = Lambda(object),
+    states  = states(object),
+    lags    = lags(object),
+    indep   = indep_flag,
+    lambdas = w,
+    pj      = pj(object),
+    p0      = if (indep_flag) p0 else NULL,
+    P_dim   = dim(P),
+    P       = P
+  )
+  class(out) <- "summary.MTD"
+  out
+}
+
+#' @rdname MTD-methods
+#' @exportS3Method print summary.MTD
+print.summary.MTD <- function(x, ...) {
+  cat("Mixture Transition Distribution (MTD) model \n")
+  if (!is.null(x$call)) { cat("\nCall:\n"); print(x$call) }
+
+  cat("\nRelevant lags: ", .mtd_fmt(x$lags), "\n", sep = "")
+  cat("State space: ", .mtd_fmt(x$states), "\n", sep = "")
+
+  cat("\nlambdas (weights):\n"); print(x$lambdas)
+
+  if (!is.null(x$p0)) {
+    cat("\nIndependent distribution (p0):\n"); print(x$p0)
+  }
+
+  cat("\nTransition matrices pj (one per lag):\n")
+  for (i in seq_along(x$pj)) {
+    cat(sprintf(" \n pj for lag j = %s:\n", -x$Lambda[i]))
+    print(x$pj[[i]])
+  }
+
+  cat(sprintf("\nTransition matrix P: %d x %d\n", x$P_dim[1], x$P_dim[2]))
+  cat("- Preview of first rows of P:\n"); print(utils::head(x$P, n = min(6L, nrow(x$P))))
+  invisible(x)
+}
+
+# --------------------------- coef.MTD ----------------------------------
+
+#' @rdname MTD-methods
+#' @exportS3Method coef MTD
+coef.MTD <- function(object, ...) {
+  checkMTD(object)
+  list(
+    lambdas = lambdas(object),
+    pj      = pj(object),
+    p0      = p0(object)
+  )
+}
