@@ -4,7 +4,7 @@
 #' using one of the available methods. By default, it applies the Forward Stepwise ("FS") method,
 #' which is particularly useful in high-dimensional settings.
 #'  The available methods are:
-#' - "FS" (Forward Stepwise): selects the lags by a criteria that depends on their oscillations.
+#' - "FS" (Forward Stepwise): selects the lags by a criterion that depends on their oscillations.
 #' - "CUT": a method that selects the relevant lag set based on a predefined threshold.
 #' - "FSC" (Forward Stepwise and Cut): applies the "FS" method followed by the "CUT" method.
 #' - "BIC": selects the lag set using the Bayesian Information Criterion.
@@ -14,7 +14,7 @@
 #' and default values are used for unspecified parameters.
 #'
 #' @details
-#' #' This function serves as a wrapper for the method-specific functions:
+#' This function serves as a wrapper for the method-specific functions:
 #' - [hdMTD_FS()], for \code{method = "FS"}
 #' - [hdMTD_FSC()], for \code{method = "FSC"}
 #' - [hdMTD_CUT()], for \code{method = "CUT"}
@@ -24,7 +24,6 @@
 #' If a parameter value is not explicitly provided, a default value is used.
 #' The main default parameters are:
 #' - \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
-#' - \code{l = d}. Required in "FS" or "FSC" methods.
 #' - \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
 #' - \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
 #' - \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
@@ -55,6 +54,7 @@
 #'
 hdMTD <- function(X, d, method = "FS", ...){
 
+  method <- toupper(method)
   if(!method %in% c("FSC", "FS", "CUT", "BIC")){
     stop("The chosen method is unknown")
   }
@@ -63,29 +63,56 @@ hdMTD <- function(X, d, method = "FS", ...){
   fmtd_params <- names(formals(fmtd)) # names of parameters need for method
 
   params <- list(...)
+  nms <- names(params)
+
+  # Capture extra args
+  if (length(params)) {
+    if (is.null(nms) || any(is.na(nms)) || any(!nzchar(nms))) {
+      stop("All additional arguments in '...' must be named (non-empty, non-NA).")
+    }
+    if (any(duplicated(nms))) {
+      dup <- unique(nms[duplicated(nms)])
+      stop("Duplicated argument name(s) in '...': ", paste(dup, collapse = ", "))
+    }
+    unknown <- setdiff(nms, fmtd_params)
+    if (length(unknown)) {
+      stop("Unknown argument(s) for method ", method, ": ",
+           paste(unknown, collapse = ", "),
+           ". See ?hdMTD_", method, " for accepted parameters.")
+    }
+  }
 
   # List of default parameters
-  dparams <- list(S = seq(1, d, 1), l = d, alpha = 0.05, mu = 1, xi = 0.5,
+  dparams <- list(S = seq_len(d), l = NULL, alpha = 0.05, mu = 1, xi = 0.5,
                   minl = 1, maxl = d, A = NULL, byl = FALSE, BICvalue = FALSE,
                   single_matrix = FALSE, indep_part = TRUE, zeta = d,
                   elbowTest = FALSE, warning = FALSE)
 
-  if(length(params) != 0){
-      if(!all(names(params) %in% fmtd_params)){
-          stop(paste0("Some of the parameter names provided do not match those used in hdMTD_", method, " function.
-                      Please check hdMTD_", method, "() documentation."))
-      }
-      params_names <- names(params)
-      dparams[params_names] <- params # Replace default parameters with informed ones
+  # overlay user-provided values
+  if(length(params) > 0){
+      dparams[nms] <- params # Replace default parameters with informed ones
 
       if ( method == "BIC"){
-          if( !"maxl" %in% params_names ){
-            dparams$maxl <- length(dparams$S) # Default maxl to length(S)
-          }
-          if( !"zeta" %in% params_names ){
-            dparams$zeta <- dparams$maxl # Default zeta to maxl
-          }
+          if(!("maxl" %in% nms)){dparams$maxl <- length(dparams$S)} # Default maxl to length(S)
+          if(!("zeta" %in% nms)){dparams$zeta <- dparams$maxl} # Default zeta to maxl
       }
+  }
+
+  # Check l parameter for FS and FSc
+  if (method == "FS") {
+    if (isTRUE(dparams$elbowTest) && is.null(dparams$l)) {
+      dparams$l <- d
+    }
+    # Else, l is mandatory for FS
+    if (!isTRUE(dparams$elbowTest) && is.null(dparams$l)) {
+      stop("For method 'FS', please supply 'l' (number of selected lags).")
+    }
+  }
+  # l is mandatory for FSC
+  if (method == "FSC") {
+    if (is.null(dparams$l)) {
+      stop("For method 'FSC', please supply 'l' (number of selected lags).")
+    }
   }
 
   fmtd(X = X, d = d, S = dparams$S, l = dparams$l, alpha = dparams$alpha,

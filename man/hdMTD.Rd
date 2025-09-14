@@ -27,7 +27,7 @@ using one of the available methods. By default, it applies the Forward Stepwise 
 which is particularly useful in high-dimensional settings.
 The available methods are:
 \itemize{
-\item "FS" (Forward Stepwise): selects the lags by a criteria that depends on their oscillations.
+\item "FS" (Forward Stepwise): selects the lags by a criterion that depends on their oscillations.
 \item "CUT": a method that selects the relevant lag set based on a predefined threshold.
 \item "FSC" (Forward Stepwise and Cut): applies the "FS" method followed by the "CUT" method.
 \item "BIC": selects the lag set using the Bayesian Information Criterion.
@@ -38,7 +38,7 @@ The function dynamically calls the corresponding method function (e.g., \code{\l
 \code{method = "FSC"}). Additional parameters specific to each method can be provided via \code{...},
 and default values are used for unspecified parameters.
 
-#' This function serves as a wrapper for the method-specific functions:
+This function serves as a wrapper for the method-specific functions:
 \itemize{
 \item \code{\link[=hdMTD_FS]{hdMTD_FS()}}, for \code{method = "FS"}
 \item \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}, for \code{method = "FSC"}
@@ -51,7 +51,6 @@ If a parameter value is not explicitly provided, a default value is used.
 The main default parameters are:
 \itemize{
 \item \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
-\item \code{l = d}. Required in "FS" or "FSC" methods.
 \item \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
 \item \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
 \item \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
