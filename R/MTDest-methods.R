@@ -55,7 +55,7 @@
 #' @exportS3Method print MTDest
 print.MTDest <- function(x, ...) {
   cat("An object of class 'MTDest' (EM estimation of MTD model)\n")
-  cat("  Lags (-S):", paste(-rev(x$S), collapse = ", "), "\n")
+  cat("  Lags (-S):", paste(-x$S, collapse = ", "), "\n")
   cat("  State space (A):", paste(x$A, collapse = ", "), "\n")
   cat("  Final log-likelihood:", format(x$logLik, digits = 6), "\n")
   if (!is.null(x$iterations)) {
@@ -135,7 +135,7 @@ print.summary.MTDest <- function(x, ...) {
     print(x$oscillations)
   }
 
-  cat("\nLags (-S):", paste(-rev(x$S), collapse = ", "),
+  cat("\nLags (-S):", paste(-x$S, collapse = ", "),
       "\nState space (A):", paste(x$A, collapse = ", "), "\n")
 
   if (!is.na(x$iterations) || !is.na(x$lastComputedDelta)) {
