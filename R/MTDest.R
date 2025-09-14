@@ -194,14 +194,14 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
       for (j in seq_len(lenA ^ lenS0)) { #row
         pSja[j, i] <- pSja[j, i] * pj[indexA[j, i], indexA[j, (lenS0)]]
       }
-      cont <- cont-1
+      cont <- cont - 1
     }
     # Normalize pSja so each row is either a distribution or a vector of 0s.
     norm <- rowSums(pSja)
     norm[which(norm == 0)] <- 1 # to avoid 0/0
     Pj_xa_S <- pSja/norm
     # Pj_xa_S is a matrix with the conditional probabilities of a hidden variable Z
-    # (a state variable, i.e., Z\in S\cup{0}), given any possible size lenS0
+    # (a lag variable, i.e., Z\in S\cup{0}), given any possible size lenS0
     # sequence with elements from A.
 
     # - End of step E
