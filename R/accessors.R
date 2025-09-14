@@ -124,7 +124,7 @@ lambdas.MTD <- function(object) {
 #' @rdname MTD-accessors
 #' @exportS3Method lags MTD
 lags.MTD <- function(object) {
-  -rev(object$Lambda)  # lags are in Z^-
+  -object$Lambda  # lags are in Z^-
 }
 
 #' @rdname MTD-accessors
@@ -168,7 +168,7 @@ lambdas.MTDest <- function(object) {
 #' @rdname MTD-accessors
 #' @exportS3Method lags MTDest
 lags.MTDest <- function(object) {
-  -rev(object$S)  # lags are in Z^-
+  -object$S  # lags are in Z^-
 }
 
 #' @rdname MTD-accessors
