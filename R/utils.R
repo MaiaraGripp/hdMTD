@@ -9,8 +9,9 @@
 # 3 - sx()
 # 4 - n_parameters()
 # 5 - prodinf()
+# 6 - fmt_vec()
 
-# At the end of each auxiliary function bellow there is
+# At the end of each auxiliary function below there is
 # a note naming the functions that use it.
 
 ###########################################################
@@ -183,7 +184,7 @@ n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE, ze
 ###########################################################
 ###########################################################
 
-# prodinf: Computes the vector product between to vectors
+# prodinf: Computes the vector product between two vectors
 #
 # This function computes the product vector between to vectors x and y.
 # However, for each i such that |x[i]|=inf and y[i]=0, x[i] * y[i] = 0.
@@ -193,7 +194,7 @@ n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE, ze
 # - y: A numeric vector with the same length as x.
 #
 # Returns:
-# - A size x vector with the product between x and y. Whenever inf*0 occurs the output
+# - A vector of size length(x) with the product between x and y. Whenever inf*0 occurs the output
 # is set to 0.
 
 prodinf <- function(x, y){
@@ -209,3 +210,38 @@ prodinf <- function(x, y){
 } # prodinf is used in MTDest.R.
 
 
+###########################################################
+###########################################################
+###########################################################
+
+
+# fmt_vec: Pretty-prints a vector into a compact one-line string
+#
+# This function formats an arbitrary vector into a concise, human-readable
+# string. It joins elements with commas and, when the vector is longer than
+# `max_items`, it truncates the output and appends a suffix indicating the
+# total length (e.g., ", ... (57 total)").
+#
+# Arguments:
+# - x: A vector of any atomic mode (numeric, integer, character, logical, etc.).
+# - max_items: Integer (default = 20). Maximum number of elements to show
+#   before truncating with the "..., (n total)" suffix.
+# - digits: Integer or NULL (default = NULL). If non-NULL and `x` is numeric,
+#   values are formatted with `format(x, digits = digits)` prior to joining.
+# - empty: Character (default = "∅"). String returned when `x` has length 0 or is NULL.
+#
+# Returns:
+# - A single character string with the compact representation of `x`.
+
+fmt_vec <- function(x, max_items = 20L, digits = NULL, empty = "∅") {
+  if (is.null(x) || length(x) == 0L) return(empty)
+  x <- as.vector(x)
+  if (!is.null(digits) && is.numeric(x)) x <- format(x, digits = digits)
+  n <- length(x)
+  if (n <= max_items) {
+    paste(x, collapse = ", ")
+  } else {
+    paste0(paste(x[seq_len(max_items)], collapse = ", "),
+           ", ... (", n, " total)")
+  }
+}# Used in: MTD-methods.R, hdMTD-methods.R

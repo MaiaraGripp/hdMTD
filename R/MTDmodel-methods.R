@@ -52,17 +52,6 @@
 #' @name MTD-methods
 NULL
 
-# ---- small internal helper for pretty vector printing (not exported) ----
-.mtd_fmt <- function(x, max_items = 20L) {
-  x <- as.vector(x)
-  n <- length(x)
-  if (n <= max_items) {
-    paste(x, collapse = ", ")
-  } else {
-    paste0(paste(x[seq_len(max_items)], collapse = ", "), ", ... (", n, " total)")
-  }
-}
-
 # --------------------------- print.MTD ---------------------------------
 
 #' @rdname MTD-methods
@@ -72,8 +61,8 @@ print.MTD <- function(x, ...) {
   A  <- states(x)
 
   cat("An object of class 'MTD'\n")
-  cat("  Relevant lags: ", .mtd_fmt(lg), "\n", sep = "")
-  cat("  State space (A): ", .mtd_fmt(A),  "\n", sep = "")
+  cat("  Relevant lags: ", fmt_vec(lg), "\n", sep = "")
+  cat("  State space (A): ", fmt_vec(A),  "\n", sep = "")
   cat("  Use summary(x) for full description.\n")
   cat("  Accessors: transitP(), lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
   cat("  Methods:   coef(), oscillation(), perfectSample().\n")
@@ -115,8 +104,8 @@ print.summary.MTD <- function(x, ...) {
   cat("Mixture Transition Distribution (MTD) model \n")
   if (!is.null(x$call)) { cat("\nCall:\n"); print(x$call) }
 
-  cat("\nRelevant lags: ", .mtd_fmt(x$lags), "\n", sep = "")
-  cat("State space: ", .mtd_fmt(x$states), "\n", sep = "")
+  cat("\nRelevant lags: ", fmt_vec(x$lags), "\n", sep = "")
+  cat("State space: ", fmt_vec(x$states), "\n", sep = "")
 
   cat("\nlambdas (weights):\n"); print(x$lambdas)
 
