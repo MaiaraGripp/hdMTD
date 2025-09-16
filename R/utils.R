@@ -224,7 +224,7 @@ prodinf <- function(x, y){
 #
 # Arguments:
 # - x: A vector of any atomic mode (numeric, integer, character, logical, etc.).
-# - max_items: Integer (default = 20). Maximum number of elements to show
+# - max_items: Integer (default = 10). Maximum number of elements to show
 #   before truncating with the "..., (n total)" suffix.
 # - digits: Integer or NULL (default = NULL). If non-NULL and `x` is numeric,
 #   values are formatted with `format(x, digits = digits)` prior to joining.
@@ -233,8 +233,8 @@ prodinf <- function(x, y){
 # Returns:
 # - A single character string with the compact representation of `x`.
 
-fmt_vec <- function(x, max_items = 20L, digits = NULL, empty = "∅") {
-  if (is.null(x) || length(x) == 0L) return(empty)
+fmt_vec <- function(x, max_items = 10, digits = NULL, empty = "empty") {
+  if (is.null(x) || length(x) == 0) return(empty)
   x <- as.vector(x)
   if (!is.null(digits) && is.numeric(x)) x <- format(x, digits = digits)
   n <- length(x)
