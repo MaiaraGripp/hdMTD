@@ -19,12 +19,22 @@ and the documentation of the corresponding method functions for more information
 will be used (see \emph{Details} ).}
 }
 \value{
-A vector containing the estimated relevant lag set.
+An integer vector of class \code{"hdMTD"} (the selected lag set \eqn{S \subset \mathbb{N}^+}),
+with attributes:
+\itemize{
+\item \code{method}, \code{d}, \code{call}, \code{settings}
+\item \code{A}: the state space actually used (either provided \code{A}, or \code{sort(unique(X))} if \code{A = NULL})
+\item (for \code{method="BIC"}) \code{extras}: a list that includes \code{BIC_values} (the complete output returned by \code{hdMTD_BIC})
+\item (for \code{method="BIC"} and \code{BICvalue = TRUE}) \code{BIC_selected_value}: numeric BIC at the selected set
+}
+The returned object supports \code{print()} and \code{summary()} methods.
 }
 \description{
 This function estimates the relevant lag set in a Mixture Transition Distribution (MTD) model
 using one of the available methods. By default, it applies the Forward Stepwise ("FS") method,
 which is particularly useful in high-dimensional settings.
+}
+\details{
 The available methods are:
 \itemize{
 \item "FS" (Forward Stepwise): selects the lags by a criterion that depends on their oscillations.
@@ -32,8 +42,7 @@ The available methods are:
 \item "FSC" (Forward Stepwise and Cut): applies the "FS" method followed by the "CUT" method.
 \item "BIC": selects the lag set using the Bayesian Information Criterion.
 }
-}
-\details{
+
 The function dynamically calls the corresponding method function (e.g., \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} for
 \code{method = "FSC"}). Additional parameters specific to each method can be provided via \code{...},
 and default values are used for unspecified parameters.
@@ -56,15 +65,29 @@ The main default parameters are:
 \item \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
 All default values are specified in the documentation of the method-specific functions.
 }
+
+\strong{BIC-specific notes:}
+\itemize{
+\item If \code{BICvalue = TRUE}, the function stores the BIC of the selected set so that
+\code{summary()} can display it.
+}
 }
 \examples{
 # Simulate a chain from an MTD model
 set.seed(1)
 M <- MTDmodel(Lambda = c(1, 4), A = c(1, 3), lam0 = 0.05)
 X <- perfectSample(M, N = 400)
-# Fit using Forward Stepwise (FS)
-hdMTD(X = X, d = 5, method = "FS", l = 2)
-# Fit using Bayesian Information Criterion (BIC)
-hdMTD(X = X, d = 5, method = "BIC", xi = 1, minl = 3, maxl = 3)
 
+# Fit using Forward Stepwise (FS)
+S_fs <- hdMTD(X = X, d = 5, method = "FS", l = 2)
+print(S_fs)
+summary(S_fs)  # shows A used if A = NULL in the call
+
+# Fit using Bayesian Information Criterion (BIC)
+hdMTD(X = X, d = 5, method = "BIC", xi = 0.6, minl = 3, maxl = 3)
+
+}
+\seealso{
+\code{\link{hdMTD_FS}}, \code{\link{hdMTD_FSC}}, \code{\link{hdMTD_CUT}}, \code{\link{hdMTD_BIC}},
+\code{\link{S}}, \code{\link{lags}}
 }
