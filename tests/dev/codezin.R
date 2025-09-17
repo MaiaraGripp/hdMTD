@@ -51,9 +51,9 @@ codezin_collect <- function() {
   set.seed(11)
   fsc_set <- hdMTD_FSC(X, d = 30, l = 3, alpha = 0.1)
 
-  # --- Probs e Oscillation (rápidos) ---
-  P_df  <- probs(X, S = c(1, 15, 30), matrixform = FALSE)
-  P_mat <- probs(X, S = c(1, 15, 30), matrixform = TRUE)
+  # --- empirical_probs e Oscillation (rápidos) ---
+  P_df  <- empirical_probs(X, S = c(1, 15, 30), matrixform = FALSE)
+  P_mat <- empirical_probs(X, S = c(1, 15, 30), matrixform = TRUE)
 
   osc_model  <- oscillation(MTD)
   osc_sample <- oscillation(X, S = c(1, 15, 30))

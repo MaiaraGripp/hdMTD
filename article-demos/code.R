@@ -110,8 +110,8 @@ hdMTD_FS(X[1:500], d = 40, l = 4)
 #'
 #' 7. Estimating transition probabilities
 #'
-probs(X, S = c(1, 15, 30))
-probs(X, S = c(1, 15, 30), matrixform = TRUE)
+empirical_probs(X, S = c(1, 15, 30))
+empirical_probs(X, S = c(1, 15, 30), matrixform = TRUE)
 #'
 #' 8. Oscillations
 #'
@@ -473,7 +473,7 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 #'
 #' 9. Estimated transition matrix for FS method output:
 #'
-P_FS <- probs(Temp12_Train, S = c(1, 6, 364), matrixform = T)
+P_FS <- empirical_probs(Temp12_Train, S = c(1, 6, 364), matrixform = T)
 P_FS
 #'
 #' ### Classic method for choosing relevant lag set:
@@ -566,7 +566,7 @@ rownames(bic_matrix) <- "BIC"
 #' ```
 #'
 #' Estimated matrix for $S=\{-2,-1\}$
-P_MC2 <- probs(Temp12_Train, S = c(1, 2), matrixform = TRUE)
+P_MC2 <- empirical_probs(Temp12_Train, S = c(1, 2), matrixform = TRUE)
 P_MC2
 #' Independent model distribution:
 P_Ind <- prop.table(table(Temp12_Train))

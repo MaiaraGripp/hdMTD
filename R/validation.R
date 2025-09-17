@@ -8,7 +8,7 @@
 # 2 - check_MTDmodel_inputs()
 # 3 - check_freqTab_inputs()
 # 4 - check_dTVsample_inputs()
-# 5 - check_probs_inputs()
+# 5 - check_empirical_probs_inputs()
 # 6 - check_hdMTD_FS_inputs()
 # 7 - check_hdMTD_CUT_inputs()
 # 8 - check_hdMTD_BIC_inputs()
@@ -247,8 +247,8 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 #########################################################################
 #########################################################################
 # 5
-check_probs_inputs <- function(X, S, matrixform, A, warning) {
-   # Validates the inputs in probs() function
+check_empirical_probs_inputs <- function(X, S, matrixform, A, warning) {
+   # Validates the inputs in empirical_probs() function
 
   if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) ||
       length(S) != length(unique(S)) || !is.vector(S) ){

@@ -1,4 +1,4 @@
-test_that("probs function estimates probabilities correctly", {
+test_that("empirical_probs function estimates probabilities correctly", {
 
   # Relevant lag set
   Lambda <- c(1, 3)
@@ -10,7 +10,7 @@ test_that("probs function estimates probabilities correctly", {
   sample_chain <-perfectSample(MTD, N = 500)
 
   # Calculate probabilities
-  result <- probs(sample_chain, Lambda)
+  result <- empirical_probs(sample_chain, Lambda)
 
   # Check if the result matches the expected output
   expect_true(all(colnames(result)==c("past_{ -3,-1 }","a","p(a|past)")))
