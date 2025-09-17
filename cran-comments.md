@@ -2,8 +2,10 @@
 
 ### Summary of changes
 - Added S3 class for EM fits: `MTDest` with `print()`, `summary()`, `coef()`, and `logLik()`.
+- Added S3 class for lag-selection fits: `hdMTD` with `print()` and `summary()`.
 - Added public accessor functions for `MTD`/`MTDest`: `pj()`, `p0()`, `lambdas()`, `lags()` (ℤ⁻),
-  `Lambda()`/`S()` (ℕ⁺), `states()`, and `transitP()` (for `MTD`).
+  `Lambda()`/`S()` (ℕ⁺), `states()`, and `transitP()` (for `MTD`). `S()` and `lags()` also apply
+to `hdMTD`.
 - Added `MTD` methods: `print()`, `summary()`, `coef()`.
 - Introduced `as.MTD()` to coerce an `MTDest` object to an `MTD` object.
 - Replaced `any(is.na())` with `anyNA()` in `checkSample()`. 
