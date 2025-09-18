@@ -45,7 +45,8 @@
 #' # Apply CUT with selected lags and smaller alpha
 #' hdMTD_CUT(X, d = 6, S = c(1, 4, 6), alpha = 0.08)
 #'
-hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE,...){
+hdMTD_CUT <- function(X, d, S = seq_len(d), alpha = 0.05,
+                      mu = 1, xi = 0.5, A = NULL, warning=FALSE,...){
 
     # Validate and preprocess the input sample
     X <- checkSample(X)
@@ -105,7 +106,8 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
       dTV_txy[z] <- max(Q - txy) # The largest dTV minus its threshold referent to lag j
     }
 
-    dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
+    S <- dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
+    sort(S)
 }
 
 

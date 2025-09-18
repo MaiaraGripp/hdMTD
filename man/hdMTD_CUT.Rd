@@ -7,7 +7,7 @@
 hdMTD_CUT(
   X,
   d,
-  S = 1:d,
+  S = seq_len(d),
   alpha = 0.05,
   mu = 1,
   xi = 0.5,
