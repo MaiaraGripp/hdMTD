@@ -6,6 +6,11 @@
 - Added public accessor functions for `MTD`/`MTDest`: `pj()`, `p0()`, `lambdas()`, `lags()` (ℤ⁻),
   `Lambda()`/`S()` (ℕ⁺), `states()`, and `transitP()` (for `MTD`). `S()` and `lags()` also apply
 to `hdMTD`.
+- Added `probs()` S3 for `MTD` and `MTDest` to return one-step-ahead predictive probabilities. Supports
+ `newdata` (most recent first) or exact `context` (one symbol per lag). When neither `newdata` nor `context`
+ is provided, `probs()` returns the full global transition matrix.
+- Renamed previous sample-based helper `probs(X, S, ...)` to `empirical_probs(X, S, ...)`. This clarifies the
+ separation between estimation from data and prediction from a model.
 - Added `MTD` methods: `print()`, `summary()`, `coef()`.
 - Introduced `as.MTD()` to coerce an `MTDest` object to an `MTD` object.
 - Replaced `any(is.na())` with `anyNA()` in `checkSample()`. 
