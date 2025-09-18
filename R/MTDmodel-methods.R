@@ -121,6 +121,16 @@ print.summary.MTD <- function(x, ...) {
 
   cat(sprintf("\nTransition matrix P: %d x %d\n", x$P_dim[1], x$P_dim[2]))
   cat("- Preview of first rows of P:\n"); print(utils::head(x$P, n = min(6L, nrow(x$P))))
+
+  ## ---- Reading guide for P (right-to-left interpretation) ----
+
+  cat("\nReading guide for P:\n")
+  if (!is.null(x$Lambda)) {
+    cat("Rows list past contexts from oldest to newest, matching lags ",
+        paste0("(", paste(-sort(x$Lambda, decreasing = TRUE), collapse = ", "), ")"), ".\n", sep = "")
+  } else {
+    cat("Rows list past contexts from oldest to newest.\n")
+  }
   invisible(x)
 }
 
