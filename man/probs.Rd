@@ -6,16 +6,14 @@
 \alias{probs.MTDest}
 \title{Predictive probabilities for MTD / MTDest}
 \usage{
-probs(object, ...)
+probs(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 
-\method{probs}{MTD}(object, context = NULL, newdata = NULL, oldLeft = FALSE, ...)
+\method{probs}{MTD}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 
-\method{probs}{MTDest}(object, context = NULL, newdata = NULL, oldLeft = FALSE, ...)
+\method{probs}{MTDest}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 }
 \arguments{
 \item{object}{An \code{MTD} or \code{MTDest} object.}
-
-\item{...}{Ignored.}
 
 \item{context}{Optional vector or matrix/data.frame of contexts (rows). By default,
 each row follows the "most recent first" convention; set \code{oldLeft = TRUE} if rows

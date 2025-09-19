@@ -25,7 +25,6 @@
 #' @param oldLeft Logical. If `TRUE`, interpret rows in `newdata`/`context` as
 #' oldest to newest (e.g. leftmost = `newdata[ ,1]` = oldest). If `FALSE` (default),
 #' rows are most recent first.
-#' @param ... Ignored.
 #'
 #' @return A numeric matrix of predictive probabilities with one row per input context and
 #'   columns indexed by `states(object)`. Row names are the context labels (oldest to newest)
@@ -61,11 +60,11 @@
 #'
 #' @name probs
 #' @export
-probs <- function(object, ...) UseMethod("probs")
+probs <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) UseMethod("probs")
 #'
 #' @rdname probs
 #' @export
-probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE, ...) {
+probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
   stopifnot(inherits(object, "MTD"))
 
   P <- transitP(object)
@@ -151,7 +150,7 @@ probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE, .
 #'
 #' @rdname probs
 #' @export
-probs.MTDest <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE, ...) {
+probs.MTDest <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
   stopifnot(inherits(object, "MTDest"))
 
   P <- transitP(as.MTD(object))
