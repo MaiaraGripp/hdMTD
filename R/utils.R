@@ -8,8 +8,7 @@
 # 2 - PI()
 # 3 - sx()
 # 4 - n_parameters()
-# 5 - prodinf()
-# 6 - fmt_vec()
+# 5 - fmt_vec()
 
 # At the end of each auxiliary function below there is
 # a note naming the functions that use it.
@@ -183,37 +182,6 @@ n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE, ze
 ###########################################################
 ###########################################################
 ###########################################################
-
-# prodinf: Computes the vector product between two vectors
-#
-# This function computes the product vector between to vectors x and y.
-# However, for each i such that |x[i]|=inf and y[i]=0, x[i] * y[i] = 0.
-#
-# Arguments:
-# - x: A numeric vector, may have inf values
-# - y: A numeric vector with the same length as x.
-#
-# Returns:
-# - A vector of size length(x) with the product between x and y. Whenever inf*0 occurs the output
-# is set to 0.
-
-prodinf <- function(x, y){
-    prinf <- numeric(length(x))
-    for (i in seq_len(length(x))) {
-        if (is.infinite(x[i]) && y[i] == 0) {
-          prinf[i] <- 0
-        } else {
-          prinf[i] <- x[i] * y[i]
-        }
-    }
-    prinf
-} # prodinf is used in MTDest.R.
-
-
-###########################################################
-###########################################################
-###########################################################
-
 
 # fmt_vec: Pretty-prints a vector into a compact one-line string
 #

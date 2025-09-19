@@ -516,24 +516,11 @@ BICMC4 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC4
 #' Comparable BIC if the model is a Markov chain of order $4$: $1877.888$
 #'
-#' Helper function: this function simply allows the product: -inf * 0 = 0, which
-#' will be useful for the next likelihood calculus.
-prodinf <- function(x, y){
-  prinf <- numeric(length(x))
-  for (i in seq_len(length(x))) {
-    if (is.infinite(x[i]) && y[i] == 0) {
-      prinf[i] <- 0
-    } else {
-      prinf[i] <- x[i] * y[i]
-    }
-  }
-  prinf
-}
-#'
 #' MC5
 #'
 ft <- freqTab(S = c(1, 2, 3, 4, 5), A = c(1, 2), countsTab = ct)
-LL <- sum(prodinf(log(ft$qax_Sj), ft$Nxa_Sj))
+pos <- which(ft$Nxa_Sj > 0)
+LL <- sum(log(ft$qax_Sj[pos]) * ft$Nxa_Sj[pos])
 freeParam <- 2^5 * 1
 BICMC5 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC5
@@ -541,7 +528,8 @@ BICMC5
 #'
 #' MC6
 ft <- freqTab(S = c(1, 2, 3, 4, 5, 6), A = c(1, 2), countsTab = ct)
-LL <- sum(prodinf(log(ft$qax_Sj), ft$Nxa_Sj))
+pos <- which(ft$Nxa_Sj > 0)
+LL <- sum(log(ft$qax_Sj[pos]) * ft$Nxa_Sj[pos])
 freeParam <- 2^6 * 1
 BICMC6 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC6

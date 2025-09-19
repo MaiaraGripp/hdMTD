@@ -1,11 +1,15 @@
 # hdMTD 0.1.2
 
 ## New
-* Accessor functions for "MTD" and "MTDest": `pj()`, `p0()`, `lambdas()`,
-  `lags()`, `Lambda()`/`S()`, `states()`, and `transitP()` (for `MTD`). These
-  expose model components without relying on internal list structure. See `?MTD-accessors`.
+* Accessor functions for "MTD": `pj()`, `p0()`, `lambdas()`,
+  `lags()`, `Lambda()`, `states()`, and `transitP()`. See `?MTD-accessors`.
+* Accessor functions for "MTDest": `pj()`, `p0()`, `lambdas()`,
+  `lags()`, `S()` and `states()`. See `?MTD-accessors`.
+* Accessor functions for "hdMTD": `S()` and `lags()`. See `?MTD-accessors`.
 * Methods for "MTD" and "MTDest" objects: added `print()`, `summary()`, and `coef()` for compact inspection of
   lag sets, state space, mixture weights, and a preview of the global transition matrix `P`. See `?MTD-methods` and `?MTDest-methods`.
+* Methods for "hdMTD" objects: added `print()` and `summary()` for compact inspection of
+  lag selection results. See `?hdMTD-methods`.
 * Coercion: new `as.MTD()` to rebuild an "MTD" object from an "MTDest" fit.
 * `logLik()` method for "MTDest": allows direct extraction of the fitted log-likelihood.
 * `probs()` S3 generic with methods for "MTD" and "MTDest". Returns one-step-ahead predictive probabilities
@@ -23,7 +27,7 @@
 * `hdMTD()` now returns an S3 object ("hdMTD") with `print()` and `summary()` methods for consistent inspection
   of high-dimensional lag selection results.
 
-## Bug fixes
+## Fixes
 * Replaced `any(is.na(X))` with `anyNA(X)` in `checkSample()` for efficiency and clarity.
 
 ## Package cleanup

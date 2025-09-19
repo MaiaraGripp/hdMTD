@@ -140,6 +140,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   lenS0 <- lenS + 1
   base <- countsTab(X, S[1])
   baseSja <- freqTab(S, j = NULL, A, base)
+  pos <- which(baseSja$Nxa_Sj > 0)
   indexA <- expand.grid(rep(list(seq_len(lenA)), lenS0))[, order(lenS0:1)]
 
   # Check if initial probabilities are compatible with the sample
@@ -171,14 +172,10 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
                pj = init$pj, p0 = init$p0))
 
     # Compute log-likelihood
-    if(any(baseSja$Nxa_Sj == 0)){
-      # If TRUE is possible that some probabilities in initMTD$P are also 0, and
-      # log(P(a|x))*N(xa) = log(0)*0 = -inf*0 = Nan. To prevent this use the auxiliary
-      # function prodinf (see utils.R). With it, terms resulting from -inf*0 are set to 0.
-      initLogLik <- sum(prodinf(log(as.vector(t(initMTD$P))), baseSja$Nxa_Sj))
-    }else{
-      initLogLik <- sum(log(as.vector(t(initMTD$P))) * baseSja$Nxa_Sj)
-    }
+    initLogLik <- sum(
+      log(as.vector(t(initMTD$P))[pos]) * baseSja$Nxa_Sj[pos]
+      )
+
 
     # - Step E (Expectation)
 
@@ -256,11 +253,9 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
     endlist <- list("lambdas" = endMTD$lambdas, "pj" = endMTD$pj, "p0" = endMTD$p0)
 
     # Updated log-likelihood
-    if (any(baseSja$Nxa_Sj == 0)) {
-      endLogLik <- sum( prodinf( log(as.vector(t(endMTD$P))), baseSja$Nxa_Sj ) )
-    }else{
-      endLogLik <- sum( log(as.vector(t(endMTD$P)))*baseSja$Nxa_Sj )
-    }
+    endLogLik <- sum(
+        log(as.vector(t(endMTD$P))[pos]) * baseSja$Nxa_Sj[pos]
+        )
 
     # Compute difference between updated and former log-likelihood
     lastComputedDelta <- abs(endLogLik - initLogLik)
@@ -289,11 +284,9 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   out <- list("lambdas" = finalMTD$lambdas, "pj" = finalMTD$pj, "p0" = finalMTD$p0)
 
   # Recomputes LogLik
-  if (any(baseSja$Nxa_Sj == 0)) {
-    out$logLik <- sum(prodinf(log(as.vector(t(finalMTD$P))), baseSja$Nxa_Sj))
-  } else {
-    out$logLik <- sum(log(as.vector(t(finalMTD$P))) * baseSja$Nxa_Sj)
-  }
+  out$logLik <- sum(
+      log(as.vector(t(finalMTD$P))[pos]) * baseSja$Nxa_Sj[pos]
+      )
   # Optional outputs
   if (iter) {
     out$iterations <- contInt
