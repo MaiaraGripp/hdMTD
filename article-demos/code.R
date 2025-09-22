@@ -735,7 +735,7 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
     # Frequency tables
     b_Sja <- freqTab(S = S, j = j, A = A, countsTab = ct)
     b_Sj <- b_Sja %>%
-      dplyr::group_by_at(paste0("x", j)) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", j)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
 
     # Compute νj
@@ -761,10 +761,10 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
     # Frequency tables
     b_Sja <- freqTab(S = S, j = j, A = A, countsTab = ct)
     b_Sj <- b_Sja %>%
-      dplyr::group_by_at(paste0("x", Sj)) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", Sj)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
     b_S <- b_Sja %>%
-      dplyr::group_by_at(paste0("x", S)) %>%
+      dplyr::dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", S)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
 
     subx <- b_S[, -ncol(b_S)]
@@ -797,10 +797,10 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
     # Frequency tables
     b_Sja <- freqTab(S = dec_S, j = j, A = A, countsTab = ct)
     b_Sj <- b_Sja %>%
-      dplyr::group_by_at(paste0("x", Sj)) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", Sj)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
     b_S <- b_Sja %>%
-      dplyr::group_by_at(paste0("x", dec_S)) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", dec_S)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
 
     subx <- b_S[, -ncol(b_S)]

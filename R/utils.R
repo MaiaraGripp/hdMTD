@@ -41,7 +41,7 @@ groupTab <- function(S, j, freqTab, lenX, d){
     if (length(Sj) > 0) {
         # Summarizes freqTab by lags in Sj
         groupTab <- freqTab %>%
-            dplyr::group_by_at(paste0("x", Sj)) %>%
+            dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", Sj)))) %>%
             dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups="drop")
 
         return(groupTab)

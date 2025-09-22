@@ -51,7 +51,7 @@
 #' freqTab(S = c(1, 2, 4), j = NULL, A = c(1, 2, 3), countsTab = ct)
 
 #'
-freqTab <- function(S, j=NULL, A, countsTab, complete = TRUE){
+freqTab <- function(S, j = NULL, A, countsTab, complete = TRUE){
 
   # Validate inputs
   check_freqTab_inputs(S, j, A, countsTab, complete)
@@ -65,7 +65,7 @@ freqTab <- function(S, j=NULL, A, countsTab, complete = TRUE){
 
   # Summarize countsTab and computes counts
   freqTab <- countsTab %>%
-      dplyr::group_by_at(filtrs) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(filtrs))) %>%
       dplyr::summarise(Nxa_Sj = sum(Nxa), .groups = "drop")
 
   # If needed, complete the table with sequences that did not appear in the sample
@@ -90,11 +90,12 @@ freqTab <- function(S, j=NULL, A, countsTab, complete = TRUE){
     colnames(Tablexa) <- colnames(freqTab)
     freqTab <- rbind(freqTab, Tablexa)
     freqTab <- dplyr::arrange_at(freqTab, filtrs)
+
   }
 
   # Computes counts and transition probabilities
   freqTab <- freqTab %>%
-    dplyr::group_by_at(paste0("x", Sj)) %>%
+    dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", Sj)))) %>%
     dplyr::mutate(Nx_Sj = sum(Nxa_Sj)) %>%
     dplyr::mutate(qax_Sj = dplyr::if_else(Nx_Sj > 0, Nxa_Sj/Nx_Sj, 1/lenA)) %>%
     dplyr::ungroup()
