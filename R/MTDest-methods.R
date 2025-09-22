@@ -61,7 +61,9 @@ print.MTDest <- function(x, ...) {
   if (!is.null(x$iterations)) {
     cat("  Number of updates:", x$iterations, "\n")
   }
-
+  cat("  Use summary(x) for full description.\n")
+  cat("  Accessors: lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
+  cat("  Methods:   coef(), probs(), as.MTD(), logLik().\n")
   invisible(x)
 }
 #' @description Summary method for EM fits of MTD models.
