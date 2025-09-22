@@ -477,22 +477,25 @@ check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
 #########################################################################
 #########################################################################
 # 10
-check_oscillation_inputs <- function(x, params){
+check_oscillation_inputs <- function(x, S, A){
   # Validates the inputs of oscillation.default() function.
 
-  if(length(params$S) < 1 || !is.numeric(params$S) || any( params$S %% 1 != 0) || any( params$S < 1) ){
-    stop("The user must inform a set of lags (labeled as S) for which to estimate the oscillations.
+  if(length(S) < 1 || !is.numeric(S) || any( S %% 1 != 0) || any( S < 1) ){
+    stop("The user must inform a set of lags S for which to estimate the oscillations.
     S must be an integer or a vector of positive integer numbers.")
   }
-  if(!is.null(params$A)) {
-    if( length(params$A) <= 1 || any( params$A%%1 != 0 ) ||
-        length(params$A) != length(unique(params$A)) || any(params$A < 0) ) {
+  if (length(unique(S)) != length(S)) {
+    stop("S must contain distinct positive integers (no duplicates).")
+  }
+  if(!is.null(A)) {
+    if( length(A) <= 1 || any( A%%1 != 0 ) ||
+        length(A) != length(unique(A)) || any(A < 0) ) {
       stop("A must be a vector of distinct nonnegative integers with length >=2.")
     }
-    if ( !all( params$A %in% unique(x) ) ) {
+    if ( !all( A %in% unique(x) ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(x) %in% params$A ) ) {
+    if ( !all( unique(x) %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   }
