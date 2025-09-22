@@ -83,6 +83,33 @@ that minimizes a penalized log likelihood for a given sample, see \emph{Referenc
 details on the method.
 }
 \details{
+\strong{Criterion.} For each candidate lag set \eqn{T} contained in \eqn{S} with
+size \eqn{l = |T|} where \code{minl <= l <= maxl}, \code{hdMTD_BIC()} evaluates
+\deqn{BIC(T) = - L_T + xi * df(T) * log(N),}
+where \eqn{N = length(X)} and
+\deqn{L_T = \sum_{x_T \in A^T} \sum_{a \in A} N(a x_T) * log( \hat{p}(a | x_T) ).}
+The empirical conditionals are
+\deqn{\hat{p}(a | x_T) = N(a x_T) / N(x_T),}
+computed from the sample counts (same quantities returned by
+\code{\link{freqTab}} and \code{\link{empirical_probs}}).
+
+\strong{Degrees of freedom.} The parameter count \eqn{df(T)} is the number of free
+parameters of an MTD model with lag set \eqn{T} and state space \eqn{A}, honoring the
+constraints \code{single_matrix}, \code{indep_part}, and \code{zeta}:
+\deqn{df(T) = w_{df} + p0_{df} + |A| * (|A| - 1) * zeta.}
+Here \eqn{zeta} is the number of distinct \eqn{p_j} matrices allowed across lags
+(by default \eqn{zeta = l}; setting \code{single_matrix = TRUE} forces \eqn{zeta = 1}).
+The weight and independent-part contributions are:
+\eqn{w_{df} = l} if \code{indep_part} is \code{TRUE}, otherwise \eqn{w_{df} = l - 1};
+\eqn{p0_{df} = |A| - 1} if \code{indep_part} is \code{TRUE}, otherwise \eqn{p0_{df} = 0}.
+
+\strong{Scale.} With \code{xi = 1/2} (the default), \eqn{BIC} equals one half of the
+classical Schwarz BIC \eqn{-2 * L_T + df(T) * log(N)}; minimizing either criterion selects
+the same lag set.
+
+\strong{Note.} The likelihood term \eqn{L_T} sums over the \eqn{N - max(T)} effective
+transitions, while the penalty uses \eqn{log(N)} (this matches the implementation).
+
 Note that the upper bound for the order of the chain (\code{d}) affects the estimation
 of the transition probabilities. If we run the function with a certain order parameter \code{d},
 only the sequences of length \code{d} that appeared in the sample will be counted. Therefore,

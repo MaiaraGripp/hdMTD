@@ -42,6 +42,35 @@
 #' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
 #' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
+#'
+#' @details
+#' \strong{Criterion.} For each candidate lag set \eqn{T} contained in \eqn{S} with
+#' size \eqn{l = |T|} where \code{minl <= l <= maxl}, \code{hdMTD_BIC()} evaluates
+#' \deqn{BIC(T) = - L_T + xi * df(T) * log(N),}
+#' where \eqn{N = length(X)} and
+#' \deqn{L_T = \sum_{x_T \in A^T} \sum_{a \in A} N(a x_T) * log( \hat{p}(a | x_T) ).}
+#' The empirical conditionals are
+#' \deqn{\hat{p}(a | x_T) = N(a x_T) / N(x_T),}
+#' computed from the sample counts (same quantities returned by
+#' \code{\link{freqTab}} and \code{\link{empirical_probs}}).
+#'
+#' \strong{Degrees of freedom.} The parameter count \eqn{df(T)} is the number of free
+#' parameters of an MTD model with lag set \eqn{T} and state space \eqn{A}, honoring the
+#' constraints \code{single_matrix}, \code{indep_part}, and \code{zeta}:
+#' \deqn{df(T) = w_{df} + p0_{df} + |A| * (|A| - 1) * zeta.}
+#' Here \eqn{zeta} is the number of distinct \eqn{p_j} matrices allowed across lags
+#' (by default \eqn{zeta = l}; setting \code{single_matrix = TRUE} forces \eqn{zeta = 1}).
+#' The weight and independent-part contributions are:
+#' \eqn{w_{df} = l} if \code{indep_part} is \code{TRUE}, otherwise \eqn{w_{df} = l - 1};
+#' \eqn{p0_{df} = |A| - 1} if \code{indep_part} is \code{TRUE}, otherwise \eqn{p0_{df} = 0}.
+#'
+#' \strong{Scale.} With \code{xi = 1/2} (the default), \eqn{BIC} equals one half of the
+#' classical Schwarz BIC \eqn{-2 * L_T + df(T) * log(N)}; minimizing either criterion selects
+#' the same lag set.
+#'
+#' \strong{Note.} The likelihood term \eqn{L_T} sums over the \eqn{N - max(T)} effective
+#' transitions, while the penalty uses \eqn{log(N)} (this matches the implementation).
+#'
 #' @details Note that the upper bound for the order of the chain (\code{d}) affects the estimation
 #' of the transition probabilities. If we run the function with a certain order parameter \code{d},
 #' only the sequences of length \code{d} that appeared in the sample will be counted. Therefore,
@@ -91,7 +120,6 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
   # Set the state space if not provided
   if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
 
-  A <- sort(A)
   lenS <- length(S)
   S <- sort(S)
   base <- countsTab(X, d)
@@ -121,13 +149,17 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
           tryCombs[1, k] <- -sum(b$Nxa_Sj * log(b$qax_Sj))
       }
 
-      pML <- colSums(tryCombs) # -loglikelihood + penalty
-      pML <- sort(pML)[1] # min (did not use min(pML) since names(min(pML))=NULL)
+      pML_vec <- colSums(tryCombs)              # -loglik + penalty for each subset
+      i_best  <- which.min(pML_vec)
 
-      if(!BICvalue){ # only names(pML) is stored
-        pML <- as.numeric(unlist(strsplit(names(pML), ",")))
+      best_name <- names(pML_vec)[i_best]
+      best_val  <- pML_vec[i_best]
+
+      if (!BICvalue) {
+        pML <- as.numeric(strsplit(best_name, ",")[[1L]])
+      } else {
+        pML <- best_val
       }
-
      # If maxl > minl the function repeats the algorithm above for all
      # minl<=i<=maxl as the sizes of subsets of S
   }else{
@@ -140,7 +172,7 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
           nCombs <- choose(lenS, i) # Number of size i subsets of S
           Combs <- t(combn(S, i)) # All size i subsets of S
 
-          tryCombs[[cont]] <- matrix(rep(0, 2*nCombs), byrow = T, nrow = 2)
+          tryCombs[[cont]] <- matrix(rep(0, 2 * nCombs), byrow = T, nrow = 2)
           colnames(tryCombs[[cont]]) <- apply(Combs, 1, paste0, collapse = ",")
           rownames(tryCombs[[cont]]) <- c("log_ML", "penalty")
 
@@ -161,7 +193,7 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
           # simplify needs to be FALSE because if lenS is odd, minl=(lenS-1)/2
           # and maxl=minl+1 all matrices in tryCombs will have the same ncol.
 
-      pML <- sapply(pML, function(x) sort(x)[1]) # Lowest BIC value per set size
+      pML <- sapply(pML, function(x) sort(x)[1]) # Lowest (named) BIC value per set size
 
       if(byl){
         smallest <- pML[order(pML)][1] # Set with the lowest BIC
@@ -176,6 +208,7 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
           pML <- as.numeric(unlist(strsplit(names(pML), ",")))
         }
       }
+
   }
   pML
 }
