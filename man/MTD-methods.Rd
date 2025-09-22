@@ -6,6 +6,7 @@
 \alias{summary.MTD}
 \alias{print.summary.MTD}
 \alias{coef.MTD}
+\alias{logLik.MTD}
 \title{Methods for objects of class \code{"MTD"}}
 \usage{
 \method{print}{MTD}(x, ...)
@@ -15,6 +16,8 @@
 \method{print}{summary.MTD}(x, ...)
 
 \method{coef}{MTD}(object, ...)
+
+\method{logLik}{MTD}(object, X, ...)
 }
 \arguments{
 \item{x}{An object of class \code{"MTD"} or \code{"summary.MTD"},
@@ -23,6 +26,9 @@ depending on the method.}
 \item{...}{Further arguments passed to or from other methods (ignored).}
 
 \item{object}{An object of class \code{"MTD"}.}
+
+\item{X}{A vector or single-column data frame containing an MTD chain sample
+(values must be in the model's state space).}
 }
 \value{
 \describe{
@@ -36,6 +42,10 @@ displaying its relevant lag set and state space.}
 \code{"summary.MTD"} object after printing its contents.}
 \item{\code{coef.MTD}}{A list with model parameters:
 \code{lambdas}, \code{pj}, and \code{p0}.}
+\item{\code{logLik.MTD}}{An object of class \code{"logLik"} with attributes
+\code{nobs} (number of transitions) and \code{df} (free parameters),
+honoring model constraints such as \code{single_matrix} and the independent
+component (\code{indep_part}).}
 }
 }
 \description{
@@ -67,5 +77,6 @@ pj(m); p0(m); lambdas(m); lags(m); Lambda(m); states(m)
 \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
 \code{\link{summary.MTDest}}, \code{\link{coef.MTDest}},
-\code{\link{oscillation}}, \code{\link{perfectSample}}
+\code{\link{oscillation}}, \code{\link{perfectSample}},
+\code{\link[stats]{logLik}}
 }

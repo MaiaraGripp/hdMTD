@@ -12,6 +12,8 @@
 #' @param x An object of class \code{"MTD"} or \code{"summary.MTD"},
 #'  depending on the method.
 #' @param object An object of class \code{"MTD"}.
+#' @param X A vector or single-column data frame containing an MTD chain sample
+#' (values must be in the model's state space).
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
 #' @return
@@ -26,6 +28,10 @@
 #'         \code{"summary.MTD"} object after printing its contents.}
 #'   \item{\code{coef.MTD}}{A list with model parameters:
 #'         \code{lambdas}, \code{pj}, and \code{p0}.}
+#'   \item{\code{logLik.MTD}}{An object of class \code{"logLik"} with attributes
+#'     \code{nobs} (number of transitions) and \code{df} (free parameters),
+#'     honoring model constraints such as \code{single_matrix} and the independent
+#'     component (\code{indep_part}).}
 #' }
 #'
 #' @seealso
@@ -33,7 +39,8 @@
 #' \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 #' \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
 #' \code{\link{summary.MTDest}}, \code{\link{coef.MTDest}},
-#' \code{\link{oscillation}}, \code{\link{perfectSample}}
+#' \code{\link{oscillation}}, \code{\link{perfectSample}},
+#' \code{\link[stats]{logLik}}
 #'
 #' @examples
 #' \dontrun{
@@ -145,4 +152,40 @@ coef.MTD <- function(object, ...) {
     pj      = pj(object),
     p0      = p0(object)
   )
+}
+
+# --------------------------- logLik.MTD ----------------------------------
+
+#' @rdname MTD-methods
+#' @exportS3Method logLik MTD
+logLik.MTD <- function(object, X,...) {
+  checkMTD(object)
+  X <- checkSample(X)
+
+  L <- Lambda(object)
+  d <- max(L)
+  if (length(X) <= d) stop("Insufficient sample size: length(X) must be > max(Lambda(object)).")
+
+  A <- states(object)
+  if (!all(X %in% A)) {
+    stop("Sample contains values outside the model state space.")
+  }
+
+  # Sufficient statistics from data
+  ct <- countsTab(X, d)
+  ft <- freqTab(S = L, j = NULL, A =  A, countsTab = ct)
+  pos <- which(ft$Nxa_Sj > 0)
+
+  P <- transitP(object)
+  ll <- sum(log(as.vector(t(P))[pos]) * ft$Nxa_Sj[pos])
+
+  nobs <- length(X) - d
+  indep_part <- lambdas(object)[1] > 0
+  single_matrix <- isTRUE(object$single_matrix)
+
+  df <- n_parameters(Lambda = L, A = A,
+                     single_matrix = single_matrix,
+                     indep_part = indep_part)
+
+  structure(ll, nobs = nobs, df = df, class = "logLik")
 }
