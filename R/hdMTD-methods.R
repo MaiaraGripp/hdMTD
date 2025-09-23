@@ -61,7 +61,8 @@ print.hdMTD <- function(x, ...) {
   cat("  Method: ", method, "\n", sep = "")
   cat("  d:      ", d,      "\n", sep = "")
   cat("  Selected S set: ", fmt_vec(Spos),   "\n", sep = "")
-  cat("  Use summary(x) for settings.\n")
+  cat("  Accessors: S() and/or lags().\n")
+  cat("  Use summary(x, settings = TRUE) for full description.\n\n")
   invisible(x)
 }
 
