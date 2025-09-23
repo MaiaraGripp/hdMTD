@@ -111,7 +111,9 @@ hdMTD_FS(X[1:500], d = 40, l = 4)
 #' 7. Estimating transition probabilities
 #'
 empirical_probs(X, S = c(1, 15, 30))
-empirical_probs(X, S = c(1, 15, 30), matrixform = TRUE)
+empirical_probs(X,
+                S = c(1, 15, 30),
+                matrixform = TRUE)
 #'
 #' 8. Oscillations
 #'

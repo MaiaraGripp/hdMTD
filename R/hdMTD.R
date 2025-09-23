@@ -108,7 +108,7 @@ hdMTD <- function(X, d, method = "FS", ...){
   dparams <- list(S = seq_len(d), l = NULL, alpha = 0.05, mu = 1, xi = 0.5,
                   minl = 1, maxl = d, A = NULL, byl = FALSE, BICvalue = FALSE,
                   single_matrix = FALSE, indep_part = TRUE, zeta = d,
-                  elbowTest = FALSE, warning = FALSE)
+                  elbowTest = FALSE, warn = FALSE)
 
   # Overlay default with user-provided values
   if(length(params) > 0){
@@ -142,7 +142,7 @@ hdMTD <- function(X, d, method = "FS", ...){
     mu = dparams$mu, xi = dparams$xi, minl = dparams$minl, maxl = dparams$maxl,
     A = dparams$A, byl = dparams$byl, BICvalue = dparams$BICvalue,
     single_matrix = dparams$single_matrix, indep_part = dparams$indep_part,
-    zeta = dparams$zeta, elbowTest = dparams$elbowTest, warning = dparams$warning
+    zeta = dparams$zeta, elbowTest = dparams$elbowTest, warn = dparams$warn
   )
 
 

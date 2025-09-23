@@ -4,7 +4,7 @@
 \alias{empirical_probs}
 \title{Estimated transition probabilities}
 \usage{
-empirical_probs(X, S, matrixform = FALSE, A = NULL, warning = FALSE)
+empirical_probs(X, S, matrixform = FALSE, A = NULL, warn = FALSE)
 }
 \arguments{
 \item{X}{A vector or single-column data frame containing a sample of a Markov chain (\code{X[1]} is the most recent).}
@@ -18,7 +18,7 @@ transition matrix.}
 \item{A}{A numeric vector of distinct integers representing the state space.
 If not provided, this function will set \code{A <- sort(unique(X))}.}
 
-\item{warning}{Logical. If \code{TRUE}, the function warns the user when the state
+\item{warn}{Logical. If \code{TRUE}, the function warns the user when the state
 space is automatically set as \code{A <- sort(unique(X))}.}
 }
 \value{

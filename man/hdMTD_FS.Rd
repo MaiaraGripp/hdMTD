@@ -4,7 +4,7 @@
 \alias{hdMTD_FS}
 \title{The Forward Stepwise (FS) method for inference in MTD models}
 \usage{
-hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE, ...)
+hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE, ...)
 }
 \arguments{
 \item{X}{A vector or single-column data frame containing a chain sample (\code{X[1]} is the most recent).}
@@ -19,7 +19,7 @@ this function will set \code{A <- sort(unique(X))}.}
 \item{elbowTest}{Logical. If TRUE, the function applies an alternative stopping criterion to
 determine the length of the set of relevant lags. See \emph{Details} for more information.}
 
-\item{warning}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
+\item{warn}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
 \item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
 }

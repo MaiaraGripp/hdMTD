@@ -17,7 +17,7 @@ hdMTD_BIC(
   single_matrix = FALSE,
   indep_part = TRUE,
   zeta = maxl,
-  warning = FALSE,
+  warn = FALSE,
   ...
 )
 }
@@ -67,7 +67,7 @@ reduces the number of parameters in the penalization term.}
 in the MTD, which affects the number of parameters in the penalization term. Defaulted
 to \code{maxl}. See more in \emph{Details}.}
 
-\item{warning}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
+\item{warn}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
 \item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
 }

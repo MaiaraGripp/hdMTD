@@ -39,7 +39,7 @@
 #' @param zeta A positive integer representing the number of distinct matrices \eqn{p_j}
 #' in the MTD, which affects the number of parameters in the penalization term. Defaulted
 #' to \code{maxl}. See more in *Details*.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
+#' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
 #' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
 #'
@@ -111,11 +111,11 @@
 hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
                       xi = 1/2, A = NULL, byl = FALSE, BICvalue = FALSE,
                       single_matrix = FALSE, indep_part = TRUE,
-                      zeta = maxl, warning = FALSE,...){
+                      zeta = maxl, warn = FALSE,...){
   # Validate inputs
   X <- checkSample(X)
   check_hdMTD_BIC_inputs(X, d, S, minl, maxl, xi, A, byl, BICvalue, single_matrix,
-                         indep_part, zeta, warning)
+                         indep_part, zeta, warn)
 
   # Set the state space if not provided
   if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }

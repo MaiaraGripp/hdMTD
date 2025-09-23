@@ -10,7 +10,7 @@
 #' transition matrix.
 #' @param A A numeric vector of distinct integers representing the state space.
 #' If not provided, this function will set \code{A <- sort(unique(X))}.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when the state
+#' @param warn Logical. If \code{TRUE}, the function warns the user when the state
 #' space is automatically set as \code{A <- sort(unique(X))}.
 #'
 #' @return A data frame or a matrix containing estimated transition probabilities:
@@ -43,10 +43,10 @@
 #' empirical_probs(X, S = c(1, 30))
 #' empirical_probs(X, S = c(1, 15, 30), matrixform = TRUE)
 #'
-empirical_probs <- function(X, S, matrixform = FALSE, A = NULL, warning = FALSE){
+empirical_probs <- function(X, S, matrixform = FALSE, A = NULL, warn = FALSE){
 
     X <- checkSample(X) # Validate and preprocess the input sample
-    check_empirical_probs_inputs(X, S, matrixform, A, warning) # Validate input parameters
+    check_empirical_probs_inputs(X, S, matrixform, A, warn) # Validate input parameters
 
     # Set the state space if not provided
     if (length(A) == 0) {A <- sort(unique(X))} else {A <- sort(A)}

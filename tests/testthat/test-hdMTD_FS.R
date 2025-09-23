@@ -16,6 +16,6 @@ test_that("hdMTD_FS function works as expected", {
   expect_true(all(result_2 %in% 1:d))
   expect_lt(length(result_2), l+0.01)
 
-  # Test with warning enabled
-  expect_warning(hdMTD_FS(X = X, d = d, l = 3, warning = TRUE))
+  # Test with warn enabled
+  expect_warning(hdMTD_FS(X = X, d = d, l = 3, warn = TRUE))
 })

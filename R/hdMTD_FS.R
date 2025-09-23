@@ -9,7 +9,7 @@
 #' this function will set \code{A <- sort(unique(X))}.
 #' @param elbowTest Logical. If TRUE, the function applies an alternative stopping criterion to
 #' determine the length of the set of relevant lags. See *Details* for more information.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
+#' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
 #' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
 #'
@@ -54,11 +54,11 @@
 #' # Forward Stepwise with l = 3
 #' hdMTD_FS(X, d = 4, l = 3)
 #'
-hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE,...){
+hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
 
     # Validate and preprocess the input sample
     X <- checkSample(X)
-    check_hdMTD_FS_inputs(X, d, l, A, elbowTest, warning) # See validation.R.
+    check_hdMTD_FS_inputs(X, d, l, A, elbowTest, warn) # See validation.R.
 
     # Set the state space if not provided
     if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }

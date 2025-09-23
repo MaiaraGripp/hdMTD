@@ -12,7 +12,7 @@ hdMTD_CUT(
   mu = 1,
   xi = 0.5,
   A = NULL,
-  warning = FALSE,
+  warn = FALSE,
   ...
 )
 }
@@ -37,7 +37,7 @@ is also a component of the same threshold as \code{alpha}.}
 \item{A}{A vector with positive integers representing the state space. If not informed,
 this function will set \code{A <- sort(unique(X))}.}
 
-\item{warning}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
+\item{warn}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
 \item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
 }

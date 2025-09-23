@@ -15,7 +15,7 @@
 #' is also a component of the same threshold as \code{alpha}.
 #' @param xi A positive real number, \code{xi} is also a component of the same threshold as
 #'  \code{alpha}.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
+#' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
 #' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
@@ -46,11 +46,11 @@
 #' hdMTD_CUT(X, d = 6, S = c(1, 4, 6), alpha = 0.08)
 #'
 hdMTD_CUT <- function(X, d, S = seq_len(d), alpha = 0.05,
-                      mu = 1, xi = 0.5, A = NULL, warning=FALSE,...){
+                      mu = 1, xi = 0.5, A = NULL, warn=FALSE,...){
 
     # Validate and preprocess the input sample
     X <- checkSample(X)
-    check_hdMTD_CUT_inputs(X, d, S, alpha, mu, xi, A, warning)
+    check_hdMTD_CUT_inputs(X, d, S, alpha, mu, xi, A, warn)
 
     # Set the state space if not provided
     if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }

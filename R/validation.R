@@ -247,7 +247,7 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
 #########################################################################
 #########################################################################
 # 5
-check_empirical_probs_inputs <- function(X, S, matrixform, A, warning) {
+check_empirical_probs_inputs <- function(X, S, matrixform, A, warn) {
    # Validates the inputs in empirical_probs() function
 
   if( length(S) < 1 || !is.numeric(S) || any(S <= 0) || any( S%%1 != 0) ||
@@ -265,7 +265,7 @@ check_empirical_probs_inputs <- function(X, S, matrixform, A, warning) {
     if ( !all( unique(X) %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
-  } else if (warning) {
+  } else if (warn) {
     warning("States space A not provided. The function will set A <- sort(unique(X)).")
   }
 
@@ -278,7 +278,7 @@ check_empirical_probs_inputs <- function(X, S, matrixform, A, warning) {
 #########################################################################
 #########################################################################
 # 6
-check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
+check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warn) {
   # Validates the inputs in hdMTD_FS() function
 
   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
@@ -299,7 +299,7 @@ check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
     if ( !all( unique(X) %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
-  } else if (warning) {
+  } else if (warn) {
     warning("States space A not provided. The function will set A <- sort(unique(X)).")
   }
 
@@ -312,7 +312,7 @@ check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warning) {
 #########################################################################
 #########################################################################
 # 7
-check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
+check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warn) {
   # Validates the inputs in hdMTD_CUT() function
 
   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
@@ -335,7 +335,7 @@ check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
     if ( !all( unique(X) %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
-  } else if (warning) {
+  } else if (warn) {
     warning("States space A not provided. The function will set A <- sort(unique(X)).")
   }
 
@@ -357,7 +357,7 @@ check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warning) {
 check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
                                    xi, A, byl, BICvalue,
                                    single_matrix, indep_part,
-                                   zeta, warning) {
+                                   zeta, warn) {
   # Validates the inputs of hdMTD_BIC() function
 
   if( length(d) != 1 || !is.numeric(d) || d < 2 || (d %% 1) != 0 ){
@@ -380,7 +380,7 @@ check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
     if ( !all( unique(X) %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
-  } else if (warning) {
+  } else if (warn) {
     warning("States space A not provided. The function will set A <- sort(unique(X)).")
   }
 
@@ -409,7 +409,7 @@ check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
   } # if single_matrix=TRUE the function n_parameters() sets zeta <- 1.
 
   if(!is.logical(indep_part)) stop("indep_part must be TRUE or FALSE.")
-  if(!is.logical(warning)) stop("warning must be TRUE or FALSE.")
+  if(!is.logical(warn)) stop("warn must be TRUE or FALSE.")
 
 
 }
