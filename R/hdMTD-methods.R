@@ -14,7 +14,8 @@
 #'   \item \code{settings}: a (method-specific) list of the arguments actually used.
 #'   \item \code{A}: the state space actually used (provided or inferred).
 #'   \item (optional) \code{BIC_selected_value} for \code{method="BIC"} with \code{BICvalue=TRUE}.
-#'   \item (optional) \code{extras$BIC_values} for \code{method="BIC"}.
+#'   \item (optional) \code{extras$BIC_out} for \code{method="BIC"} (exactly the
+#'  output of \code{hdMTD_BIC()}).
 #' }
 #' \code{print()} shows the method, \code{d}, and the selected set of lags in
 #' \eqn{\mathbb{N}^+}. \code{summary()} also prints the call, the state space used,

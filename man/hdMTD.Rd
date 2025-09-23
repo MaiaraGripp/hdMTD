@@ -24,7 +24,7 @@ with attributes:
 \itemize{
 \item \code{method}, \code{d}, \code{call}, \code{settings}
 \item \code{A}: the state space actually used (either provided \code{A}, or \code{sort(unique(X))} if \code{A = NULL})
-\item (for \code{method="BIC"}) \code{extras}: a list that includes \code{BIC_values} (the complete output returned by \code{hdMTD_BIC})
+\item (for \code{method="BIC"}) \code{extras}: a list with \code{BIC_out} (exactly the object returned by \code{hdMTD_BIC})
 \item (for \code{method="BIC"} and \code{BICvalue = TRUE}) \code{BIC_selected_value}: numeric BIC at the selected set
 }
 The returned object supports \code{print()} and \code{summary()} methods.
@@ -66,10 +66,15 @@ The main default parameters are:
 All default values are specified in the documentation of the method-specific functions.
 }
 
-\strong{BIC-specific notes:}
+\strong{BIC-specific notes.} When \code{method = "BIC"}, the object may carry
+additional BIC diagnostics:
 \itemize{
-\item If \code{BICvalue = TRUE}, the function stores the BIC of the selected set so that
-\code{summary()} can display it.
+\item \code{attr(x, "extras")$BIC_out}: exactly the object returned by
+\code{\link[=hdMTD_BIC]{hdMTD_BIC()}} (its type depends on \code{BICvalue} and \code{byl}:
+named numeric vector when \code{BICvalue = TRUE}; otherwise a character
+vector of labels, possibly including \code{"smallest: <set>"}).
+\item \code{attr(x, "BIC_selected_value")}: when \code{BICvalue = TRUE},
+the numeric BIC at the selected lag set (shown by \code{summary()}).
 }
 }
 \examples{
