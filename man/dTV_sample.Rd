@@ -9,15 +9,17 @@ dTV_sample(S, j, A = NULL, base, lenA = NULL, A_pairs = NULL, x_S)
 \arguments{
 \item{S}{A numeric vector of positive integers (or \code{NULL}) representing
 a set of past lags. The distributions from which this function will calculate the total
-variation distance are conditioned on a fixed sequence indexed by \code{S} ( the user must
-also input the sequence through the argument \code{x_S}).}
+variation distance are conditioned on a fixed sequence indexed by \code{S}
+(the user must also input the sequence through the argument \code{x_S}).}
 
 \item{j}{A positive integer representing a lag in the \eqn{complement} of \code{S}.
-The symbols indexed by \code{j} vary along the state space \code{A}, altering the distribution
-through this single lag, and the size of this change is what this function seeks to measure.}
+The symbols indexed by \code{j} vary along the state space \code{A}, altering
+the distribution through this single lag, and the size of this change is what
+this function seeks to measure.}
 
-\item{A}{A vector of unique positive integers (state space) with at least two elements. \code{A}
-represents the state space. You may leave \code{A=NULL} (default) if you provide the function
+\item{A}{A vector of unique nonnegative integers (state space) with at least
+two elements. \code{A} represents the state space. You may leave \code{A=NULL}
+(default) if you provide the function
 with the arguments \code{lenA} and \code{A_pairs} (see \emph{Details} below).}
 
 \item{base}{A data frame with sequences of elements from \code{A} and their transition
@@ -38,11 +40,13 @@ be set to \code{NULL}. \code{x_S} represents a sequence of symbols from \code{A}
 representing the fixed configuration of the past.}
 }
 \value{
-Returns a vector of total variation distances, where each entry corresponds to the
-distance between a pair of distributions conditioned on the same fixed past \code{x_S},
-differing only in the symbol indexed by \code{j}, which varies across all distinct pairs
-of elements in \code{A}.The output has length equal to the number of unique pairs
-in \code{A_pairs}.
+A single-row matrix with one column per pair of distinct elements from
+the state space \code{A} (so \code{choose(length(A), 2)} columns). Each entry
+corresponds to the total variation distance between a pair of distributions,
+conditioned on the same fixed past \code{x_S} (when \code{S} is not \code{NULL}),
+differing only in the symbol indexed by \code{j}, which varies across all
+distinct pairs of elements in \code{A}. When \code{S} is \code{NULL}, the row
+name is the empty string \code{""}.
 }
 \description{
 Calculates the total variation distance between distributions conditioned
@@ -54,7 +58,15 @@ found in \code{base}, which is expected to be the output of the function \code{\
 Therefore, \code{base} must follow a specific structure (e.g., column names must
 match, and a column named qax_Sj, containing transition distributions, must be
 present). For more details on the output structure of \code{\link[=freqTab]{freqTab()}}, refer to its
-documentation..
+documentation.
+
+The total-variation distance is computed as
+\deqn{\tfrac{1}{2}\sum_{a \in \mathcal A} \left|
+        \hat{p}(a | x_{-S}, x_{-j}=b) - \hat{p}(a| x_{-S}, x_{-j}=c)
+      \right|,}
+for each pair of symbols b, c in \code{A} using the empirical conditional
+probabilities obtained from \code{\link{freqTab}} for the supplied \code{S}
+and \code{j}.
 
 If you provide the state space \code{A}, the function calculates:
 \code{lenA <- length(A)} and \code{A_pairs <- t(utils::combn(A, 2))}.
