@@ -122,7 +122,7 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
 
             cont <- 0
             for (y in seq_len(nrowA_pairs)) {
-              cont <- cont + prod(PIs[A_pairsPos[y, ]])*dTVs[y]
+              cont <- cont + prod(PIs[A_pairsPos[y, ]]) * dTVs[y]
             } # cont = \sum_{b\in A}\sum_{c\in A} P(x_Sb_j)*P(x_Sc_j)*dTV[q(|xSbj)||q(|xScj)]
 
             PI_xS <- as.numeric(b_S[t, ncolb_S]/(lenX - d)) # If S is NULL, this
