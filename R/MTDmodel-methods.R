@@ -117,7 +117,7 @@ print.summary.MTD <- function(x, ...) {
   cat("\nlambdas (weights):\n"); print(x$lambdas)
 
   if (!is.null(x$p0)) {
-    cat("\nIndependent distribution (p0):\n"); print(x$p0)
+    cat("\nIndependent distribution p0:\n"); print(x$p0)
   }
 
   cat("\nTransition matrices pj (one per lag):\n")

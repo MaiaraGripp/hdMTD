@@ -62,7 +62,7 @@ print.MTDest <- function(x, ...) {
     cat("  Number of updates:", x$iterations, "\n")
   }
   cat("  Use summary(x) for full description.\n")
-  cat("  Accessors: lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
+  cat("  Accessors: lambdas(), pj(), p0(), lags(), S(), states().\n")
   cat("  Methods:   coef(), probs(), as.MTD(), logLik().\n")
   invisible(x)
 }
@@ -112,16 +112,14 @@ summary.MTDest <- function(object, ...) {
 #' @exportS3Method print summary.MTDest
 print.summary.MTDest <- function(x, ...) {
   cat("Summary of EM estimation for MTD model:\n")
-  if (!is.null(x$call)) cat("Call: "); if (!is.null(x$call)) print(x$call)
+
+  if (!is.null(x$call)) cat("\nCall:\n"); if (!is.null(x$call)) print(x$call)
+
+  cat("\nLags (-S):", paste(-x$S, collapse = ", "),
+      "\nState space (A):", paste(x$A, collapse = ", "), "\n")
 
   cat("\nlambdas (weights):\n")
   print(x$lambdas)
-
-  cat("\nTransition matrices pj (one per lag):\n")
-  for (i in seq_along(x$pj)) {
-    cat(sprintf(" \n pj for lag j = %s:\n", -x$S[i]))
-    print(x$pj[[i]])
-  }
 
   if (!is.null(x$p0)) {
     cat("\nIndependent distribution p0:\n")
@@ -130,15 +128,18 @@ print.summary.MTDest <- function(x, ...) {
     cat("\nIndependent distribution p0: (none)\n")
   }
 
+  cat("\nTransition matrices pj (one per lag):\n")
+  for (i in seq_along(x$pj)) {
+    cat(sprintf(" \n pj for lag j = %s:\n", -x$S[i]))
+    print(x$pj[[i]])
+  }
+
   cat("\nLog-likelihood:", format(x$logLik, digits = 6), "\n")
 
   if (!is.null(x$oscillations)) {
     cat("\nOscillations:\n")
     print(x$oscillations)
   }
-
-  cat("\nLags (-S):", paste(-x$S, collapse = ", "),
-      "\nState space (A):", paste(x$A, collapse = ", "), "\n")
 
   if (!is.na(x$iterations) || !is.na(x$lastComputedDelta)) {
     cat("\nIterations Report:\n")
