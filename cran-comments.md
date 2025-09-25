@@ -1,21 +1,18 @@
 ## Resubmission (hdMTD 0.1.2)
 
 ### Summary of changes
-- Added S3 class for EM fits: `MTDest` with `print()`, `summary()`, `coef()`, and `logLik()`.
+- Added S3 class for EM fits: `MTDest` with `print()`, `summary()`, `coef()`, `logLik()` and `probs()`.
 - Added S3 class for lag-selection fits: `hdMTD` with `print()` and `summary()`.
 - Added public accessor functions for `MTD`/`MTDest`: `pj()`, `p0()`, `lambdas()`, `lags()` (ℤ⁻),
   `Lambda()`/`S()` (ℕ⁺), `states()`, and `transitP()` (for `MTD`). `S()` and `lags()` also apply
 to `hdMTD`.
-- Added `probs()` S3 for `MTD` and `MTDest` to return one-step-ahead predictive probabilities. Supports
- `newdata` (most recent first) or exact `context` (one symbol per lag). When neither `newdata` nor `context`
- is provided, `probs()` returns the full global transition matrix.
-- Renamed previous sample-based helper `probs(X, S, ...)` to `empirical_probs(X, S, ...)`. This clarifies the
- separation between estimation from data and prediction from a model.
-- Added `MTD` methods: `print()`, `summary()`, `coef()`.
 - Introduced `as.MTD()` to coerce an `MTDest` object to an `MTD` object.
+- Clarified terminology: sample-based probs() has been renamed to empirical_probs(), while probs() is now an
+ S3 generic for model objects.
+- Added `MTD` methods: `print()`, `summary()`, `coef()`, `logLik()` and `probs()`.
 - Replaced `any(is.na())` with `anyNA()` in `checkSample()`. 
-- Marked internal helpers with `@keywords internal` so they no longer appear in `help(package="hdMTD")`.
-- Removed unused datasets and updated examples to use simulated data.
+- Cleaned package: removed unused datasets, marked internal helpers as @keywords internal, and updated examples
+ to use simulated data.
 
 ### R CMD check results (current)
 0 errors | 0 warnings | 0 notes
