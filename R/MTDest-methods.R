@@ -61,7 +61,7 @@ print.MTDest <- function(x, ...) {
   if (!is.null(x$iterations)) {
     cat("  Number of updates:", x$iterations, "\n")
   }
-  cat("  Use summary(x) for full description.\n")
+  cat("  Use summary() for full description.\n")
   cat("  Accessors: lambdas(), pj(), p0(), lags(), S(), states().\n")
   cat("  Methods:   coef(), probs(), as.MTD(), logLik().\n")
   invisible(x)
