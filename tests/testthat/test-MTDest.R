@@ -12,9 +12,10 @@ test_that("MTDest function works as expected", {
 
   # Test with default parameters
   result_1 <- MTDest(X = X, S = S, M = 0.05, init = init)
-  expect_true(is.list(result_1))
-  expect_true(all(names(result_1) %in% c("lambdas", "pj", "p0")))
-  expect_equal(sum(init$lambdas),1)
+  expect_true(class(result_1) == "MTDest")
+  expect_true(all(names(coef(result_1)) %in% c("lambdas", "pj", "p0")))
+  expect_equal(sum(p0(result_1)),1)
+  expect_equal(sum(lambdas(result_1)),1)
 
   init$p0 <- c(0)
   expect_warning(expect_error(MTDest(X = X, S = S, M = 0.05, init = init)))
@@ -23,9 +24,9 @@ test_that("MTDest function works as expected", {
   init$lambdas[1] <- 0
   # Test with default parameters
   result_1 <- MTDest(X = X, S = S, M = 0.05, init = init)
-  expect_true(is.list(result_1))
-  expect_true(all(names(result_1) %in% c("lambdas", "pj", "p0")))
-  expect_true(all(c(result_1$p0, result_1$lambdas[1])==c(0,0,0)))
+  expect_true(class(result_1) == "MTDest")
+  expect_true(all(names(coef(result_1)) %in% c("lambdas", "pj", "p0")))
+  expect_true(all(c(p0(result_1), lambdas(result_1)[1])==c(0,0,0)))
   # Test with custom parameters
   init2 <- list('p0' = c(0.4, 0.6),
                'lambdas' = c(0.05, 0.45, 0.5),
@@ -34,7 +35,5 @@ test_that("MTDest function works as expected", {
                  matrix(c(0.25, 0.75, 0.3, 0.7), byrow = TRUE, ncol = 2))
                )
   result_2 <- MTDest(X = X, S = S, init = init2, iter = TRUE)
-  expect_true(is.list(result_2))
-  expect_true(all(names(result_2) %in% c("lambdas", "pj", "p0", "iterations", "distlogL")))
-
+  expect_true(class(as.MTD(result_2)) == "MTD")
 })
