@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="generator" content="litedown 0.7">
+<title></title>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+body, .abstract, code, .footnotes, footer, #refs, .caption { font-size: .9em; }
+li li { font-size: .95em; }
+ul:has(li > input[type="checkbox"]) { list-style: none; padding-left: 1em; }
+*, :before, :after { box-sizing: border-box; }
+a { color: steelblue; }
+pre, img { max-width: 100%; }
+pre { white-space: pre-wrap; word-break: break-word; }
+pre code { display: block; padding: 1em; overflow-x: auto; }
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre, th) > code, code[class], div > .caption { background: #f8f8f8; }
+pre > code:is(:not([class]), .language-plain, .language-none, .plain), .box, .figure, .table { background: inherit; border: 1px solid #eee; }
+pre > code {
+  &.message { border-color: #9eeaf9; }
+  &.warning { background: #fff3cd; border-color: #fff3cd; }
+  &.error { background: #f8d7da; border-color: #f8d7da; }
+}
+.fenced-chunk { border-left: 1px solid #666; }
+.code-fence {
+  opacity: .4;
+  border: 1px dashed #666;
+  border-left: 2px solid;
+  &:hover { opacity: inherit; }
+}
+.box, .figure, .table, table { margin: 1em auto; }
+div > .caption { padding: 1px 1em; }
+.figure { p:has(img, svg), pre:has(svg) { text-align: center; } }
+.flex-col { display: flex; justify-content: space-between; }
+table {
+  &:only-child:not(.table > *) { margin: auto; }
+  th, td { padding: 5px; font-variant-numeric: tabular-nums; }
+  thead, tfoot, tr:nth-child(even) { background: whitesmoke; }
+  thead th { border-bottom: 1px solid #ddd; }
+  &:not(.datatable-table) {
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+  }
+}
+blockquote {
+  color: #666;
+  margin: 0;
+  padding: 1px 1em;
+  border-left: .5em solid #eee;
+}
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC {
+  a { text-decoration: none; }
+  ul { list-style: none; padding-left: 1em; }
+  & > ul { padding: 0; }
+  ul ul { border-left: 1px solid lightsteelblue; }
+}
+.body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.main-number::after { content: "."; }
+span[class^="ref-number-"] { font-weight: bold; }
+.ref-number-fig::after, .ref-number-tab::after { content: ":"; }
+.cross-ref-chp::before { content: "Chapter "; }
+.cross-ref-sec::before { content: "Section "; }
+.cross-ref-fig::before, .ref-number-fig::before { content: "Figure "; }
+.cross-ref-tab::before, .ref-number-tab::before { content: "Table "; }
+.cross-ref-eqn::before, .MathJax_ref:has(mjx-mtext > mjx-c + mjx-c)::before { content: "Equation "; }
+.abstract, #refs {
+  &::before { display: block; margin: 1em auto; font-weight: bold; }
+}
+.abstract::before { content: "Abstract"; text-align: center; }
+#refs::before { content: "Bibliography"; font-size: 1.5em; }
+.ref-paren-open::before { content: "("; }
+.ref-paren-close::after { content: ")"; }
+.ref-semicolon::after { content: "; "; }
+.ref-and::after { content: " and "; }
+.ref-et-al::after { content: " et al."; font-style: italic; }
+.footnote-ref a {
+  &::before { content: "["; }
+  &::after { content: "]"; }
+}
+section.footnotes {
+  margin-top: 2em;
+  &::before { content: ""; display: block; max-width: 20em; }
+}
+.fade {
+  background: repeating-linear-gradient(135deg, white, white 30px, #ddd 32px, #ddd 32px);
+  opacity: 0.6;
+}
+
+@media print {
+  body { max-width: 100%; }
+  tr, img { break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  body:not(.pagesjs) pre:has(.line-numbers):not(:hover) { white-space: pre; }
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.14/css/prism-xcode.min.css">
+<script src="https://cdn.jsdelivr.net/combine/npm/katex@0.16.22/dist/katex.min.js,npm/katex@0.16.22/dist/contrib/auto-render.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@xiee/utils@1.14.14/js/render-katex.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+</head>
+<body>
+<div class="frontmatter">
+</div>
+<div class="body">
+<pre><code class="language-r">####################################################
+### R code to reproduce the submitted manuscript
+###
+### &quot;hdMTD:
+###  An R Package for High-Dimensional Mixture Transition
+###  Distribution Models&quot;
+###
+### Authors: Maiara Gripp, Guilherme Ost, Giulio Iacobelli, Daniel Y. Takahashi
+### Date: July 2025
+####################################################
+
+# Required packages:
+# install.packages(c(&quot;hdMTD&quot;, &quot;dplyr&quot;, &quot;ggplot2&quot;, &quot;lubridate&quot;, &quot;purrr&quot;, &quot;tidyr&quot;))
+
+## Load libraries
+library(&quot;hdMTD&quot;)
+library(&quot;dplyr&quot;)
+</code></pre>
+<pre><code>## 
+## Anexando pacote: 'dplyr'
+</code></pre>
+<pre><code>## Os seguintes objetos são mascarados por 'package:stats':
+## 
+##     filter, lag
+</code></pre>
+<pre><code>## Os seguintes objetos são mascarados por 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+<pre><code class="language-r">library(&quot;ggplot2&quot;)
+</code></pre>
+<pre><code>## Warning: pacote 'ggplot2' foi compilado no R versão 4.4.3
+</code></pre>
+<pre><code class="language-r">library(&quot;lubridate&quot;)
+</code></pre>
+<pre><code>## Warning: pacote 'lubridate' foi compilado no R versão 4.4.3
+</code></pre>
+<pre><code>## 
+## Anexando pacote: 'lubridate'
+</code></pre>
+<pre><code>## Os seguintes objetos são mascarados por 'package:base':
+## 
+##     date, intersect, setdiff, union
+</code></pre>
+<pre><code class="language-r">library(&quot;purrr&quot;)
+library(&quot;tidyr&quot;)
+</code></pre>
+<pre><code>## Warning: pacote 'tidyr' foi compilado no R versão 4.4.3
+</code></pre>
+<h2 id="sec:section-5-using-hdmtd">Section 5: Using hdMTD</h2>
+<h3 id="sec:5-1-data-generation">5.1 Data generation</h3>
+<ol>
+<li>Generate MTD model:</li>
+</ol>
+<p>Parameters: \(\Lambda = \{-30,-15,-1\}\), \(\mathcal{A} = \{0,1\}\),
+\(\lambda_0= \{0.01\}\), \(\lambda_{-1} = 0.39\), \(\lambda_{-15} = \lambda_{-30} = 0.3\),
+\(p_0(0)=p_0(1)=0.5\), and transition matrices \(p_j\), \(j\in\Lambda\), sampled uniformly.</p>
+<pre><code class="language-r">set.seed(11)
+Lambda &lt;- c(1, 15, 30)
+A &lt;- c(0, 1)
+lam0 &lt;- 0.01
+lamj &lt;- c(0.39, 0.3, 0.3)
+p0 &lt;- c(0.5, 0.5)
+MTD &lt;- MTDmodel(Lambda = Lambda, A = A, lam0 = lam0, lamj = lamj, p0 = p0)
+MTD
+</code></pre>
+<pre><code>## $P
+##             0         1
+## 000 0.5208503 0.4791497
+## 001 0.3974855 0.6025145
+## 010 0.6226020 0.3773980
+## 011 0.4992372 0.5007628
+## 100 0.3361516 0.6638484
+## 101 0.2127868 0.7872132
+## 110 0.4379033 0.5620967
+## 111 0.3145385 0.6854615
+## 
+## $lambdas
+##   lam0  lam-1 lam-15 lam-30 
+##   0.01   0.39   0.30   0.30 
+## 
+## $pj
+## $pj$`p-1`
+##            0         1
+## 0 0.35190318 0.6480968
+## 1 0.03558321 0.9644168
+## 
+## $pj$`p-15`
+##           0         1
+## 0 0.4278830 0.5721170
+## 1 0.7670555 0.2329445
+## 
+## $pj$`p-30`
+##           0         1
+## 0 0.8341439 0.1658561
+## 1 0.2184814 0.7815186
+## 
+## 
+## $p0
+## p0(0) p0(1) 
+##   0.5   0.5 
+## 
+## $Lambda
+## [1]  1 15 30
+## 
+## $A
+## [1] 0 1
+</code></pre>
+<ol start="2">
+<li>Sample from the invariant distribution</li>
+</ol>
+<pre><code class="language-r">X &lt;- perfectSample(MTD, N = 1000)
+</code></pre>
+<h3 id="sec:5-2-estimation">5.2 Estimation</h3>
+<ol start="3">
+<li>Estimate relevant lags using FS method</li>
+</ol>
+<pre><code class="language-r">hdMTD_FS(X, d = 40, l = 4)
+</code></pre>
+<pre><code>## [1] 30 15  1 27
+</code></pre>
+<p>Equivalent call: hdMTD(X, d = 40, method = “FS”, l=4)</p>
+<ol start="4">
+<li>Estimate relevant lags using BIC method</li>
+</ol>
+<p><strong>WARNING</strong>: next line takes ~30min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_BIC(X, d = 40, minl = 4, maxl = 4)
+</code></pre>
+<pre><code>## [1]  1 15 17 30
+</code></pre>
+<p>Equivalent call: hdMTD(X, d = 40, method = “BIC”, minl = 4, maxl = 4)</p>
+<p>Custom subset S</p>
+<pre><code class="language-r">hdMTD_BIC(X, d = 40,
+          S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40),
+          minl = 4, maxl = 4)
+</code></pre>
+<pre><code>## [1]  1 15 17 30
+</code></pre>
+<p>Varying number of lags to be selected</p>
+<pre><code class="language-r">hdMTD_BIC(X, d = 40,
+          S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40),
+          minl = 1, maxl = 4)
+</code></pre>
+<pre><code>## [1] 30
+</code></pre>
+<p>With BIC values by number of lags</p>
+<pre><code class="language-r">hdMTD_BIC(X, d = 40,
+          S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40),
+          minl = 1, maxl = 4,
+          byl = TRUE, BICvalue = TRUE)
+</code></pre>
+<pre><code>##           30        15,30      1,15,30   1,15,17,30 smallest: 30 
+##     644.4959     648.0111     649.4950     650.2869     644.4959
+</code></pre>
+<p>Setting \(\xi=0.4\)</p>
+<pre><code class="language-r">hdMTD_BIC(X, d = 40,
+          S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40),
+          minl = 1, maxl = 4,
+          byl = TRUE, BICvalue = TRUE,
+          xi = 0.4)
+</code></pre>
+<pre><code>##                   30                15,30              1,15,30           1,15,17,30 
+##             641.7328             643.1757             642.5873             641.3069 
+## smallest: 1,15,17,30 
+##             641.3069
+</code></pre>
+<p>All matrices \(p_j\) are equal and \(\lambda_0=0\)</p>
+<pre><code class="language-r">hdMTD_BIC(X, d = 40,
+          S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40),
+          minl = 1, maxl = 4,
+          byl = TRUE, BICvalue = TRUE,
+          single_matrix = TRUE, indep_part = FALSE)
+</code></pre>
+<pre><code>##                   30                15,30              1,15,30           1,15,17,30 
+##             637.5881             634.1956             628.7718             622.6559 
+## smallest: 1,15,17,30 
+##             622.6559
+</code></pre>
+<ol start="5">
+<li>Estimate relevant lags using CUT method</li>
+</ol>
+<p><strong>WARNING</strong>: next line takes ~2.5min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40))
+</code></pre>
+<pre><code>##  [1] 40 35 30 27 20 17 15 10  5  1
+</code></pre>
+<p>Equivalent call: hdMTD(X,d=40,S=c(1,5,10,15,17,20,27,30,35,40),method=“CUT”)</p>
+<p>Setting \(\alpha = 0.13\) <br>
+<strong>WARNING</strong>: next line takes ~2.5min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40), alpha = 0.13)
+</code></pre>
+<pre><code>## [1] 35 27  5  1
+</code></pre>
+<p>Custom subset S</p>
+<pre><code class="language-r">hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
+</code></pre>
+<pre><code>## [1] 30 17  5  1
+</code></pre>
+<ol start="6">
+<li>Estimate relevant lags using FSC method</li>
+</ol>
+<pre><code class="language-r">hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1)
+</code></pre>
+<pre><code>## [1] 30 24
+</code></pre>
+<p>Equivalent call: hdMTD(X, d = 40, method = “FSC”, l = 4, alpha = 0.1)</p>
+<p>FS method with halved sample</p>
+<pre><code class="language-r">hdMTD_FS(X[1:500], d = 40, l = 4)
+</code></pre>
+<pre><code>## [1] 11 30  7 24
+</code></pre>
+<ol start="7">
+<li>Estimating transition probabilities</li>
+</ol>
+<pre><code class="language-r">probs(X, S = c(1, 15, 30))
+</code></pre>
+<pre><code>##    past_{ -30,-15,-1 } a p(a|past)
+## 1                  000 0 0.5000000
+## 2                  000 1 0.5000000
+## 3                  001 0 0.3714286
+## 4                  001 1 0.6285714
+## 5                  010 0 0.6306306
+## 6                  010 1 0.3693694
+## 7                  011 0 0.5065789
+## 8                  011 1 0.4934211
+## 9                  100 0 0.3861386
+## 10                 100 1 0.6138614
+## 11                 101 0 0.1987952
+## 12                 101 1 0.8012048
+## 13                 110 0 0.3888889
+## 14                 110 1 0.6111111
+## 15                 111 0 0.3697917
+## 16                 111 1 0.6302083
+</code></pre>
+<pre><code class="language-r">probs(X, S = c(1, 15, 30), matrixform = TRUE)
+</code></pre>
+<pre><code>##             0         1
+## 000 0.5000000 0.5000000
+## 001 0.3714286 0.6285714
+## 010 0.6306306 0.3693694
+## 011 0.5065789 0.4934211
+## 100 0.3861386 0.6138614
+## 101 0.1987952 0.8012048
+## 110 0.3888889 0.6111111
+## 111 0.3697917 0.6302083
+</code></pre>
+<ol start="8">
+<li>Oscillations</li>
+</ol>
+<p>Computing from MTD</p>
+<pre><code class="language-r">oscillation(MTD)
+</code></pre>
+<pre><code>##        -1       -15       -30 
+## 0.1233648 0.1017517 0.1846987
+</code></pre>
+<p>Estimating from sample</p>
+<pre><code class="language-r">oscillation(X, S = c(1, 15, 30))
+</code></pre>
+<pre><code>##        -1       -15       -30 
+## 0.1076339 0.1166363 0.1675360
+</code></pre>
+<ol start="9">
+<li>Estimating MTD parameters through the EM algorithm</li>
+</ol>
+<p>Initial parameters for EM method</p>
+<pre><code class="language-r">init &lt;- list(
+  'lambdas'= c(0.01, 0.33, 0.33, 0.33),
+  'p0' = c(0.5, 0.5),
+  'pj' = rep(list(matrix(c(0.5, 0.5, 0.5, 0.5), ncol = 2, nrow = 2)), 3)
+)
+</code></pre>
+<p>Run EM</p>
+<pre><code class="language-r">MTDest(X, S = c(1, 15, 30), init = init, iter = TRUE)
+</code></pre>
+<pre><code>## $lambdas
+##       lam-0       lam-1      lam-15      lam-30 
+## 0.009353147 0.323151043 0.326490125 0.341005685 
+## 
+## $pj
+## $pj$`p_-1`
+##           0         1
+## 0 0.5982386 0.4017614
+## 1 0.2641061 0.7358939
+## 
+## $pj$`p_-15`
+##           0         1
+## 0 0.1909446 0.8090554
+## 1 0.5495934 0.4504066
+## 
+## $pj$`p_-30`
+##           0         1
+## 0 0.6978307 0.3021693
+## 1 0.2113007 0.7886993
+## 
+## 
+## $p0
+##    p_0(0)    p_0(1) 
+## 0.3911887 0.6088113 
+## 
+## $iterations
+## [1] 9
+## 
+## $distlogL
+##  [1] 36.20577891  7.20855924  2.95676388  1.22724939  0.51347791  0.21602936
+##  [7]  0.09125854  0.03867624  0.01643732  0.00700394
+</code></pre>
+<p>Stops after \(9\) iterations</p>
+<pre><code class="language-r">MTDest(X, S = c(1, 15, 30), M = NULL, nIter = 9, init = init, oscillations = TRUE)
+</code></pre>
+<pre><code>## $lambdas
+##       lam-0       lam-1      lam-15      lam-30 
+## 0.009353147 0.323151043 0.326490125 0.341005685 
+## 
+## $pj
+## $pj$`p_-1`
+##           0         1
+## 0 0.5982386 0.4017614
+## 1 0.2641061 0.7358939
+## 
+## $pj$`p_-15`
+##           0         1
+## 0 0.1909446 0.8090554
+## 1 0.5495934 0.4504066
+## 
+## $pj$`p_-30`
+##           0         1
+## 0 0.6978307 0.3021693
+## 1 0.2113007 0.7886993
+## 
+## 
+## $p0
+##    p_0(0)    p_0(1) 
+## 0.3911887 0.6088113 
+## 
+## $oscillations
+##        -1       -15       -30 
+## 0.1065876 0.1159706 0.1643166
+</code></pre>
+<p>Estimating P (transition probabilities) with EM</p>
+<p>Estimate MTD parameters with EM</p>
+<pre><code class="language-r">estParam &lt;- MTDest(X, S = c(1, 15, 30), init = init)
+</code></pre>
+<p>Set MTD model with estimations</p>
+<pre><code class="language-r">estMTD &lt;- MTDmodel(Lambda, A, lam0 = estParam$lambdas[1],
+                   lamj = estParam$lambdas[-1], p0 = estParam$p0,
+                   pj = estParam$pj)
+</code></pre>
+<p>Return estimated transition matrix</p>
+<pre><code class="language-r">estMTD$P
+</code></pre>
+<pre><code>##             0         1
+## 000 0.4972860 0.5027140
+## 001 0.3893107 0.6106893
+## 010 0.6143813 0.3856187
+## 011 0.5064060 0.4935940
+## 100 0.3313766 0.6686234
+## 101 0.2234013 0.7765987
+## 110 0.4484718 0.5515282
+## 111 0.3404966 0.6595034
+</code></pre>
+<h3 id="sec:5-3-testing-hdmtd">5.3 Testing hdMTD</h3>
+<ol>
+<li>MTD model specification:</li>
+</ol>
+<pre><code class="language-r">set.seed(123)
+Lambda &lt;- c(1, 5)
+A &lt;- c(0, 1)
+lam0 &lt;- 0.01
+p0 &lt;- c(0.5, 0.5)
+MTD &lt;- MTDmodel(Lambda, A, lam0, p0 = p0) # Generates an MTD model
+</code></pre>
+<ol start="2">
+<li>Simulation settings and results</li>
+</ol>
+<p>Simulation parameters:</p>
+<pre><code class="language-r">n &lt;- 100      # Number of replications
+N &lt;- 10000    # Full sample size
+m &lt;- c(1000, 1500, 2000, 2500, 3000, 5000, 10000) # Subsample sizes
+d &lt;- 100      # Max order for FS and Oracle
+dNaive &lt;- 5   # Max order for Naive
+pairList &lt;- t(combn(100, 2)) # All possible pairs with digits from 1 to 100
+npairs &lt;- nrow(pairList)
+</code></pre>
+<p><strong>WARNING</strong>: The following simulation takes approximately 5–6 DAYS to complete.
+For reproducibility and ease of access, we use a precomputed <code>.rds</code> file (simulated_data.rds).
+To regenerate the results manually, set <code>recompute &lt;- TRUE</code> bellow:</p>
+<pre><code class="language-r">recompute &lt;- TRUE
+if (recompute) {
+  # Initialize results storage
+  FSP &lt;- matrix(0, ncol = length(m),nrow = n)
+  FS &lt;- matrix(0, ncol = length(m),nrow = n)
+  NaiveP &lt;- matrix(0, ncol = length(m), nrow = n)
+  Naive &lt;- matrix(0, ncol = length(m), nrow = n)
+  OracleP &lt;- matrix(0, ncol = length(m),nrow = n)
+  Oracle &lt;- matrix(0, ncol = length(m), nrow = n)
+  SFS &lt;- matrix(0, ncol = length(m)*2, nrow = n)
+  ZOracle &lt;- matrix(0, ncol = length(m)*2, nrow = n)
+  # WARNING: the next loop takes 5 to 6 DAYS to complete
+  for (i in seq_len(n)) {
+    X &lt;- perfectSample(MTD, N = N) # Generate full sample
+    
+    for (k in seq_along(m)) {
+      Y &lt;- X[seq_len(m[k])] # Take sub sample
+      ct &lt;- countsTab(Y, d = d) # Counts of size d+1 sequences from Y
+      
+      # FS:
+      S &lt;- hdMTD_FS(Y, d = d, l = 2)
+      SFS[i, ( (k * 2 - 1):(k * 2) )] &lt;- S # Stores S
+      p_FS &lt;- freqTab(S = S, A = A, countsTab = ct)$qax_Sj[1]
+      FS[i, k] &lt;- abs(p_FS - MTD$P[1, 1])
+      FSP[i, k] &lt;- abs(p_FS - MTD$P[1, 1])/min(MTD$P[1, 1], MTD$P[1, 2])
+      
+      # NAIVE:
+      ct_dNaive  &lt;- countsTab(Y, dNaive) # Counts of size dNaive+1 sequences from Y
+      p_Naive &lt;- freqTab(S = seq_len(dNaive), A = A, countsTab = ct_dNaive)$qax_Sj[1]
+      Naive[i, k] &lt;- abs(p_Naive - MTD$P[1, 1])
+      NaiveP[i, k] &lt;- abs(p_Naive - MTD$P[1, 1])/min(MTD$P[1, 1], MTD$P[1, 2])
+      
+      # ORACLE:
+      p_pairs &lt;- numeric(npairs)
+      for (s in seq_len(npairs)) {
+        p_pairs[s] &lt;- freqTab(S = pairList[s, ], A = A, countsTab = ct)$qax_Sj[1]
+      }
+      minpos &lt;- which.min(abs(p_pairs - MTD$P[1,1]))
+      ZOracle[i, (( k * 2 - 1):(k * 2))] &lt;- pairList[minpos, ] # Stores lags set with minimal error (Oracle set)
+      p_Oracle &lt;- p_pairs[minpos]
+      Oracle[i, k] &lt;- abs(p_Oracle - MTD$P[1, 1])
+      OracleP[i, k] &lt;- abs(p_Oracle - MTD$P[1, 1] )/min(MTD$P[1, 1],MTD$P[1, 2])
+    }
+  }
+} else {
+  #' Load precomputed results from `simulated_data.rds`
+  simulated_data &lt;- readRDS(&quot;simulated_data.rds&quot;)
+  FS &lt;- simulated_data$FS
+  FSP &lt;- simulated_data$FSP
+  Oracle &lt;- simulated_data$Oracle
+  OracleP &lt;- simulated_data$OracleP
+  Naive &lt;- simulated_data$Naive
+  NaiveP &lt;- simulated_data$NaiveP
+  SFS &lt;- simulated_data$SFS
+  ZOracle &lt;- simulated_data$ZOracle
+}
+</code></pre>
+<ol start="3">
+<li>Generate Table 1</li>
+</ol>
+<pre><code class="language-r">means_table &lt;- rbind(
+  round(apply(FS, 2, mean), 5),
+  round(apply(Oracle, 2, mean), 5),
+  round(apply(Naive, 2, mean), 5),
+  round(apply(FSP, 2, mean), 5),
+  round(apply(OracleP, 2, mean), 5),
+  round(apply(NaiveP, 2, mean), 5)
+)
+rownames(means_table) &lt;- c(
+  &quot;Delta_FS(m)&quot;,
+  &quot;Delta_Oracle(m)&quot;,
+  &quot;Delta_Naive,5(m)&quot;,
+  &quot;std Delta_FS(m)&quot;,
+  &quot;std Delta_Oracle(m)&quot;,
+  &quot;std Delta_Naive,5(m)&quot;
+)
+colnames(means_table) &lt;- m
+</code></pre>
+<p>Table 1: Mean error of estimators</p>
+<pre><code class="language-r">knitr::kable(means_table, caption = &quot;Mean error of estimators&quot;, format = &quot;markdown&quot;, booktabs = TRUE, escape = FALSE)
+</code></pre>
+<p>Table: Mean error of estimators</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="right">1000</th>
+<th align="right">1500</th>
+<th align="right">2000</th>
+<th align="right">2500</th>
+<th align="right">3000</th>
+<th align="right">5000</th>
+<th align="right">10000</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Delta_FS(m)</td>
+<td align="right">0.02847</td>
+<td align="right">0.02026</td>
+<td align="right">0.01752</td>
+<td align="right">0.01561</td>
+<td align="right">0.01442</td>
+<td align="right">0.01010</td>
+<td align="right">0.00681</td>
+</tr>
+<tr>
+<td align="left">Delta_Oracle(m)</td>
+<td align="right">0.00728</td>
+<td align="right">0.00916</td>
+<td align="right">0.01104</td>
+<td align="right">0.01167</td>
+<td align="right">0.01150</td>
+<td align="right">0.00971</td>
+<td align="right">0.00681</td>
+</tr>
+<tr>
+<td align="left">Delta_Naive,5(m)</td>
+<td align="right">0.06786</td>
+<td align="right">0.05845</td>
+<td align="right">0.05534</td>
+<td align="right">0.04974</td>
+<td align="right">0.04485</td>
+<td align="right">0.03412</td>
+<td align="right">0.02508</td>
+</tr>
+<tr>
+<td align="left">std Delta_FS(m)</td>
+<td align="right">0.06469</td>
+<td align="right">0.04605</td>
+<td align="right">0.03981</td>
+<td align="right">0.03547</td>
+<td align="right">0.03278</td>
+<td align="right">0.02295</td>
+<td align="right">0.01547</td>
+</tr>
+<tr>
+<td align="left">std Delta_Oracle(m)</td>
+<td align="right">0.01655</td>
+<td align="right">0.02081</td>
+<td align="right">0.02509</td>
+<td align="right">0.02651</td>
+<td align="right">0.02614</td>
+<td align="right">0.02207</td>
+<td align="right">0.01547</td>
+</tr>
+<tr>
+<td align="left">std Delta_Naive,5(m)</td>
+<td align="right">0.15420</td>
+<td align="right">0.13281</td>
+<td align="right">0.12577</td>
+<td align="right">0.11303</td>
+<td align="right">0.10193</td>
+<td align="right">0.07753</td>
+<td align="right">0.05700</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
+<li>Compute how often the FS output differs from Oracle by subsample size</li>
+</ol>
+<pre><code class="language-r">m_index &lt;- seq(1, length(m)*2, by = 2)
+names(m_index) &lt;- as.character(m)
+SFS_vs_ZOracle_diff &lt;- sapply(m_index, function(idx) {
+  SFS_set &lt;- apply(SFS[, c(idx, idx + 1)], 1, function(x) paste(sort(x), collapse = &quot;-&quot;))
+  ZOracle_set &lt;- apply(ZOracle[, c(idx, idx + 1)], 1, function(x) paste(sort(x), collapse = &quot;-&quot;))
+  sum(SFS_set != ZOracle_set)
+})
+SFS_vs_ZOracle_diff
+</code></pre>
+<pre><code>##  1000  1500  2000  2500  3000  5000 10000 
+##    73    52    35    26    19     5     0
+</code></pre>
+<ol start="5">
+<li>Generate Figure 1:</li>
+</ol>
+<p>Data arrangement</p>
+<p>FS</p>
+<pre><code class="language-r">tab &lt;- FS
+FStab &lt;- rbind(apply(tab, 2, summary),'sd'=apply(tab, 2, sd))
+FStab &lt;- rbind(FStab,'sdLo'=FStab[4,]-FStab[7,],'sdUp'=FStab[4,]+FStab[7,])
+Fmean &lt;- FStab[4,]
+FsdUp &lt;- FStab[9,]
+FsdLo &lt;- FStab[8,]
+Fq1 &lt;- FStab[2,]
+Fq2 &lt;- FStab[3,]
+Fq3 &lt;- FStab[5,]
+</code></pre>
+<p>NAIVE</p>
+<pre><code class="language-r">tab &lt;- Naive
+Naivetab &lt;- rbind(apply(tab, 2, summary),'sd'=apply(tab, 2, sd))
+Naivetab &lt;- rbind(Naivetab,'sdLo'=Naivetab[4,]-Naivetab[7,],'sdUp'=Naivetab[4,]+Naivetab[7,])
+Nmean &lt;- Naivetab[4,]
+NsdUp &lt;- Naivetab[9,]
+NsdLo &lt;- Naivetab[8,]
+Nq1 &lt;- Naivetab[2,]
+Nq2 &lt;- Naivetab[3,]
+Nq3 &lt;- Naivetab[5,]
+</code></pre>
+<p>ORACLE</p>
+<pre><code class="language-r">tab &lt;- Oracle
+Oracletab &lt;- rbind(apply(tab, 2, summary),'sd'=apply(tab, 2, sd))
+Oracletab &lt;- rbind(Oracletab,'sdLo'=Oracletab[4,]-Oracletab[7,],'sdUp'=Oracletab[4,]+Oracletab[7,])
+Omean &lt;- Oracletab[4,]
+OsdUp &lt;- Oracletab[9,]
+OsdLo &lt;- Oracletab[8,]
+Oq1 &lt;- Oracletab[2,]
+Oq2 &lt;- Oracletab[3,]
+Oq3 &lt;- Oracletab[5,]
+</code></pre>
+<h3 id="sec:plot-figure-1-estimators-mean-error-across-n-rep-100-replications">Plot Figure 1: Estimators mean error across \(N_{rep}=100\) replications.</h3>
+<pre><code class="language-r">par(mfrow=c(1,2))
+
+# --- Left panel: Mean error with standard deviation bands ---
+ plot(m/100, Fmean, type = &quot;l&quot;, col = &quot;#377EB8&quot;,
+      xlab = &quot;m (x100)&quot;, ylab = &quot;Mean error&quot;, ylim = c(0, 0.06),lwd=3,
+      frame.plot = FALSE, xaxt=&quot;n&quot;, xlim = c(10,100))
+ lines(m/100, Omean, type = &quot;l&quot;, col = &quot;#E41A1C&quot;,lwd=3)
+ lines(m/100, Nmean, type = &quot;l&quot;, col = &quot;#4DAF4A&quot;,lwd=3)
+ points(m/100, Fmean, col = &quot;#377EB8&quot;, pch=19,cex=0.7)
+ points(m/100, Omean, col = &quot;#E41A1C&quot;, pch=19,cex=0.7)
+ points(m/100, Nmean, col = &quot;#4DAF4A&quot;, pch=19,cex=0.7)
+ lines(m/100, FsdUp, type = &quot;l&quot;, col = &quot;#377EB8&quot;, lty = 2)
+ lines(m/100, FsdLo, type = &quot;l&quot;, col = &quot;#377EB8&quot;, lty = 2)
+ lines(m/100, OsdUp, type = &quot;l&quot;, col = &quot;#E41A1C&quot;, lty = 2)
+ lines(m/100, OsdLo, type = &quot;l&quot;, col = &quot;#E41A1C&quot;, lty = 2)
+ lines(m/100, NsdUp, type = &quot;l&quot;, col = &quot;#4DAF4A&quot;, lty = 2)
+ lines(m/100, NsdLo, type = &quot;l&quot;, col = &quot;#4DAF4A&quot;, lty = 2)
+ axis(side = 1, at = m/100, labels = m/100)
+ legend(&quot;topright&quot;,
+        legend = c(expression(bar(Delta) ~ &quot;FS&quot;),
+                   expression(bar(Delta) ~ &quot;FS&quot; %+-% &quot;sd&quot;),
+                   expression(bar(Delta) ~ &quot;Oracle&quot;),
+                   expression(bar(Delta) ~ &quot;Oracle&quot; %+-% &quot;sd&quot;),
+                   expression(bar(Delta) ~ &quot;Naive&quot;),
+                   expression(bar(Delta) ~ &quot;Naive&quot; %+-% &quot;sd&quot;)),
+        col = c(&quot;#377EB8&quot;,&quot;#377EB8&quot;,&quot;#E41A1C&quot;,&quot;#E41A1C&quot;,&quot;#4DAF4A&quot;,&quot;#4DAF4A&quot;), lty = c(1,3,1,3,1,3), bty = &quot;n&quot;)
+ # --- Right panel: Median and quartiles ---
+ plot(m/100, Fq2, type = &quot;l&quot;, col = &quot;#377EB8&quot;,
+      xlab = &quot;m (x100)&quot;, ylab = &quot;Quartiles of mean error&quot;, ylim = c(0, 0.06),lwd=3,
+      frame.plot = FALSE, xaxt=&quot;n&quot;, xlim = c(10,100), lty=1)
+ lines(m/100, Oq2, type = &quot;l&quot;, col = &quot;#E41A1C&quot;,lwd=3, lty=1)
+ lines(m/100, Nq2, type = &quot;l&quot;, col = &quot;#4DAF4A&quot;,lwd=3, lty=1)
+ points(m/100, Fq2, col = &quot;#377EB8&quot;, pch=19,cex=0.7)
+ points(m/100, Oq2, col = &quot;#E41A1C&quot;, pch=19,cex=0.7)
+ points(m/100, Nq2, col = &quot;#4DAF4A&quot;, pch=19,cex=0.7)
+ lines(m/100, Fq1, type = &quot;l&quot;, col = &quot;#377EB8&quot;, lty = 2)
+ lines(m/100, Fq3, type = &quot;l&quot;, col = &quot;#377EB8&quot;, lty = 2)
+ lines(m/100, Oq1, type = &quot;l&quot;, col = &quot;#E41A1C&quot;, lty = 2)
+ lines(m/100, Oq3, type = &quot;l&quot;, col = &quot;#E41A1C&quot;, lty = 2)
+ lines(m/100, Nq1, type = &quot;l&quot;, col = &quot;#4DAF4A&quot;, lty = 2)
+ lines(m/100, Nq3, type = &quot;l&quot;, col = &quot;#4DAF4A&quot;, lty = 2)
+ axis(side = 1, at = m/100, labels = m/100)
+ legend(&quot;topright&quot;,
+        legend = c(expression(&quot;Med  &quot; ~ bar(Delta) ~ &quot;FS&quot;),
+                   expression(&quot;q1,q3&quot; ~ bar(Delta) ~ &quot;FS&quot;),
+                   expression(&quot;Med  &quot; ~ bar(Delta) ~ &quot;Oracle&quot;),
+                   expression(&quot;q1,q3&quot; ~ bar(Delta) ~ &quot;Oracle&quot;),
+                   expression(&quot;Med  &quot; ~ bar(Delta) ~ &quot;Naive&quot;),
+                   expression(&quot;q1,q3&quot; ~ bar(Delta) ~ &quot;Naive&quot;)),
+        col = c(&quot;#377EB8&quot;,&quot;#377EB8&quot;,&quot;#E41A1C&quot;,&quot;#E41A1C&quot;,&quot;#4DAF4A&quot;,&quot;#4DAF4A&quot;), lty = c(1,3,1,3,1,3), bty = &quot;n&quot;)
+</code></pre>
+<p><img src="data:image/png;base64,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" alt="plot of chunk fig1-plot" /></p>
+<h3 id="sec:5-4-analysis-of-real-world-data">5.4 Analysis of Real-World Data</h3>
+<pre><code class="language-r">data(&quot;tempdata&quot;)
+</code></pre>
+<ol>
+<li>Treat NA data:</li>
+</ol>
+<p>Removing days before “2010-08-05”</p>
+<pre><code class="language-r">tempdata &lt;- hdMTD::tempdata %&gt;% filter(DATE &gt;= &quot;2010-08-05&quot;) 
+</code></pre>
+<p>Identify remaining \(155\) NA positions</p>
+<pre><code class="language-r">posNA &lt;- which(is.na(tempdata$MAXTEMP))
+</code></pre>
+<p>Fill short sequences of NAs ( \(≤6\) NAs) using nearest neighbors mean</p>
+<pre><code class="language-r">for (i in posNA) {
+  if(!is.na(tempdata$MAXTEMP[i - 1]) &amp;&amp; !all(is.na(tempdata$MAXTEMP[(i + 1):(i + 6)]))) {
+    aux &lt;- which(!is.na(tempdata$MAXTEMP[(i + 1):(i + 6)]))[1]
+    tempdata$MAXTEMP[i] &lt;- mean(tempdata$MAXTEMP[i - 1],tempdata$MAXTEMP[i + aux])
+  }
+}
+</code></pre>
+<p>Identify remaining \(88\) NA positions</p>
+<pre><code class="language-r">posNA &lt;- which(is.na(tempdata$MAXTEMP))
+</code></pre>
+<p>Fill remaining NA with the mean of the previous hour temperature, next hour
+temperature, and same hour of previous day temperature.</p>
+<pre><code class="language-r">for (i in posNA) {
+  tempdata$MAXTEMP[i] &lt;- mean(c(tempdata$MAXTEMP[i - 1], tempdata$MAXTEMP[i + 1],
+                                tempdata$MAXTEMP[i - 24]),na.rm = TRUE)
+}
+</code></pre>
+<ol start="2">
+<li>Compute mean daily maximum temperatures:</li>
+</ol>
+<pre><code class="language-r">temp &lt;- tempdata %&gt;%
+  group_by(DATE) %&gt;%
+  summarize(MAXTEMP = mean(MAXTEMP), .groups = 'drop')
+head(temp, 4)
+</code></pre>
+<pre><code>## # A tibble: 4 × 2
+##   DATE       MAXTEMP
+##   &lt;date&gt;       &lt;dbl&gt;
+## 1 2010-08-05    20.7
+## 2 2010-08-06    20.5
+## 3 2010-08-07    21.8
+## 4 2010-08-08    22.3
+</code></pre>
+<h3 id="sec:plot-figure-2-time-series-with-quarterly-mean-of-daily-maximum-temperatures">Plot Figure 2: Time series with quarterly mean of daily maximum temperatures</h3>
+<pre><code class="language-r">TRIM_DATA &lt;- temp %&gt;%
+  mutate(
+    Y_TRIMESTER = paste0(year(DATE), &quot;-T&quot;, quarter(DATE))
+  ) %&gt;%
+  group_by(Y_TRIMESTER) %&gt;%
+  summarise(
+    MEAN_TEMP = mean(MAXTEMP),
+    DATA_REF = min(DATE)
+  ) %&gt;%
+  ungroup() %&gt;%
+  arrange(DATA_REF)
+TRIM_DATA &lt;- TRIM_DATA[-c(1, nrow(TRIM_DATA)),]
+
+ggplot(TRIM_DATA, aes(x = DATA_REF, y = MEAN_TEMP)) +
+  geom_line(color = &quot;steelblue&quot;, linewidth = 0.5) +
+  geom_point(color = &quot;steelblue&quot;, size = 1.2) +
+  scale_x_date(
+    date_breaks = &quot;1 year&quot;,
+    date_labels = &quot;%Y&quot;,
+    minor_breaks = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    axis.text.y = element_text(size = 12),
+    panel.grid.major = element_line(color = &quot;gray90&quot;),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15), 
+    plot.title = element_text(hjust = 0.5, size = 17, face = &quot;bold&quot;)
+  ) +
+  labs(
+    title = &quot;Quarterly mean of daily maximum temperatures across the years&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Mean Temperature (°C)&quot;
+  )
+</code></pre>
+<p><img src="data:image/png;base64,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" alt="plot of chunk temp-plot" /></p>
+<ol start="3">
+<li>Create categories of temperature:</li>
+</ol>
+<pre><code class="language-r">xn &lt;- max(temp$MAXTEMP)
+x1 &lt;- min(temp$MAXTEMP)
+maxAmp &lt;- xn - x1
+temp$MAXTEMP1  &lt;- ifelse(temp$MAXTEMP &lt; x1 + maxAmp/2, 1, 2)
+head(temp, 4)
+</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   DATE       MAXTEMP MAXTEMP1
+##   &lt;date&gt;       &lt;dbl&gt;    &lt;dbl&gt;
+## 1 2010-08-05    20.7        1
+## 2 2010-08-06    20.5        1
+## 3 2010-08-07    21.8        2
+## 4 2010-08-08    22.3        2
+</code></pre>
+<pre><code class="language-r">prop.table(table(temp$MAXTEMP1)) # frequency of thermal regimes
+</code></pre>
+<pre><code>## 
+##         1         2 
+## 0.2606497 0.7393503
+</code></pre>
+<ol start="4">
+<li>Run FS for temp:</li>
+</ol>
+<pre><code class="language-r">Temp12 &lt;- rev(temp$MAXTEMP1)
+</code></pre>
+<p>hdMTD functions assume the sample is sorted from the latest observations to
+oldest.</p>
+<p><strong>WARNING</strong>: next line takes ~7min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_FS(Temp12, d = 400, l = 3)
+</code></pre>
+<pre><code>## [1]   1 364   6
+</code></pre>
+<p>Reduce maximum order to improve estimation <br>
+Note: This code line is mentioned in the article but without a CodeChunk <br>
+<strong>WARNING</strong>: next line takes ~6min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_FS(Temp12, d = 364, l = 3)
+</code></pre>
+<pre><code>## [1]   1 364   6
+</code></pre>
+<ol start="5">
+<li>Split sample in Train and Test data:</li>
+</ol>
+<pre><code class="language-r">ndays &lt;- nrow(temp %&gt;%
+                filter(DATE &gt;= &quot;2023-09-01&quot;)) # 366 days in the latest year of the sample
+Temp12_Train &lt;- Temp12[-seq_len(ndays)] # Training data with 4775 days
+Temp12_Test &lt;- Temp12[seq_len(ndays)] # Test data
+</code></pre>
+<ol start="6">
+<li>Rerun FS for Train data:</li>
+</ol>
+<p><strong>WARNING</strong>: next line takes ~5min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_FS(Temp12_Train, d = 364, l = 3)
+</code></pre>
+<pre><code>## [1]   1 364   6
+</code></pre>
+<ol start="7">
+<li>Trim out irrelevant lags:</li>
+</ol>
+<p>With CUT method</p>
+<pre><code class="language-r">hdMTD_CUT(Temp12_Train, d = 364, S = c(1, 364, 6))
+</code></pre>
+<pre><code>## [1] 364   6   1
+</code></pre>
+<p>With BIC method</p>
+<pre><code class="language-r">hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
+          byl = TRUE, BICvalue = TRUE )
+</code></pre>
+<pre><code>##                 1             1,364           1,6,364 smallest: 1,6,364 
+##          1720.801          1690.543          1674.080          1674.080
+</code></pre>
+<ol start="8">
+<li>Lag selection with FSC method:</li>
+</ol>
+<p><strong>WARNING</strong>: next line takes ~3min (on i7-1255U, 10 cores). Uncomment to compute. <br></p>
+<pre><code class="language-r">hdMTD_FSC(Temp12_Train, d = 364, l = 3)
+</code></pre>
+<pre><code>## [1] 364   6   1
+</code></pre>
+<ol start="9">
+<li>Estimated transition matrix for FS method output:</li>
+</ol>
+<pre><code class="language-r">P_FS &lt;- probs(Temp12_Train, S = c(1, 6, 364), matrixform = T)
+P_FS
+</code></pre>
+<pre><code>##              1         2
+## 111 0.86626140 0.1337386
+## 112 0.24736842 0.7526316
+## 121 0.77157360 0.2284264
+## 122 0.13318777 0.8668122
+## 211 0.78846154 0.2115385
+## 212 0.10972569 0.8902743
+## 221 0.57506361 0.4249364
+## 222 0.07283555 0.9271645
+</code></pre>
+<h3 id="sec:classic-method-for-choosing-relevant-lag-set">Classic method for choosing relevant lag set:</h3>
+<ol start="10">
+<li>Compute models:</li>
+</ol>
+<pre><code class="language-r">ct &lt;- countsTab(Temp12_Train, d = 6) # Table with size 6 sequence counts
+head(ct,4)
+</code></pre>
+<pre><code>## # A tibble: 4 × 8
+##      x6    x5    x4    x3    x2    x1     a   Nxa
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1     1     1     1     1     1     1     1   342
+## 2     1     1     1     1     1     1     2    62
+## 3     1     1     1     1     1     2     1    18
+## 4     1     1     1     1     1     2     2    62
+</code></pre>
+<p>MC1</p>
+<pre><code class="language-r">ft &lt;- freqTab(S = 1, A = c(1, 2), countsTab = ct)
+LL &lt;- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
+freeParam &lt;- 2 * 1
+BICMC1 &lt;- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
+BICMC1
+</code></pre>
+<pre><code>## [1] 1869.162
+</code></pre>
+<p>Comparable BIC if the model is a Markov chain of order \(1\): \(1869.162\)</p>
+<p>MC2</p>
+<pre><code class="language-r">ft &lt;- freqTab(S = c(1, 2), A = c(1, 2), countsTab = ct)
+LL &lt;- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
+freeParam &lt;- 2^2 * 1
+BICMC2 &lt;- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
+BICMC2
+</code></pre>
+<pre><code>## [1] 1850.598
+</code></pre>
+<p>Comparable BIC if the model is a Markov chain of order \(2\): \(1850.598\)</p>
+<p>MC3. Used as example in the article</p>
+<pre><code class="language-r">ft &lt;- freqTab(S = c(1, 2, 3), A = c(1, 2), countsTab = ct)
+head(ft, 4)
+</code></pre>
+<pre><code>## # A tibble: 4 × 7
+##      x3    x2    x1     a Nxa_Sj Nx_Sj qax_Sj
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+## 1     1     1     1     1    587   726  0.809
+## 2     1     1     1     2    139   726  0.191
+## 3     1     1     2     1     38   206  0.184
+## 4     1     1     2     2    168   206  0.816
+</code></pre>
+<pre><code class="language-r">LL &lt;- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
+freeParam &lt;- 2^3 * 1
+BICMC3 &lt;- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
+BICMC3
+</code></pre>
+<pre><code>## [1] 1854.029
+</code></pre>
+<p>Comparable BIC if the model is a Markov chain of order \(3\): \(1854.029\)</p>
+<p>MC4</p>
+<pre><code class="language-r">ft &lt;- freqTab(S = c(1, 2, 3, 4), A = c(1, 2), countsTab = ct)
+LL &lt;- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
+freeParam &lt;- 2^4 * 1
+BICMC4 &lt;- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
+BICMC4
+</code></pre>
+<pre><code>## [1] 1877.888
+</code></pre>
+<p>Comparable BIC if the model is a Markov chain of order \(4\): \(1877.888\)</p>
+<p>Helper function: this function simply allows the product: -inf * 0 = 0, which
+will be useful for the next likelihood calculus.</p>
+<pre><code class="language-r">prodinf &lt;- function(x, y){
+  prinf &lt;- numeric(length(x))
+  for (i in seq_len(length(x))) {
+    if (is.infinite(x[i]) &amp;&amp; y[i] == 0) {
+      prinf[i] &lt;- 0
+    } else {
+      prinf[i] &lt;- x[i] * y[i]
+    }
+  }
+  prinf
+}
+</code></pre>
+<p>MC5</p>
+<pre><code class="language-r">ft &lt;- freqTab(S = c(1, 2, 3, 4, 5), A = c(1, 2), countsTab = ct)
+LL &lt;- sum(prodinf(log(ft$qax_Sj), ft$Nxa_Sj))
+freeParam &lt;- 2^5 * 1
+BICMC5 &lt;- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
+BICMC5
+</code></pre>
+<pre><code>## [1] 1925.962
+</code></pre>
+<p>Comparable BIC if the model is a Markov chain of order \(5\): \(1925.962\)</p>
+<p>MC6</p>
+<pre><code class="language-r">ft &lt;- freqTab(S = c(1, 2, 3, 4, 5, 6), A = c(1, 2), countsTab = ct)
+LL &lt;- sum(prodinf(log(ft$qax_Sj), ft$Nxa_Sj))
+freeParam &lt;- 2^6 * 1
+BICMC6 &lt;- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
+BICMC6
+</code></pre>
+<pre><code>## [1] 2031.679
+</code></pre>
+<p>Comparable BIC if the model is a Markov chain of order \(6\): \(2031.679\)</p>
+<ol start="11">
+<li>Comparing models:</li>
+</ol>
+<pre><code class="language-r">BIC_vals &lt;-  c(BICMC1, BICMC2, BICMC3, BICMC4, BICMC5, BICMC6)
+model_names &lt;- paste0(&quot;MC&quot;, 1:6)
+minBIC_idx &lt;- which.min(BIC_vals)
+BIC_fmt &lt;- sprintf(&quot;%.3f&quot;, BIC_vals)
+BIC_fmt[minBIC_idx] &lt;- paste0(&quot;**&quot;, BIC_fmt[minBIC_idx], &quot;**&quot;)
+minBIC_idx
+</code></pre>
+<pre><code>## [1] 2
+</code></pre>
+<p>The classic method chooses order \(2\) (\(S=\{-2,-1\}\)).</p>
+<p>Table 2: BIC values</p>
+<pre><code class="language-r">bic_matrix &lt;- data.frame(matrix(BIC_fmt, nrow = 1))
+colnames(bic_matrix) &lt;- model_names
+rownames(bic_matrix) &lt;- &quot;BIC&quot;
+</code></pre>
+<pre><code class="language-r">knitr::kable(bic_matrix, caption = &quot;BIC values computed for classical Markov chain models of different orders.&quot;)
+</code></pre>
+<p>Table: BIC values computed for classical Markov chain models of different orders.</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">MC1</th>
+<th align="left">MC2</th>
+<th align="left">MC3</th>
+<th align="left">MC4</th>
+<th align="left">MC5</th>
+<th align="left">MC6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">BIC</td>
+<td align="left">1869.162</td>
+<td align="left"><strong>1850.598</strong></td>
+<td align="left">1854.029</td>
+<td align="left">1877.888</td>
+<td align="left">1925.962</td>
+<td align="left">2031.679</td>
+</tr>
+</tbody>
+</table>
+<p>Estimated matrix for \(S=\{-2,-1\}\)</p>
+<pre><code class="language-r">P_MC2 &lt;- probs(Temp12_Train, S = c(1, 2), matrixform = TRUE)
+P_MC2
+</code></pre>
+<pre><code>##             1         2
+## 11 0.77813505 0.2218650
+## 12 0.16326531 0.8367347
+## 21 0.60233918 0.3976608
+## 22 0.09064976 0.9093502
+</code></pre>
+<p>Independent model distribution:</p>
+<pre><code class="language-r">P_Ind &lt;- prop.table(table(Temp12_Train))
+P_Ind
+</code></pre>
+<pre><code>## Temp12_Train
+##         1         2 
+## 0.2672251 0.7327749
+</code></pre>
+<h3 id="sec:comparing-methods">Comparing methods</h3>
+<ol start="12">
+<li>Computing values for Table 3.</li>
+</ol>
+<pre><code class="language-r">Days1 &lt;- which(Temp12_Test == 1) 
+lenDays1 &lt;- length(Days1)
+lenDays1 / ndays # frequency of low temperature days
+</code></pre>
+<pre><code>## [1] 0.1748634
+</code></pre>
+<pre><code class="language-r">Temp12_Test &lt;- c(Temp12_Test, Temp12_Train[seq_len(364)])
+</code></pre>
+<pre><code class="language-r">set.seed(1)
+hitInd &lt;- numeric(1000)
+hitMC2 &lt;- numeric(1000)
+hitFS &lt;- numeric(1000)
+T1Ind &lt;- numeric(1000)
+T1MC2 &lt;- numeric(1000)
+T1FS &lt;- numeric(1000)
+F1Ind &lt;- numeric(1000)
+F1MC2 &lt;- numeric(1000)
+F1FS &lt;- numeric(1000)
+pasts2 &lt;- rownames(P_MC2)
+pastsFS &lt;- rownames(P_FS)
+</code></pre>
+<pre><code class="language-r">for (j in seq_len(1000)){
+  u &lt;- runif(ndays)
+  predInd &lt;- numeric(ndays)
+  predMC2 &lt;- numeric(ndays)
+  predFS &lt;- numeric(ndays)
+  
+  for (i in ndays:1) {
+    predInd[i] &lt;- ifelse(u[i] &lt;= P_Ind[1], 1, 2)
+    pastRow &lt;- which(pasts2 == paste0(rev(Temp12_Test[c(i+1, i+2)]), collapse = &quot;&quot;))
+    predMC2[i] &lt;- ifelse(u[i] &lt;= P_MC2[pastRow, 1], 1, 2)
+    pastRow &lt;- which(pastsFS == paste0(rev(Temp12_Test[c(i+1, i+6, i+364)]), collapse = &quot;&quot;))
+    predFS[i] &lt;- ifelse(u[i] &lt;= P_FS[pastRow, 1], 1, 2)
+  }
+  
+  hitInd[j] &lt;- sum(predInd == Temp12_Test[seq_len(ndays)])
+  hitMC2[j] &lt;- sum(predMC2 == Temp12_Test[seq_len(ndays)])
+  hitFS[j] &lt;- sum(predFS == Temp12_Test[seq_len(ndays)])
+  T1Ind[j] &lt;- sum(predInd[Days1] == 1)
+  T1MC2[j] &lt;- sum(predMC2[Days1] == 1)
+  T1FS[j] &lt;- sum(predFS[Days1] == 1)
+  F1Ind[j] &lt;- sum(predInd[-Days1] == 1)
+  F1MC2[j] &lt;- sum(predMC2[-Days1] == 1)
+  F1FS[j] &lt;- sum(predFS[-Days1] == 1)
+}
+</code></pre>
+<h3 id="sec:accuracy">Accuracy</h3>
+<pre><code class="language-r">AccInd &lt;- mean(hitInd)/ndays
+AccMC2 &lt;- mean(hitMC2)/ndays
+AccFS &lt;- mean(hitFS)/ndays
+AccInd; AccMC2; AccFS
+</code></pre>
+<pre><code>## [1] 0.6509262
+</code></pre>
+<pre><code>## [1] 0.8236585
+</code></pre>
+<pre><code>## [1] 0.8349153
+</code></pre>
+<h3 id="sec:precision">Precision</h3>
+<pre><code class="language-r">PrecInd &lt;- mean(T1Ind/(T1Ind + F1Ind))
+PrecMC2 &lt;- mean(T1MC2/(T1MC2 + F1MC2))
+PrecFS &lt;- mean(T1FS/(T1FS + F1FS))
+PrecInd; PrecMC2; PrecFS
+</code></pre>
+<pre><code>## [1] 0.1745824
+</code></pre>
+<pre><code>## [1] 0.4981026
+</code></pre>
+<pre><code>## [1] 0.5249133
+</code></pre>
+<h3 id="sec:sensitivity-recall">Sensitivity (Recall)</h3>
+<pre><code class="language-r">SensInd &lt;- mean(T1Ind)/lenDays1
+SensMC2 &lt;- mean(T1MC2)/lenDays1
+SensFS &lt;- mean(T1FS)/lenDays1
+SensInd; SensMC2; SensFS
+</code></pre>
+<pre><code>## [1] 0.2671875
+</code></pre>
+<pre><code>## [1] 0.5870313
+</code></pre>
+<pre><code>## [1] 0.6294531
+</code></pre>
+<h3 id="sec:specificity">Specificity</h3>
+<pre><code class="language-r">SpecInd &lt;- 1 - mean(F1Ind)/(ndays - lenDays1)
+SpecMC2 &lt;- 1 - mean(F1MC2)/(ndays - lenDays1)
+SpecFS &lt;- 1 - mean(F1FS)/(ndays - lenDays1)
+SpecInd; SpecMC2; SpecFS
+</code></pre>
+<pre><code>## [1] 0.7322483
+</code></pre>
+<pre><code>## [1] 0.8738046
+</code></pre>
+<pre><code>## [1] 0.878457
+</code></pre>
+<h3 id="sec:f1-score">F1-Score</h3>
+<pre><code class="language-r">F1ScoreInd &lt;- 2 * (PrecInd * SensInd) / (PrecInd + SensInd)
+F1ScoreMC2 &lt;- 2 * (PrecMC2 * SensMC2) / (PrecMC2 + SensMC2)
+F1ScoreFS &lt;- 2 * (PrecFS * SensFS) / (PrecFS + SensFS)
+F1ScoreInd; F1ScoreMC2; F1ScoreFS
+</code></pre>
+<pre><code>## [1] 0.2111789
+</code></pre>
+<pre><code>## [1] 0.538923
+</code></pre>
+<pre><code>## [1] 0.5724496
+</code></pre>
+<p>Table 3: Model performance metrics</p>
+<pre><code class="language-r">metric &lt;- c(&quot;Accuracy&quot;, &quot;Precision&quot;, &quot;Sensitivity (Recall)&quot;, &quot;Specificity&quot;, &quot;F1-Score&quot;)
+formula &lt;- c(&quot;(TP+TN)/(TP+TN+FP+FN)&quot;,
+             &quot;TP/(TP+FP)&quot;,
+             &quot;TP/(TP+FN)&quot;,
+             &quot;TN/(TN+FP)&quot;,
+             &quot;2(PPV*Recall)/(PPV+Recall)&quot;)
+performance_table &lt;- data.frame(
+  Metric = metric,
+  Formula = formula,
+  indc = round(c(AccInd, PrecInd, SensInd, SpecInd, F1ScoreInd) * 100, 2),
+  mc2c = round(c(AccMC2, PrecMC2, SensMC2, SpecMC2, F1ScoreMC2) * 100, 2),
+  fsc = round(c(AccFS, PrecFS, SensFS, SpecFS, F1ScoreFS) * 100, 2),
+  check.names = FALSE
+)
+names(performance_table) &lt;- c(&quot;Metric&quot;, &quot;Formula&quot;, &quot;Ind (\\%)&quot;, &quot;MC2 (\\%)&quot;, &quot;FS (\\%)&quot;)
+</code></pre>
+<pre><code class="language-r">knitr::kable(performance_table, align = &quot;l&quot;, caption = &quot;Model performance metrics.&quot;)
+</code></pre>
+<p>Table: Model performance metrics.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="left">Formula</th>
+<th align="left">Ind (%)</th>
+<th align="left">MC2 (%)</th>
+<th align="left">FS (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Accuracy</td>
+<td align="left">(TP+TN)/(TP+TN+FP+FN)</td>
+<td align="left">65.09</td>
+<td align="left">82.37</td>
+<td align="left">83.49</td>
+</tr>
+<tr>
+<td align="left">Precision</td>
+<td align="left">TP/(TP+FP)</td>
+<td align="left">17.46</td>
+<td align="left">49.81</td>
+<td align="left">52.49</td>
+</tr>
+<tr>
+<td align="left">Sensitivity (Recall)</td>
+<td align="left">TP/(TP+FN)</td>
+<td align="left">26.72</td>
+<td align="left">58.70</td>
+<td align="left">62.95</td>
+</tr>
+<tr>
+<td align="left">Specificity</td>
+<td align="left">TN/(TN+FP)</td>
+<td align="left">73.22</td>
+<td align="left">87.38</td>
+<td align="left">87.85</td>
+</tr>
+<tr>
+<td align="left">F1-Score</td>
+<td align="left">2(PPV*Recall)/(PPV+Recall)</td>
+<td align="left">21.12</td>
+<td align="left">53.89</td>
+<td align="left">57.24</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sec:plot-figure-3-exploratory-analysis-of-accuracies">Plot Figure 3: Exploratory analysis of accuracies</h3>
+<pre><code class="language-r">accuracy_data &lt;- data.frame(
+  MC2 = hitMC2 / ndays,
+  FS = hitFS / ndays
+) %&gt;% 
+  pivot_longer(
+    everything(),
+    names_to = &quot;Model&quot;,
+    values_to = &quot;Accuracy&quot;
+  )
+
+ggplot(accuracy_data, aes(x = Model, y = Accuracy, fill = Model)) +
+  geom_boxplot() +
+  labs(
+    title = &quot;Accuracy distribution (1000 replications)&quot;,
+    x = &quot;Model&quot;,
+    y = &quot;Accuracy&quot;
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = &quot;Paired&quot;) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 18, face = &quot;bold&quot;),  
+    axis.title = element_text(size = 16),                              
+    axis.text = element_text(size = 14),                               
+    legend.title = element_text(size = 16),                           
+    legend.text = element_text(size = 14)                              
+  )
+</code></pre>
+<p><img src="data:image/png;base64,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ExCRNhCRPxCRExCRNhCRPxCRExCRNhCRPxCRExCRNhCRP5cX8SUdri27ACtIjQ4a0CJyAi0ibSAifyAiJyAibSAifyAiJyAibSAifyAiJyAibSAifyAiJyAibSAifyAiJyAibSAifyAiJyAibSAifyAiJyAibVZGRMFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwUIjICcFBISInBAeFiJwQHBQickJwULeI5/vdbi/aPnvY7W6p76N73W731os2CrYIgusnj+CgThHP97eUf71k+3xfbZ9utVSsxRBcP3kEB3WKOPrgqRLPtn5nD3fD8ERJeLjbXskWQHD95BEc1CmicXB0/0hvxy3i+ZMPKfbMkusnj+CgThFPjIi6WdQcdru7oe2qRw+siS/pcG3ZBWgLQkGXIqIR8DAaH5p+mhaCG4o8goOW6ppPs63j+T5EXBaCg7onK9rBaLISi3j6lnrs7NHT9opXDsH1k0dw0FLLN7ZrvvXCNIan9GYrgusnj+CgxQvahz27oK39i78TQ3D95BEcFJf4OCE4aLsiXuNFq+emDPRKVBsti/gHTtCrdnolqg2I6IZetdMrUW1ARDf0qp1eiWoDIrqhV+30SlQbENENvWqnV6LagIhu6FU7vRLVBkR0Q6/a6ZWoNiCiG3rVTq9EtQER3dCrdnolqg2I6IZetdMrUW1ARDf0qp1eiWoDIrqhV+30SlQbENENvWqnV6LagIhu6FU7vRLVBkR0Q6/a6ZWoNiCiG3rVTq9EtQER3dCrdnolqg2I6IZetdMrUW1ARDf0qp1eiWoDIrqhV+30SlQbENENvWqnV6LagIhu6FU7vRLVBkR0Q6/a6ZWoNiCiG3rVTq9EtQER3dCrdnolqg2I6IZetdMrUW3gI0cuoNVzUwZ6JaoNiHgBCNoe6JrdVBHxR5yAiLSBiC0CEd1AxBaBiG4gYotARDcQ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" alt="plot of chunk accuracy-plot" /></p>
+<h3 id="sec:empirical-nu-analysis">Empirical \(\nu\) Analysis</h3>
+<ol start="13">
+<li>FS sequential selection based on \(\hat{\nu}_{n,j,S}\) values:</li>
+</ol>
+<pre><code class="language-r">run_sequential_lag_selection &lt;- function(Temp12_Train, d = 364) {
+  # Initialization
+  A &lt;-  sort(unique(Temp12_Train))
+  lenA &lt;- length(A)
+  lenX &lt;- length(Temp12_Train)
+  A_pairs &lt;- matrix(A, ncol = 2) # All unique state pairs
+  ct &lt;- countsTab(X = Temp12_Train, d = 364) # Sequence counts table
+  
+  # Initialize storage
+  results &lt;- list(
+    nuj1 = numeric(d),
+    nuj2 = numeric(d-1),
+    nuj3 = numeric(d-2),
+    selected_lags = numeric(3)
+  )
+  
+  # Helper function for empirical distribution calculation
+  PI &lt;- function(S, groupTab, x_S, lenX, d) {
+    if (length(S) &gt; 0) {
+      filtr_S &lt;- paste0(&quot;x&quot;, S)
+      groupTab &lt;- groupTab %&gt;%
+        dplyr::mutate(match = purrr::pmap_lgl(dplyr::pick(dplyr::all_of(filtr_S)),
+                                              ~ all(c(...) == x_S))) %&gt;%
+        dplyr::filter(match) %&gt;%
+        dplyr::select(-match)
+    }
+    PI &lt;- matrix(groupTab$Nx_Sj/(lenX - d),ncol = 1)
+    PI
+  }
+  
+  # Sequential Selection Process
+  cat(&quot;=== Starting Sequential Lag Selection ===\n&quot;)
+  
+  # Step 1: Initial selection (S = ∅)
+  cat(&quot;\n[Step 1] Selecting first lag (S = ∅)...\n&quot;)
+  S &lt;- NULL
+  Sc &lt;- sort(setdiff(seq_len(d), S), decreasing = TRUE) # Complement of S in 1:d
+  
+  for (z in seq_along(Sc)) { # Runs across all available lags
+    j &lt;- Sc[z]
+    # Frequency tables
+    b_Sja &lt;- freqTab(S = S, j = j, A = A, countsTab = ct)
+    b_Sj &lt;- b_Sja %&gt;%
+      dplyr::group_by_at(paste0(&quot;x&quot;, j)) %&gt;%
+      dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = &quot;drop&quot;)
+    
+    # Compute νj
+    PIs &lt;- PI(S = S, groupTab = b_Sj, x_S = S, lenX = lenX, d = 364)
+    dTVs &lt;- dTV_sample(S = S, j = j, lenA = lenA, base = b_Sja,
+                       A_pairs = A_pairs, x_S = S)
+    results$nuj1[z] &lt;- prod(PIs) * dTVs
+  }
+  results$selected_lags[1] &lt;- Sc[which.max(results$nuj1)]
+  cat(sprintf(&quot;Selected: j = %d (ν = %.4f)\n&quot;, 
+              results$selected_lags[1], max(results$nuj1)))
+  
+  # Step 2: Second selection (S = {1})
+  cat(sprintf(&quot;\n[Step 2] Selecting second lag (S = {%d})...\n&quot;,
+              results$selected_lags[1]))
+  S &lt;- results$selected_lags[1]
+  Sc &lt;- sort(setdiff(seq_len(d), S), decreasing = TRUE)
+  
+  for (z in seq_along(Sc)) {
+    j &lt;- Sc[z]
+    Sj &lt;- sort(c(S, j), decreasing = TRUE)
+    
+    # Frequency tables
+    b_Sja &lt;- freqTab(S = S, j = j, A = A, countsTab = ct)
+    b_Sj &lt;- b_Sja %&gt;%
+      dplyr::group_by_at(paste0(&quot;x&quot;, Sj)) %&gt;%
+      dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = &quot;drop&quot;)
+    b_S &lt;- b_Sja %&gt;%
+      dplyr::group_by_at(paste0(&quot;x&quot;, S)) %&gt;%
+      dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = &quot;drop&quot;)
+    
+    subx &lt;- b_S[, -ncol(b_S)]
+    
+    # Compute ν_j
+    for (t in which(b_S$Nx_Sj &gt; 0)) {
+      PIs &lt;- PI(S = S, groupTab = b_Sj, x_S = subx[t, ],
+                lenX = lenX, d = d)
+      dTVs &lt;- dTV_sample(S = S, j = j, lenA = lenA, base = b_Sja,
+                         A_pairs = A_pairs, x_S = subx[t, ])
+      PI_xS &lt;- as.numeric(b_S[t, ncol(b_S)]/(lenX - d))
+      results$nuj2[z] &lt;- results$nuj2[z] + prod(PIs) * dTVs/PI_xS
+    }
+  }
+  results$selected_lags[2] &lt;- Sc[which.max(results$nuj2)]
+  cat(sprintf(&quot;Selected: j = %d (ν = %.4f)\n&quot;, 
+              results$selected_lags[2], max(results$nuj2)))
+  
+  # Step 3: Third selection (S = {1,364})
+  cat(sprintf(&quot;\n[Step 3] Selecting third lag (S = {%d,%d})...\n&quot;, 
+              results$selected_lags[1], results$selected_lags[2]))
+  S &lt;- c(S, results$selected_lags[2])
+  Sc &lt;- sort(setdiff(seq_len(d), S), decreasing = TRUE)
+  
+  for (z in seq_along(Sc)) {
+    j &lt;- Sc[z]
+    Sj &lt;- sort(c(S, j), decreasing = TRUE)
+    dec_S &lt;- rev(S) # S in decreasing order
+    
+    # Frequency tables
+    b_Sja &lt;- freqTab(S = dec_S, j = j, A = A, countsTab = ct)
+    b_Sj &lt;- b_Sja %&gt;%
+      dplyr::group_by_at(paste0(&quot;x&quot;, Sj)) %&gt;%
+      dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = &quot;drop&quot;)
+    b_S &lt;- b_Sja %&gt;%
+      dplyr::group_by_at(paste0(&quot;x&quot;, dec_S)) %&gt;%
+      dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = &quot;drop&quot;)
+    
+    subx &lt;- b_S[, -ncol(b_S)]
+    
+    # Compute ν_j
+    for (t in which(b_S$Nx_Sj &gt; 0)) {
+      PIs &lt;- PI(S = dec_S, groupTab = b_Sj, x_S = subx[t, ],
+                lenX = lenX, d = d)
+      dTVs &lt;- dTV_sample(S = dec_S, j = j, lenA = lenA, base = b_Sja,
+                         A_pairs = A_pairs, x_S = subx[t, ])
+      PI_xS &lt;- as.numeric(b_S[t, ncol(b_S)]/(lenX - d))
+      results$nuj3[z] &lt;- results$nuj3[z] + prod(PIs) * dTVs/PI_xS
+    }
+  }
+  results$selected_lags[3] &lt;- Sc[which.max(results$nuj3)]
+  cat(sprintf(&quot;Selected: j = %d (ν = %.4f)\n&quot;, 
+              results$selected_lags[3], max(results$nuj3)))
+  
+  # Final Results
+  cat(&quot;\n=== Final Selection Results ===\n&quot;)
+  print(data.frame(Step = 1:3, Selected_Lag = results$selected_lags,
+                   nu = c(max(results$nuj1), max(results$nuj2), max(results$nuj3))))
+  
+  return(results)
+}
+</code></pre>
+<p><strong>WARNING</strong>: The next code line takes ~6 min (on i7-1255U, 10 cores).
+For reproducibility and ease of access, we use a precomputed <code>.rds</code> file
+(results_sequential_selection.rds). To regenerate the results manually, set
+<code>recompute &lt;- TRUE</code> bellow: <br></p>
+<pre><code class="language-r">recompute &lt;- TRUE
+if (recompute) {
+  results &lt;- run_sequential_lag_selection(Temp12_Train)
+} else {
+  results &lt;- readRDS(&quot;results_sequential_selection.rds&quot;) # using precomputed results
+}
+</code></pre>
+<pre><code>## === Starting Sequential Lag Selection ===
+## 
+## [Step 1] Selecting first lag (S = ∅)...
+## Selected: j = 1 (ν = 0.1253)
+## 
+## [Step 2] Selecting second lag (S = {1})...
+## Selected: j = 364 (ν = 0.0216)
+## 
+## [Step 3] Selecting third lag (S = {1,364})...
+## Selected: j = 6 (ν = 0.0165)
+## 
+## === Final Selection Results ===
+##   Step Selected_Lag         nu
+## 1    1            1 0.12533879
+## 2    2          364 0.02162680
+## 3    3            6 0.01652459
+</code></pre>
+<h3 id="sec:plot-figure-4-fs-sequential-step-analysis-through-hat-nu-n-j-s">Plot Figure 4: FS sequential step analysis through \(\hat{\nu}_{n,j,S}\).</h3>
+<pre><code class="language-r">par(mfrow = c(1, 3), mar = c(5, 6, 4, 2), oma = c(0, 0, 4, 0))
+palette &lt;- c(&quot;#E41A1C&quot;, &quot;#377EB8&quot;, &quot;#4DAF4A&quot;)
+with(results, {
+  # Graph 1
+  Sc &lt;-  364:1
+  plot(1:364, rev(nuj1), type = &quot;p&quot;, pch = 19, cex = 0.8, col = &quot;gray70&quot;,
+       ylab = &quot;&quot;, xlab = &quot;Lag (-j)&quot;, cex.lab = 1.8, cex.axis = 1.3,
+       ylim = c(0,0.13), main = &quot;&quot;, panel.first = grid())
+  title(main = expression(paste(&quot;S = &quot;, Ø)), cex.main = 1.5, font.main = 1)
+  title(ylab = expression(widehat(nu)[n*&quot;,&quot;*j*&quot;,&quot;*S]), line = 4, cex.lab = 1.8) 
+  points(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], pch = 21, bg = palette[1], cex = 1.5, lwd = 1)
+  text(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], labels = paste0(Sc[which.max(nuj1)]),
+       pos = 3, col = palette[1], font = 2, cex = 1.4)
+  # Graph 2
+  Sc &lt;- 364:2
+  plot(2:364, rev(nuj2), type = &quot;p&quot;, pch = 19, cex = 0.8, col = &quot;gray70&quot;,
+       ylab = &quot;&quot;, xlab = &quot;Lag (-j)&quot;, cex.lab = 1.8, cex.axis = 1.3,
+       ylim = c(0,0.025),  main = &quot;&quot;, panel.first = grid())
+  title(main = &quot;With S = {-1}&quot;, cex.main = 1.5, font.main = 1)
+  title(ylab = expression(widehat(nu)[n*&quot;,&quot;*j*&quot;,&quot;*S]), line = 4, cex.lab = 1.8)
+  points(Sc[which.max(nuj2)], nuj2[which.max(nuj2)], pch = 21, bg = palette[2], cex = 1.5, lwd = 1)
+  text(Sc[which.max(nuj2)]-5, nuj2[which.max(nuj2)], labels = paste0(Sc[which.max(nuj2)]),
+       pos = 3, col = palette[2], font = 2, cex = 1.4)
+  # Graph 3
+  Sc &lt;- 363:2
+  plot(2:363, rev(nuj3), type = &quot;p&quot;, pch = 19, cex = 0.8, col = &quot;gray70&quot;,
+       ylab = &quot;&quot;, xlab = &quot;Lag (-j)&quot;, cex.lab = 1.8, cex.axis = 1.3,
+       ylim = c(0,0.025), main = &quot;&quot;, panel.first = grid())
+  title(main = &quot;With S = {-364, -1}&quot;, cex.main = 1.5, font.main = 1)
+  title(ylab = expression(widehat(nu)[n*&quot;,&quot;*j*&quot;,&quot;*S]), line = 4, cex.lab = 1.8)
+  points(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], pch = 21, bg = palette[3], cex = 1.5, lwd = 1)
+  text(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], labels = paste0(Sc[which.max(nuj3)]),
+       pos = 3, col = palette[3], font = 2, cex = 1.4)
+
+  mtext(expression(paste(&quot;Sequential lag selection based on &quot;, widehat(nu)[n*&quot;,&quot;*j*&quot;,&quot;*S])),
+        outer = TRUE, cex = 1.6, font = 2, line = 1.4)
+})
+</code></pre>
+<p><img src="data:image/png;base64,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" alt="plot of chunk nu-plot" /></p>
+<h2 id="sec:session-info">Session info</h2>
+<pre><code class="language-r">sessionInfo()
+</code></pre>
+<pre><code>## R version 4.4.1 (2024-06-14 ucrt)
+## Platform: x86_64-w64-mingw32/x64
+## Running under: Windows 11 x64 (build 22631)
+## 
+## Matrix products: default
+## 
+## 
+## locale:
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
+## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
+## [5] LC_TIME=Portuguese_Brazil.utf8    
+## 
+## time zone: America/Sao_Paulo
+## tzcode source: internal
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] tidyr_1.3.1     purrr_1.0.2     lubridate_1.9.4 ggplot2_3.5.2   dplyr_1.1.4    
+## [6] hdMTD_0.1.0    
+## 
+## loaded via a namespace (and not attached):
+##  [1] vctrs_0.6.5        cli_3.6.3          knitr_1.48         rlang_1.1.4       
+##  [5] xfun_0.52          highr_0.11         generics_0.1.3     labeling_0.4.3    
+##  [9] glue_1.7.0         scales_1.4.0       grid_4.4.1         evaluate_1.0.0    
+## [13] tibble_3.2.1       lifecycle_1.0.4    compiler_4.4.1     RColorBrewer_1.1-3
+## [17] timechange_0.3.0   pkgconfig_2.0.3    rstudioapi_0.16.0  farver_2.1.2      
+## [21] R6_2.6.1           tidyselect_1.2.1   pillar_1.10.1      magrittr_2.0.3    
+## [25] tools_4.4.1        withr_3.0.2        gtable_0.3.6
+</code></pre>
+</div>
+</body>
+</html>

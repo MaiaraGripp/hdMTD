@@ -19,20 +19,8 @@ library("ggplot2")
 library("lubridate")
 library("purrr")
 library("tidyr")
-library("future")
-library("future.apply")
 
-## Load precomputed outputs
-precomputed <- readRDS(file = "hdMTD_outputs.rds")
-
-# Set recompute_all = TRUE to override all precomputed results (not recommended)
-recompute_all <- FALSE
-
-# All procedures that take longer than ~2 minutes were precomputed and stored in
-# hdMTD_outputs.rds, simulated_data.rds and results_sequential_selection.rds.
-# To recompute any of them, set the corresponding `recompute <- TRUE` block to
-# activate the code.
-
+#'
 #' ## Section 5: Using hdMTD
 #' ### 5.1 Data generation
 #'
@@ -41,7 +29,6 @@ recompute_all <- FALSE
 #' Parameters: $\Lambda = \{-30,-15,-1\}$, $\mathcal{A} = \{0,1\}$,
 #' $\lambda_0= \{0.01\}$, $\lambda_{-1} = 0.39$, $\lambda_{-15} = \lambda_{-30} = 0.3$,
 #' $p_0(0)=p_0(1)=0.5$, and transition matrices $p_j$, $j\in\Lambda$, sampled uniformly.
-#'
 set.seed(11)
 Lambda <- c(1, 15, 30)
 A <- c(0, 1)
@@ -49,7 +36,7 @@ lam0 <- 0.01
 lamj <- c(0.39, 0.3, 0.3)
 p0 <- c(0.5, 0.5)
 MTD <- MTDmodel(Lambda = Lambda, A = A, lam0 = lam0, lamj = lamj, p0 = p0)
-summary(MTD)
+MTD
 #'
 #' 2. Sample from the invariant distribution
 #'
@@ -60,20 +47,14 @@ X <- perfectSample(MTD, N = 1000)
 #' 3. Estimate relevant lags using FS method
 #'
 hdMTD_FS(X, d = 40, l = 4)
-#'
-FS <- hdMTD(X, d = 40, method = "FS", l = 4)
-S(FS); summary(FS)
+#' Equivalent call: hdMTD(X, d = 40, method = "FS", l=4)
 #'
 #' 4. Estimate relevant lags using BIC method
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+#' **WARNING**: next line takes ~30min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_BIC(X, d = 40, minl = 4, maxl = 4)
 #'
-if (recompute) {
-  hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min (on i7-1255U, 10 cores).
-} else {
-  precomputed$BIC_d40_l4
-}
+#' Equivalent call: hdMTD(X, d = 40, method = "BIC", minl = 4, maxl = 4)
 #'
 #' Custom subset S
 hdMTD_BIC(X, d = 40,
@@ -107,23 +88,14 @@ hdMTD_BIC(X, d = 40,
 #'
 #' 5. Estimate relevant lags using CUT method
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+#' **WARNING**: next line takes ~2.5min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40))
 #'
-if (recompute) {
-  hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40)) #takes ~2.5min.
-} else {
-  precomputed$CUT_d40
-}
+#' Equivalent call: hdMTD(X,d=40,S=c(1,5,10,15,17,20,27,30,35,40),method="CUT")
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
-#' Setting $\alpha = 0.13$
-if (recompute) {
-  hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40), alpha = 0.13) #takes ~2.5min.
-} else {
-  precomputed$CUT_d40_alpha
-}
+#' Setting $\alpha = 0.13$ <br>
+#' **WARNING**: next line takes ~2.5min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40), alpha = 0.13)
 #'
 #' Custom subset S
 hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
@@ -138,9 +110,10 @@ hdMTD_FS(X[1:500], d = 40, l = 4)
 #'
 #' 7. Estimating transition probabilities
 #'
-head(empirical_probs(X, S = c(1, 15, 30)), 6)
-#'
-empirical_probs(X, S = c(1, 15, 30), matrixform = TRUE)
+empirical_probs(X, S = c(1, 15, 30))
+empirical_probs(X,
+                S = c(1, 15, 30),
+                matrixform = TRUE)
 #'
 #' 8. Oscillations
 #'
@@ -158,18 +131,20 @@ init <- list(
   'pj' = rep(list(matrix(c(0.5, 0.5, 0.5, 0.5), ncol = 2, nrow = 2)), 3)
 )
 #' Run EM
-emMTD <- MTDest(X, S = c(1, 15, 30), init = init, iter = TRUE)
-summary(emMTD)
+MTDest(X, S = c(1, 15, 30), init = init, iter = TRUE)
 #' Stops after $9$ iterations
-emMTD <- MTDest(X, S = c(1, 15, 30), M = NULL, nIter = 9, init = init, oscillations = TRUE)
-summary(emMTD)
+MTDest(X, S = c(1, 15, 30), M = NULL, nIter = 9, init = init, oscillations = TRUE)
 #'
-#' Coercing an MTDest object to an MTD
+#' Estimating P (transition probabilities) with EM
 #'
-emMTD <- MTDest(X, S = c(1, 15, 30), init = init)
-MTD_hat <- as.MTD(emMTD)
+#' Estimate MTD parameters with EM
+estParam <- MTDest(X, S = c(1, 15, 30), init = init)
+#' Set MTD model with estimations
+estMTD <- MTDmodel(Lambda, A, lam0 = estParam$lambdas[1],
+                   lamj = estParam$lambdas[-1], p0 = estParam$p0,
+                   pj = estParam$pj)
 #' Return estimated transition matrix
-transitP(MTD_hat)
+estMTD$P
 #'
 #' ### 5.3 Testing hdMTD
 #'
@@ -190,87 +165,56 @@ N <- 10000    # Full sample size
 m <- c(1000, 1500, 2000, 2500, 3000, 5000, 10000) # Subsample sizes
 d <- 100      # Max order for FS and Oracle
 dNaive <- 5   # Max order for Naive
-pairList <- t(combn(d, 2)) # All possible pairs with digits from 1 to 100
+pairList <- t(combn(100, 2)) # All possible pairs with digits from 1 to 100
 npairs <- nrow(pairList)
-minP11_P12 <- min(MTD$P[1, 1], MTD$P[1, 2])
 #'
-#'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
-
+#' **WARNING**: The following simulation takes approximately 5–6 DAYS to complete.
+#' For reproducibility and ease of access, we use a precomputed `.rds` file (simulated_data.rds).
+#' To regenerate the results manually, set `recompute <- TRUE` bellow:
+recompute <- FALSE
 if (recompute) {
-
-  FSP <- matrix(0, ncol = length(m), nrow = n)
-  FS  <- matrix(0, ncol = length(m), nrow = n)
+  # Initialize results storage
+  FSP <- matrix(0, ncol = length(m),nrow = n)
+  FS <- matrix(0, ncol = length(m),nrow = n)
   NaiveP <- matrix(0, ncol = length(m), nrow = n)
-  Naive  <- matrix(0, ncol = length(m), nrow = n)
-  OracleP <- matrix(0, ncol = length(m), nrow = n)
-  Oracle  <- matrix(0, ncol = length(m), nrow = n)
-  SFS     <- matrix(0, ncol = length(m) * 2, nrow = n)
-  ZOracle <- matrix(0, ncol = length(m) * 2, nrow = n)
-
-  X_list <- vector("list", n)
+  Naive <- matrix(0, ncol = length(m), nrow = n)
+  OracleP <- matrix(0, ncol = length(m),nrow = n)
+  Oracle <- matrix(0, ncol = length(m), nrow = n)
+  SFS <- matrix(0, ncol = length(m)*2, nrow = n)
+  ZOracle <- matrix(0, ncol = length(m)*2, nrow = n)
+  # WARNING: the next loop takes 5 to 6 DAYS to complete
   for (i in seq_len(n)) {
-    X_list[[i]] <- perfectSample(MTD, N = N)
-  }
-
-  # 2) Paralel per replication
-  workers <- max(1, parallel::detectCores() - 1)
-  plan(multisession, workers = workers)
-  on.exit(plan(sequential), add = TRUE)
-
-  res_list <- future_lapply(seq_len(n), function(i) {
-    X <- X_list[[i]]
-
-    FS_i <- FSP_i <- Naive_i <- NaiveP_i <- Oracle_i <- OracleP_i <- numeric(length(m))
-    SFS_row <- ZOracle_row <- integer(length(m) * 2)
+    X <- perfectSample(MTD, N = N) # Generate full sample
 
     for (k in seq_along(m)) {
-      Y <- X[seq_len(m[k])]
-      ct <- countsTab(Y, d = d)
+      Y <- X[seq_len(m[k])] # Take sub sample
+      ct <- countsTab(Y, d = d) # Counts of size d+1 sequences from Y
 
-      # FS
+      # FS:
       S <- hdMTD_FS(Y, d = d, l = 2)
-      SFS_row[(k * 2 - 1):(k * 2)] <- S
+      SFS[i, ( (k * 2 - 1):(k * 2) )] <- S # Stores S
       p_FS <- freqTab(S = S, A = A, countsTab = ct)$qax_Sj[1]
-      err_FS <- abs(p_FS - MTD$P[1, 1])
-      FS_i[k]  <- err_FS
-      FSP_i[k] <- err_FS / minP11_P12
+      FS[i, k] <- abs(p_FS - MTD$P[1, 1])
+      FSP[i, k] <- abs(p_FS - MTD$P[1, 1])/min(MTD$P[1, 1], MTD$P[1, 2])
 
-      # Naive
-      ct_dNaive <- countsTab(Y, dNaive)
+      # NAIVE:
+      ct_dNaive  <- countsTab(Y, dNaive) # Counts of size dNaive+1 sequences from Y
       p_Naive <- freqTab(S = seq_len(dNaive), A = A, countsTab = ct_dNaive)$qax_Sj[1]
-      err_NV <- abs(p_Naive - MTD$P[1, 1])
-      Naive_i[k]  <- err_NV
-      NaiveP_i[k] <- err_NV / minP11_P12
+      Naive[i, k] <- abs(p_Naive - MTD$P[1, 1])
+      NaiveP[i, k] <- abs(p_Naive - MTD$P[1, 1])/min(MTD$P[1, 1], MTD$P[1, 2])
 
-      # Oracle
+      # ORACLE:
       p_pairs <- numeric(npairs)
       for (s in seq_len(npairs)) {
         p_pairs[s] <- freqTab(S = pairList[s, ], A = A, countsTab = ct)$qax_Sj[1]
       }
-      minpos <- which.min(abs(p_pairs - MTD$P[1, 1]))
-      ZOracle_row[(k * 2 - 1):(k * 2)] <- pairList[minpos, ]
+      minpos <- which.min(abs(p_pairs - MTD$P[1,1]))
+      ZOracle[i, (( k * 2 - 1):(k * 2))] <- pairList[minpos, ] # Stores lags set with minimal error (Oracle set)
       p_Oracle <- p_pairs[minpos]
-      err_OR <- abs(p_Oracle - MTD$P[1, 1])
-      Oracle_i[k]  <- err_OR
-      OracleP_i[k] <- err_OR / minP11_P12
+      Oracle[i, k] <- abs(p_Oracle - MTD$P[1, 1])
+      OracleP[i, k] <- abs(p_Oracle - MTD$P[1, 1] )/min(MTD$P[1, 1],MTD$P[1, 2])
     }
-
-    list(FS=FS_i, FSP=FSP_i, Naive=Naive_i, NaiveP=NaiveP_i,
-         Oracle=Oracle_i, OracleP=OracleP_i,
-         SFS=SFS_row, ZOracle=ZOracle_row)
-  })
-
-  FS      <- do.call(rbind, lapply(res_list, `[[`, "FS"))
-  FSP     <- do.call(rbind, lapply(res_list, `[[`, "FSP"))
-  Naive   <- do.call(rbind, lapply(res_list, `[[`, "Naive"))
-  NaiveP  <- do.call(rbind, lapply(res_list, `[[`, "NaiveP"))
-  Oracle  <- do.call(rbind, lapply(res_list, `[[`, "Oracle"))
-  OracleP <- do.call(rbind, lapply(res_list, `[[`, "OracleP"))
-  SFS     <- do.call(rbind, lapply(res_list, `[[`, "SFS"))
-  ZOracle <- do.call(rbind, lapply(res_list, `[[`, "ZOracle"))
-
+  }
 } else {
   #' Load precomputed results from `simulated_data.rds`
   simulated_data <- readRDS("simulated_data.rds")
@@ -496,25 +440,13 @@ Temp12 <- rev(temp$MAXTEMP1)
 #' hdMTD functions assume the sample is sorted from the latest observations to
 #' oldest.
 #'
-recompute <- FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+#' **WARNING**: next line takes ~7min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_FS(Temp12, d = 400, l = 3)
 #'
-if (recompute) {
-  hdMTD_FS(Temp12, d = 400, l = 3) #takes ~7min.
-} else {
-  precomputed$FS_Temp12_d400
-}
-#'
-#' Note: The next code line is mentioned in the article but without a CodeChunk <br>
 #' Reduce maximum order to improve estimation <br>
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
-#'
-if (recompute) {
-  hdMTD_FS(Temp12, d = 364, l = 3) #takes ~6min.
-} else {
-  precomputed$FS_Temp12_d364
-}
+#' Note: This code line is mentioned in the article but without a CodeChunk <br>
+#' **WARNING**: next line takes ~6min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_FS(Temp12, d = 364, l = 3)
 #'
 #' 5. Split sample in Train and Test data:
 #'
@@ -525,14 +457,9 @@ Temp12_Test <- Temp12[seq_len(ndays)] # Test data
 #'
 #' 6. Rerun FS for Train data:
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+#' **WARNING**: next line takes ~5min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_FS(Temp12_Train, d = 364, l = 3)
 #'
-if (recompute) {
-  hdMTD_FS(Temp12_Train, d = 364, l = 3) #takes ~5min.
-} else {
-  precomputed$FS_Temp12Train
-}
 #' 7. Trim out irrelevant lags:
 #'
 #' With CUT method
@@ -543,14 +470,8 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 #'
 #' 8. Lag selection with FSC method:
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
-#'
-if (recompute) {
-  hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
-} else {
-  precomputed$FSC_Temp12Train
-}
+#' **WARNING**: next line takes ~3min (on i7-1255U, 10 cores). Uncomment to compute. <br>
+#' hdMTD_FSC(Temp12_Train, d = 364, l = 3)
 #'
 #' 9. Estimated transition matrix for FS method output:
 #'
@@ -564,7 +485,7 @@ P_FS
 ct <- countsTab(Temp12_Train, d = 6) # Table with size 6 sequence counts
 head(ct,4)
 #'
-#' MC1 (does not explicitly appear in the article)
+#' MC1
 ft <- freqTab(S = 1, A = c(1, 2), countsTab = ct)
 LL <- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
 freeParam <- 2 * 1
@@ -572,7 +493,7 @@ BICMC1 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC1
 #' Comparable BIC if the model is a Markov chain of order $1$: $1869.162$
 #'
-#' MC2 (does not explicitly appear in the article)
+#' MC2
 ft <- freqTab(S = c(1, 2), A = c(1, 2), countsTab = ct)
 LL <- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
 freeParam <- 2^2 * 1
@@ -589,7 +510,7 @@ BICMC3 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC3
 #' Comparable BIC if the model is a Markov chain of order $3$: $1854.029$
 #'
-#' MC4 (does not explicitly appear in the article)
+#' MC4
 ft <- freqTab(S = c(1, 2, 3, 4), A = c(1, 2), countsTab = ct)
 LL <- sum(log(ft$qax_Sj) * ft$Nxa_Sj)
 freeParam <- 2^4 * 1
@@ -597,7 +518,8 @@ BICMC4 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC4
 #' Comparable BIC if the model is a Markov chain of order $4$: $1877.888$
 #'
-#' MC5 (does not explicitly appear in the article)
+#' MC5
+#'
 ft <- freqTab(S = c(1, 2, 3, 4, 5), A = c(1, 2), countsTab = ct)
 pos <- which(ft$Nxa_Sj > 0)
 LL <- sum(log(ft$qax_Sj[pos]) * ft$Nxa_Sj[pos])
@@ -606,7 +528,7 @@ BICMC5 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC5
 #' Comparable BIC if the model is a Markov chain of order $5$: $1925.962$
 #'
-#' MC6 (does not explicitly appear in the article)
+#' MC6
 ft <- freqTab(S = c(1, 2, 3, 4, 5, 6), A = c(1, 2), countsTab = ct)
 pos <- which(ft$Nxa_Sj > 0)
 LL <- sum(log(ft$qax_Sj[pos]) * ft$Nxa_Sj[pos])
@@ -844,7 +766,7 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
       dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", Sj)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
     b_S <- b_Sja %>%
-      dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", S)))) %>%
+      dplyr::dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", S)))) %>%
       dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups = "drop")
 
     subx <- b_S[, -ncol(b_S)]
@@ -907,16 +829,15 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
   return(results)
 }
 #'
-#'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+#' **WARNING**: The next code line takes ~6 min (on i7-1255U, 10 cores).
+#' For reproducibility and ease of access, we use a precomputed `.rds` file
+#' (results_sequential_selection.rds). To regenerate the results manually, set
+#' `recompute <- TRUE` bellow: <br>
+recompute <- FALSE
 if (recompute) {
-  results <- run_sequential_lag_selection(Temp12_Train) #takes ~6 min
+  results <- run_sequential_lag_selection(Temp12_Train)
 } else {
   results <- readRDS("results_sequential_selection.rds") # using precomputed results
-  cat("\n=== Final Selection Results ===\n")
-  print(data.frame(Step = 1:3, Selected_Lag = results$selected_lags,
-                   nu = c(max(results$nuj1), max(results$nuj2), max(results$nuj3))))
 }
 #'
 #' ### Plot Figure 4: FS sequential step analysis through $\hat{\nu}_{n,j,S}$.
