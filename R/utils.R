@@ -8,9 +8,9 @@
 # 2 - PI()
 # 3 - sx()
 # 4 - n_parameters()
-# 5 - prodinf()
+# 5 - fmt_vec()
 
-# At the end of each auxiliary function bellow there is
+# At the end of each auxiliary function below there is
 # a note naming the functions that use it.
 
 ###########################################################
@@ -41,7 +41,7 @@ groupTab <- function(S, j, freqTab, lenX, d){
     if (length(Sj) > 0) {
         # Summarizes freqTab by lags in Sj
         groupTab <- freqTab %>%
-            dplyr::group_by_at(paste0("x", Sj)) %>%
+            dplyr::group_by(dplyr::across(dplyr::all_of(paste0("x", Sj)))) %>%
             dplyr::summarise(Nx_Sj = sum(Nxa_Sj), .groups="drop")
 
         return(groupTab)
@@ -183,29 +183,33 @@ n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE, ze
 ###########################################################
 ###########################################################
 
-# prodinf: Computes the vector product between to vectors
+# fmt_vec: Pretty-prints a vector into a compact one-line string
 #
-# This function computes the product vector between to vectors x and y.
-# However, for each i such that |x[i]|=inf and y[i]=0, x[i] * y[i] = 0.
+# This function formats an arbitrary vector into a concise, human-readable
+# string. It joins elements with commas and, when the vector is longer than
+# `max_items`, it truncates the output and appends a suffix indicating the
+# total length (e.g., ", ... (57 total)").
 #
 # Arguments:
-# - x: A numeric vector, may have inf values
-# - y: A numeric vector with the same length as x.
+# - x: A vector of any atomic mode (numeric, integer, character, logical, etc.).
+# - max_items: Integer (default = 10). Maximum number of elements to show
+#   before truncating with the "..., (n total)" suffix.
+# - digits: Integer or NULL (default = NULL). If non-NULL and `x` is numeric,
+#   values are formatted with `format(x, digits = digits)` prior to joining.
+# - empty: Character (default = "∅"). String returned when `x` has length 0 or is NULL.
 #
 # Returns:
-# - A size x vector with the product between x and y. Whenever inf*0 occurs the output
-# is set to 0.
+# - A single character string with the compact representation of `x`.
 
-prodinf <- function(x, y){
-    prinf <- numeric(length(x))
-    for (i in seq_len(length(x))) {
-        if (is.infinite(x[i]) && y[i] == 0) {
-          prinf[i] <- 0
-        } else {
-          prinf[i] <- x[i] * y[i]
-        }
-    }
-    prinf
-} # prodinf is used in MTDest.R.
-
-
+fmt_vec <- function(x, max_items = 10, digits = NULL, empty = "empty") {
+  if (is.null(x) || length(x) == 0) return(empty)
+  x <- as.vector(x)
+  if (!is.null(digits) && is.numeric(x)) x <- format(x, digits = digits)
+  n <- length(x)
+  if (n <= max_items) {
+    paste(x, collapse = ", ")
+  } else {
+    paste0(paste(x[seq_len(max_items)], collapse = ", "),
+           ", ... (", n, " total)")
+  }
+}# Used in: MTD-methods.R, hdMTD-methods.R

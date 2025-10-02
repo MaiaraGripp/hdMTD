@@ -19,6 +19,6 @@ test_that("hdMTD_CUT function works as expected", {
   expect_true(is.numeric(result_1))
   expect_true(all(result_1 %in% 1:d))
 
-  # Test with warning enabled
-  expect_warning(hdMTD_CUT(X = X, d = d, S = c(1, 4), alpha = 0.0065, warning = TRUE))
+  # Test with warn enabled
+  expect_warning(hdMTD_CUT(X = X, d = d, S = c(1, 4), alpha = 0.0065, warn = TRUE))
 })

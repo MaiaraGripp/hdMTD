@@ -9,7 +9,7 @@
 #' this function will set \code{A <- sort(unique(X))}.
 #' @param elbowTest Logical. If TRUE, the function applies an alternative stopping criterion to
 #' determine the length of the set of relevant lags. See *Details* for more information.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
+#' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
 #' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
 #'
@@ -43,15 +43,22 @@
 #' @export
 #'
 #' @examples
-#' X <- testChains[,1]
-#'hdMTD_FS(X,d=5,l=2)
-#'hdMTD_FS(X,d=4,l=3,elbowTest = TRUE)
+#' # Simulate a chain from an MTD model
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 3), A = c(1, 2), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
 #'
-hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE,...){
+#' # Forward Stepwise with l = 2
+#' hdMTD_FS(X, d = 5, l = 2)
+#'
+#' # Forward Stepwise with l = 3
+#' hdMTD_FS(X, d = 4, l = 3)
+#'
+hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
 
     # Validate and preprocess the input sample
     X <- checkSample(X)
-    check_hdMTD_FS_inputs(X, d, l, A, elbowTest, warning) # See validation.R.
+    check_hdMTD_FS_inputs(X, d, l, A, elbowTest, warn) # See validation.R.
 
     # Set the state space if not provided
     if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
@@ -115,7 +122,7 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warning = FALSE,...){
 
             cont <- 0
             for (y in seq_len(nrowA_pairs)) {
-              cont <- cont + prod(PIs[A_pairsPos[y, ]])*dTVs[y]
+              cont <- cont + prod(PIs[A_pairsPos[y, ]]) * dTVs[y]
             } # cont = \sum_{b\in A}\sum_{c\in A} P(x_Sb_j)*P(x_Sc_j)*dTV[q(|xSbj)||q(|xScj)]
 
             PI_xS <- as.numeric(b_S[t, ncolb_S]/(lenX - d)) # If S is NULL, this

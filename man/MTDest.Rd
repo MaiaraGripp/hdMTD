@@ -16,32 +16,54 @@ MTDest(
 )
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing an MTD chain sample (\code{X[1]} is the most recent).}
+\item{X}{A vector or single-column data frame containing an MTD chain sample
+(\code{X[1]} is the most recent).}
 
-\item{S}{A numeric vector of positive integers. Typically, \code{S} represents a set of relevant lags.}
+\item{S}{A numeric vector of distinct positive integers, sorted increasingly.
+Typically, \code{S} represents a set of relevant lags.}
 
-\item{M}{A stopping point for the EM algorithm. If \code{M=NULL} the algorithm will run
-for a total of \code{nIter} iteractions.}
+\item{M}{A stopping point for the EM algorithm. If \code{M=NULL} the algorithm
+will run for a total of \code{nIter} iterations (i.e., no convergence check).}
 
-\item{init}{A list with initial parameters: \code{p0} (optional), \code{lambdas} (required),
-\code{pj} (required). The entries in \code{lambdas} are weights for the distribution \code{p0}
-and the distributions present in the list \code{pj}. Therefore, the order in which the elements
-appear in the vector \code{lambdas} is important for correct assignment. Please refer to the
-\emph{Details} section for more information.}
+\item{init}{A list with initial parameters: \code{p0} (optional), \code{lambdas}
+(required), \code{pj} (required). The entries in \code{lambdas} are weights
+for the distribution \code{p0} and the distributions present in the list
+\code{pj}. Therefore, the order in which the elements appear in the vector
+\code{lambdas} is important for correct assignment. See  \emph{Details}.}
 
-\item{iter}{Logical. If \code{TRUE}, returns the number of iterations of the
-algorithm, that is, the number of times the initial parameters were updated.}
+\item{iter}{Logical. If \code{TRUE} include iteration diagnostics in the output
+(number of updates \code{iterations}; vector of absolute log-likelihood changes
+\code{deltaLogLik}; and \code{lastComputedDelta}, the last delta log-likelihood
+compared against \code{M}).}
 
-\item{nIter}{An integer positive number with the maximum number of iterations.}
+\item{nIter}{An integer positive number with the maximum number of EM iterations.}
 
-\item{A}{A vector with positive integers representing the state space. If not informed,
-this function will set \code{A=unique(X)}.}
+\item{A}{Optional integer vector giving the state space. If omitted, defaults
+to \code{sort(unique(X))}.}
 
-\item{oscillations}{Logical. If \code{TRUE}, the function will return the estimated oscillations
-for the updated model along with the estimated parameters.}
+\item{oscillations}{Logical. If \code{TRUE}, also compute oscillations for the
+fitted model (see \code{\link{oscillation}}).}
 }
 \value{
-A list with the estimated parameters of the MTD model.
+An S3 object of class \code{"MTDest"} (a list) with at least the following elements:
+\itemize{
+\item \code{lambdas}: estimated mixture weights (independent part first, if any).
+\item \code{pj}: list of estimated transition matrices \eqn{p_j}.
+\item \code{p0}: estimated independent distribution (if applicable).
+\item \code{logLik}: log-likelihood of the final fitted model.
+\item \code{iterations}, \code{deltaLogLik}, \code{lastComputedDelta} (optional):
+returned if \code{iter = TRUE}. Here, \code{iterations} is the number of
+parameter updates performed; \code{deltaLogLik} stores the successive
+absolute log-likelihood changes for the accepted updates; and
+\code{lastComputedDelta} is the last computed change (which may be below
+\code{M} when the loop stops by convergence).
+\item \code{oscillations} (optional): returned if \code{oscillations = TRUE}.
+\item \code{call}: the matched call.
+\item \code{S}: the lag set used for estimation.
+\item \code{A}: the state space used for estimation.
+\item \code{n}: the sample size.
+\item \code{n_eff}: the effective sample size used for estimation.
+}
 }
 \description{
 Estimation of MTD parameters through the Expectation Maximization (EM) algorithm.
@@ -59,35 +81,40 @@ To ensure that the \code{M} criterion is effectively utilized, we
 recommend using a higher value for \code{nIter}, which is set to a
 default of 100.
 
-Concerning the \code{init} parameter, it is expected to be a list
-comprising either 2 or 3 entries. These entries consist of:
+Concerning the \code{init} parameter, it is expected to be a list with 2 or
+3 entries. These entries consist of:
 an optional vector named \code{p0}, representing an independent
 distribution (the probability in the first entry of \code{p0} must be
 that of the smallest element in \code{A} and so on), a required list
 of matrices \code{pj}, containing a stochastic matrix for each
-element of \code{S} ( the first matrix must refer to the smallest
-element of \code{S} and so on), and a vector named \code{lambdas} representing
+element of \code{S} (the first matrix corresponds to the smallest lag in
+\code{S} and so on), and a vector named \code{lambdas} representing
 the weights, the first entry must be the weight for \code{p0}, and then one entry
 for each element in \code{pj} list. If your MTD model does not have an independent
-distribution \code{p0}, set \code{init$lambda[1]=0}.
+distribution \code{p0}, set \code{init$lambdas[1]=0}.
 }
 \examples{
 # Simulating data.
-# Model:
-MTD <- MTDmodel(Lambda=c(1,10),A=c(0,1),lam0=0.01)
-# Sampling a chain:
-X <- hdMTD::perfectSample(MTD,N=2000)
+set.seed(1)
+MTD <- MTDmodel(Lambda = c(1, 10), A = c(0, 1), lam0 = 0.01)
+X <- perfectSample(MTD, N = 400)
 
 # Initial Parameters:
-init <- list('p0'=c(0.4,0.6),'lambdas'=c(0.05,0.45,0.5),
-  'pj'=list(matrix(c(0.2,0.8,0.45,0.55),byrow = TRUE,ncol=2),
-   matrix(c(0.25,0.75,0.3,0.7),byrow = TRUE,ncol=2)))
+init <- list(
+  'p0' = c(0.4, 0.6),
+  'lambdas' = c(0.05, 0.45, 0.5),
+  'pj' = list(
+      matrix(c(0.2, 0.8, 0.45, 0.55), byrow = TRUE, ncol = 2),
+      matrix(c(0.25, 0.75, 0.3, 0.7), byrow = TRUE, ncol = 2)
+    )
+ )
 
-# MTDest() ------------------------------------
-MTDest(X,S=c(1,10),M=1,init)
-MTDest(X,S=c(1,10),init=init,iter = TRUE)
-MTDest(X,S=c(1,10),init=init,iter = TRUE,nIter=5)
-MTDest(X,S=c(1,10),init=init,oscillations = TRUE)
+fit <- MTDest(X, S = c(1, 10), init = init, iter = TRUE)
+str(fit, max.level = 1)
+fit$logLik
+
+fit2 <- MTDest(X, S = c(1, 10), init = init, oscillations = TRUE)
+fit2$oscillations
 
 }
 \references{
@@ -95,4 +122,12 @@ Lebre, Sophie and Bourguignon, Pierre-Yves. (2008).
 An EM algorithm for estimation in the Mixture Transition Distribution model.
 \emph{Journal of Statistical Computation and Simulation}, \emph{78}(1), 1-15.
 \doi{10.1080/00949650701266666}
+}
+\seealso{
+Methods for fitted objects: \code{\link{print.MTDest}},
+\code{\link{summary.MTDest}}, \code{\link{print.summary.MTDest}},
+\code{\link{coef.MTDest}}, \code{\link{logLik.MTDest}}.
+Model constructor and related utilities: \code{\link{MTDmodel}},
+\code{\link{oscillation}}.
+Coercion helper: \code{\link{as.MTD}}
 }

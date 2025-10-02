@@ -15,7 +15,7 @@
 #' is also a component of the same threshold as \code{alpha}.
 #' @param xi A positive real number, \code{xi} is also a component of the same threshold as
 #'  \code{alpha}.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
+#' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
 #' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
 #'
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
@@ -34,15 +34,23 @@
 #' @return Returns a set of relevant lags estimated using the CUT algorithm.
 #' @export
 #' @examples
-#' X <- testChains[,3]
-#' hdMTD_CUT(X,4,alpha=0.02,mu=1,xi=0.4)
-#' hdMTD_CUT(X,d=6,S=c(1,4,6),alpha=0.0065)
+#' # Simulate a chain from an MTD model
+#' set.seed(1)
+#' M <- MTDmodel(Lambda = c(1, 4), A = c(1, 3), lam0 = 0.05)
+#' X <- perfectSample(M, N = 400)
 #'
-hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FALSE,...){
+#' # Apply CUT with custom alpha, mu, and xi
+#' hdMTD_CUT(X, d = 4, alpha = 0.02, mu = 1, xi = 0.4)
+#'
+#' # Apply CUT with selected lags and smaller alpha
+#' hdMTD_CUT(X, d = 6, S = c(1, 4, 6), alpha = 0.08)
+#'
+hdMTD_CUT <- function(X, d, S = seq_len(d), alpha = 0.05,
+                      mu = 1, xi = 0.5, A = NULL, warn=FALSE,...){
 
     # Validate and preprocess the input sample
     X <- checkSample(X)
-    check_hdMTD_CUT_inputs(X, d, S, alpha, mu, xi, A, warning)
+    check_hdMTD_CUT_inputs(X, d, S, alpha, mu, xi, A, warn)
 
     # Set the state space if not provided
     if(length(A) == 0) { A <- sort(unique(X)) } else { A <- sort(A) }
@@ -98,7 +106,8 @@ hdMTD_CUT <- function(X, d, S=1:d, alpha=0.05, mu=1, xi=0.5, A=NULL, warning=FAL
       dTV_txy[z] <- max(Q - txy) # The largest dTV minus its threshold referent to lag j
     }
 
-    dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
+    S <- dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
+    sort(S)
 }
 
 

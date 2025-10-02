@@ -2,53 +2,80 @@
 % Please edit documentation in R/probs.R
 \name{probs}
 \alias{probs}
-\title{Estimated transition probabilities}
+\alias{probs.MTD}
+\alias{probs.MTDest}
+\title{Predictive probabilities for MTD / MTDest}
 \usage{
-probs(X, S, matrixform = FALSE, A = NULL, warning = FALSE)
+probs(object, context = NULL, newdata = NULL, oldLeft = FALSE)
+
+\method{probs}{MTD}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
+
+\method{probs}{MTDest}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a sample of a Markov chain (\code{X[1]} is the most recent).}
+\item{object}{An \code{MTD} or \code{MTDest} object.}
 
-\item{S}{A numeric vector of unique positive integers. Typically, \code{S} represents
-a set of relevant lags.}
+\item{context}{Optional vector or matrix/data.frame of contexts (rows). By default,
+each row follows the "most recent first" convention; set \code{oldLeft = TRUE} if rows
+are supplied oldest to newest. Must have exactly \code{length(Lambda(object))} columns
+for \code{MTD} or \code{length(S(object))} for \code{MTDest} (one symbol per lag).}
 
-\item{matrixform}{Logical. If \code{TRUE}, the output is formatted as a stochastic
-transition matrix.}
+\item{newdata}{Optional vector or matrix/data.frame of samples (rows). Columns follow
+the "most recent first" convention. Must have at least \code{max(Lambda(object))} columns
+for \code{MTD} or \code{max(S(object))} for \code{MTDest}. Only one of \code{newdata} or \code{context}
+can be provided at a time. When there are extra columns, only the columns at the
+model lags are used.}
 
-\item{A}{A numeric vector of distinct integers representing the state space.
-If not provided, this function will set \code{A <- sort(unique(X))}.}
-
-\item{warning}{Logical. If \code{TRUE}, the function warns the user when the state
-space is automatically set as \code{A <- sort(unique(X))}.}
+\item{oldLeft}{Logical. If \code{TRUE}, interpret rows in \code{newdata}/\code{context} as
+oldest to newest (e.g. leftmost = \code{newdata[ ,1]} = oldest). If \code{FALSE} (default),
+rows are most recent first.}
 }
 \value{
-A data frame or a matrix containing estimated transition probabilities:
-\itemize{
-\item If \code{matrixform = FALSE}, the function returns a data frame with three columns:
-\itemize{
-\item The past sequence \eqn{x_S} (a concatenation of past states).
-\item The current state \eqn{a}.
-\item The estimated probability \eqn{\hat{p}(a | x_S)}.
-}
-\item If \code{matrixform = TRUE}, the function returns a stochastic transition matrix,
-where rows correspond to past sequences \eqn{x_S} and columns correspond to states in \code{A}.
-}
+A numeric matrix of predictive probabilities with one row per input context and
+columns indexed by \code{states(object)}. Row names are the context labels (oldest to newest)
+formed by concatenating state symbols without a separator. If both \code{newdata} and
+\code{context} are missing, the full global transition matrix is returned.
 }
 \description{
-Computes the Maximum Likelihood estimators (MLE) for an MTD Markov chain with
-relevant lag set \code{S}.
+Compute one-step-ahead predictive probabilities under an MTD model or an MTDest fit.
+
+Conventions:
+\itemize{
+\item Samples are read most recent first: \verb{x[1] = X_\{t-1\}}, \verb{x[2] = X_\{t-2\}}, etc.
+\item The global transition matrix \code{P} is indexed by row labels that list the past
+context from oldest to newest. A cell at row \code{"s_k...s_1"} and column \code{"a"}
+is read as \code{p(a | s_1...s_k)}.
+\item If both \code{newdata} and \code{context} are missing, \code{probs()} returns the full
+global transition matrix (\code{transitP(object)} for \code{MTD}; \code{transitP(as.MTD(object))}
+for \code{MTDest}).
+}
 }
 \details{
-The probabilities are estimated as:
-\deqn{\hat{p}(a | x_S) = \frac{N(x_S a)}{N(x_S)}}
-where \eqn{N(x_S a)} is the number of times the sequence \eqn{x_S} appeared in the sample
-followed by \eqn{a}, and \eqn{N(x_S)} is the number of times \eqn{x_S} appeared
-(followed by any state). If \eqn{N(x_S) = 0}, the probability is set to \eqn{1 / |A|}
-(assuming a uniform distribution over \code{A}).
+All entries of \code{newdata}/\code{context} must belong to the model's state space \code{states(object)}.
+For \code{MTDest}, returning the full matrix materializes \code{transitP(as.MTD(object))}, which can be
+large for big state spaces or many lags.
 }
 \examples{
-X <- testChains[, 3]
-probs(X, S = c(1, 30))
-probs(X, S = c(1, 15, 30))
+set.seed(1)
+m <- MTDmodel(Lambda = c(1,3), A = c(0,1), lam0 = 0.1)
 
+# Full matrix
+P <- probs(m)
+
+# Using a sample row (most recent first): newdata has >= max(Lambda) columns
+new_ctx <- c(1, 0, 1, 0)      # X_{t-1}=1, X_{t-2}=0, X_{t-3}=1, ...
+probs(m, newdata = new_ctx)   # one row of probabilities
+
+# Explicit contexts (exactly |Lambda| symbols per row)
+probs(m, context = c(0, 1), oldLeft = FALSE)  # most recent first
+probs(m, context = c(0, 1), oldLeft = TRUE)   # oldest to newest
+
+# Multiple contexts (rows)
+ctxs <- rbind(c(1,0,1), c(0,1,1), c(1,1,0))
+probs(m, newdata = ctxs)
+
+}
+\seealso{
+\code{\link{transitP}}, \code{\link{states}}, \code{\link{Lambda}},
+\code{\link{S}}, \code{\link{as.MTD}}, \code{\link{empirical_probs}}
 }

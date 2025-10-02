@@ -50,6 +50,7 @@ A list of class \code{MTD} containing:
 \item{\code{p0}}{The independent probability distribution.}
 \item{\code{Lambda}}{The vector of relevant lags.}
 \item{\code{A}}{The state space.}
+\item{\code{single_matrix}}{A logical argument, if TRUE indicates that all matrices in \code{pj} are identical.}
 }
 }
 \description{
@@ -61,11 +62,15 @@ model's oscillation, and \code{\link[=perfectSample]{perfectSample()}}, which wi
 distribution.
 }
 \examples{
-MTDmodel(Lambda=c(1,3),A=c(4,8,12))
+summary(MTDmodel(Lambda=c(1,3),A=c(4,8,12)))
 
-MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,lamj=c(0.35,0.2,0.4),
+MM <- MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,lamj=c(0.35,0.2,0.4),
 pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
+transitP(MM); pj(MM); oscillation(MM)
 
-MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,
+
+MM <- MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,
 pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
+p0(MM); lambdas(MM)
+
 }

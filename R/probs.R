@@ -1,72 +1,236 @@
-#' Estimated transition probabilities
+#' Predictive probabilities for MTD / MTDest
 #'
-#' Computes the Maximum Likelihood estimators (MLE) for an MTD Markov chain with
-#' relevant lag set \code{S}.
+#' @description
+#' Compute one-step-ahead predictive probabilities under an MTD model or an MTDest fit.
 #'
-#' @param X A vector or single-column data frame containing a sample of a Markov chain (`X[1]` is the most recent).
-#' @param S A numeric vector of unique positive integers. Typically, \code{S} represents
-#' a set of relevant lags.
-#' @param matrixform Logical. If \code{TRUE}, the output is formatted as a stochastic
-#' transition matrix.
-#' @param A A numeric vector of distinct integers representing the state space.
-#' If not provided, this function will set \code{A <- sort(unique(X))}.
-#' @param warning Logical. If \code{TRUE}, the function warns the user when the state
-#' space is automatically set as \code{A <- sort(unique(X))}.
+#' Conventions:
+#' - Samples are read most recent first: `x[1] = X_{t-1}`, `x[2] = X_{t-2}`, etc.
+#' - The global transition matrix `P` is indexed by row labels that list the past
+#'   context from oldest to newest. A cell at row `"s_k...s_1"` and column `"a"`
+#'   is read as `p(a | s_1...s_k)`.
+#' - If both `newdata` and `context` are missing, `probs()` returns the full
+#'   global transition matrix (`transitP(object)` for `MTD`; `transitP(as.MTD(object))`
+#'   for `MTDest`).
 #'
-#' @return A data frame or a matrix containing estimated transition probabilities:
+#' @param object An `MTD` or `MTDest` object.
+#' @param context Optional vector or matrix/data.frame of contexts (rows). By default,
+#'   each row follows the "most recent first" convention; set `oldLeft = TRUE` if rows
+#'   are supplied oldest to newest. Must have exactly `length(Lambda(object))` columns
+#'   for `MTD` or `length(S(object))` for `MTDest` (one symbol per lag).
+#' @param newdata Optional vector or matrix/data.frame of samples (rows). Columns follow
+#'   the "most recent first" convention. Must have at least `max(Lambda(object))` columns
+#'   for `MTD` or `max(S(object))` for `MTDest`. Only one of `newdata` or `context`
+#'   can be provided at a time. When there are extra columns, only the columns at the
+#'   model lags are used.
+#' @param oldLeft Logical. If `TRUE`, interpret rows in `newdata`/`context` as
+#' oldest to newest (e.g. leftmost = `newdata[ ,1]` = oldest). If `FALSE` (default),
+#' rows are most recent first.
 #'
-#' - If \code{matrixform = FALSE}, the function returns a data frame with three columns:
-#'   - The past sequence \eqn{x_S} (a concatenation of past states).
-#'   - The current state \eqn{a}.
-#'   - The estimated probability \eqn{\hat{p}(a | x_S)}.
-#'
-#' - If \code{matrixform = TRUE}, the function returns a stochastic transition matrix,
-#'   where rows correspond to past sequences \eqn{x_S} and columns correspond to states in \code{A}.
+#' @return A numeric matrix of predictive probabilities with one row per input context and
+#'   columns indexed by `states(object)`. Row names are the context labels (oldest to newest)
+#'   formed by concatenating state symbols without a separator. If both `newdata` and
+#'   `context` are missing, the full global transition matrix is returned.
 #'
 #' @details
-#' The probabilities are estimated as:
-#' \deqn{\hat{p}(a | x_S) = \frac{N(x_S a)}{N(x_S)}}
-#' where \eqn{N(x_S a)} is the number of times the sequence \eqn{x_S} appeared in the sample
-#' followed by \eqn{a}, and \eqn{N(x_S)} is the number of times \eqn{x_S} appeared
-#' (followed by any state). If \eqn{N(x_S) = 0}, the probability is set to \eqn{1 / |A|}
-#' (assuming a uniform distribution over \code{A}).
-#'
-#' @export
+#' All entries of `newdata`/`context` must belong to the model's state space `states(object)`.
+#' For `MTDest`, returning the full matrix materializes `transitP(as.MTD(object))`, which can be
+#' large for big state spaces or many lags.
 #'
 #' @examples
-#' X <- testChains[, 3]
-#' probs(X, S = c(1, 30))
-#' probs(X, S = c(1, 15, 30))
+#' set.seed(1)
+#' m <- MTDmodel(Lambda = c(1,3), A = c(0,1), lam0 = 0.1)
 #'
-probs <- function(X, S, matrixform = FALSE, A = NULL, warning = FALSE){
+#' # Full matrix
+#' P <- probs(m)
+#'
+#' # Using a sample row (most recent first): newdata has >= max(Lambda) columns
+#' new_ctx <- c(1, 0, 1, 0)      # X_{t-1}=1, X_{t-2}=0, X_{t-3}=1, ...
+#' probs(m, newdata = new_ctx)   # one row of probabilities
+#'
+#' # Explicit contexts (exactly |Lambda| symbols per row)
+#' probs(m, context = c(0, 1), oldLeft = FALSE)  # most recent first
+#' probs(m, context = c(0, 1), oldLeft = TRUE)   # oldest to newest
+#'
+#' # Multiple contexts (rows)
+#' ctxs <- rbind(c(1,0,1), c(0,1,1), c(1,1,0))
+#' probs(m, newdata = ctxs)
+#'
+#' @seealso \code{\link{transitP}}, \code{\link{states}}, \code{\link{Lambda}},
+#'   \code{\link{S}}, \code{\link{as.MTD}}, \code{\link{empirical_probs}}
+#'
+#' @name probs
+#' @export
+probs <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) UseMethod("probs")
+#'
+#' @rdname probs
+#' @export
+probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
+  stopifnot(inherits(object, "MTD"))
 
-    X <- checkSample(X) # Validate and preprocess the input sample
-    check_probs_inputs(X, S, matrixform, A, warning) # Validate input parameters
+  P <- transitP(object)
 
-    # Set the state space if not provided
-    if (length(A) == 0) {A <- sort(unique(X))} else {A <- sort(A)}
+  if (is.null(newdata) && is.null(context)) { # Full transition matrix already available
+    return(P)
+  }
 
-    S <- sort(S, decreasing = TRUE) # Ensure S is sorted in decreasing order
-    lenS <- length(S)
+  if (!is.null(newdata) && !is.null(context)) stop("Only one of `newdata` or `context` can be provided at a time.")
 
-    # Compute frequency tables
-    base <- countsTab(X, max(S))
-    base <- freqTab(S = S, A = A, countsTab = base, complete = TRUE)
+  A        <- states(object)
+  S        <- sort(as.integer(Lambda(object)))  # positive lags
 
-    # Construct output data frame
-    probs <- data.frame(apply(base[, seq_len(lenS)], 1, paste0, collapse = ""),
-                        base[, lenS + 1], base$qax_Sj)
-    # probs = | Concatenated past states | Current state | Estimated probability |
-    names(probs) <- c(paste("past_{", paste0(-S, collapse = ","),"}"), "a", "p(a|past)")
-
-    # Convert output to stochastic matrix if requested
-    if (matrixform) {
-        Pest <- probs$`p(a|past)`
-        dim(Pest) <- c(length(A), length(A)^lenS)
-        Pest <- t(Pest)
-        colnames(Pest) <- A
-        rownames(Pest) <- unique(probs[, 1])
-        probs <- Pest
+  if (!is.null(newdata)) {
+    # --- Coerce newdata to a matrix ---
+    if (is.vector(newdata)) {
+      newdata <- matrix(as.vector(newdata), nrow = 1)
+    } else if (is.data.frame(newdata)) {
+      newdata <- as.matrix(newdata)
+    } else if (!is.matrix(newdata)) {
+      stop("`newdata` must be either NULL, a vector, a matrix, or a data.frame.")
     }
-    return(probs)
+
+    if(!all(unique(as.vector(newdata)) %in% A)) stop("Some `newdata` elements are not in the state space.")
+    if (ncol(newdata)<max(S)) {
+      stop("`newdata` must have at least ", max(S), " symbols from the state space.")
+    }
+
+    contextP <- rownames(P)
+
+
+    if(oldLeft){# User gives sample with OLDEST on the LEFT.
+
+      cols_needed <- rev(ncol(newdata) - S + 1)
+      ctx_S_order <- newdata[, cols_needed, drop = FALSE]
+
+    } else {# User gives sample with MOST RECENT on the LEFT.
+
+      ctx_S_order <- newdata[, rev(S), drop = FALSE]   # older to newer to compare with P
+    }
+
+    labels <- apply(ctx_S_order, 1, paste0, collapse = "")
+    rows   <- match(labels, contextP)
+
+    out <- P[rows, , drop = FALSE]
+    rownames(out) <- labels
+    return(out)
+  }
+
+  if (!is.null(context)){
+    # --- Coerce context to a matrix with rows = contexts ---
+    if (is.vector(context)) {
+      context <- matrix(as.vector(context), nrow = 1)
+    } else if (is.data.frame(context)) {
+      context <- as.matrix(context)
+    } else if (!is.matrix(context)) {
+      stop("`context` must be either NULL, a vector, a matrix, or a data.frame.")
+    }
+
+    if(!all(unique(as.vector(context)) %in% A)) stop("Some `context` elements are not in the state space.")
+    if (ncol(context) != length(S)) {
+      stop("`context` must have exactly ", length(S), " symbols (one per lag in Lambda).")
+    }
+    contextP <- rownames(P)
+
+
+    if(oldLeft){# User gives context with OLDEST on the LEFT.
+
+      ctx_oldfirst <- context
+
+    } else {# User gives sample with MOST RECENT on the LEFT.
+
+      ctx_oldfirst <- context[, ncol(context):1, drop = FALSE]   # older to newer to compare with P
+
+    }
+    labels <- apply(ctx_oldfirst, 1, paste0, collapse = "")
+    rows   <- match(labels, contextP)
+    out <- P[rows, , drop = FALSE]
+    rownames(out) <- labels
+    return(out)
+  }
+}
+#'
+#' @rdname probs
+#' @export
+probs.MTDest <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
+  stopifnot(inherits(object, "MTDest"))
+
+  P <- transitP(as.MTD(object))
+
+  if (is.null(newdata) && is.null(context)) { # Full transition matrix
+    return(P)
+  }
+
+  if (!is.null(newdata) && !is.null(context)) stop("Only one of `newdata` or `context` can be provided at a time.")
+
+  A        <- states(object)
+  S        <- sort(as.integer(S(object)))  # positive lags
+
+  if (!is.null(newdata)) {
+    # --- Coerce newdata to a matrix ---
+    if (is.vector(newdata)) {
+      newdata <- matrix(as.vector(newdata), nrow = 1)
+    } else if (is.data.frame(newdata)) {
+      newdata <- as.matrix(newdata)
+    } else if (!is.matrix(newdata)) {
+      stop("`newdata` must be either NULL, a vector, a matrix, or a data.frame.")
+    }
+
+    if(!all(unique(as.vector(newdata)) %in% A)) stop("Some `newdata` elements are not in the state space.")
+    if (ncol(newdata)<max(S)) {
+      stop("`newdata` must have at least ", max(S), " symbols from the state space.")
+    }
+
+    contextP <- rownames(P)
+
+
+    if(oldLeft){# User gives sample with OLDEST on the LEFT.
+
+      cols_needed <- rev(ncol(newdata) - S + 1)
+      ctx_S_order <- newdata[, cols_needed, drop = FALSE]
+
+    } else {# User gives sample with MOST RECENT on the LEFT.
+
+      ctx_S_order <- newdata[, rev(S), drop = FALSE]   # older to newer to compare with P
+    }
+
+    labels <- apply(ctx_S_order, 1, paste0, collapse = "")
+    rows   <- match(labels, contextP)
+
+    out <- P[rows, , drop = FALSE]
+    rownames(out) <- labels
+    return(out)
+  }
+
+  if (!is.null(context)){
+    # --- Coerce context to a matrix with rows = contexts ---
+    if (is.vector(context)) {
+      context <- matrix(as.vector(context), nrow = 1)
+    } else if (is.data.frame(context)) {
+      context <- as.matrix(context)
+    } else if (!is.matrix(context)) {
+      stop("`context` must be either NULL, a vector, a matrix, or a data.frame.")
+    }
+
+    if(!all(unique(as.vector(context)) %in% A)) stop("Some `context` elements are not in the state space.")
+    if (ncol(context) != length(S)) {
+      stop("`context` must have exactly ", length(S), " symbols (one per lag in S).")
+    }
+    contextP <- rownames(P)
+
+
+    if(oldLeft){# User gives context with OLDEST on the LEFT.
+
+      ctx_oldfirst <- context
+
+    } else {# User gives sample with MOST RECENT on the LEFT.
+
+      ctx_oldfirst <- context[, ncol(context):1, drop = FALSE]   # older to newer to compare with P
+
+    }
+    labels <- apply(ctx_oldfirst, 1, paste0, collapse = "")
+    rows   <- match(labels, contextP)
+    out <- P[rows, , drop = FALSE]
+    rownames(out) <- labels
+    return(out)
+  }
+
 }

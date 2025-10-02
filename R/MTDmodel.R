@@ -32,19 +32,24 @@
 #'   \item{`p0`}{The independent probability distribution.}
 #'   \item{`Lambda`}{The vector of relevant lags.}
 #'   \item{`A`}{The state space.}
+#'   \item{`single_matrix`}{A logical argument, if TRUE indicates that all matrices in `pj` are identical.}
 #' }
 #' @importFrom stats runif
 #' @importFrom methods is
 #' @export
 #'
 #' @examples
-#' MTDmodel(Lambda=c(1,3),A=c(4,8,12))
+#' summary(MTDmodel(Lambda=c(1,3),A=c(4,8,12)))
 #'
-#' MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,lamj=c(0.35,0.2,0.4),
+#' MM <- MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,lamj=c(0.35,0.2,0.4),
 #' pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
+#' transitP(MM); pj(MM); oscillation(MM)
 #'
-#' MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,
+#'
+#' MM <- MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,
 #' pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
+#' p0(MM); lambdas(MM)
+#'
 MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
                      single_matrix = FALSE, indep_part = TRUE) {
 
@@ -68,6 +73,11 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
     # If the user provides p0 as a zero vector, automatically set indep_part to FALSE
     if (!is.null(p0) && all(p0 == 0) && indep_part) {
       indep_part <- FALSE
+    }
+
+    # If lam0 = 0 but there is independent dist warn user the weight is 0
+    if (is.numeric(lam0) && lam0 == 0){
+      if (indep_part || any(p0 > 0)) warning("Since lam0 = 0, the generated MTD has independent distribution but with zero weight.")
     }
 
       # If indep_part is FALSE, enforce p0 as a zero vector and set lam0 = 0
@@ -169,18 +179,14 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
         rownames(P) <- apply(subx, 1, paste0, collapse = "")
     }
 
-    MTD <- list(P = P, lambdas = lambdas, pj = pj, p0 = p0, Lambda = Lambda, A = A)
+    MTD <- list(
+      P = P, lambdas = lambdas, pj = pj, p0 = p0,
+      Lambda = Lambda, A = A,
+      single_matrix = single_matrix,
+      call = match.call()
+    )
     class(MTD) <- "MTD"
     MTD
 }
 
-#' @export
-print.MTD <- function(x, ...) {
-    ind <- seq_along(x)
-    if (all(x$p0 == 0)) {
-      ind <- ind[-which(names(x) == "p0")]
-    }
-    print(x[ind])
-    return(invisible(x))
-}
 

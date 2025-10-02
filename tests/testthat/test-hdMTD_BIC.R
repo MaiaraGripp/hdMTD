@@ -22,6 +22,6 @@ test_that("hdMTD_BIC function works as expected", {
   expect_true(all( as.integer(unlist(strsplit(result_3[i],","))) %in% 1:d) )
   }
 
-  # Test with warning = TRUE
-  expect_warning(hdMTD_BIC(X = X, d = d, minl = 1, maxl = 2, warning = TRUE))
+  # Test with warn = TRUE
+  expect_warning(hdMTD_BIC(X = X, d = d, minl = 1, maxl = 2, warn = TRUE))
 })

@@ -19,26 +19,35 @@ and the documentation of the corresponding method functions for more information
 will be used (see \emph{Details} ).}
 }
 \value{
-A vector containing the estimated relevant lag set.
+An integer vector of class \code{"hdMTD"} (the selected lag set \eqn{S \subset \mathbb{N}^+}),
+with attributes:
+\itemize{
+\item \code{method}, \code{d}, \code{call}, \code{settings}
+\item \code{A}: the state space actually used (either provided \code{A}, or \code{sort(unique(X))} if \code{A = NULL})
+\item (for \code{method="BIC"}) \code{extras}: a list with \code{BIC_out} (exactly the object returned by \code{hdMTD_BIC})
+\item (for \code{method="BIC"} and \code{BICvalue = TRUE}) \code{BIC_selected_value}: numeric BIC at the selected set
+}
+The returned object supports \code{print()} and \code{summary()} methods.
 }
 \description{
 This function estimates the relevant lag set in a Mixture Transition Distribution (MTD) model
 using one of the available methods. By default, it applies the Forward Stepwise ("FS") method,
 which is particularly useful in high-dimensional settings.
+}
+\details{
 The available methods are:
 \itemize{
-\item "FS" (Forward Stepwise): selects the lags by a criteria that depends on their oscillations.
+\item "FS" (Forward Stepwise): selects the lags by a criterion that depends on their oscillations.
 \item "CUT": a method that selects the relevant lag set based on a predefined threshold.
 \item "FSC" (Forward Stepwise and Cut): applies the "FS" method followed by the "CUT" method.
 \item "BIC": selects the lag set using the Bayesian Information Criterion.
 }
-}
-\details{
+
 The function dynamically calls the corresponding method function (e.g., \code{\link[=hdMTD_FSC]{hdMTD_FSC()}} for
 \code{method = "FSC"}). Additional parameters specific to each method can be provided via \code{...},
 and default values are used for unspecified parameters.
 
-#' This function serves as a wrapper for the method-specific functions:
+This function serves as a wrapper for the method-specific functions:
 \itemize{
 \item \code{\link[=hdMTD_FS]{hdMTD_FS()}}, for \code{method = "FS"}
 \item \code{\link[=hdMTD_FSC]{hdMTD_FSC()}}, for \code{method = "FSC"}
@@ -51,16 +60,39 @@ If a parameter value is not explicitly provided, a default value is used.
 The main default parameters are:
 \itemize{
 \item \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
-\item \code{l = d}. Required in "FS" or "FSC" methods.
 \item \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
 \item \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
 \item \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
 All default values are specified in the documentation of the method-specific functions.
 }
+
+\strong{BIC-specific notes.} When \code{method = "BIC"}, the object may carry
+additional BIC diagnostics:
+\itemize{
+\item \code{attr(x, "extras")$BIC_out}: exactly the object returned by
+\code{\link[=hdMTD_BIC]{hdMTD_BIC()}} (its type depends on \code{BICvalue} and \code{byl}:
+named numeric vector when \code{BICvalue = TRUE}; otherwise a character
+vector of labels, possibly including \code{"smallest: <set>"}).
+\item \code{attr(x, "BIC_selected_value")}: when \code{BICvalue = TRUE},
+the numeric BIC at the selected lag set (shown by \code{summary()}).
+}
 }
 \examples{
-X <- testChains[,1]
-hdMTD(X = X, d = 5, method = "FS", l = 2)
-hdMTD(X = X, d = 5, method = "BIC", xi = 1, minl = 3, maxl = 3)
+# Simulate a chain from an MTD model
+set.seed(1)
+M <- MTDmodel(Lambda = c(1, 4), A = c(1, 3), lam0 = 0.05)
+X <- perfectSample(M, N = 400)
 
+# Fit using Forward Stepwise (FS)
+S_fs <- hdMTD(X = X, d = 5, method = "FS", l = 2)
+print(S_fs)
+summary(S_fs)  # shows A used if A = NULL in the call
+
+# Fit using Bayesian Information Criterion (BIC)
+hdMTD(X = X, d = 5, method = "BIC", xi = 0.6, minl = 3, maxl = 3)
+
+}
+\seealso{
+\code{\link{hdMTD_FS}}, \code{\link{hdMTD_FSC}}, \code{\link{hdMTD_CUT}}, \code{\link{hdMTD_BIC}},
+\code{\link{S}}, \code{\link{lags}}
 }

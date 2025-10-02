@@ -1,4 +1,27 @@
-## Resubmission (hdMTD 0.1.1)
+## Resubmission (hdMTD 0.1.2)
+
+### Summary of changes
+- Added S3 class for EM fits: `MTDest` with `print()`, `summary()`, `coef()`, `logLik()` and `probs()`.
+- Added S3 class for lag-selection fits: `hdMTD` with `print()` and `summary()`.
+- Added public accessor functions for `MTD`/`MTDest`: `pj()`, `p0()`, `lambdas()`, `lags()` (ℤ⁻),
+  `Lambda()`/`S()` (ℕ⁺), `states()`, and `transitP()` (for `MTD`). `S()` and `lags()` also apply
+to `hdMTD`.
+- Introduced `as.MTD()` to coerce an `MTDest` object to an `MTD` object.
+- Clarified terminology: sample-based probs() has been renamed to empirical_probs(), while probs() is now an
+ S3 generic for model objects.
+- Added `MTD` methods: `print()`, `summary()`, `coef()`, `logLik()` and `probs()`.
+- Replaced `any(is.na())` with `anyNA()` in `checkSample()`. 
+- Cleaned package: removed unused datasets, marked internal helpers as @keywords internal, and updated examples
+ to use simulated data.
+
+### R CMD check results (current)
+0 errors | 0 warnings | 0 notes
+
+---
+
+## Previous submission notes (for reference)
+
+version - hdMTD 0.1.1
 
 - Relicensed the package from MIT to GPL-3.
 - Removed an unintended `README.md` from the package source.
@@ -8,9 +31,7 @@
 ### R CMD check results (current)
 0 errors | 0 warnings | 0 notes
 
----
-
-## Previous submission notes (for reference)
+version - hdMTD 0.1.0
 
 R CMD check results
 0 errors | 0 warnings | 1 note

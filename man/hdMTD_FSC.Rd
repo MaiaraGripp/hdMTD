@@ -44,9 +44,14 @@ This method and its steps where developed by \href{http://jmlr.org/papers/v24/22
 and are specially useful for inference in high-order MTD Markov chains.
 }
 \examples{
-X <- testChains[,1]
-hdMTD_FSC(X,4,3,alpha=0.02)
-hdMTD_FSC(X,4,2,alpha=0.001)
+# Simulate a chain from an MTD model
+set.seed(1)
+M <- MTDmodel(Lambda = c(1, 3), A = c(1, 2), lam0 = 0.05)
+X <- perfectSample(M, N = 400)
+
+# Forward Stepwise and Cut with different parameters
+hdMTD_FSC(X, d = 4, l = 2)
+hdMTD_FSC(X, d = 4, l = 3, alpha = 0.1)
 
 }
 \references{
