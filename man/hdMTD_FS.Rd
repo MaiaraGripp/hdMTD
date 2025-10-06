@@ -46,6 +46,11 @@ If \code{elbowTest = TRUE}, the function will store these maximum \eqn{\nu} valu
 at each iteration, and output only the lags that appear before the one with smallest
 \eqn{\nu} among them.
 }
+\note{
+Tie-breaking: if multiple lags share the maximum ν, FS picks the most recent
+lag (smallest j). Up to version 0.1.2 ties were broken at random, which could cause
+run-to-run differences.
+}
 \examples{
 # Simulate a chain from an MTD model
 set.seed(1)

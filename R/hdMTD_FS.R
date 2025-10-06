@@ -29,6 +29,10 @@
 #' at each iteration, and output only the lags that appear before the one with smallest
 #' \eqn{\nu} among them.
 #'
+#' @note Tie-breaking: if multiple lags share the maximum ν, FS picks the most recent
+#' lag (smallest j). Up to version 0.1.2 ties were broken at random, which could cause
+#' run-to-run differences.
+#'
 #' @references
 #' Ost, G. & Takahashi, D. Y. (2023).
 #' Sparse Markov models for high-dimensional inference.
@@ -38,6 +42,7 @@
 #' @return A numeric vector containing the estimated relevant lag set using FS algorithm.
 #'
 #' @importFrom utils combn
+#' @importFrom utils tail
 #' @importFrom methods is
 #'
 #' @export
@@ -131,13 +136,10 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
           }
       }
 
-      maxnu[lenS + 1] <- max(nuj) # Store maximum ν, used if elbowTest is TRUE.
-      posMaxnu <- which(nuj == max(nuj)) # Select max ν lag. Can be more than one!
+      maxnu_val <- max(nuj)
+      maxnu[lenS + 1] <- maxnu_val # Store maximum ν, used if elbowTest is TRUE.
+      posMaxnu <- utils::tail(which(nuj == maxnu_val), 1)  # Position of most recent max ν lag.
 
-      # If multiple lags have the same max ν, sample one uniformly
-      if(length(posMaxnu) > 1){
-        posMaxnu <- sample(posMaxnu, 1)
-      }
       s <- Sc[posMaxnu]
       S <- c(S, s)
       lenS <- length(S)
