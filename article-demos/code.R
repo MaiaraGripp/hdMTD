@@ -5,8 +5,8 @@
 ###  An R Package for High-Dimensional Mixture Transition
 ###  Distribution Models"
 ###
-### Authors: Maiara Gripp, Guilherme Ost, Giulio Iacobelli, Daniel Y. Takahashi
-### Date: July 2025
+### Authors: Maiara Gripp, Giulio Iacobelli, Guilherme Ost, Daniel Y. Takahashi
+### Date: October 2025
 ####################################################
 
 # Required packages:
@@ -27,7 +27,7 @@ library("future.apply")
 precomputed <- readRDS(file = "hdMTD_outputs.rds")
 
 # Set recompute_all = TRUE to override all precomputed results (not recommended)
-recompute_all <- TRUE
+recompute_all <- FALSE
 
 # All procedures that take longer than ~2 minutes were precomputed and stored in
 # hdMTD_outputs.rds, simulated_data.rds or results_sequential_selection.rds.
@@ -392,15 +392,16 @@ Oq2 <- Oracletab[3,]
 Oq3 <- Oracletab[5,]
 #'
 #' ### Plot Figure 1: Estimators mean error across $N_{rep}=100$ replications.
-#' ```{r fig1-plot, fig.width=10, fig.height=5, message=FALSE, warning=FALSE}
-#' par(mfrow = c(1,2))
+#' ```{r fig1-plot, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
+#' par(mfrow = c(1,2), oma = c(0,0,0,0))
 #'
 #' ## --- Left panel: Mean error with standard deviation bands ---
-#' par(mar = c(5,5,3,8), xpd = NA)
+#' par(mar = c(5,5,3,4), xpd = NA)
 #'
 #' plot(m/100, Fmean, type = "l", col = "#377EB8",
 #'      xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.12), lwd = 3,
-#'      frame.plot = FALSE, xaxt = "n", xlim = c(10,100))
+#'      frame.plot = FALSE, xaxt = "n", yaxt = "n", xlim = c(10,100),
+#'      cex.axis = 1.4, cex.lab = 1.6)
 #' lines(m/100, Omean, col = "#E41A1C", lwd = 3)
 #' lines(m/100, Nmean, col = "#4DAF4A", lwd = 3)
 #' points(m/100, Fmean, col = "#377EB8", pch = 19, cex = 0.7)
@@ -410,13 +411,16 @@ Oq3 <- Oracletab[5,]
 #' lines(m/100, FsdLo, col = "#377EB8", lty = 2)
 #' lines(m/100, OsdUp, col = "#E41A1C", lty = 2)
 #' lines(m/100, OsdLo, col = "#E41A1C", lty = 2)
-#' lines(m/100, NsdUp, col = "#4DAF4A", lty = 2)
+#' cap <- 0.12
+#' NsdUp_cut <- ifelse(NsdUp > cap, NA, NsdUp)
+#' lines(m/100, NsdUp_cut, col = "#4DAF4A", lty = 2)
 #' lines(m/100, NsdLo, col = "#4DAF4A", lty = 2)
-#' axis(side = 1, at = m/100, labels = m/100)
+#' axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+#' axis(side = 2, cex.axis = 1.4)
 #'
 #' legend(
 #'   "topright",
-#'   inset = c(-0.18, 0),
+#'   inset = c(0.05, 0),
 #'   legend = c(expression(bar(Delta) ~ "FS"),
 #'              expression(bar(Delta) ~ "FS" %+-% "sd"),
 #'              expression(bar(Delta) ~ "Oracle"),
@@ -425,20 +429,17 @@ Oq3 <- Oracletab[5,]
 #'              expression(bar(Delta) ~ "Naive" %+-% "sd")),
 #'   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
 #'   lty = c(1,2,1,2,1,2),
-#'   lwd = c(3,1.5,3,1.5,3,1.5),
-#'   bty = "n",
-#'   y.intersp = 0.8,
-#'   x.intersp = 0.5,
-#'   seg.len = 3,
-#'   cex = 0.9
+#'   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+#'   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
 #' )
 #'
 #' ## --- Right panel: Median and quartiles ---
-#' par(mar = c(5,5,3,8), xpd = NA)
+#' par(mar = c(5,5,3,4), xpd = NA)
 #'
 #' plot(m/100, Fq2, type = "l", col = "#377EB8",
 #'      xlab = "m (x100)", ylab = "Quartiles of mean error",
-#'      ylim = c(0, 0.12), lwd = 3, frame.plot = FALSE, xaxt = "n", xlim = c(10,100))
+#'      ylim = c(0, 0.12), lwd = 3, frame.plot = FALSE, xaxt = "n", yaxt = "n",
+#'      xlim = c(10,100), cex.axis = 1.4, cex.lab = 1.6)
 #' lines(m/100, Oq2, col = "#E41A1C", lwd = 3)
 #' lines(m/100, Nq2, col = "#4DAF4A", lwd = 3)
 #' points(m/100, Fq2, col = "#377EB8", pch = 19, cex = 0.7)
@@ -450,11 +451,12 @@ Oq3 <- Oracletab[5,]
 #' lines(m/100, Oq3, col = "#E41A1C", lty = 2)
 #' lines(m/100, Nq1, col = "#4DAF4A", lty = 2)
 #' lines(m/100, Nq3, col = "#4DAF4A", lty = 2)
-#' axis(side = 1, at = m/100, labels = m/100)
+#' axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+#' axis(side = 2, cex.axis = 1.4)
 #'
 #' legend(
 #'   "topright",
-#'   inset = c(-0.18, 0),
+#'   inset = c(0.09, 0),
 #'   legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
 #'              expression("q1,q3" ~ bar(Delta) ~ "FS"),
 #'              expression("Med  " ~ bar(Delta) ~ "Oracle"),
@@ -463,12 +465,8 @@ Oq3 <- Oracletab[5,]
 #'              expression("q1,q3" ~ bar(Delta) ~ "Naive")),
 #'   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
 #'   lty = c(1,2,1,2,1,2),
-#'   lwd = c(3,1.5,3,1.5,3,1.5),
-#'   bty = "n",
-#'   y.intersp = 0.8,
-#'   x.intersp = 0.5,
-#'   seg.len = 3,
-#'   cex = 0.9
+#'   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+#'   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
 #' )
 #' ```
 #'
