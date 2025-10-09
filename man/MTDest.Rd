@@ -124,9 +124,7 @@ An EM algorithm for estimation in the Mixture Transition Distribution model.
 \doi{10.1080/00949650701266666}
 }
 \seealso{
-Methods for fitted objects: \code{\link{print.MTDest}},
-\code{\link{summary.MTDest}}, \code{\link{print.summary.MTDest}},
-\code{\link{coef.MTDest}}, \code{\link{logLik.MTDest}}.
+Methods for fitted objects: \code{\link{MTDest-methods}}.
 Model constructor and related utilities: \code{\link{MTDmodel}},
 \code{\link{oscillation}}.
 Coercion helper: \code{\link{as.MTD}}

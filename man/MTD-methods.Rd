@@ -2,33 +2,17 @@
 % Please edit documentation in R/MTDmodel-methods.R
 \name{MTD-methods}
 \alias{MTD-methods}
-\alias{print.MTD}
-\alias{summary.MTD}
-\alias{print.summary.MTD}
-\alias{coef.MTD}
-\alias{logLik.MTD}
 \title{Methods for objects of class \code{"MTD"}}
-\usage{
-\method{print}{MTD}(x, ...)
-
-\method{summary}{MTD}(object, ...)
-
-\method{print}{summary.MTD}(x, ...)
-
-\method{coef}{MTD}(object, ...)
-
-\method{logLik}{MTD}(object, X, ...)
-}
 \arguments{
 \item{x}{An object of class \code{"MTD"} or \code{"summary.MTD"},
 depending on the method.}
-
-\item{...}{Further arguments passed to or from other methods (ignored).}
 
 \item{object}{An object of class \code{"MTD"}.}
 
 \item{X}{A vector or single-column data frame containing an MTD chain sample
 (values must be in the model's state space).}
+
+\item{...}{Further arguments passed to or from other methods (ignored).}
 }
 \value{
 \describe{
@@ -53,9 +37,30 @@ Printing, summarizing, and coefficient-extraction methods for Mixture
 Transition Distribution (MTD) model objects.
 }
 \details{
-\code{print.MTD()} displays the relevant lag set (shown as negative integers)
-and the state space. For a detailed overview including mixture weights and a
-compact preview of the global transition matrix \eqn{P}, use \code{summary()}.
+These methods operate on objects created by \code{\link{MTDmodel}}:
+\itemize{
+\item \code{print.MTD()} displays a compact summary of the model:
+the relevant lag set (shown as negative integers) and the state space.
+
+\item \code{summary.MTD()} collects the key components of the model into
+a list (class \code{"summary.MTD"}) containing order, lags, state
+space, mixture weights, independent distribution (if present),
+the dimension of the global transition matrix \eqn{P}, and a compact
+preview of its first rows.
+
+\item \code{print.summary.MTD()} prints that summary in a readable format,
+including lambdas, transition matrices \eqn{p_j}, the independent
+distribution \eqn{p_0} (if present), and a guide for interpreting the
+rows of the global transition matrix \eqn{P}.
+
+\item \code{coef.MTD()} extracts the model parameters as a list with
+\code{lambdas}, \code{pj}, and \code{p0}.
+
+\item \code{logLik.MTD()} computes the log-likelihood of a sample under the
+model, honoring constraints such as \code{single_matrix} and the
+independent component (\code{indep_part}), and returns an object of
+class \code{"logLik"} with appropriate attributes.
+}
 }
 \examples{
 \dontrun{
@@ -76,7 +81,7 @@ pj(m); p0(m); lambdas(m); lags(m); Lambda(m); states(m)
 \code{\link{MTDmodel}}, \code{\link{MTDest}},
 \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
-\code{\link{summary.MTDest}}, \code{\link{coef.MTDest}},
+\code{\link{MTDest-methods}},
 \code{\link{oscillation}}, \code{\link{perfectSample}},
 \code{\link[stats]{logLik}}
 }
