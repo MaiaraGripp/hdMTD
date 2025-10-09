@@ -30,7 +30,7 @@ library("future.apply")
 precomputed <- readRDS(file = "hdMTD_outputs.rds")
 
 # Set recompute_all = TRUE to override all precomputed results (not recommended)
-recompute_all <- TRUE
+recompute_all <- FALSE
 
 # All procedures that take longer than ~2 minutes were precomputed and stored in
 # hdMTD_outputs.rds, simulated_data.rds or results_sequential_selection.rds.
@@ -249,10 +249,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30           1,15,17,30 
-##             641.7328             643.1757             642.5873             641.3069 
-## smallest: 1,15,17,30 
-##             641.3069
+##                   30                15,30              1,15,30           1,15,17,30 smallest: 1,15,17,30 
+##             641.7328             643.1757             642.5873             641.3069             641.3069
 ```
 
 
@@ -268,10 +266,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30           1,15,17,30 
-##             637.5881             634.1956             628.7718             622.6559 
-## smallest: 1,15,17,30 
-##             622.6559
+##                   30                15,30              1,15,30           1,15,17,30 smallest: 1,15,17,30 
+##             637.5881             634.1956             628.7718             622.6559             622.6559
 ```
 
 
@@ -718,19 +714,6 @@ if (recompute) {
   SFS <- simulated_data$SFS
   ZOracle <- simulated_data$ZOracle
 }
-```
-
-```
-## Using 6 workers
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
 ```
 
 
@@ -1876,16 +1859,6 @@ if (recompute) {
 ```
 
 ```
-## === Starting Sequential Lag Selection ===
-## 
-## [Step 1] Selecting first lag (S = ∅)...
-## Selected: j = 1 (ν = 0.1253)
-## 
-## [Step 2] Selecting second lag (S = {1})...
-## Selected: j = 364 (ν = 0.0216)
-## 
-## [Step 3] Selecting third lag (S = {1,364})...
-## Selected: j = 6 (ν = 0.0165)
 ## 
 ## === Final Selection Results ===
 ##   Step Selected_Lag         nu
@@ -1950,15 +1923,14 @@ sessionInfo()
 ```
 ## R version 4.4.1 (2024-06-14 ucrt)
 ## Platform: x86_64-w64-mingw32/x64
-## Running under: Windows 11 x64 (build 26100)
+## Running under: Windows 11 x64 (build 26200)
 ## 
 ## Matrix products: default
 ## 
 ## 
 ## locale:
-## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
-## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
-## [5] LC_TIME=Portuguese_Brazil.utf8    
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8    LC_MONETARY=Portuguese_Brazil.utf8
+## [4] LC_NUMERIC=C                       LC_TIME=Portuguese_Brazil.utf8    
 ## 
 ## time zone: America/Sao_Paulo
 ## tzcode source: internal
@@ -1967,26 +1939,20 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0        
-##  [5] lubridate_1.9.4     ggplot2_3.5.2       dplyr_1.1.4         knitr_1.48         
-##  [9] hdMTD_0.1.2.9000    testthat_3.2.1.1    devtools_2.4.5      usethis_2.2.3      
+##  [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0         lubridate_1.9.4     ggplot2_3.5.2      
+##  [7] dplyr_1.1.4         knitr_1.48          hdMTD_0.1.2.9000    testthat_3.2.1.1    devtools_2.4.5      usethis_2.2.3      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       xfun_0.52          htmlwidgets_1.6.4  remotes_2.5.0     
-##  [5] vctrs_0.6.5        tools_4.4.1        generics_0.1.4     parallel_4.4.1    
-##  [9] tibble_3.3.0       highr_0.11         pkgconfig_2.0.3    RColorBrewer_1.1-3
-## [13] desc_1.4.3         lifecycle_1.0.4    compiler_4.4.1     farver_2.1.2      
-## [17] stringr_1.5.1      brio_1.1.5         munsell_0.5.1      codetools_0.2-20  
-## [21] litedown_0.7       httpuv_1.6.15      htmltools_0.5.8.1  later_1.3.2       
-## [25] pillar_1.11.0      urlchecker_1.0.1   ellipsis_0.3.2     cachem_1.1.0      
-## [29] sessioninfo_1.2.2  mime_0.12          parallelly_1.45.1  commonmark_2.0.0  
-## [33] tidyselect_1.2.1   digest_0.6.36      stringi_1.8.4      listenv_0.9.1     
-## [37] labeling_0.4.3     rprojroot_2.0.4    fastmap_1.2.0      grid_4.4.1        
-## [41] colorspace_2.1-1   cli_3.6.5          magrittr_2.0.3     pkgbuild_1.4.4    
-## [45] withr_3.0.2        scales_1.3.0       promises_1.3.0     timechange_0.3.0  
-## [49] globals_0.18.0     memoise_2.0.1      shiny_1.8.1.1      evaluate_0.24.0   
-## [53] miniUI_0.1.1.1     markdown_2.0       profvis_0.3.8      rlang_1.1.6       
-## [57] Rcpp_1.0.13-1      xtable_1.8-4       glue_1.8.0         pkgload_1.4.0     
+##  [1] gtable_0.3.5       xfun_0.52          htmlwidgets_1.6.4  remotes_2.5.0      vctrs_0.6.5        tools_4.4.1       
+##  [7] generics_0.1.4     parallel_4.4.1     tibble_3.3.0       highr_0.11         pkgconfig_2.0.3    RColorBrewer_1.1-3
+## [13] desc_1.4.3         lifecycle_1.0.4    compiler_4.4.1     farver_2.1.2       stringr_1.5.1      brio_1.1.5        
+## [19] munsell_0.5.1      codetools_0.2-20   litedown_0.7       httpuv_1.6.15      htmltools_0.5.8.1  later_1.3.2       
+## [25] pillar_1.11.0      urlchecker_1.0.1   ellipsis_0.3.2     cachem_1.1.0       sessioninfo_1.2.2  mime_0.12         
+## [31] parallelly_1.45.1  commonmark_2.0.0   tidyselect_1.2.1   digest_0.6.36      stringi_1.8.4      listenv_0.9.1     
+## [37] labeling_0.4.3     rprojroot_2.0.4    fastmap_1.2.0      grid_4.4.1         colorspace_2.1-1   cli_3.6.5         
+## [43] magrittr_2.0.3     pkgbuild_1.4.4     withr_3.0.2        scales_1.3.0       promises_1.3.0     timechange_0.3.0  
+## [49] globals_0.18.0     memoise_2.0.1      shiny_1.8.1.1      evaluate_0.24.0    miniUI_0.1.1.1     markdown_2.0      
+## [55] profvis_0.3.8      rlang_1.1.6        Rcpp_1.0.13-1      xtable_1.8-4       glue_1.8.0         pkgload_1.4.0     
 ## [61] rstudioapi_0.16.0  R6_2.6.1           fs_1.6.4
 ```
 
