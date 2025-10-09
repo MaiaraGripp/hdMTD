@@ -8,127 +8,24 @@
 ###  An R Package for High-Dimensional Mixture Transition
 ###  Distribution Models"
 ###
-### Authors: Maiara Gripp, Guilherme Ost, Giulio Iacobelli, Daniel Y. Takahashi
-### Date: July 2025
+### Authors: Maiara Gripp, Giulio Iacobelli, Guilherme Ost, Daniel Y. Takahashi
+### Date: October 2025
 ####################################################
 
 # Required packages:
-# install.packages(c("hdMTD", "dplyr", "ggplot2", "lubridate", "purrr", "tidyr"))
+# install.packages(c("hdMTD", "dplyr", "ggplot2","lubridate", "purrr", "tidyr", "future", "future.apply"))
 
 ## Load packages
 library("hdMTD")
 library("dplyr")
-```
-
-```
-## Warning: pacote 'dplyr' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'dplyr'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:testthat':
-## 
-##     matches
-```
-
-```
-## Os seguintes objetos são mascarados por 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## Os seguintes objetos são mascarados por 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-``` r
 library("ggplot2")
-```
-
-```
-## Warning: pacote 'ggplot2' foi compilado no R versão 4.4.3
-```
-
-``` r
 library("lubridate")
-```
-
-```
-## Warning: pacote 'lubridate' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'lubridate'
-```
-
-```
-## Os seguintes objetos são mascarados por 'package:base':
-## 
-##     date, intersect, setdiff, union
-```
-
-``` r
 library("purrr")
-```
-
-```
-## Warning: pacote 'purrr' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'purrr'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:testthat':
-## 
-##     is_null
-```
-
-``` r
 library("tidyr")
-```
-
-```
-## Warning: pacote 'tidyr' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'tidyr'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:testthat':
-## 
-##     matches
-```
-
-``` r
 library("future")
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-``` r
 library("future.apply")
-```
 
-```
-## Warning: pacote 'future.apply' foi compilado no R versão 4.4.3
-```
 
-``` r
 ## Load precomputed outputs
 precomputed <- readRDS(file = "hdMTD_outputs.rds")
 
@@ -136,9 +33,19 @@ precomputed <- readRDS(file = "hdMTD_outputs.rds")
 recompute_all <- FALSE
 
 # All procedures that take longer than ~2 minutes were precomputed and stored in
-# hdMTD_outputs.rds, simulated_data.rds and results_sequential_selection.rds.
+# hdMTD_outputs.rds, simulated_data.rds or results_sequential_selection.rds.
 # To recompute any of them, set the corresponding `recompute <- TRUE` block to
-# activate the code.
+# activate the code. For each recompute block, an estimated runtime (on i7-1255U
+# 10 cores) is provided.
+
+# One procedure takes much longer than the others: the check that the
+# estimation error converges to the minimal error over 100 samples in section 5.3.
+# The average runtime per sample is about 90 minutes.
+# This procedure was run in parallel using 6 workers, and took roughly 1 day to
+# complete. The total runtime depends on the number of workers: for W workers,
+# the expected runtime is approximately ceiling(100 / W) * 90 minutes. Adjust the
+# number of workers (n_workers at section 5.3) accordingly before recomputing
+# this step.
 ```
 
 ## Section 5: Using hdMTD
@@ -275,9 +182,9 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 
 ``` r
 if (recompute) {
-  hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min (on i7-1255U, 10 cores).
+  hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min.
 } else {
-  precomputed$BIC_d40_l4
+  print(precomputed$BIC_d40_l4)
 }
 ```
 
@@ -369,7 +276,7 @@ hdMTD_BIC(X, d = 40,
 
 
 ``` r
-recompute <-  TRUE
+recompute <-  FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 ```
 
@@ -380,7 +287,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40)) #takes ~2.5min.
 } else {
-  precomputed$CUT_d40
+  print(precomputed$CUT_d40)
 }
 ```
 
@@ -392,7 +299,7 @@ if (recompute) {
 
 
 ``` r
-recompute <-  TRUE
+recompute <-  FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 ```
 
@@ -403,7 +310,7 @@ Setting $\alpha = 0.13$
 if (recompute) {
   hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40), alpha = 0.13) #takes ~2.5min.
 } else {
-  precomputed$CUT_d40_alpha
+  print(precomputed$CUT_d40_alpha)
 }
 ```
 
@@ -699,29 +606,51 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 
 if (recompute) {
 
-  FSP <- matrix(0, ncol = length(m), nrow = n)
   FS  <- matrix(0, ncol = length(m), nrow = n)
-  NaiveP <- matrix(0, ncol = length(m), nrow = n)
   Naive  <- matrix(0, ncol = length(m), nrow = n)
-  OracleP <- matrix(0, ncol = length(m), nrow = n)
   Oracle  <- matrix(0, ncol = length(m), nrow = n)
   SFS     <- matrix(0, ncol = length(m) * 2, nrow = n)
   ZOracle <- matrix(0, ncol = length(m) * 2, nrow = n)
 
   X_list <- vector("list", n)
   for (i in seq_len(n)) {
-    X_list[[i]] <- perfectSample(MTD, N = N)
+    X_list[[i]] <- perfectSample(MTD, N = N) # Generates n samples of size N
   }
 
-  # 2) Paralel per replication
-  workers <- max(1, parallel::detectCores() - 1)
+  # Parallel
+  # Limit internal BLAS/OpenMP threads to avoid oversubscription across worker
+  Sys.setenv(OMP_NUM_THREADS = "1",
+             MKL_NUM_THREADS = "1",
+             OPENBLAS_NUM_THREADS = "1",
+             BLIS_NUM_THREADS = "1")
+
+  # Detect cores and choose a safe number of workers
+  get_smart_workers <- function() {
+    physical_cores <- parallel::detectCores(logical = FALSE)
+
+    if (physical_cores >= 10) {
+      return(6)
+    } else if (physical_cores >= 6) {
+      return(4)
+    } else if (physical_cores >= 4) {
+      return(2)
+    } else {
+      return(1)
+    }
+  }
+
+  # Manually assign number of workers (n_workers) or leave NULL for automatic choice.
+  n_workers <- NULL
+  workers <- ifelse(is.null(n_workers), get_smart_workers(), n_workers)
+  message(sprintf("Using %d workers", workers))
   plan(multisession, workers = workers)
   on.exit(plan(sequential), add = TRUE)
+  op <- options(future.scheduling = 1)
+  on.exit(options(op), add = TRUE)
 
-  res_list <- future_lapply(seq_len(n), function(i) {
-    X <- X_list[[i]]
-
-    FS_i <- FSP_i <- Naive_i <- NaiveP_i <- Oracle_i <- OracleP_i <- numeric(length(m))
+  # Parallelize over replications
+  one_rep <- function(X) {
+    FS_i <- Naive_i <- Oracle_i <- numeric(length(m))
     SFS_row <- ZOracle_row <- integer(length(m) * 2)
 
     for (k in seq_along(m)) {
@@ -732,16 +661,12 @@ if (recompute) {
       S <- hdMTD_FS(Y, d = d, l = 2)
       SFS_row[(k * 2 - 1):(k * 2)] <- S
       p_FS <- freqTab(S = S, A = A, countsTab = ct)$qax_Sj[1]
-      err_FS <- abs(p_FS - MTD$P[1, 1])
-      FS_i[k]  <- err_FS
-      FSP_i[k] <- err_FS / minP11_P12
+      FS_i[k]  <- abs(p_FS - MTD$P[1, 1])
 
       # Naive
       ct_dNaive <- countsTab(Y, dNaive)
       p_Naive <- freqTab(S = seq_len(dNaive), A = A, countsTab = ct_dNaive)$qax_Sj[1]
-      err_NV <- abs(p_Naive - MTD$P[1, 1])
-      Naive_i[k]  <- err_NV
-      NaiveP_i[k] <- err_NV / minP11_P12
+      Naive_i[k]  <- abs(p_Naive - MTD$P[1, 1])
 
       # Oracle
       p_pairs <- numeric(npairs)
@@ -751,24 +676,31 @@ if (recompute) {
       minpos <- which.min(abs(p_pairs - MTD$P[1, 1]))
       ZOracle_row[(k * 2 - 1):(k * 2)] <- pairList[minpos, ]
       p_Oracle <- p_pairs[minpos]
-      err_OR <- abs(p_Oracle - MTD$P[1, 1])
-      Oracle_i[k]  <- err_OR
-      OracleP_i[k] <- err_OR / minP11_P12
+      Oracle_i[k]  <- abs(p_Oracle - MTD$P[1, 1])
     }
 
-    list(FS=FS_i, FSP=FSP_i, Naive=Naive_i, NaiveP=NaiveP_i,
-         Oracle=Oracle_i, OracleP=OracleP_i,
-         SFS=SFS_row, ZOracle=ZOracle_row)
-  })
+    list(FS = FS_i, Naive = Naive_i, Oracle = Oracle_i,
+         SFS = SFS_row, ZOracle = ZOracle_row)
+  }
 
-  FS      <- do.call(rbind, lapply(res_list, `[[`, "FS"))
-  FSP     <- do.call(rbind, lapply(res_list, `[[`, "FSP"))
-  Naive   <- do.call(rbind, lapply(res_list, `[[`, "Naive"))
-  NaiveP  <- do.call(rbind, lapply(res_list, `[[`, "NaiveP"))
-  Oracle  <- do.call(rbind, lapply(res_list, `[[`, "Oracle"))
-  OracleP <- do.call(rbind, lapply(res_list, `[[`, "OracleP"))
-  SFS     <- do.call(rbind, lapply(res_list, `[[`, "SFS"))
-  ZOracle <- do.call(rbind, lapply(res_list, `[[`, "ZOracle"))
+  indices_to_run <- seq_len(n)
+  chunks <- split(indices_to_run, ceiling(seq_along(indices_to_run) / workers))
+
+  # Note that, given X_list the following loop is deterministic
+  for (bi in seq_along(chunks)) { #takes ~ceiling(100/workers)*90 minutes to run)
+    rows <- chunks[[bi]]
+    res_block <- future_lapply(X_list[rows], one_rep, future.seed = TRUE)
+
+    #Fill block lines
+    FS[rows, ]      <- do.call(rbind, lapply(res_block, `[[`, "FS"))
+    Naive[rows, ]   <- do.call(rbind, lapply(res_block, `[[`, "Naive"))
+    Oracle[rows, ]  <- do.call(rbind, lapply(res_block, `[[`, "Oracle"))
+    SFS[rows, ]     <- do.call(rbind, lapply(res_block, `[[`, "SFS"))
+    ZOracle[rows, ] <- do.call(rbind, lapply(res_block, `[[`, "ZOracle"))
+  }
+  FSP <- FS/minP11_P12
+  OracleP <- Oracle/minP11_P12
+  NaiveP <- Naive/minP11_P12
 
 } else {
   #' Load precomputed results from `simulated_data.rds`
@@ -821,12 +753,12 @@ Table: Mean error of estimators
 
 |                     |    1000|    1500|    2000|    2500|    3000|    5000|   10000|
 |:--------------------|-------:|-------:|-------:|-------:|-------:|-------:|-------:|
-|Delta_FS(m)          | 0.02847| 0.02026| 0.01752| 0.01561| 0.01442| 0.01010| 0.00681|
-|Delta_Oracle(m)      | 0.00728| 0.00916| 0.01104| 0.01167| 0.01150| 0.00971| 0.00681|
-|Delta_Naive,5(m)     | 0.06786| 0.05845| 0.05534| 0.04974| 0.04485| 0.03412| 0.02508|
-|std Delta_FS(m)      | 0.06469| 0.04605| 0.03981| 0.03547| 0.03278| 0.02295| 0.01547|
-|std Delta_Oracle(m)  | 0.01655| 0.02081| 0.02509| 0.02651| 0.02614| 0.02207| 0.01547|
-|std Delta_Naive,5(m) | 0.15420| 0.13281| 0.12577| 0.11303| 0.10193| 0.07753| 0.05700|
+|Delta_FS(m)          | 0.03279| 0.01940| 0.01686| 0.01492| 0.01438| 0.00980| 0.00649|
+|Delta_Oracle(m)      | 0.00844| 0.01006| 0.01201| 0.01143| 0.01194| 0.00971| 0.00649|
+|Delta_Naive,5(m)     | 0.06898| 0.05988| 0.05072| 0.04862| 0.04381| 0.03072| 0.02330|
+|std Delta_FS(m)      | 0.07452| 0.04410| 0.03832| 0.03390| 0.03268| 0.02228| 0.01475|
+|std Delta_Oracle(m)  | 0.01917| 0.02287| 0.02729| 0.02598| 0.02714| 0.02207| 0.01475|
+|std Delta_Naive,5(m) | 0.15676| 0.13608| 0.11525| 0.11049| 0.09957| 0.06980| 0.05296|
 
 4. Compute how often the FS output differs from Oracle by subsample size
 
@@ -844,7 +776,7 @@ SFS_vs_ZOracle_diff
 
 ```
 ##  1000  1500  2000  2500  3000  5000 10000 
-##    73    52    35    26    19     5     0
+##    74    46    33    25    18     3     0
 ```
 
 
@@ -903,56 +835,81 @@ Oq3 <- Oracletab[5,]
 ### Plot Figure 1: Estimators mean error across $N_{rep}=100$ replications.
 
 ``` r
-par(mfrow=c(1,2))
+par(mfrow = c(1,2), oma = c(0,0,0,0))
 
-# --- Left panel: Mean error with standard deviation bands ---
- plot(m/100, Fmean, type = "l", col = "#377EB8",
-      xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.06),lwd=3,
-      frame.plot = FALSE, xaxt="n", xlim = c(10,100))
- lines(m/100, Omean, type = "l", col = "#E41A1C",lwd=3)
- lines(m/100, Nmean, type = "l", col = "#4DAF4A",lwd=3)
- points(m/100, Fmean, col = "#377EB8", pch=19,cex=0.7)
- points(m/100, Omean, col = "#E41A1C", pch=19,cex=0.7)
- points(m/100, Nmean, col = "#4DAF4A", pch=19,cex=0.7)
- lines(m/100, FsdUp, type = "l", col = "#377EB8", lty = 2)
- lines(m/100, FsdLo, type = "l", col = "#377EB8", lty = 2)
- lines(m/100, OsdUp, type = "l", col = "#E41A1C", lty = 2)
- lines(m/100, OsdLo, type = "l", col = "#E41A1C", lty = 2)
- lines(m/100, NsdUp, type = "l", col = "#4DAF4A", lty = 2)
- lines(m/100, NsdLo, type = "l", col = "#4DAF4A", lty = 2)
- axis(side = 1, at = m/100, labels = m/100)
- legend("topright",
-        legend = c(expression(bar(Delta) ~ "FS"),
-                   expression(bar(Delta) ~ "FS" %+-% "sd"),
-                   expression(bar(Delta) ~ "Oracle"),
-                   expression(bar(Delta) ~ "Oracle" %+-% "sd"),
-                   expression(bar(Delta) ~ "Naive"),
-                   expression(bar(Delta) ~ "Naive" %+-% "sd")),
-        col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"), lty = c(1,3,1,3,1,3), bty = "n")
- # --- Right panel: Median and quartiles ---
- plot(m/100, Fq2, type = "l", col = "#377EB8",
-      xlab = "m (x100)", ylab = "Quartiles of mean error", ylim = c(0, 0.06),lwd=3,
-      frame.plot = FALSE, xaxt="n", xlim = c(10,100), lty=1)
- lines(m/100, Oq2, type = "l", col = "#E41A1C",lwd=3, lty=1)
- lines(m/100, Nq2, type = "l", col = "#4DAF4A",lwd=3, lty=1)
- points(m/100, Fq2, col = "#377EB8", pch=19,cex=0.7)
- points(m/100, Oq2, col = "#E41A1C", pch=19,cex=0.7)
- points(m/100, Nq2, col = "#4DAF4A", pch=19,cex=0.7)
- lines(m/100, Fq1, type = "l", col = "#377EB8", lty = 2)
- lines(m/100, Fq3, type = "l", col = "#377EB8", lty = 2)
- lines(m/100, Oq1, type = "l", col = "#E41A1C", lty = 2)
- lines(m/100, Oq3, type = "l", col = "#E41A1C", lty = 2)
- lines(m/100, Nq1, type = "l", col = "#4DAF4A", lty = 2)
- lines(m/100, Nq3, type = "l", col = "#4DAF4A", lty = 2)
- axis(side = 1, at = m/100, labels = m/100)
- legend("topright",
-        legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
-                   expression("q1,q3" ~ bar(Delta) ~ "FS"),
-                   expression("Med  " ~ bar(Delta) ~ "Oracle"),
-                   expression("q1,q3" ~ bar(Delta) ~ "Oracle"),
-                   expression("Med  " ~ bar(Delta) ~ "Naive"),
-                   expression("q1,q3" ~ bar(Delta) ~ "Naive")),
-        col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"), lty = c(1,3,1,3,1,3), bty = "n")
+## --- Left panel: Mean error with standard deviation bands ---
+par(mar = c(5,5,3,4), xpd = NA)
+
+plot(m/100, Fmean, type = "l", col = "#377EB8",
+     xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.12), lwd = 3,
+     frame.plot = FALSE, xaxt = "n", yaxt = "n", xlim = c(10,100),
+     cex.axis = 1.4, cex.lab = 1.6)
+lines(m/100, Omean, col = "#E41A1C", lwd = 3)
+lines(m/100, Nmean, col = "#4DAF4A", lwd = 3)
+points(m/100, Fmean, col = "#377EB8", pch = 19, cex = 0.7)
+points(m/100, Omean, col = "#E41A1C", pch = 19, cex = 0.7)
+points(m/100, Nmean, col = "#4DAF4A", pch = 19, cex = 0.7)
+lines(m/100, FsdUp, col = "#377EB8", lty = 2)
+lines(m/100, FsdLo, col = "#377EB8", lty = 2)
+lines(m/100, OsdUp, col = "#E41A1C", lty = 2)
+lines(m/100, OsdLo, col = "#E41A1C", lty = 2)
+cap <- 0.12
+NsdUp_cut <- ifelse(NsdUp > cap, NA, NsdUp)
+lines(m/100, NsdUp_cut, col = "#4DAF4A", lty = 2)
+lines(m/100, NsdLo, col = "#4DAF4A", lty = 2)
+axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+axis(side = 2, cex.axis = 1.4)
+
+legend(
+  "topright",
+  inset = c(0.05, 0),
+  legend = c(expression(bar(Delta) ~ "FS"),
+             expression(bar(Delta) ~ "FS" %+-% "sd"),
+             expression(bar(Delta) ~ "Oracle"),
+             expression(bar(Delta) ~ "Oracle" %+-% "sd"),
+             expression(bar(Delta) ~ "Naive"),
+             expression(bar(Delta) ~ "Naive" %+-% "sd")),
+  col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
+  lty = c(1,2,1,2,1,2),
+  lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+  y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
+)
+
+## --- Right panel: Median and quartiles ---
+par(mar = c(5,5,3,4), xpd = NA)
+
+plot(m/100, Fq2, type = "l", col = "#377EB8",
+     xlab = "m (x100)", ylab = "Quartiles of mean error",
+     ylim = c(0, 0.12), lwd = 3, frame.plot = FALSE, xaxt = "n", yaxt = "n",
+     xlim = c(10,100), cex.axis = 1.4, cex.lab = 1.6)
+lines(m/100, Oq2, col = "#E41A1C", lwd = 3)
+lines(m/100, Nq2, col = "#4DAF4A", lwd = 3)
+points(m/100, Fq2, col = "#377EB8", pch = 19, cex = 0.7)
+points(m/100, Oq2, col = "#E41A1C", pch = 19, cex = 0.7)
+points(m/100, Nq2, col = "#4DAF4A", pch = 19, cex = 0.7)
+lines(m/100, Fq1, col = "#377EB8", lty = 2)
+lines(m/100, Fq3, col = "#377EB8", lty = 2)
+lines(m/100, Oq1, col = "#E41A1C", lty = 2)
+lines(m/100, Oq3, col = "#E41A1C", lty = 2)
+lines(m/100, Nq1, col = "#4DAF4A", lty = 2)
+lines(m/100, Nq3, col = "#4DAF4A", lty = 2)
+axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+axis(side = 2, cex.axis = 1.4)
+
+legend(
+  "topright",
+  inset = c(0.09, 0),
+  legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
+             expression("q1,q3" ~ bar(Delta) ~ "FS"),
+             expression("Med  " ~ bar(Delta) ~ "Oracle"),
+             expression("q1,q3" ~ bar(Delta) ~ "Oracle"),
+             expression("Med  " ~ bar(Delta) ~ "Naive"),
+             expression("q1,q3" ~ bar(Delta) ~ "Naive")),
+  col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
+  lty = c(1,2,1,2,1,2),
+  lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+  y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
+)
 ```
 
 ![plot of chunk fig1-plot](figure/fig1-plot-1.png)
@@ -1124,7 +1081,7 @@ oldest.
 
 
 ``` r
-recompute <- TRUE
+recompute <- FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 ```
 
@@ -1135,7 +1092,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FS(Temp12, d = 400, l = 3) #takes ~7min.
 } else {
-  precomputed$FS_Temp12_d400
+  print(precomputed$FS_Temp12_d400)
 }
 ```
 
@@ -1160,7 +1117,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FS(Temp12, d = 364, l = 3) #takes ~6min.
 } else {
-  precomputed$FS_Temp12_d364
+  print(precomputed$FS_Temp12_d364)
 }
 ```
 
@@ -1186,7 +1143,7 @@ Temp12_Test <- Temp12[seq_len(ndays)] # Test data
 
 
 ``` r
-recompute <-  TRUE
+recompute <-  FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 ```
 
@@ -1197,7 +1154,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FS(Temp12_Train, d = 364, l = 3) #takes ~5min.
 } else {
-  precomputed$FS_Temp12Train
+  print(precomputed$FS_Temp12Train)
 }
 ```
 
@@ -1237,7 +1194,7 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 
 
 ``` r
-recompute <-  TRUE
+recompute <-  FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 ```
 
@@ -1248,7 +1205,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
 } else {
-  precomputed$FSC_Temp12Train
+  print(precomputed$FSC_Temp12Train)
 }
 ```
 
@@ -1889,7 +1846,7 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
 
 
 ``` r
-recompute <-  TRUE
+recompute <-  FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   results <- run_sequential_lag_selection(Temp12_Train) #takes ~6 min
@@ -1902,16 +1859,6 @@ if (recompute) {
 ```
 
 ```
-## === Starting Sequential Lag Selection ===
-## 
-## [Step 1] Selecting first lag (S = ∅)...
-## Selected: j = 1 (ν = 0.1253)
-## 
-## [Step 2] Selecting second lag (S = {1})...
-## Selected: j = 364 (ν = 0.0216)
-## 
-## [Step 3] Selecting third lag (S = {1,364})...
-## Selected: j = 6 (ν = 0.0165)
 ## 
 ## === Final Selection Results ===
 ##   Step Selected_Lag         nu
@@ -1976,7 +1923,7 @@ sessionInfo()
 ```
 ## R version 4.4.1 (2024-06-14 ucrt)
 ## Platform: x86_64-w64-mingw32/x64
-## Running under: Windows 11 x64 (build 26100)
+## Running under: Windows 11 x64 (build 26200)
 ## 
 ## Matrix products: default
 ## 
@@ -1993,21 +1940,19 @@ sessionInfo()
 ## 
 ## other attached packages:
 ##  [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0         lubridate_1.9.4     ggplot2_3.5.2      
-##  [7] dplyr_1.1.4         hdMTD_0.1.2         testthat_3.2.1.1    devtools_2.4.5      usethis_2.2.3      
+##  [7] dplyr_1.1.4         knitr_1.48          hdMTD_0.1.2.9000    testthat_3.2.1.1    devtools_2.4.5      usethis_2.2.3      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.2.1   farver_2.1.2       fastmap_1.2.0      xopen_1.0.1        promises_1.3.0     digest_0.6.36     
-##  [7] timechange_0.3.0   mime_0.12          lifecycle_1.0.4    waldo_0.5.2        ellipsis_0.3.2     processx_3.8.4    
-## [13] magrittr_2.0.3     compiler_4.4.1     rlang_1.1.6        tools_4.4.1        knitr_1.48         labeling_0.4.3    
-## [19] prettyunits_1.2.0  htmlwidgets_1.6.4  pkgbuild_1.4.4     curl_5.2.1         RColorBrewer_1.1-3 xml2_1.3.6        
-## [25] pkgload_1.4.0      miniUI_0.1.1.1     withr_3.0.2        desc_1.4.3         grid_4.4.1         fansi_1.0.6       
-## [31] roxygen2_7.3.2     diffobj_0.3.5      urlchecker_1.0.1   profvis_0.3.8      xtable_1.8-4       colorspace_2.1-1  
-## [37] globals_0.18.0     scales_1.3.0       cli_3.6.5          crayon_1.5.3       generics_0.1.4     remotes_2.5.0     
-## [43] rstudioapi_0.16.0  commonmark_2.0.0   sessioninfo_1.2.2  cachem_1.1.0       stringr_1.5.1      parallel_4.4.1    
-## [49] vctrs_0.6.5        callr_3.7.6        rcmdcheck_1.4.0    listenv_0.9.1      glue_1.8.0         parallelly_1.45.1 
-## [55] rematch2_2.1.2     codetools_0.2-20   ps_1.7.7           stringi_1.8.4      gtable_0.3.5       later_1.3.2       
-## [61] munsell_0.5.1      tibble_3.3.0       pillar_1.11.0      htmltools_0.5.8.1  brio_1.1.5         R6_2.6.1          
-## [67] rprojroot_2.0.4    shiny_1.8.1.1      evaluate_0.24.0    highr_0.11         memoise_2.0.1      httpuv_1.6.15     
-## [73] Rcpp_1.0.13-1      xfun_0.52          fs_1.6.4           pkgconfig_2.0.3
+##  [1] gtable_0.3.5       xfun_0.52          htmlwidgets_1.6.4  remotes_2.5.0      vctrs_0.6.5        tools_4.4.1       
+##  [7] generics_0.1.4     parallel_4.4.1     tibble_3.3.0       highr_0.11         pkgconfig_2.0.3    RColorBrewer_1.1-3
+## [13] desc_1.4.3         lifecycle_1.0.4    compiler_4.4.1     farver_2.1.2       stringr_1.5.1      brio_1.1.5        
+## [19] munsell_0.5.1      codetools_0.2-20   litedown_0.7       httpuv_1.6.15      htmltools_0.5.8.1  later_1.3.2       
+## [25] pillar_1.11.0      urlchecker_1.0.1   ellipsis_0.3.2     cachem_1.1.0       sessioninfo_1.2.2  mime_0.12         
+## [31] parallelly_1.45.1  commonmark_2.0.0   tidyselect_1.2.1   digest_0.6.36      stringi_1.8.4      listenv_0.9.1     
+## [37] labeling_0.4.3     rprojroot_2.0.4    fastmap_1.2.0      grid_4.4.1         colorspace_2.1-1   cli_3.6.5         
+## [43] magrittr_2.0.3     pkgbuild_1.4.4     withr_3.0.2        scales_1.3.0       promises_1.3.0     timechange_0.3.0  
+## [49] globals_0.18.0     memoise_2.0.1      shiny_1.8.1.1      evaluate_0.24.0    miniUI_0.1.1.1     markdown_2.0      
+## [55] profvis_0.3.8      rlang_1.1.6        Rcpp_1.0.13-1      xtable_1.8-4       glue_1.8.0         pkgload_1.4.0     
+## [61] rstudioapi_0.16.0  R6_2.6.1           fs_1.6.4
 ```
 

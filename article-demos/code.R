@@ -5,8 +5,8 @@
 ###  An R Package for High-Dimensional Mixture Transition
 ###  Distribution Models"
 ###
-### Authors: Maiara Gripp, Guilherme Ost, Giulio Iacobelli, Daniel Y. Takahashi
-### Date: July 2025
+### Authors: Maiara Gripp, Giulio Iacobelli, Guilherme Ost, Daniel Y. Takahashi
+### Date: October 2025
 ####################################################
 
 # Required packages:
@@ -27,12 +27,22 @@ library("future.apply")
 precomputed <- readRDS(file = "hdMTD_outputs.rds")
 
 # Set recompute_all = TRUE to override all precomputed results (not recommended)
-recompute_all <- TRUE
+recompute_all <- FALSE
 
 # All procedures that take longer than ~2 minutes were precomputed and stored in
-# hdMTD_outputs.rds, simulated_data.rds and results_sequential_selection.rds.
+# hdMTD_outputs.rds, simulated_data.rds or results_sequential_selection.rds.
 # To recompute any of them, set the corresponding `recompute <- TRUE` block to
-# activate the code.
+# activate the code. For each recompute block, an estimated runtime (on i7-1255U
+# 10 cores) is provided.
+
+# One procedure takes much longer than the others: the check that the
+# estimation error converges to the minimal error over 100 samples in section 5.3.
+# The average runtime per sample is about 90 minutes.
+# This procedure was run in parallel using 6 workers, and took roughly 1 day to
+# complete. The total runtime depends on the number of workers: for W workers,
+# the expected runtime is approximately ceiling(100 / W) * 90 minutes. Adjust the
+# number of workers (n_workers at section 5.3) accordingly before recomputing
+# this step.
 
 #' ## Section 5: Using hdMTD
 #' ### 5.1 Data generation
@@ -71,9 +81,9 @@ recompute <-  FALSE
 recompute <- ifelse(recompute_all, TRUE, recompute)
 #'
 if (recompute) {
-  hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min (on i7-1255U, 10 cores).
+  hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min.
 } else {
-  precomputed$BIC_d40_l4
+  print(precomputed$BIC_d40_l4)
 }
 #'
 #' Custom subset S
@@ -114,7 +124,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40)) #takes ~2.5min.
 } else {
-  precomputed$CUT_d40
+  print(precomputed$CUT_d40)
 }
 #'
 recompute <-  FALSE
@@ -123,7 +133,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40), alpha = 0.13) #takes ~2.5min.
 } else {
-  precomputed$CUT_d40_alpha
+  print(precomputed$CUT_d40_alpha)
 }
 #'
 #' Custom subset S
@@ -201,21 +211,18 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 
 if (recompute) {
 
-  FSP <- matrix(0, ncol = length(m), nrow = n)
   FS  <- matrix(0, ncol = length(m), nrow = n)
-  NaiveP <- matrix(0, ncol = length(m), nrow = n)
   Naive  <- matrix(0, ncol = length(m), nrow = n)
-  OracleP <- matrix(0, ncol = length(m), nrow = n)
   Oracle  <- matrix(0, ncol = length(m), nrow = n)
   SFS     <- matrix(0, ncol = length(m) * 2, nrow = n)
   ZOracle <- matrix(0, ncol = length(m) * 2, nrow = n)
 
   X_list <- vector("list", n)
   for (i in seq_len(n)) {
-    X_list[[i]] <- perfectSample(MTD, N = N)
+    X_list[[i]] <- perfectSample(MTD, N = N) # Generates n samples of size N
   }
 
-  # Paralel
+  # Parallel
   # Limit internal BLAS/OpenMP threads to avoid oversubscription across worker
   Sys.setenv(OMP_NUM_THREADS = "1",
              MKL_NUM_THREADS = "1",
@@ -223,22 +230,32 @@ if (recompute) {
              BLIS_NUM_THREADS = "1")
 
   # Detect cores and choose a safe number of workers
-  logical_cores  <- parallel::detectCores(logical = TRUE)
-  physical_cores <- parallel::detectCores(logical = FALSE)
+  get_smart_workers <- function() {
+    physical_cores <- parallel::detectCores(logical = FALSE)
 
-  workers <- max(1L, min(physical_cores - 1L, n))
+    if (physical_cores >= 10) {
+      return(6)
+    } else if (physical_cores >= 6) {
+      return(4)
+    } else if (physical_cores >= 4) {
+      return(2)
+    } else {
+      return(1)
+    }
+  }
 
+  # Manually assign number of workers (n_workers) or leave NULL for automatic choice.
+  n_workers <- NULL
+  workers <- ifelse(is.null(n_workers), get_smart_workers(), n_workers)
+  message(sprintf("Using %d workers", workers))
   plan(multisession, workers = workers)
   on.exit(plan(sequential), add = TRUE)
-
   op <- options(future.scheduling = 1)
   on.exit(options(op), add = TRUE)
 
   # Parallelize over replications
-  res_list <- future_lapply(seq_len(n), function(i) {
-    X <- X_list[[i]]
-
-    FS_i <- FSP_i <- Naive_i <- NaiveP_i <- Oracle_i <- OracleP_i <- numeric(length(m))
+  one_rep <- function(X) {
+    FS_i <- Naive_i <- Oracle_i <- numeric(length(m))
     SFS_row <- ZOracle_row <- integer(length(m) * 2)
 
     for (k in seq_along(m)) {
@@ -249,16 +266,12 @@ if (recompute) {
       S <- hdMTD_FS(Y, d = d, l = 2)
       SFS_row[(k * 2 - 1):(k * 2)] <- S
       p_FS <- freqTab(S = S, A = A, countsTab = ct)$qax_Sj[1]
-      err_FS <- abs(p_FS - MTD$P[1, 1])
-      FS_i[k]  <- err_FS
-      FSP_i[k] <- err_FS / minP11_P12
+      FS_i[k]  <- abs(p_FS - MTD$P[1, 1])
 
       # Naive
       ct_dNaive <- countsTab(Y, dNaive)
       p_Naive <- freqTab(S = seq_len(dNaive), A = A, countsTab = ct_dNaive)$qax_Sj[1]
-      err_NV <- abs(p_Naive - MTD$P[1, 1])
-      Naive_i[k]  <- err_NV
-      NaiveP_i[k] <- err_NV / minP11_P12
+      Naive_i[k]  <- abs(p_Naive - MTD$P[1, 1])
 
       # Oracle
       p_pairs <- numeric(npairs)
@@ -268,26 +281,31 @@ if (recompute) {
       minpos <- which.min(abs(p_pairs - MTD$P[1, 1]))
       ZOracle_row[(k * 2 - 1):(k * 2)] <- pairList[minpos, ]
       p_Oracle <- p_pairs[minpos]
-      err_OR <- abs(p_Oracle - MTD$P[1, 1])
-      Oracle_i[k]  <- err_OR
-      OracleP_i[k] <- err_OR / minP11_P12
+      Oracle_i[k]  <- abs(p_Oracle - MTD$P[1, 1])
     }
 
-    list(FS = FS_i, FSP = FSP_i, Naive = Naive_i, NaiveP = NaiveP_i,
-         Oracle = Oracle_i, OracleP = OracleP_i,
+    list(FS = FS_i, Naive = Naive_i, Oracle = Oracle_i,
          SFS = SFS_row, ZOracle = ZOracle_row)
-    },
-    future.seed = TRUE # reproducible given set.seed(...)
-  )
+  }
 
-  FS      <- do.call(rbind, lapply(res_list, `[[`, "FS"))
-  FSP     <- do.call(rbind, lapply(res_list, `[[`, "FSP"))
-  Naive   <- do.call(rbind, lapply(res_list, `[[`, "Naive"))
-  NaiveP  <- do.call(rbind, lapply(res_list, `[[`, "NaiveP"))
-  Oracle  <- do.call(rbind, lapply(res_list, `[[`, "Oracle"))
-  OracleP <- do.call(rbind, lapply(res_list, `[[`, "OracleP"))
-  SFS     <- do.call(rbind, lapply(res_list, `[[`, "SFS"))
-  ZOracle <- do.call(rbind, lapply(res_list, `[[`, "ZOracle"))
+  indices_to_run <- seq_len(n)
+  chunks <- split(indices_to_run, ceiling(seq_along(indices_to_run) / workers))
+
+  # Note that, given X_list the following loop is deterministic
+  for (bi in seq_along(chunks)) { #takes ~ceiling(100/workers)*90 minutes to run)
+    rows <- chunks[[bi]]
+    res_block <- future_lapply(X_list[rows], one_rep, future.seed = TRUE)
+
+    #Fill block lines
+    FS[rows, ]      <- do.call(rbind, lapply(res_block, `[[`, "FS"))
+    Naive[rows, ]   <- do.call(rbind, lapply(res_block, `[[`, "Naive"))
+    Oracle[rows, ]  <- do.call(rbind, lapply(res_block, `[[`, "Oracle"))
+    SFS[rows, ]     <- do.call(rbind, lapply(res_block, `[[`, "SFS"))
+    ZOracle[rows, ] <- do.call(rbind, lapply(res_block, `[[`, "ZOracle"))
+  }
+  FSP <- FS/minP11_P12
+  OracleP <- Oracle/minP11_P12
+  NaiveP <- Naive/minP11_P12
 
 } else {
   #' Load precomputed results from `simulated_data.rds`
@@ -374,57 +392,82 @@ Oq2 <- Oracletab[3,]
 Oq3 <- Oracletab[5,]
 #'
 #' ### Plot Figure 1: Estimators mean error across $N_{rep}=100$ replications.
-#' ```{r fig1-plot, fig.width=10, fig.height=5, message=FALSE, warning=FALSE}
-#' par(mfrow=c(1,2))
+#' ```{r fig1-plot, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
+#' par(mfrow = c(1,2), oma = c(0,0,0,0))
 #'
-#' # --- Left panel: Mean error with standard deviation bands ---
-#'  plot(m/100, Fmean, type = "l", col = "#377EB8",
-#'       xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.06),lwd=3,
-#'       frame.plot = FALSE, xaxt="n", xlim = c(10,100))
-#'  lines(m/100, Omean, type = "l", col = "#E41A1C",lwd=3)
-#'  lines(m/100, Nmean, type = "l", col = "#4DAF4A",lwd=3)
-#'  points(m/100, Fmean, col = "#377EB8", pch=19,cex=0.7)
-#'  points(m/100, Omean, col = "#E41A1C", pch=19,cex=0.7)
-#'  points(m/100, Nmean, col = "#4DAF4A", pch=19,cex=0.7)
-#'  lines(m/100, FsdUp, type = "l", col = "#377EB8", lty = 2)
-#'  lines(m/100, FsdLo, type = "l", col = "#377EB8", lty = 2)
-#'  lines(m/100, OsdUp, type = "l", col = "#E41A1C", lty = 2)
-#'  lines(m/100, OsdLo, type = "l", col = "#E41A1C", lty = 2)
-#'  lines(m/100, NsdUp, type = "l", col = "#4DAF4A", lty = 2)
-#'  lines(m/100, NsdLo, type = "l", col = "#4DAF4A", lty = 2)
-#'  axis(side = 1, at = m/100, labels = m/100)
-#'  legend("topright",
-#'         legend = c(expression(bar(Delta) ~ "FS"),
-#'                    expression(bar(Delta) ~ "FS" %+-% "sd"),
-#'                    expression(bar(Delta) ~ "Oracle"),
-#'                    expression(bar(Delta) ~ "Oracle" %+-% "sd"),
-#'                    expression(bar(Delta) ~ "Naive"),
-#'                    expression(bar(Delta) ~ "Naive" %+-% "sd")),
-#'         col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"), lty = c(1,3,1,3,1,3), bty = "n")
-#'  # --- Right panel: Median and quartiles ---
-#'  plot(m/100, Fq2, type = "l", col = "#377EB8",
-#'       xlab = "m (x100)", ylab = "Quartiles of mean error", ylim = c(0, 0.06),lwd=3,
-#'       frame.plot = FALSE, xaxt="n", xlim = c(10,100), lty=1)
-#'  lines(m/100, Oq2, type = "l", col = "#E41A1C",lwd=3, lty=1)
-#'  lines(m/100, Nq2, type = "l", col = "#4DAF4A",lwd=3, lty=1)
-#'  points(m/100, Fq2, col = "#377EB8", pch=19,cex=0.7)
-#'  points(m/100, Oq2, col = "#E41A1C", pch=19,cex=0.7)
-#'  points(m/100, Nq2, col = "#4DAF4A", pch=19,cex=0.7)
-#'  lines(m/100, Fq1, type = "l", col = "#377EB8", lty = 2)
-#'  lines(m/100, Fq3, type = "l", col = "#377EB8", lty = 2)
-#'  lines(m/100, Oq1, type = "l", col = "#E41A1C", lty = 2)
-#'  lines(m/100, Oq3, type = "l", col = "#E41A1C", lty = 2)
-#'  lines(m/100, Nq1, type = "l", col = "#4DAF4A", lty = 2)
-#'  lines(m/100, Nq3, type = "l", col = "#4DAF4A", lty = 2)
-#'  axis(side = 1, at = m/100, labels = m/100)
-#'  legend("topright",
-#'         legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
-#'                    expression("q1,q3" ~ bar(Delta) ~ "FS"),
-#'                    expression("Med  " ~ bar(Delta) ~ "Oracle"),
-#'                    expression("q1,q3" ~ bar(Delta) ~ "Oracle"),
-#'                    expression("Med  " ~ bar(Delta) ~ "Naive"),
-#'                    expression("q1,q3" ~ bar(Delta) ~ "Naive")),
-#'         col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"), lty = c(1,3,1,3,1,3), bty = "n")
+#' ## --- Left panel: Mean error with standard deviation bands ---
+#' par(mar = c(5,5,3,4), xpd = NA)
+#'
+#' plot(m/100, Fmean, type = "l", col = "#377EB8",
+#'      xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.12), lwd = 3,
+#'      frame.plot = FALSE, xaxt = "n", yaxt = "n", xlim = c(10,100),
+#'      cex.axis = 1.4, cex.lab = 1.6)
+#' lines(m/100, Omean, col = "#E41A1C", lwd = 3)
+#' lines(m/100, Nmean, col = "#4DAF4A", lwd = 3)
+#' points(m/100, Fmean, col = "#377EB8", pch = 19, cex = 0.7)
+#' points(m/100, Omean, col = "#E41A1C", pch = 19, cex = 0.7)
+#' points(m/100, Nmean, col = "#4DAF4A", pch = 19, cex = 0.7)
+#' lines(m/100, FsdUp, col = "#377EB8", lty = 2)
+#' lines(m/100, FsdLo, col = "#377EB8", lty = 2)
+#' lines(m/100, OsdUp, col = "#E41A1C", lty = 2)
+#' lines(m/100, OsdLo, col = "#E41A1C", lty = 2)
+#' cap <- 0.12
+#' NsdUp_cut <- ifelse(NsdUp > cap, NA, NsdUp)
+#' lines(m/100, NsdUp_cut, col = "#4DAF4A", lty = 2)
+#' lines(m/100, NsdLo, col = "#4DAF4A", lty = 2)
+#' axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+#' axis(side = 2, cex.axis = 1.4)
+#'
+#' legend(
+#'   "topright",
+#'   inset = c(0.05, 0),
+#'   legend = c(expression(bar(Delta) ~ "FS"),
+#'              expression(bar(Delta) ~ "FS" %+-% "sd"),
+#'              expression(bar(Delta) ~ "Oracle"),
+#'              expression(bar(Delta) ~ "Oracle" %+-% "sd"),
+#'              expression(bar(Delta) ~ "Naive"),
+#'              expression(bar(Delta) ~ "Naive" %+-% "sd")),
+#'   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
+#'   lty = c(1,2,1,2,1,2),
+#'   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+#'   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
+#' )
+#'
+#' ## --- Right panel: Median and quartiles ---
+#' par(mar = c(5,5,3,4), xpd = NA)
+#'
+#' plot(m/100, Fq2, type = "l", col = "#377EB8",
+#'      xlab = "m (x100)", ylab = "Quartiles of mean error",
+#'      ylim = c(0, 0.12), lwd = 3, frame.plot = FALSE, xaxt = "n", yaxt = "n",
+#'      xlim = c(10,100), cex.axis = 1.4, cex.lab = 1.6)
+#' lines(m/100, Oq2, col = "#E41A1C", lwd = 3)
+#' lines(m/100, Nq2, col = "#4DAF4A", lwd = 3)
+#' points(m/100, Fq2, col = "#377EB8", pch = 19, cex = 0.7)
+#' points(m/100, Oq2, col = "#E41A1C", pch = 19, cex = 0.7)
+#' points(m/100, Nq2, col = "#4DAF4A", pch = 19, cex = 0.7)
+#' lines(m/100, Fq1, col = "#377EB8", lty = 2)
+#' lines(m/100, Fq3, col = "#377EB8", lty = 2)
+#' lines(m/100, Oq1, col = "#E41A1C", lty = 2)
+#' lines(m/100, Oq3, col = "#E41A1C", lty = 2)
+#' lines(m/100, Nq1, col = "#4DAF4A", lty = 2)
+#' lines(m/100, Nq3, col = "#4DAF4A", lty = 2)
+#' axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+#' axis(side = 2, cex.axis = 1.4)
+#'
+#' legend(
+#'   "topright",
+#'   inset = c(0.09, 0),
+#'   legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
+#'              expression("q1,q3" ~ bar(Delta) ~ "FS"),
+#'              expression("Med  " ~ bar(Delta) ~ "Oracle"),
+#'              expression("q1,q3" ~ bar(Delta) ~ "Oracle"),
+#'              expression("Med  " ~ bar(Delta) ~ "Naive"),
+#'              expression("q1,q3" ~ bar(Delta) ~ "Naive")),
+#'   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
+#'   lty = c(1,2,1,2,1,2),
+#'   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+#'   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
+#' )
 #' ```
 #'
 #' ### 5.4 Analysis of Real-World Data
@@ -520,7 +563,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FS(Temp12, d = 400, l = 3) #takes ~7min.
 } else {
-  precomputed$FS_Temp12_d400
+  print(precomputed$FS_Temp12_d400)
 }
 #'
 #' Note: The next code line is mentioned in the article but without a CodeChunk <br>
@@ -531,7 +574,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FS(Temp12, d = 364, l = 3) #takes ~6min.
 } else {
-  precomputed$FS_Temp12_d364
+  print(precomputed$FS_Temp12_d364)
 }
 #'
 #' 5. Split sample in Train and Test data:
@@ -549,7 +592,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FS(Temp12_Train, d = 364, l = 3) #takes ~5min.
 } else {
-  precomputed$FS_Temp12Train
+  print(precomputed$FS_Temp12Train)
 }
 #' 7. Trim out irrelevant lags:
 #'
@@ -567,7 +610,7 @@ recompute <- ifelse(recompute_all, TRUE, recompute)
 if (recompute) {
   hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
 } else {
-  precomputed$FSC_Temp12Train
+  print(precomputed$FSC_Temp12Train)
 }
 #'
 #' 9. Estimated transition matrix for FS method output:
