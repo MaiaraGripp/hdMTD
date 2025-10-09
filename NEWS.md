@@ -1,4 +1,7 @@
-# hdMTD (development version)
+# hdMTD 0.1.2.9000 (development version)
+
+## Fixes
+* Modified the tie-breaking rule in the FS (Forward Selection) procedure to ensure deterministic behavior.
 
 # hdMTD 0.1.2
 
