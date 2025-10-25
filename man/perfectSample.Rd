@@ -2,28 +2,37 @@
 % Please edit documentation in R/perfectSample.R
 \name{perfectSample}
 \alias{perfectSample}
+\alias{perfectSample.MTD}
 \title{Perfectly samples an MTD Markov chain}
 \usage{
-perfectSample(MTD, N = NULL)
+perfectSample(object, ...)
+
+\method{perfectSample}{MTD}(object, N, ...)
 }
 \arguments{
-\item{MTD}{An MTD object, see \code{\link[=MTDmodel]{MTDmodel()}} for properly generating a MTD object.}
+\item{object}{An object of class "MTD", see \code{\link[=MTDmodel]{MTDmodel()}} for properly generating}
 
-\item{N}{The sample size. If \code{NULL} sample size will be set to 1000.}
+\item{...}{Additional arguments passed to methods.
+an MTD object.}
+
+\item{N}{Positive integer. Sample size to generate. Must be > max(Lambda(object)).}
 }
 \value{
-Returns a sample from an MTD model (the first element is the most recent).
+Returns a size N sample from an MTD model (the first element is the most recent).
 }
 \description{
 Samples an MTD Markov Chain from the stationary distribution.
 }
 \details{
 This perfect sample algorithm requires that the MTD model has
-an independent distribution (p0) with a positive weight (i.e., \code{MTD$lambdas["lam0"]>0} which
-means \eqn{\lambda_0>0}).
+an independent distribution (p0) with a positive weight (i.e., \code{lambdas(object)["lam0"]>0}
+which means \eqn{\lambda_0>0}).
 }
 \examples{
-perfectSample(MTDmodel(Lambda=c(1,4), A = c(0,2)), N = 200 )
-perfectSample(MTDmodel(Lambda=c(2,5), A = c(1,2,3)), N = 1000 )
+M <- MTDmodel(Lambda = c(1, 3, 4), A = c(0, 2))
+perfectSample(M, N = 200)
+
+M <- MTDmodel(Lambda = c(2, 5), A = c(1, 2, 3))
+perfectSample(M, N = 300)
 
 }
