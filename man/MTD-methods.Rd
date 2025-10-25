@@ -57,9 +57,11 @@ rows of the global transition matrix \eqn{P}.
 \code{lambdas}, \code{pj}, and \code{p0}.
 
 \item \code{logLik.MTD()} computes the log-likelihood of a sample under the
-model, honoring constraints such as \code{single_matrix} and the
-independent component (\code{indep_part}), and returns an object of
-class \code{"logLik"} with appropriate attributes.
+model. Since an object of class \code{"MTD"} carries only the model
+parameters, a sample \code{X} must be supplied. The method honors
+constraints such as \code{single_matrix} and an independent component
+(\code{indep_part}), and returns an object of class \code{"logLik"}
+with appropriate attributes.
 }
 }
 \examples{
@@ -74,6 +76,9 @@ print(s)
 coef(m)        # list(lambdas = ..., pj = ..., p0 = ...)
 transitP(m)    # global transition matrix P
 pj(m); p0(m); lambdas(m); lags(m); Lambda(m); states(m)
+
+X <- perfectSample(m, N = 400)
+logLik(m, X)
 }
 
 }

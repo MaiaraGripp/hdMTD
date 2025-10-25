@@ -25,9 +25,11 @@
 #'         \code{lambdas}, \code{pj}, and \code{p0}.
 #'
 #'   \item \code{logLik.MTD()} computes the log-likelihood of a sample under the
-#'         model, honoring constraints such as \code{single_matrix} and the
-#'         independent component (\code{indep_part}), and returns an object of
-#'         class \code{"logLik"} with appropriate attributes.
+#'         model. Since an object of class \code{"MTD"} carries only the model
+#'         parameters, a sample \code{X} must be supplied. The method honors
+#'         constraints such as \code{single_matrix} and an independent component
+#'         (\code{indep_part}), and returns an object of class \code{"logLik"}
+#'         with appropriate attributes.
 #' }
 #'
 #' @param x An object of class \code{"MTD"} or \code{"summary.MTD"},
@@ -75,6 +77,9 @@
 #' coef(m)        # list(lambdas = ..., pj = ..., p0 = ...)
 #' transitP(m)    # global transition matrix P
 #' pj(m); p0(m); lambdas(m); lags(m); Lambda(m); states(m)
+#'
+#' X <- perfectSample(m, N = 400)
+#' logLik(m, X)
 #' }
 #'
 #' @name MTD-methods
@@ -176,6 +181,10 @@ coef.MTD <- function(object, ...) {
 #' @exportS3Method logLik MTD
 logLik.MTD <- function(object, X,...) {
   checkMTD(object)
+  if (missing(X)) {
+    stop("A sample X must be provided. An object of class MTD carries only the model parameters; ",
+         "the log-likelihood is computed from those parameters together with the sample frequencies.")
+  }
   X <- checkSample(X)
 
   L <- Lambda(object)
