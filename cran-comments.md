@@ -1,4 +1,22 @@
-## Resubmission (hdMTD 0.1.2)
+## Resubmission (hdMTD 0.1.3)
+
+### Summary of changes
+
+- Added `plot.MTD()` method for objects of class "MTD", allowing graphical visualization of lag weights and contributions.
+- Added `plot.MTDest()` method for "MTDest" objects, mirroring `plot.MTD()` and including EM iteration diagnostics (when available).
+- Modified the tie-breaking rule in the Forward Selection (FS) procedure to ensure deterministic behavior.
+- Updated documentation for `MTD-methods`, `MTDest-methods`, and `MTD-accessors` to remove redundant links and streamline method listings.
+- `perfectSample()` now requires explicit sample size as an argument.
+- Improved the error message in `logLik.MTD()` when a sample is not provided.
+
+### R CMD check results (current)
+0 errors | 0 warnings | 0 notes
+
+---
+
+## Previous submission notes (for reference)
+
+version - hdMTD 0.1.2
 
 ### Summary of changes
 - Added S3 class for EM fits: `MTDest` with `print()`, `summary()`, `coef()`, `logLik()` and `probs()`.
@@ -13,9 +31,6 @@ to `hdMTD`.
 - Replaced `any(is.na())` with `anyNA()` in `checkSample()`. 
 - Cleaned package: removed unused datasets, marked internal helpers as @keywords internal, and updated examples
  to use simulated data.
-
-### R CMD check results (current)
-0 errors | 0 warnings | 0 notes
 
 ---
 
