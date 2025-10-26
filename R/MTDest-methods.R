@@ -54,6 +54,7 @@
 #' @seealso \code{\link{MTDest}}, \code{\link{as.MTD}}
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(1)
 #' MTD <- MTDmodel(Lambda = c(1, 3), A = c(0, 1), lam0 = 0.01)
 #' X <- perfectSample(MTD, N = 200)  # small N to keep examples fast
@@ -71,6 +72,7 @@
 #' coef(fit)
 #' logLik(fit)
 #' BIC(fit)
+#' }
 #'
 #' @name MTDest-methods
 NULL

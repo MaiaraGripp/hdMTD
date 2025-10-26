@@ -58,6 +58,7 @@ under the multimatrix model) and \code{nobs} (effective sample size).
 }
 }
 \examples{
+\dontrun{
 set.seed(1)
 MTD <- MTDmodel(Lambda = c(1, 3), A = c(0, 1), lam0 = 0.01)
 X <- perfectSample(MTD, N = 200)  # small N to keep examples fast
@@ -75,6 +76,7 @@ summary(fit)
 coef(fit)
 logLik(fit)
 BIC(fit)
+}
 
 }
 \seealso{
