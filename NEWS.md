@@ -1,8 +1,14 @@
 # hdMTD 0.1.3
-
+  
 ## Fixes
 * Modified the tie-breaking rule in the FS (Forward Selection) procedure to ensure deterministic behavior.
 * Updated `MTD-methods`, `MTDest-methods` and `MTD-accessors` documentation to remove redundant links in the help system and streamline method listings.
+* Sample size is now a required argument in `perfectSample()`.
+* Improved the error message in `logLik.MTD()` when a sample is not provided.
+
+## New Features
+* Added a `plot.MTD()` method for visualizing MTD models, including bar plots of lag contributions and associated weights.
+* Added a `plot.MTDest()` method for fitted `MTDest` objects, which mirrors `plot.MTD()` but also includes EM iteration diagnostics when available.
 
 # hdMTD 0.1.2
 
