@@ -182,8 +182,7 @@ coef.MTD <- function(object, ...) {
 logLik.MTD <- function(object, X,...) {
   checkMTD(object)
   if (missing(X)) {
-    stop("A sample X must be provided. An object of class MTD carries only the model parameters; ",
-         "the log-likelihood is computed from those parameters together with the sample frequencies.")
+    stop("Argument X is missing. A sample X must be provided since the log-likelihood is computed from the sample frequencies together with the model parameters stored in the MTD object.")
   }
   X <- checkSample(X)
 
