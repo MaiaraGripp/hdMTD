@@ -27,8 +27,8 @@
 #'
 #' @return
 #' If \code{type} is provided, invisibly returns the numeric vector that was plotted
-#' (oscillation or lambdas). If \code{type} is missing, invisibly returns a list with
-#' components \code{oscillation} and \code{lambdas}.
+#' (\code{oscillation} or \code{lambdas}). If \code{type} is missing, invisibly
+#' returns a list with components \code{oscillation} and \code{lambdas}.
 #'
 #' @seealso \code{\link{oscillation}}, \code{\link{lambdas}}, \code{\link{Lambda}}
 #' @importFrom graphics par barplot
@@ -45,13 +45,13 @@
 #' }
 #'
 #' @exportS3Method plot MTD
-plot.MTD <- function(x, type = c("oscillation", "lambdas"),
-                     main, ylim, col = "gray70", border = NA, ...) {
+plot.MTD <- function(x, type, main, ylim, col = "gray70", border = NA, ...) {
   checkMTD(x)
 
   if (missing(type)) {
-    oldpar <- par(ask = TRUE)
-    on.exit(par(oldpar))
+    old_ask <- par("ask")
+    par(ask = TRUE)
+    on.exit(par(ask = old_ask))
 
     ## 1) Oscillations
     y1 <- oscillation(x)
@@ -60,7 +60,9 @@ plot.MTD <- function(x, type = c("oscillation", "lambdas"),
       ymax1 <- max(y1, 0)
       pad1 <- max(0.05, 0.08 * ymax1)
       ylim1 <- c(0, ymax1 + pad1)
-    } else ylim1 <- ylim
+    } else {
+      ylim1 <- ylim
+    }
     barplot(y1, names.arg = names(y1), ylim = ylim1,
             main = main1, xlab = "Relevant lags",
             col = col, border = border, ...)
@@ -72,9 +74,13 @@ plot.MTD <- function(x, type = c("oscillation", "lambdas"),
     if (lam0 > 0) {lag_names <- c("0", lag_names)}
     y2 <- if (lam0 > 0) lj else lj[-1]; names(y2) <- lag_names
     main2 <- if (missing(main)) "MTD weights by lag" else main
-    ymax2 <- max(y2, 0)
-    pad2 <- max(0.05, 0.08 * ymax2)
-    ylim2 <- c(0, ymax2 + pad2)
+    if (missing(ylim)) {
+      ymax2 <- max(y2, 0)
+      pad2 <- max(0.05, 0.08 * ymax2)
+      ylim2 <- c(0, ymax2 + pad2)
+    } else {
+      ylim2 <- ylim
+    }
     barplot(y2, names.arg = names(y2), ylim = ylim2,
             main = main2, xlab = "Relevant lags",
             col = col, border = border, ...)
@@ -82,7 +88,7 @@ plot.MTD <- function(x, type = c("oscillation", "lambdas"),
     invisible(list(oscillation = y1, lambdas = y2))
 
   } else {
-    type <- match.arg(type)
+    type <- match.arg(type, c("oscillation", "lambdas"))
 
     if (type == "oscillation") {
       y <- oscillation(x)

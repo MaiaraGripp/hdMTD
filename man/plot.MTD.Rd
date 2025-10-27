@@ -4,15 +4,7 @@
 \alias{plot.MTD}
 \title{Plot method for MTD objects}
 \usage{
-\method{plot}{MTD}(
-  x,
-  type = c("oscillation", "lambdas"),
-  main,
-  ylim,
-  col = "gray70",
-  border = NA,
-  ...
-)
+\method{plot}{MTD}(x, type, main, ylim, col = "gray70", border = NA, ...)
 }
 \arguments{
 \item{x}{An object of class \code{"MTD"}.}
@@ -33,8 +25,8 @@ If \code{type} is missing, both plots are shown sequentially (press Enter to pro
 }
 \value{
 If \code{type} is provided, invisibly returns the numeric vector that was plotted
-(oscillation or lambdas). If \code{type} is missing, invisibly returns a list with
-components \code{oscillation} and \code{lambdas}.
+(\code{oscillation} or \code{lambdas}). If \code{type} is missing, invisibly
+returns a list with components \code{oscillation} and \code{lambdas}.
 }
 \description{
 Produces bar plots for an \code{MTD} object. By default, it shows
