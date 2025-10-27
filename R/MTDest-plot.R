@@ -1,9 +1,15 @@
 #' Plot method for MTDest objects
 #'
+#' Produces bar plots for an \code{MTDest} object. By default, it shows
+#' two plots in sequence: (i) oscillations by relevant lag, (ii) mixture weights
+#' \eqn{\lambda_j} (including \code{lam0} if \code{> 0}), and - if available -
+#' (iii) log-likelihood variation per update. When \code{type} is
+#' specified, only the requested plot is drawn.
+#'
+#' @details
 #' Produces the same bar plots as \code{\link{plot.MTD}} for a fitted object of
 #' class \code{"MTDest"}. Internally, the object is converted to an \code{"MTD"}
 #' via \code{as.MTD(x)} and then passed to \code{plot.MTD()}.
-#'
 #' If EM iteration diagnostics are available (i.e., the object was fitted with
 #' \code{iter = TRUE} and \code{length(deltaLogLik) > 0}), a third plot showing
 #' the log-likelihood variation per update is displayed automatically when
@@ -26,11 +32,10 @@
 #' @param ... Further graphical parameters passed to the underlying plotting functions.
 #'
 #' @return
-#' Invisibly returns whatever \code{\link{plot.MTD}} returns for bar plots.
-#' For \code{type = "convergence"}, returns (invisibly) the numeric vector
-#' \code{x$deltaLogLik}. When \code{type} is missing and a convergence plot is drawn,
-#' the return value is a list with components \code{oscillation}, \code{lambdas},
-#' and \code{convergence}.
+#' If \code{type} is provided, invisibly returns the numeric vector that was plotted
+#' (\code{oscillation}, \code{lambdas} or \code{deltaLogLik}). When \code{type}
+#' is missing invisibly returns a list with components \code{oscillation},
+#' \code{lambdas}, and - if available - \code{deltaLogLik}.
 #'
 #' @seealso \code{\link{plot.MTD}}, \code{\link{as.MTD}}, \code{\link{MTDest}}
 #'
@@ -57,8 +62,9 @@ plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA, ...) {
 
   # If no explicit type: show seq oscillation -> lambdas -> (optionally) convergence
   if (missing(type)) {
-    oldpar <- par(ask = TRUE)
-    on.exit(par(oldpar))
+    old_ask <- par("ask")
+    par(ask = TRUE)
+    on.exit(par(ask = old_ask))
 
     out1 <- plot(m, type = "oscillation",
                  main = if (missing(main)) "Oscillations by lag" else main,
@@ -80,7 +86,7 @@ plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA, ...) {
            xlab = "Iteration", ylab = "logLik variation",
            main = if (missing(main)) "EM convergence: logLik variation per update" else main,
            ylim = ylim3, ...)
-      invisible(list(oscillation = out1, lambdas = out2, convergence = y))
+      invisible(list(oscillation = out1, lambdas = out2, deltaLogLik = y))
     } else {
       invisible(list(oscillation = out1, lambdas = out2))
     }
@@ -94,11 +100,7 @@ plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA, ...) {
 
     } else { # type == "convergence"
       if (!has_conv) {
-        stop(
-          "No EM diagnostics available: 'deltaLogLik' is missing or empty. ",
-          "This may happen if the algorithm converged in the first iteration or made no updates. ",
-          "If you did not set iter = TRUE, please refit with iter = TRUE to record diagnostics."
-        )
+        stop("No EM diagnostics available: 'deltaLogLik' is missing or empty. This may happen if the algorithm converged in the first iteration or made no updates. If you did not set iter = TRUE, please refit with iter = TRUE to record diagnostics.")
       }
       y <- conv
       ymax <- max(y, 0)

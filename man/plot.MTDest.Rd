@@ -29,18 +29,22 @@ Defaults to \code{"gray70"}.}
 \item{...}{Further graphical parameters passed to the underlying plotting functions.}
 }
 \value{
-Invisibly returns whatever \code{\link{plot.MTD}} returns for bar plots.
-For \code{type = "convergence"}, returns (invisibly) the numeric vector
-\code{x$deltaLogLik}. When \code{type} is missing and a convergence plot is drawn,
-the return value is a list with components \code{oscillation}, \code{lambdas},
-and \code{convergence}.
+If \code{type} is provided, invisibly returns the numeric vector that was plotted
+(\code{oscillation}, \code{lambdas} or \code{deltaLogLik}). When \code{type}
+is missing invisibly returns a list with components \code{oscillation},
+\code{lambdas}, and - if available - \code{deltaLogLik}.
 }
 \description{
+Produces bar plots for an \code{MTDest} object. By default, it shows
+two plots in sequence: (i) oscillations by relevant lag, (ii) mixture weights
+\eqn{\lambda_j} (including \code{lam0} if \code{> 0}), and - if available -
+(iii) log-likelihood variation per update. When \code{type} is
+specified, only the requested plot is drawn.
+}
+\details{
 Produces the same bar plots as \code{\link{plot.MTD}} for a fitted object of
 class \code{"MTDest"}. Internally, the object is converted to an \code{"MTD"}
 via \code{as.MTD(x)} and then passed to \code{plot.MTD()}.
-}
-\details{
 If EM iteration diagnostics are available (i.e., the object was fitted with
 \code{iter = TRUE} and \code{length(deltaLogLik) > 0}), a third plot showing
 the log-likelihood variation per update is displayed automatically when

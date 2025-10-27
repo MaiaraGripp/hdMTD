@@ -88,7 +88,7 @@ print.MTDest <- function(x, ...) {
   }
   cat("  Use summary() for full description.\n")
   cat("  Accessors: lambdas(), pj(), p0(), lags(), S(), states().\n")
-  cat("  Methods:   coef(), probs(), as.MTD(), logLik().\n")
+  cat("  Methods: coef(), probs(), as.MTD(), logLik(), plot().\n")
   invisible(x)
 }
 
