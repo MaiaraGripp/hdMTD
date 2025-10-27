@@ -34,8 +34,14 @@ perfectSample.MTD <- function(object, N, ...) {
   checkMTD(object)
   d <- max(Lambda(object))
   if (missing(N) || length(N) != 1L || !is.numeric(N) || !is.finite(N) || N <= d || N %% 1 != 0) {
-    stop("The intended sample size N is required and must be a positive integer > ", d,
-         ". Example: perfectSample(object, N = 1000) returns a sample of size 1000.")
+    stop(
+      paste0(
+        "Argument N is missing or invalid. ",
+        "The intended sample size N is required and must be a positive integer > max(Lambda(object)) = ",
+        d, ". ",
+        "Example: perfectSample(object, N = 1000) returns a sample of size 1000."
+      )
+    )
   }
   N <- as.integer(N)
 
