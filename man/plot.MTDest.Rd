@@ -4,52 +4,79 @@
 \alias{plot.MTDest}
 \title{Plot method for MTDest objects}
 \usage{
-\method{plot}{MTDest}(x, type, main, ylim, col = "gray70", border = NA, ...)
+\method{plot}{MTDest}(x, type, main, ylim, col = "gray70", border = NA, pj_index = 1, ...)
 }
 \arguments{
 \item{x}{An object of class \code{"MTDest"}.}
 
-\item{type}{Character string indicating what to plot: \code{"oscillation"},
-\code{"lambdas"}, or \code{"convergence"}. If \code{type} is missing,
-oscillations and lambdas are shown sequentially (press Enter to proceed),
-and—if available—the convergence plot is shown last.}
+\item{type}{If \code{type} is missing, \code{oscillation}, \code{lambdas},
+\code{pj} graphs and—if available—the \code{convergence} plots are shown
+sequentially (press Enter to proceed). Else, \code{type} is a character string
+indicating what to plot: \code{"oscillation"}, \code{"lambdas"}, \code{"pj"} or
+\code{"convergence"}.}
 
-\item{main}{Optional main title. If missing, an informative default is used.
-(For \code{type = "convergence"}, the default title is
-\code{"EM convergence: logLik variation per update"}).}
+\item{main}{Optional main title. When \code{type} is missing, panel-specific
+defaults are used and \code{main} is ignored.}
 
-\item{ylim}{Optional y-axis limits. If missing, determined from the data.
-(For \code{type = "convergence"}, limits are chosen from the diagnostics.)}
+\item{ylim}{Optional y-axis limits. When \code{type} is missing, panel-specific
+defaults are used and \code{ylim} is ignored.}
 
-\item{col}{Color for bars (for bar plots). Ignored for \code{type = "convergence"}.
-Defaults to \code{"gray70"}.}
+\item{col}{Bar fill color (passed to \code{barplot}). Defaults to \code{"gray70"}.}
 
 \item{border}{Bar border color (for bar plots). Defaults to \code{NA}.}
 
-\item{...}{Further graphical parameters passed to the underlying plotting functions.}
+\item{pj_index}{Integer index of \code{pj(x)} to plot when
+\code{type = "pj"} (default \code{1}).}
+
+\item{...}{Further graphical parameters: passed to \code{barplot()} when
+\code{type \%in\% c("oscillation","lambdas")}, to \code{plot.igraph()} when
+\code{type = "pj"}, and to \code{plot()} when \code{type = "convergence"}.
+Ignored when \code{type} is missing.}
 }
 \value{
-If \code{type} is provided, invisibly returns the numeric vector that was plotted
-(\code{oscillation}, \code{lambdas} or \code{deltaLogLik}). When \code{type}
-is missing invisibly returns a list with components \code{oscillation},
-\code{lambdas}, and - if available - \code{deltaLogLik}.
+If \code{type} is \code{"oscillation"} or \code{"lambdas"}, invisibly returns
+the numeric vector that was plotted. If \code{type = "pj"}, invisibly returns
+the selected transition matrix \code{pj(x)[[pj_index]]}. If
+\code{type = "convergence"}, invisibly returns the numeric vector
+\code{deltaLogLik}. If \code{type} is missing, invisibly returns the list
+produced by \code{plot.MTD(m)} (typically with components \code{oscillation}
+and \code{lambdas}); if \code{deltaLogLik} is available, the returned list also
+includes \code{deltaLogLik}.
 }
 \description{
-Produces bar plots for an \code{MTDest} object. By default, it shows
-two plots in sequence: (i) oscillations by relevant lag, (ii) mixture weights
-\eqn{\lambda_j} (including \code{lam0} if \code{> 0}), and - if available -
-(iii) log-likelihood variation per update. When \code{type} is
-specified, only the requested plot is drawn.
+Produces plots for an \code{MTDest} object. By default, it shows in sequence:
+(i) barplot of oscillations by relevant lag, (ii) barplot of mixture weights
+\eqn{\lambda_j} (including \code{lam0} if \code{> 0}), and (iii) graphs of
+\code{pj} (one graph for each lag in \code{Lambda}). If EM diagnostics are
+available, a convergence panel (log-likelihood variation per update) is shown
+last. When \code{type} is specified, only the requested plot is drawn.
 }
 \details{
-Produces the same bar plots as \code{\link{plot.MTD}} for a fitted object of
-class \code{"MTDest"}. Internally, the object is converted to an \code{"MTD"}
-via \code{as.MTD(x)} and then passed to \code{plot.MTD()}.
+For \code{type = "oscillation"}, the function calls \code{oscillation(as.MTD(x))}
+to obtain \eqn{\delta_j = \lambda_j \max_{b,c} d_{TV}(p_j(\cdot|b), p_j(\cdot|c))}
+for each lag in \code{Lambda(as.MTD(x))}, and draws a bar plot named by the lags.
+
+For \code{type = "lambdas"}, it plots the mixture weights \eqn{\lambda_j} by lag.
+If \code{lam0 > 0}, the weight for the independent component is included and
+labeled \code{"0"}.
+
+For \code{type = "pj"}, the function draws the directed, weighted graph of the
+transition matrices \code{pj} taken from \code{pj(x)}. Vertices correspond to the
+states \code{states(x)}. A directed edge \code{a -> b} carries weight
+\code{p_j(b | a)}. Edge widths and edge labels are proportional to the transition
+probabilities (labels shown in the plot are rounded to two decimals).
+By default, self-loops (\code{a -> a}) are not drawn. The self-loop probability
+at a state \code{a} can be inferred as \deqn{1 - \sum_{b: b \ne a} p_j(b \mid a).}
+For \code{type = "pj"}, a specific matrix can be selected via \code{pj_index}
+(e.g., \code{pj_index = 2} plots \code{pj(x)[[2]]}). In automatic mode (when
+\code{type} is missing), graphs for all \code{pj} matrices are shown
+sequentially.
+
 If EM iteration diagnostics are available (i.e., the object was fitted with
-\code{iter = TRUE} and \code{length(deltaLogLik) > 0}), a third plot showing
-the log-likelihood variation per update is displayed automatically when
-\code{type} is missing. You can also request it explicitly
-with \code{type = "convergence"}.
+\code{iter = TRUE} and \code{length(deltaLogLik) > 0}), a convergence panel
+showing the log-likelihood variation per update is displayed automatically
+when \code{type} is missing. You can also request it explicitly with
+\code{type = "convergence"}.
 }
 \examples{
 \dontrun{
@@ -58,8 +85,9 @@ M <- MTDmodel(Lambda = c(1, 3), A = c(0, 1), lam0 = 0.05)
 X <- perfectSample(M, N = 300)
 fit <- MTDest(X, S = c(1, 3), init = coef(M), iter = TRUE)
 
-plot(fit)                        # oscillations, lambdas, then (if available) convergence
-plot(fit, type = "convergence")  # convergence panel only
+plot(fit)
+plot(fit, type = "pj", pj_index = 2)
+plot(fit, type = "convergence")
 }
 
 }
