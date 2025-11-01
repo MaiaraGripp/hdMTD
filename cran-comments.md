@@ -2,7 +2,7 @@
 
 ### Summary of changes
 
-- Added `plot.MTD()` method for objects of class "MTD", allowing graphical visualization of lag weights and contributions.
+- Added `plot.MTD()` method for objects of class "MTD", providing bar plots of lag weights and contributions, and directed graphs of lag-specific transition matrices (via igraph).
 - Added `plot.MTDest()` method for "MTDest" objects, mirroring `plot.MTD()` and including EM iteration diagnostics (when available).
 - Modified the tie-breaking rule in the Forward Selection (FS) procedure to ensure deterministic behavior.
 - Updated documentation for `MTD-methods`, `MTDest-methods`, and `MTD-accessors` to remove redundant links and streamline method listings.

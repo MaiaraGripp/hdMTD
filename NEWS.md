@@ -7,8 +7,8 @@
 * Improved the error message in `logLik.MTD()` when a sample is not provided.
 
 ## New Features
-* Added a `plot.MTD()` method for visualizing MTD models, including bar plots of lag contributions and associated weights.
-* Added a `plot.MTDest()` method for fitted `MTDest` objects, which mirrors `plot.MTD()` but also includes EM iteration diagnostics when available.
+* Added a `plot.MTD()` method for visualizing MTD models, including bar plots of lag contributions and mixture weights, as well as directed weighted graphs (via igraph) representing each lag-specific transition matrix.
+* Added a `plot.MTDest()` method for fitted `MTDest` objects, which mirrors `plot.MTD()` but also includes EM iteration diagnostics (log-likelihood variation per update) when available.
 
 # hdMTD 0.1.2
 
