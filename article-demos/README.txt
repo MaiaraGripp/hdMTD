@@ -31,13 +31,17 @@ Important notes on reproducibility:
 
 Some lines in code.R are preceded by a logical variable "recompute <- FALSE". 
 These correspond to computations that may take several minutes or more to complete.
+For convenience, their results have been precomputed and saved in the .rds files
+listed above under "Contents".
 
-- These lines can be ignored for a quick inspection.
+- For a quick inspection, you may simply leave all "recompute <- FALSE" lines
+unchanged; in this case, the precomputed results will be loaded.
 - To recompute a result simply set the corresponding line to "recompute <- TRUE".
 - However, to fully reproduce all results from scratch, you may set the default
 "recompute_all <- FALSE" at the beginning of the code to "recompute_all <- TRUE".
 - All instructions are provided within code.R itself, along with approximate time durations
 (on an i7-1255U 10-core processor) for these time-consuming chunks.
+- To overwrite the RDS files set `save_precomputed <- TRUE` in the beginning of code.R.
 
 ====================================
 About the included code.html file:

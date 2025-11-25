@@ -22,18 +22,22 @@ library("tidyr")
 library("future")
 library("future.apply")
 
-
-## Load precomputed outputs
-precomputed <- readRDS(file = "hdMTD_outputs.rds")
-
-# Set recompute_all = TRUE to override all precomputed results (not recommended)
+# Set recompute_all = TRUE to override all pre-computed results (not recommended)
 recompute_all <- FALSE
 
-# All procedures that take longer than ~2 minutes were precomputed and stored in
+# Set save_precomputed = TRUE to store results in their corresponding RDS file.
+save_precomputed <- FALSE
+
+
+## ------------------------------------------------------------------
+## Notes on pre-computed time-consuming computations:
+## ------------------------------------------------------------------
+# All procedures that take longer than ~2 minutes were pre-computed and stored in
 # hdMTD_outputs.rds, simulated_data.rds or results_sequential_selection.rds.
 # To recompute any of them, set the corresponding `recompute <- TRUE` block to
 # activate the code. For each recompute block, an estimated runtime (on i7-1255U
-# 10 cores) is provided.
+# 10 cores) is provided. Note that if the corresponding RDS file is not available,
+# the data will be recomputed even if `recompute` is set to FALSE.
 
 # One procedure takes much longer than the others: the check that the
 # estimation error converges to the minimal error over 100 samples in section 5.3.
@@ -43,6 +47,39 @@ recompute_all <- FALSE
 # the expected runtime is approximately ceiling(100 / W) * 90 minutes. Adjust the
 # number of workers (n_workers at section 5.3) accordingly before recomputing
 # this step.
+
+# Diagnostic: check if/which pre-computed RDS files are missing
+required_rds <- c(
+  "hdMTD_outputs.rds",               # Section 5: hdMTD examples
+  "simulated_data.rds",              # Section 5.3: simulations
+  "results_sequential_selection.rds" # Section 5.4: FS sequential selection (nu analysis)
+)
+missing_rds <- required_rds[!file.exists(required_rds)]
+# Warns users if recompute_all = FALSE and there are missing RDS files.
+if (!recompute_all && length(missing_rds) > 0) {
+  message(
+    paste0(
+      "\nThe following pre-computed RDS files are missing:\n  -> ",
+      paste(missing_rds, collapse = "\n  -> "),
+      "\n\nTherefore, these results will be recomputed automatically when\n",
+      "needed even if `recompute = FALSE` inside that block.\n",
+      "This will significantly increase processing time.\n",
+      "To avoid recomputation, provide the missing RDS files.\n"
+    )
+  )
+}
+
+## ---------------------------------------------------------------
+
+# Load pre-computed hdMTD_outputs if available and recompute_all = FALSE.
+use_precomputed_hdMTD_outputs <- !recompute_all && file.exists("hdMTD_outputs.rds")
+if (use_precomputed_hdMTD_outputs) {
+  message("Using pre-computed results from 'hdMTD_outputs.rds'.")
+  precomputed <- readRDS(file = "hdMTD_outputs.rds")
+} else {
+  message("Pre-computed results not available or recompute_all = TRUE.")
+  precomputed <- list()
+}
 
 #' ## Section 5: Using hdMTD
 #' ### 5.1 Data generation
@@ -77,14 +114,18 @@ S(FS); summary(FS)
 #'
 #' 4. Estimate relevant lags using BIC method
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #'
 if (recompute) {
-  hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min.
+  message("Recomputing...")
+  BIC_d40_l4 <- hdMTD_BIC(X, d = 40, minl = 4, maxl = 4) #takes ~30min.
+  precomputed$BIC_d40_l4 <- BIC_d40_l4
 } else {
-  print(precomputed$BIC_d40_l4)
+  message("Using pre-computed data.")
+  BIC_d40_l4 <- precomputed$BIC_d40_l4
 }
+print(BIC_d40_l4)
 #'
 #' Custom subset S
 hdMTD_BIC(X, d = 40,
@@ -118,23 +159,34 @@ hdMTD_BIC(X, d = 40,
 #'
 #' 5. Estimate relevant lags using CUT method
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #'
 if (recompute) {
-  hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40)) #takes ~2.5min.
+  message("Recomputing...")
+  CUT_d40 <- hdMTD_CUT(X, d = 40,
+                       S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40)) #takes ~2.5min.
+  precomputed$CUT_d40 <- CUT_d40
 } else {
-  print(precomputed$CUT_d40)
+  message("Using pre-computed data.")
+  CUT_d40 <- precomputed$CUT_d40
 }
+print(CUT_d40)
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #' Setting $\alpha = 0.13$
 if (recompute) {
-  hdMTD_CUT(X, d = 40, S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40), alpha = 0.13) #takes ~2.5min.
+  message("Recomputing...")
+  CUT_d40_alpha <- hdMTD_CUT(X, d = 40,
+                             S = c(1, 5, 10, 15, 17, 20, 27, 30, 35, 40),
+                             alpha = 0.13) #takes ~2.5min.
+  precomputed$CUT_d40_alpha <- CUT_d40_alpha
 } else {
-  print(precomputed$CUT_d40_alpha)
+  message("Using pre-computed data.")
+  CUT_d40_alpha <- precomputed$CUT_d40_alpha
 }
+print(CUT_d40_alpha)
 #'
 #' Custom subset S
 hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
@@ -142,7 +194,6 @@ hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
 #' 6. Estimate relevant lags using FSC method
 #'
 hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1)
-#' Equivalent call: hdMTD(X, d = 40, method = "FSC", l = 4, alpha = 0.1)
 #'
 #' FS method with halved sample
 hdMTD_FS(X[1:500], d = 40, l = 4)
@@ -206,10 +257,14 @@ npairs <- nrow(pairList)
 minP11_P12 <- min(MTD$P[1, 1], MTD$P[1, 2])
 #'
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
-
+# Load pre-computed simulated_data if available and recompute_all = FALSE.
+use_simulated_data <- !recompute_all && file.exists("simulated_data.rds")
+#'
+recompute <- FALSE
+recompute <- recompute || (!use_simulated_data)
+# Will recompute if data is not available
 if (recompute) {
+  message("Recomputing simulation data for Section 5.3.")
 
   FS  <- matrix(0, ncol = length(m), nrow = n)
   Naive  <- matrix(0, ncol = length(m), nrow = n)
@@ -303,12 +358,22 @@ if (recompute) {
     SFS[rows, ]     <- do.call(rbind, lapply(res_block, `[[`, "SFS"))
     ZOracle[rows, ] <- do.call(rbind, lapply(res_block, `[[`, "ZOracle"))
   }
+
   FSP <- FS/minP11_P12
   OracleP <- Oracle/minP11_P12
   NaiveP <- Naive/minP11_P12
 
+  # Store all simulated data in a list
+  simulated_data <- list(
+    FS = FS, FSP = FSP,
+    Oracle = Oracle, OracleP = OracleP,
+    Naive = Naive, NaiveP = NaiveP,
+    SFS = SFS, ZOracle = ZOracle
+  )
+
 } else {
-  #' Load precomputed results from `simulated_data.rds`
+  #' Load precomputed results from `simulated_data.rds` (only if available)
+  message("Using pre-computed simulation data from 'simulated_data.rds'.")
   simulated_data <- readRDS("simulated_data.rds")
   FS <- simulated_data$FS
   FSP <- simulated_data$FSP
@@ -340,9 +405,17 @@ rownames(means_table) <- c(
 colnames(means_table) <- m
 #'
 #' Table 1: Mean error of estimators
-#' ```{r mean-error-table, results='asis', message=FALSE, warning=FALSE}
-#' knitr::kable(means_table, caption = "Mean error of estimators", format = "markdown", booktabs = TRUE, escape = FALSE)
-#' ```
+#+ mean-error-table, results='asis', message=FALSE, warning=FALSE
+suppressWarnings(
+  tbl_1 <- knitr::kable(
+    means_table,
+    caption = "Mean error of estimators",
+    format = "markdown",
+    booktabs = TRUE,
+    escape = FALSE
+  )
+)
+suppressWarnings(print(tbl_1))
 #'
 #' 4. Compute how often the FS output differs from Oracle by subsample size
 m_index <- seq(1, length(m)*2, by = 2)
@@ -392,83 +465,84 @@ Oq2 <- Oracletab[3,]
 Oq3 <- Oracletab[5,]
 #'
 #' ### Plot Figure 1: Estimators mean error across $N_{rep}=100$ replications.
-#' ```{r fig1-plot, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
-#' par(mfrow = c(1,2), oma = c(0,0,0,0))
-#'
-#' ## --- Left panel: Mean error with standard deviation bands ---
-#' par(mar = c(5,5,3,4), xpd = NA)
-#'
-#' plot(m/100, Fmean, type = "l", col = "#377EB8",
-#'      xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.12), lwd = 3,
-#'      frame.plot = FALSE, xaxt = "n", yaxt = "n", xlim = c(10,100),
-#'      cex.axis = 1.4, cex.lab = 1.6)
-#' lines(m/100, Omean, col = "#E41A1C", lwd = 3)
-#' lines(m/100, Nmean, col = "#4DAF4A", lwd = 3)
-#' points(m/100, Fmean, col = "#377EB8", pch = 19, cex = 0.7)
-#' points(m/100, Omean, col = "#E41A1C", pch = 19, cex = 0.7)
-#' points(m/100, Nmean, col = "#4DAF4A", pch = 19, cex = 0.7)
-#' lines(m/100, FsdUp, col = "#377EB8", lty = 2)
-#' lines(m/100, FsdLo, col = "#377EB8", lty = 2)
-#' lines(m/100, OsdUp, col = "#E41A1C", lty = 2)
-#' lines(m/100, OsdLo, col = "#E41A1C", lty = 2)
-#' cap <- 0.12
-#' NsdUp_cut <- ifelse(NsdUp > cap, NA, NsdUp)
-#' lines(m/100, NsdUp_cut, col = "#4DAF4A", lty = 2)
-#' lines(m/100, NsdLo, col = "#4DAF4A", lty = 2)
-#' axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
-#' axis(side = 2, cex.axis = 1.4)
-#'
-#' legend(
-#'   "topright",
-#'   inset = c(0.05, 0),
-#'   legend = c(expression(bar(Delta) ~ "FS"),
-#'              expression(bar(Delta) ~ "FS" %+-% "sd"),
-#'              expression(bar(Delta) ~ "Oracle"),
-#'              expression(bar(Delta) ~ "Oracle" %+-% "sd"),
-#'              expression(bar(Delta) ~ "Naive"),
-#'              expression(bar(Delta) ~ "Naive" %+-% "sd")),
-#'   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
-#'   lty = c(1,2,1,2,1,2),
-#'   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
-#'   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
-#' )
-#'
-#' ## --- Right panel: Median and quartiles ---
-#' par(mar = c(5,5,3,4), xpd = NA)
-#'
-#' plot(m/100, Fq2, type = "l", col = "#377EB8",
-#'      xlab = "m (x100)", ylab = "Quartiles of mean error",
-#'      ylim = c(0, 0.12), lwd = 3, frame.plot = FALSE, xaxt = "n", yaxt = "n",
-#'      xlim = c(10,100), cex.axis = 1.4, cex.lab = 1.6)
-#' lines(m/100, Oq2, col = "#E41A1C", lwd = 3)
-#' lines(m/100, Nq2, col = "#4DAF4A", lwd = 3)
-#' points(m/100, Fq2, col = "#377EB8", pch = 19, cex = 0.7)
-#' points(m/100, Oq2, col = "#E41A1C", pch = 19, cex = 0.7)
-#' points(m/100, Nq2, col = "#4DAF4A", pch = 19, cex = 0.7)
-#' lines(m/100, Fq1, col = "#377EB8", lty = 2)
-#' lines(m/100, Fq3, col = "#377EB8", lty = 2)
-#' lines(m/100, Oq1, col = "#E41A1C", lty = 2)
-#' lines(m/100, Oq3, col = "#E41A1C", lty = 2)
-#' lines(m/100, Nq1, col = "#4DAF4A", lty = 2)
-#' lines(m/100, Nq3, col = "#4DAF4A", lty = 2)
-#' axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
-#' axis(side = 2, cex.axis = 1.4)
-#'
-#' legend(
-#'   "topright",
-#'   inset = c(0.09, 0),
-#'   legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
-#'              expression("q1,q3" ~ bar(Delta) ~ "FS"),
-#'              expression("Med  " ~ bar(Delta) ~ "Oracle"),
-#'              expression("q1,q3" ~ bar(Delta) ~ "Oracle"),
-#'              expression("Med  " ~ bar(Delta) ~ "Naive"),
-#'              expression("q1,q3" ~ bar(Delta) ~ "Naive")),
-#'   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
-#'   lty = c(1,2,1,2,1,2),
-#'   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
-#'   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
-#' )
-#' ```
+
+#+ fig1-plot, fig.width=10, fig.height=6, message=FALSE, warning=FALSE
+ par(mfrow = c(1,2), oma = c(0,0,0,0))
+
+ ## --- Left panel: Mean error with standard deviation bands ---
+ par(mar = c(5,5,3,4), xpd = NA)
+
+ plot(m/100, Fmean, type = "l", col = "#377EB8",
+      xlab = "m (x100)", ylab = "Mean error", ylim = c(0, 0.12), lwd = 3,
+      frame.plot = FALSE, xaxt = "n", yaxt = "n", xlim = c(10,100),
+      cex.axis = 1.4, cex.lab = 1.6)
+ lines(m/100, Omean, col = "#E41A1C", lwd = 3)
+ lines(m/100, Nmean, col = "#4DAF4A", lwd = 3)
+ points(m/100, Fmean, col = "#377EB8", pch = 19, cex = 0.7)
+ points(m/100, Omean, col = "#E41A1C", pch = 19, cex = 0.7)
+ points(m/100, Nmean, col = "#4DAF4A", pch = 19, cex = 0.7)
+ lines(m/100, FsdUp, col = "#377EB8", lty = 2)
+ lines(m/100, FsdLo, col = "#377EB8", lty = 2)
+ lines(m/100, OsdUp, col = "#E41A1C", lty = 2)
+ lines(m/100, OsdLo, col = "#E41A1C", lty = 2)
+ cap <- 0.12
+ NsdUp_cut <- ifelse(NsdUp > cap, NA, NsdUp)
+ lines(m/100, NsdUp_cut, col = "#4DAF4A", lty = 2)
+ lines(m/100, NsdLo, col = "#4DAF4A", lty = 2)
+ axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+ axis(side = 2, cex.axis = 1.4)
+
+ legend(
+   "topright",
+   inset = c(0.05, 0),
+   legend = c(expression(bar(Delta) ~ "FS"),
+              expression(bar(Delta) ~ "FS" %+-% "sd"),
+              expression(bar(Delta) ~ "Oracle"),
+              expression(bar(Delta) ~ "Oracle" %+-% "sd"),
+              expression(bar(Delta) ~ "Naive"),
+              expression(bar(Delta) ~ "Naive" %+-% "sd")),
+   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
+   lty = c(1,2,1,2,1,2),
+   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
+ )
+
+ ## --- Right panel: Median and quartiles ---
+ par(mar = c(5,5,3,4), xpd = NA)
+
+ plot(m/100, Fq2, type = "l", col = "#377EB8",
+      xlab = "m (x100)", ylab = "Quartiles of mean error",
+      ylim = c(0, 0.12), lwd = 3, frame.plot = FALSE, xaxt = "n", yaxt = "n",
+      xlim = c(10,100), cex.axis = 1.4, cex.lab = 1.6)
+ lines(m/100, Oq2, col = "#E41A1C", lwd = 3)
+ lines(m/100, Nq2, col = "#4DAF4A", lwd = 3)
+ points(m/100, Fq2, col = "#377EB8", pch = 19, cex = 0.7)
+ points(m/100, Oq2, col = "#E41A1C", pch = 19, cex = 0.7)
+ points(m/100, Nq2, col = "#4DAF4A", pch = 19, cex = 0.7)
+ lines(m/100, Fq1, col = "#377EB8", lty = 2)
+ lines(m/100, Fq3, col = "#377EB8", lty = 2)
+ lines(m/100, Oq1, col = "#E41A1C", lty = 2)
+ lines(m/100, Oq3, col = "#E41A1C", lty = 2)
+ lines(m/100, Nq1, col = "#4DAF4A", lty = 2)
+ lines(m/100, Nq3, col = "#4DAF4A", lty = 2)
+ axis(side = 1, at = m/100, labels = m/100, cex.axis = 1.4)
+ axis(side = 2, cex.axis = 1.4)
+
+ legend(
+   "topright",
+   inset = c(0.09, 0),
+   legend = c(expression("Med  " ~ bar(Delta) ~ "FS"),
+              expression("q1,q3" ~ bar(Delta) ~ "FS"),
+              expression("Med  " ~ bar(Delta) ~ "Oracle"),
+              expression("q1,q3" ~ bar(Delta) ~ "Oracle"),
+              expression("Med  " ~ bar(Delta) ~ "Naive"),
+              expression("q1,q3" ~ bar(Delta) ~ "Naive")),
+   col = c("#377EB8","#377EB8","#E41A1C","#E41A1C","#4DAF4A","#4DAF4A"),
+   lty = c(1,2,1,2,1,2),
+   lwd = c(3,1.5,3,1.5,3,1.5), bty = "n",
+   y.intersp = 0.95, x.intersp = 0.5, seg.len = 3, cex = 1.4
+ )
+
 #'
 #' ### 5.4 Analysis of Real-World Data
 #'
@@ -504,43 +578,44 @@ temp <- tempdata %>%
 head(temp, 4)
 #'
 #' ### Plot Figure 2: Time series with quarterly mean of daily maximum temperatures
-#' ```{r temp-plot, fig.width=9, fig.height=6, message=FALSE, warning=FALSE}
-#' TRIM_DATA <- temp %>%
-#'   mutate(
-#'     Y_TRIMESTER = paste0(year(DATE), "-T", quarter(DATE))
-#'   ) %>%
-#'   group_by(Y_TRIMESTER) %>%
-#'   summarise(
-#'     MEAN_TEMP = mean(MAXTEMP),
-#'     DATA_REF = min(DATE)
-#'   ) %>%
-#'   ungroup() %>%
-#'   arrange(DATA_REF)
-#' TRIM_DATA <- TRIM_DATA[-c(1, nrow(TRIM_DATA)),]
-#'
-#' ggplot(TRIM_DATA, aes(x = DATA_REF, y = MEAN_TEMP)) +
-#'   geom_line(color = "steelblue", linewidth = 0.5) +
-#'   geom_point(color = "steelblue", size = 1.2) +
-#'   scale_x_date(
-#'     date_breaks = "1 year",
-#'     date_labels = "%Y",
-#'     minor_breaks = NULL
-#'   ) +
-#'   theme_minimal() +
-#'   theme(
-#'     axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
-#'     axis.text.y = element_text(size = 12),
-#'     panel.grid.major = element_line(color = "gray90"),
-#'     axis.title.x = element_text(size = 15),
-#'     axis.title.y = element_text(size = 15),
-#'     plot.title = element_text(hjust = 0.5, size = 17, face = "bold")
-#'   ) +
-#'   labs(
-#'     title = "Quarterly mean of daily maximum temperatures across the years",
-#'     x = "Year",
-#'     y = "Mean Temperature (°C)"
-#'   )
-#' ```
+
+#+ temp-plot, fig.width=9, fig.height=6, message=FALSE, warning=FALSE
+ TRIM_DATA <- temp %>%
+   mutate(
+     Y_TRIMESTER = paste0(year(DATE), "-T", quarter(DATE))
+   ) %>%
+   group_by(Y_TRIMESTER) %>%
+   summarise(
+     MEAN_TEMP = mean(MAXTEMP),
+     DATA_REF = min(DATE)
+   ) %>%
+   ungroup() %>%
+   arrange(DATA_REF)
+ TRIM_DATA <- TRIM_DATA[-c(1, nrow(TRIM_DATA)),]
+
+ ggplot(TRIM_DATA, aes(x = DATA_REF, y = MEAN_TEMP)) +
+   geom_line(color = "steelblue", linewidth = 0.5) +
+   geom_point(color = "steelblue", size = 1.2) +
+   scale_x_date(
+     date_breaks = "1 year",
+     date_labels = "%Y",
+     minor_breaks = NULL
+   ) +
+   theme_minimal() +
+   theme(
+     axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+     axis.text.y = element_text(size = 12),
+     panel.grid.major = element_line(color = "gray90"),
+     axis.title.x = element_text(size = 15),
+     axis.title.y = element_text(size = 15),
+     plot.title = element_text(hjust = 0.5, size = 17, face = "bold")
+   ) +
+   labs(
+     title = "Quarterly mean of daily maximum temperatures across the years",
+     x = "Year",
+     y = "Mean Temperature (°C)"
+   )
+
 #'
 #' 3. Create categories of temperature:
 #'
@@ -558,24 +633,32 @@ Temp12 <- rev(temp$MAXTEMP1)
 #' oldest.
 #'
 recompute <- FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #'
 if (recompute) {
-  hdMTD_FS(Temp12, d = 400, l = 3) #takes ~7min.
+  message("Recomputing...")
+  FS_Temp12_d400 <- hdMTD_FS(Temp12, d = 400, l = 3) #takes ~7min.
+  precomputed$FS_Temp12_d400 <- FS_Temp12_d400
 } else {
-  print(precomputed$FS_Temp12_d400)
+  message("Using pre-computed data.")
+  FS_Temp12_d400 <- precomputed$FS_Temp12_d400
 }
+print(FS_Temp12_d400)
 #'
 #' Note: The next code line is mentioned in the article but without a CodeChunk <br>
 #' Reduce maximum order to improve estimation <br>
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #'
 if (recompute) {
-  hdMTD_FS(Temp12, d = 364, l = 3) #takes ~6min.
+  message("Recomputing...")
+  FS_Temp12_d364 <- hdMTD_FS(Temp12, d = 364, l = 3) #takes ~6min.
+  precomputed$FS_Temp12_d364 <- FS_Temp12_d364
 } else {
-  print(precomputed$FS_Temp12_d364)
+  message("Using pre-computed data.")
+  FS_Temp12_d364 <- precomputed$FS_Temp12_d364
 }
+print(FS_Temp12_d364)
 #'
 #' 5. Split sample in Train and Test data:
 #'
@@ -586,14 +669,18 @@ Temp12_Test <- Temp12[seq_len(ndays)] # Test data
 #'
 #' 6. Rerun FS for Train data:
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #'
 if (recompute) {
-  hdMTD_FS(Temp12_Train, d = 364, l = 3) #takes ~5min.
+  message("Recomputing...")
+  FS_Temp12Train <- hdMTD_FS(Temp12_Train, d = 364, l = 3) #takes ~5min.
+  precomputed$FS_Temp12Train <- FS_Temp12Train
 } else {
-  print(precomputed$FS_Temp12Train)
+  message("Using pre-computed data.")
+  FS_Temp12Train <- precomputed$FS_Temp12Train
 }
+print(FS_Temp12Train)
 #' 7. Trim out irrelevant lags:
 #'
 #' With CUT method
@@ -604,14 +691,18 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 #'
 #' 8. Lag selection with FSC method:
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 #'
 if (recompute) {
-  hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
+  message("Recomputing...")
+  FSC_Temp12Train <- hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
+  precomputed$FSC_Temp12Train <- FSC_Temp12Train
 } else {
-  print(precomputed$FSC_Temp12Train)
+  message("Using pre-computed data.")
+  FSC_Temp12Train <- precomputed$FSC_Temp12Train
 }
+print(FSC_Temp12Train)
 #'
 #' 9. Estimated transition matrix for FS method output:
 #'
@@ -686,13 +777,22 @@ BIC_fmt[minBIC_idx] <- paste0("**", BIC_fmt[minBIC_idx], "**")
 minBIC_idx
 #' The classic method chooses order $2$ ($S=\{-2,-1\}$).
 #'
-#' Table 2: BIC values
+#' Generating BIC values Table
 bic_matrix <- data.frame(matrix(BIC_fmt, nrow = 1))
 colnames(bic_matrix) <- model_names
 rownames(bic_matrix) <- "BIC"
-#' ```{r bic-table, results='asis', message=FALSE, warning=FALSE}
-#' knitr::kable(bic_matrix, caption = "BIC values computed for classical Markov chain models of different orders.")
-#' ```
+
+#' Table 2: BIC values
+
+#+ bic-table, results='asis', message=FALSE, warning=FALSE
+tbl_2 <- suppressWarnings(
+  knitr::kable(
+    bic_matrix,
+    caption = "BIC values computed for classical Markov chain models of different orders."
+  )
+)
+suppressWarnings(print(tbl_2))
+
 #'
 #' Estimated matrix for $S=\{-2,-1\}$
 P_MC2 <- empirical_probs(Temp12_Train, S = c(1, 2), matrixform = TRUE)
@@ -778,7 +878,6 @@ F1ScoreMC2 <- 2 * (PrecMC2 * SensMC2) / (PrecMC2 + SensMC2)
 F1ScoreFS <- 2 * (PrecFS * SensFS) / (PrecFS + SensFS)
 F1ScoreInd; F1ScoreMC2; F1ScoreFS
 
-#' Table 3: Model performance metrics
 metric <- c("Accuracy", "Precision", "Sensitivity (Recall)", "Specificity", "F1-Score")
 formula <- c("(TP+TN)/(TP+TN+FP+FN)",
              "TP/(TP+FP)",
@@ -794,40 +893,47 @@ performance_table <- data.frame(
   check.names = FALSE
 )
 names(performance_table) <- c("Metric", "Formula", "Ind (\\%)", "MC2 (\\%)", "FS (\\%)")
-#' ```{r performance-table, results='asis', message=FALSE, warning=FALSE}
-#' knitr::kable(performance_table, align = "l", caption = "Model performance metrics.")
-#' ```
+
+#' Table 3: Model performance metrics
+
+#+ performance-table, results='asis', message=FALSE, warning=FALSE
+suppressWarnings(
+  tbl_3 <- knitr::kable(performance_table, align = "l",
+                        caption = "Model performance metrics.")
+)
+suppressWarnings(print(tbl_3))
+
 #'
 #' ### Plot Figure 3: Exploratory analysis of accuracies
 #'
-#' ```{r accuracy-plot, fig.width=9, fig.height=6, message=FALSE, warning=FALSE}
-#' accuracy_data <- data.frame(
-#'   MC2 = hitMC2 / ndays,
-#'   FS = hitFS / ndays
-#' ) %>%
-#'   pivot_longer(
-#'     everything(),
-#'     names_to = "Model",
-#'     values_to = "Accuracy"
-#'   )
-#'
-#' ggplot(accuracy_data, aes(x = Model, y = Accuracy, fill = Model)) +
-#'   geom_boxplot() +
-#'   labs(
-#'     title = "Accuracy distribution (1000 replications)",
-#'     x = "Model",
-#'     y = "Accuracy"
-#'   ) +
-#'   theme_minimal() +
-#'   scale_fill_brewer(palette = "Paired") +
-#'   theme(
-#'     plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
-#'     axis.title = element_text(size = 16),
-#'     axis.text = element_text(size = 14),
-#'     legend.title = element_text(size = 16),
-#'     legend.text = element_text(size = 14)
-#'   )
-#' ```
+#+ accuracy-plot, fig.width=9, fig.height=6, message=FALSE, warning=FALSE
+ accuracy_data <- data.frame(
+   MC2 = hitMC2 / ndays,
+   FS = hitFS / ndays
+ ) %>%
+   pivot_longer(
+     everything(),
+     names_to = "Model",
+     values_to = "Accuracy"
+   )
+
+ ggplot(accuracy_data, aes(x = Model, y = Accuracy, fill = Model)) +
+   geom_boxplot() +
+   labs(
+     title = "Accuracy distribution (1000 replications)",
+     x = "Model",
+     y = "Accuracy"
+   ) +
+   theme_minimal() +
+   scale_fill_brewer(palette = "Paired") +
+   theme(
+     plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+     axis.title = element_text(size = 16),
+     axis.text = element_text(size = 14),
+     legend.title = element_text(size = 16),
+     legend.text = element_text(size = 14)
+   )
+
 #'
 #' ### Empirical $\nu$ Analysis
 #'
@@ -968,59 +1074,74 @@ run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
   return(results)
 }
 #'
+
+## Load pre-computed results of sequential selection if available and recompute_all = FALSE.
+use_results_sequential <- !recompute_all && file.exists("results_sequential_selection.rds")
 #'
-recompute <-  FALSE
-recompute <- ifelse(recompute_all, TRUE, recompute)
+recompute <- FALSE
+recompute <- recompute || (!use_results_sequential)
+
 if (recompute) {
+  message("Recomputing FS sequential selection results.")
   results <- run_sequential_lag_selection(Temp12_Train) #takes ~6 min
 } else {
-  results <- readRDS("results_sequential_selection.rds") # using precomputed results
+  message("Using pre-computed FS sequential selection results from 'results_sequential_selection.rds'.")
+  results <- readRDS("results_sequential_selection.rds") # using precomputed results if available
   cat("\n=== Final Selection Results ===\n")
   print(data.frame(Step = 1:3, Selected_Lag = results$selected_lags,
                    nu = c(max(results$nuj1), max(results$nuj2), max(results$nuj3))))
 }
 #'
 #' ### Plot Figure 4: FS sequential step analysis through $\hat{\nu}_{n,j,S}$.
-#' ```{r nu-plot, fig.width=11, fig.height=6, message=FALSE, warning=FALSE}
-#' par(mfrow = c(1, 3), mar = c(5, 6, 4, 2), oma = c(0, 0, 4, 0))
-#' palette <- c("#E41A1C", "#377EB8", "#4DAF4A")
-#' with(results, {
-#'   # Graph 1
-#'   Sc <-  364:1
-#'   plot(1:364, rev(nuj1), type = "p", pch = 19, cex = 0.8, col = "gray70",
-#'        ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
-#'        ylim = c(0,0.13), main = "", panel.first = grid())
-#'   title(main = expression(paste("S = ", Ø)), cex.main = 1.5, font.main = 1)
-#'   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
-#'   points(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], pch = 21, bg = palette[1], cex = 1.5, lwd = 1)
-#'   text(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], labels = paste0(Sc[which.max(nuj1)]),
-#'        pos = 3, col = palette[1], font = 2, cex = 1.4)
-#'   # Graph 2
-#'   Sc <- 364:2
-#'   plot(2:364, rev(nuj2), type = "p", pch = 19, cex = 0.8, col = "gray70",
-#'        ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
-#'        ylim = c(0,0.025),  main = "", panel.first = grid())
-#'   title(main = "With S = {-1}", cex.main = 1.5, font.main = 1)
-#'   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
-#'   points(Sc[which.max(nuj2)], nuj2[which.max(nuj2)], pch = 21, bg = palette[2], cex = 1.5, lwd = 1)
-#'   text(Sc[which.max(nuj2)]-5, nuj2[which.max(nuj2)], labels = paste0(Sc[which.max(nuj2)]),
-#'        pos = 3, col = palette[2], font = 2, cex = 1.4)
-#'   # Graph 3
-#'   Sc <- 363:2
-#'   plot(2:363, rev(nuj3), type = "p", pch = 19, cex = 0.8, col = "gray70",
-#'        ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
-#'        ylim = c(0,0.025), main = "", panel.first = grid())
-#'   title(main = "With S = {-364, -1}", cex.main = 1.5, font.main = 1)
-#'   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
-#'   points(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], pch = 21, bg = palette[3], cex = 1.5, lwd = 1)
-#'   text(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], labels = paste0(Sc[which.max(nuj3)]),
-#'        pos = 3, col = palette[3], font = 2, cex = 1.4)
 #'
-#'   mtext(expression(paste("Sequential lag selection based on ", widehat(nu)[n*","*j*","*S])),
-#'         outer = TRUE, cex = 1.6, font = 2, line = 1.4)
-#' })
-#' ```
+#+ nu-plot, fig.width=11, fig.height=6, message=FALSE, warning=FALSE
+ par(mfrow = c(1, 3), mar = c(5, 6, 4, 2), oma = c(0, 0, 4, 0))
+ palette <- c("#E41A1C", "#377EB8", "#4DAF4A")
+ with(results, {
+   # Graph 1
+   Sc <-  364:1
+   plot(1:364, rev(nuj1), type = "p", pch = 19, cex = 0.8, col = "gray70",
+        ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
+        ylim = c(0,0.13), main = "", panel.first = grid())
+   title(main = expression(paste("S = ", Ø)), cex.main = 1.5, font.main = 1)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   points(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], pch = 21, bg = palette[1], cex = 1.5, lwd = 1)
+   text(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], labels = paste0(Sc[which.max(nuj1)]),
+        pos = 3, col = palette[1], font = 2, cex = 1.4)
+   # Graph 2
+   Sc <- 364:2
+   plot(2:364, rev(nuj2), type = "p", pch = 19, cex = 0.8, col = "gray70",
+        ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
+        ylim = c(0,0.025),  main = "", panel.first = grid())
+   title(main = "With S = {-1}", cex.main = 1.5, font.main = 1)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   points(Sc[which.max(nuj2)], nuj2[which.max(nuj2)], pch = 21, bg = palette[2], cex = 1.5, lwd = 1)
+   text(Sc[which.max(nuj2)]-5, nuj2[which.max(nuj2)], labels = paste0(Sc[which.max(nuj2)]),
+        pos = 3, col = palette[2], font = 2, cex = 1.4)
+   # Graph 3
+   Sc <- 363:2
+   plot(2:363, rev(nuj3), type = "p", pch = 19, cex = 0.8, col = "gray70",
+        ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
+        ylim = c(0,0.025), main = "", panel.first = grid())
+   title(main = "With S = {-364, -1}", cex.main = 1.5, font.main = 1)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   points(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], pch = 21, bg = palette[3], cex = 1.5, lwd = 1)
+   text(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], labels = paste0(Sc[which.max(nuj3)]),
+        pos = 3, col = palette[3], font = 2, cex = 1.4)
+
+   mtext(expression(paste("Sequential lag selection based on ", widehat(nu)[n*","*j*","*S])),
+         outer = TRUE, cex = 1.6, font = 2, line = 1.4)
+ })
+
 #'
+if (save_precomputed) {
+  message("Saving pre-computed results to 'hdMTD_outputs.rds'.")
+  saveRDS(precomputed, "hdMTD_outputs.rds")
+  message("Saving simulated data to 'simulated_data.rds'.")
+  saveRDS(simulated_data, "simulated_data.rds")
+  message("Saving FS sequential selection results to 'results_sequential_selection.rds'.")
+  saveRDS(results, "results_sequential_selection.rds")
+}
 #'
 #' ## Session info
 sessionInfo()

@@ -110,43 +110,36 @@ transitP <- function(object) {
 
 # ===== MTD obj methods =====
 
-#' @rdname MTD-accessors
 #' @exportS3Method pj MTD
 pj.MTD <- function(object) {
   object$pj
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method p0 MTD
 p0.MTD <- function(object) {
   object$p0
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method lambdas MTD
 lambdas.MTD <- function(object) {
   object$lambdas
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method lags MTD
 lags.MTD <- function(object) {
   -object$Lambda  # lags are in Z^-
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method Lambda MTD
 Lambda.MTD <- function(object) {
   object$Lambda
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method states MTD
 states.MTD <- function(object) {
   object$A
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method transitP MTD
 transitP.MTD <- function(object) {
   object$P
@@ -154,37 +147,31 @@ transitP.MTD <- function(object) {
 
 # ===== MTDest obj methods =====
 
-#' @rdname MTD-accessors
 #' @exportS3Method pj MTDest
 pj.MTDest <- function(object) {
   object$pj
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method p0 MTDest
 p0.MTDest <- function(object) {
   object$p0
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method lambdas MTDest
 lambdas.MTDest <- function(object) {
   object$lambdas
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method lags MTDest
 lags.MTDest <- function(object) {
   -object$S  # lags are in Z^-
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method S MTDest
 S.MTDest <- function(object) {
   object$S
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method states MTDest
 states.MTDest <- function(object) {
   object$A
@@ -192,13 +179,11 @@ states.MTDest <- function(object) {
 
 # ===== hdMTD obj methods =====
 
-#' @rdname MTD-accessors
 #' @exportS3Method S hdMTD
 S.hdMTD <- function(object) {
   as.integer(unclass(object))
 }
 
-#' @rdname MTD-accessors
 #' @exportS3Method lags hdMTD
 lags.hdMTD <- function(object) {
   -S(object)

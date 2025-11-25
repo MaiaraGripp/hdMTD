@@ -1,15 +1,39 @@
 #' Methods for objects of class \code{"MTDest"}
 #'
 #' @description
-#' Printing method for EM fits of Mixture Transition Distribution (MTD) models.
+#' Printing, summarizing, and extracting information from EM fits of Mixture
+#'  Transition Distribution (MTD) models.
 #'
 #' @details
-#' The \code{print.MTDest()} method displays a compact summary of the fitted model:
-#' the lag set (\code{S}), the state space (\code{A}), the final log-likelihood,
-#' and, if available, the number of EM updates performed.
+#' These methods handle objects returned by \code{\link{MTDest}} (class \code{"MTDest"}):
+#' \itemize{
+#'   \item \code{print.MTDest()} displays a compact summary of the fitted model:
+#'    the lag set (\code{S}), the state space (\code{A}), the final
+#'     log-likelihood, and, if available, the number of EM updates performed.
+#'
+#'   \item \code{summary.MTDest()} collects key components of the object into a
+#'   readable summary list (class \code{"summary.MTDest"}), including lambdas,
+#'   transition matrices, independent distribution (if present), log-likelihood,
+#'    oscillations (if available), and iteration diagnostics.
+#'
+#'   \item \code{print.summary.MTDest()} prints the summary in a readable format,
+#'    including lambdas, transition matrices, independent distribution,
+#'     log-likelihood, oscillations (if available), and iteration diagnostics
+#'      (if available).
+#'
+#'   \item \code{coef.MTDest()} extracts the estimated mixture weights
+#'    (\code{lambdas}), the list of transition matrices (\code{pj}), and the
+#'     independent distribution (\code{p0}).
+#'
+#'   \item \code{logLik.MTDest()} returns the log-likelihood as an object of class
+#'    \code{"logLik"}, with attributes \code{df} (number of free parameters
+#'     under the multimatrix model) and \code{nobs} (effective sample size).
+#' }
 #'
 #' @param x An object of class \code{"MTDest"} or \code{"summary.MTDest"},
 #'  depending on the method.
+#' @param object An object of class \code{"MTDest"} (used by summary, coef, and
+#'  logLik methods).
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
 #' @return
@@ -27,11 +51,10 @@
 #'     \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
 #' }
 #'
-#' @seealso \code{\link{MTDest}}, \code{\link{summary.MTDest}},
-#'   \code{\link{print.summary.MTDest}}, \code{\link{coef.MTDest}},
-#'    \code{\link{logLik}}, \code{\link{AIC}}, \code{\link{BIC}}
+#' @seealso \code{\link{MTDest}}, \code{\link{as.MTD}}
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(1)
 #' MTD <- MTDmodel(Lambda = c(1, 3), A = c(0, 1), lam0 = 0.01)
 #' X <- perfectSample(MTD, N = 200)  # small N to keep examples fast
@@ -49,9 +72,11 @@
 #' coef(fit)
 #' logLik(fit)
 #' BIC(fit)
+#' }
 #'
 #' @name MTDest-methods
-#' @rdname MTDest-methods
+NULL
+
 #' @exportS3Method print MTDest
 print.MTDest <- function(x, ...) {
   cat("An object of class 'MTDest' (EM estimation of MTD model)\n")
@@ -63,19 +88,10 @@ print.MTDest <- function(x, ...) {
   }
   cat("  Use summary() for full description.\n")
   cat("  Accessors: lambdas(), pj(), p0(), lags(), S(), states().\n")
-  cat("  Methods:   coef(), probs(), as.MTD(), logLik().\n")
+  cat("  Methods: coef(), probs(), as.MTD(), logLik(), plot().\n")
   invisible(x)
 }
-#' @description Summary method for EM fits of MTD models.
-#'
-#' @details The \code{summary.MTDest()} method collects key fields from an
-#' \code{"MTDest"} object into a compact list (class \code{"summary.MTDest"})
-#' suitable for printing.
-#'
-#' @param object An object of class \code{"MTDest"} (used by methods that operate
-#' on the fitted model).
-#'
-#' @rdname MTDest-methods
+
 #' @exportS3Method summary MTDest
 summary.MTDest <- function(object, ...) {
   stopifnot(inherits(object, "MTDest"))
@@ -101,14 +117,6 @@ summary.MTDest <- function(object, ...) {
   out
 }
 
-#' @description Printing method for \code{"summary.MTDest"} objects.
-#'
-#' @details
-#' The \code{print.summary.MTDest()} method prints that summary in a readable format,
-#' including lambdas, transition matrices, independent distribution,
-#' log-likelihood, oscillations (if available), and iteration diagnostics (if available).
-#'
-#' @rdname MTDest-methods
 #' @exportS3Method print summary.MTDest
 print.summary.MTDest <- function(x, ...) {
   cat("Summary of EM estimation for MTD model:\n")
@@ -150,13 +158,6 @@ print.summary.MTDest <- function(x, ...) {
   invisible(x)
 }
 
-#' @description Extract coefficients from an \code{"MTDest"} fit.
-#'
-#' @details The \code{coef.MTDest()} method returns the fitted mixture weights
-#' (\code{lambdas}), the list of transition matrices (\code{pj}), and (if present)
-#' the independent distribution \code{p0}.
-#'
-#' @rdname MTDest-methods
 #' @exportS3Method coef MTDest
 coef.MTDest <- function(object, ...) {
   stopifnot(inherits(object, "MTDest"))
@@ -168,17 +169,6 @@ coef.MTDest <- function(object, ...) {
   out
 }
 
-#' @description Extract log-likelihood from an \code{"MTDest"} fit.
-#'
-#' @details
-#' The \code{logLik.MTDest()} computes the log-likelihood and returns an object
-#' of class \code{"logLik"} with attributes: \code{nobs}, the effective sample
-#' size used for estimation, and \code{df}, number of free parameters estimated
-#' supposing all transition matrices pj to be distinct (multimatrix model).
-#' Note: in the returned "logLik" object, \code{df} denotes the number of free
-#' parameters (not residual degrees of freedom).
-#'
-#' @rdname MTDest-methods
 #' @exportS3Method logLik MTDest
 logLik.MTDest <- function(object, ...) {
   stopifnot(inherits(object, "MTDest"))
