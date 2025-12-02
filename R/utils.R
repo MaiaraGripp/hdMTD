@@ -4,7 +4,7 @@
 # These functions are not exported and are used internally to run some
 # simple algorithm or calculation.
 
-# 1 - groupTab()
+# 1 - .groupTab()
 # 2 - PI()
 # 3 - sx()
 # 4 - n_parameters()
@@ -17,7 +17,7 @@
 ###########################################################
 ###########################################################
 
-# groupTab: groups and summarizes a frequency table by a given set of lags.
+# .groupTab: groups and summarizes a frequency table by a given set of lags.
 #
 # This function groups a tibble `freqTab` by a subset of lags `S` and possibly
 # an additional lag `j`. It then sums the frequency counts (`Nxa_Sj`) for
@@ -34,7 +34,7 @@
 # - A tibble grouped by lags in `Sj` with summed absolute frequencies.
 # - If `S` and `j` are NULL or empty, returns a 1-row matrix [0, lenX - d].
 
-groupTab <- function(S, j, freqTab, lenX, d){
+.groupTab <- function(S, j, freqTab, lenX, d){
 
     Sj <- sort(c(S, j), decreasing = TRUE) # The set of lags
 
@@ -51,7 +51,7 @@ groupTab <- function(S, j, freqTab, lenX, d){
       return( data.frame(x = 0, Nx_Sj = lenX - d) )
     }
 }
-# groupTab is used in: oscillation.R, hdMTD_FS.R.
+# .groupTab is used in: oscillation.R, hdMTD_FS.R.
 
 ###########################################################
 ###########################################################
