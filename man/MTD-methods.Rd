@@ -4,9 +4,6 @@
 \alias{MTD-methods}
 \title{Methods for objects of class \code{"MTD"}}
 \arguments{
-\item{x}{An object of class \code{"MTD"} or \code{"summary.MTD"},
-depending on the method.}
-
 \item{object}{An object of class \code{"MTD"}.}
 
 \item{X}{A vector or single-column data frame containing an MTD chain sample
@@ -18,12 +15,11 @@ depending on the method.}
 \describe{
 \item{\code{print.MTD}}{Invisibly returns the \code{"MTD"} object, after
 displaying its relevant lag set and state space.}
-\item{\code{summary.MTD}}{An object of class \code{"summary.MTD"} with fields:
-\code{order}, \code{states}, \code{lags}, \code{indep},
-\code{lambdas}, \code{p0} (or \code{NULL}),
-\code{P_dim}, and \code{P_head}.}
-\item{\code{print.summary.MTD}}{Invisibly returns the
-\code{"summary.MTD"} object after printing its contents.}
+\item{\code{summary.MTD}}{Invisibly returns a named list with fields:
+\code{call}, \code{order}, \code{Lambda}, \code{states},
+\code{lags}, \code{indep}, \code{lambdas}, \code{pj},
+\code{p0} (or \code{NULL}), \code{P_dim}, and \code{P}. The same
+information is printed to the console in a readable format.}
 \item{\code{coef.MTD}}{A list with model parameters:
 \code{lambdas}, \code{pj}, and \code{p0}.}
 \item{\code{logLik.MTD}}{An object of class \code{"logLik"} with attributes
@@ -42,16 +38,10 @@ These methods operate on objects created by \code{\link{MTDmodel}}:
 \item \code{print.MTD()} displays a compact summary of the model:
 the relevant lag set (shown as negative integers) and the state space.
 
-\item \code{summary.MTD()} collects the key components of the model into
-a list (class \code{"summary.MTD"}) containing order, lags, state
-space, mixture weights, independent distribution (if present),
-the dimension of the global transition matrix \eqn{P}, and a compact
-preview of its first rows.
-
-\item \code{print.summary.MTD()} prints that summary in a readable format,
-including lambdas, transition matrices \eqn{p_j}, the independent
-distribution \eqn{p_0} (if present), and a guide for interpreting the
-rows of the global transition matrix \eqn{P}.
+\item \code{summary.MTD()} computes and prints a detailed summary of the
+model, including order, relevant lags, state space, mixture weights,
+the independent distribution (if present), and a compact preview of
+the global transition matrix \eqn{P}.
 
 \item \code{coef.MTD()} extracts the model parameters as a list with
 \code{lambdas}, \code{pj}, and \code{p0}.
@@ -71,7 +61,7 @@ m <- MTDmodel(Lambda = c(1, 3), A = c(0, 1), lam0 = 0.05)
 
 print(m)       # compact display: lags (Z^-) and state space
 s <- summary(m)
-print(s)
+str(s)
 
 coef(m)        # list(lambdas = ..., pj = ..., p0 = ...)
 transitP(m)    # global transition matrix P

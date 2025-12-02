@@ -10,16 +10,10 @@
 #'   \item \code{print.MTD()} displays a compact summary of the model:
 #'         the relevant lag set (shown as negative integers) and the state space.
 #'
-#'   \item \code{summary.MTD()} collects the key components of the model into
-#'         a list (class \code{"summary.MTD"}) containing order, lags, state
-#'         space, mixture weights, independent distribution (if present),
-#'         the dimension of the global transition matrix \eqn{P}, and a compact
-#'         preview of its first rows.
-#'
-#'   \item \code{print.summary.MTD()} prints that summary in a readable format,
-#'         including lambdas, transition matrices \eqn{p_j}, the independent
-#'         distribution \eqn{p_0} (if present), and a guide for interpreting the
-#'         rows of the global transition matrix \eqn{P}.
+#'   \item \code{summary.MTD()} computes and prints a detailed summary of the
+#'         model, including order, relevant lags, state space, mixture weights,
+#'         the independent distribution (if present), and a compact preview of
+#'         the global transition matrix \eqn{P}.
 #'
 #'   \item \code{coef.MTD()} extracts the model parameters as a list with
 #'         \code{lambdas}, \code{pj}, and \code{p0}.
@@ -32,8 +26,6 @@
 #'         with appropriate attributes.
 #' }
 #'
-#' @param x An object of class \code{"MTD"} or \code{"summary.MTD"},
-#'  depending on the method.
 #' @param object An object of class \code{"MTD"}.
 #' @param X A vector or single-column data frame containing an MTD chain sample
 #' (values must be in the model's state space).
@@ -43,12 +35,11 @@
 #' \describe{
 #'   \item{\code{print.MTD}}{Invisibly returns the \code{"MTD"} object, after
 #'         displaying its relevant lag set and state space.}
-#'   \item{\code{summary.MTD}}{An object of class \code{"summary.MTD"} with fields:
-#'         \code{order}, \code{states}, \code{lags}, \code{indep},
-#'         \code{lambdas}, \code{p0} (or \code{NULL}),
-#'         \code{P_dim}, and \code{P_head}.}
-#'   \item{\code{print.summary.MTD}}{Invisibly returns the
-#'         \code{"summary.MTD"} object after printing its contents.}
+#'   \item{\code{summary.MTD}}{Invisibly returns a named list with fields:
+#'         \code{call}, \code{order}, \code{Lambda}, \code{states},
+#'         \code{lags}, \code{indep}, \code{lambdas}, \code{pj},
+#'         \code{p0} (or \code{NULL}), \code{P_dim}, and \code{P}. The same
+#'         information is printed to the console in a readable format.}
 #'   \item{\code{coef.MTD}}{A list with model parameters:
 #'         \code{lambdas}, \code{pj}, and \code{p0}.}
 #'   \item{\code{logLik.MTD}}{An object of class \code{"logLik"} with attributes
@@ -72,7 +63,7 @@
 #'
 #' print(m)       # compact display: lags (Z^-) and state space
 #' s <- summary(m)
-#' print(s)
+#' str(s)
 #'
 #' coef(m)        # list(lambdas = ..., pj = ..., p0 = ...)
 #' transitP(m)    # global transition matrix P
@@ -88,9 +79,9 @@ NULL
 # --------------------------- print.MTD ---------------------------------
 
 #' @exportS3Method print MTD
-print.MTD <- function(x, ...) {
-  lg <- lags(x)
-  A  <- states(x)
+print.MTD <- function(object, ...) {
+  lg <- lags(object)
+  A  <- states(object)
 
   cat("An object of class 'MTD'\n")
   cat("  Relevant lags: ", fmt_vec(lg), "\n", sep = "")
@@ -98,7 +89,7 @@ print.MTD <- function(x, ...) {
   cat("  Use summary() for full description.\n")
   cat("  Accessors: transitP(), lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
   cat("  Methods: coef(), probs(), oscillation(), perfectSample(), logLik(), plot().\n")
-  invisible(x)
+  invisible(object)
 }
 
 # ------------------------- summary.MTD ---------------------------------
@@ -125,44 +116,50 @@ summary.MTD <- function(object, ...) {
     P_dim   = dim(P),
     P       = P
   )
-  class(out) <- "summary.MTD"
-  out
+  .print_MTD_summary(out)
+  invisible(out)
 }
 
-#' @exportS3Method print summary.MTD
-print.summary.MTD <- function(x, ...) {
-  cat("Mixture Transition Distribution (MTD) model \n")
-  if (!is.null(x$call)) { cat("\nCall:\n"); print(x$call) }
+.print_MTD_summary <- function(object) {
+  cat("Mixture Transition Distribution (MTD) model\n")
+  if (!is.null(object$call)) {
+    cat("\nCall:\n")
+    print(object$call)
+  }
 
-  cat("\nRelevant lags: ", fmt_vec(x$lags), "\n", sep = "")
-  cat("State space: ", fmt_vec(x$states), "\n", sep = "")
+  cat("\nRelevant lags: ", fmt_vec(object$lags), "\n", sep = "")
+  cat("State space: ", fmt_vec(object$states), "\n", sep = "")
 
-  cat("\nlambdas (weights):\n"); print(x$lambdas)
+  cat("\nlambdas (weights):\n")
+  print(object$lambdas)
 
-  if (!is.null(x$p0)) {
-    cat("\nIndependent distribution p0:\n"); print(x$p0)
+  if (!is.null(object$p0)) {
+    cat("\nIndependent distribution p0:\n")
+    print(object$p0)
   }
 
   cat("\nTransition matrices pj (one per lag):\n")
-  for (i in seq_along(x$pj)) {
-    cat(sprintf(" \n pj for lag j = %s:\n", -x$Lambda[i]))
-    print(x$pj[[i]])
+  for (i in seq_along(object$pj)) {
+    cat(sprintf(" \n pj for lag j = %s:\n", -object$Lambda[i]))
+    print(object$pj[[i]])
   }
 
-  cat(sprintf("\nTransition matrix P: %d x %d\n", x$P_dim[1], x$P_dim[2]))
-  cat("- Preview of first rows of P:\n"); print(utils::head(x$P, n = min(6L, nrow(x$P))))
-
-  ## ---- Reading guide for P (right-to-left interpretation) ----
+  cat(sprintf("\nTransition matrix P: %d x %d\n",
+              object$P_dim[1], object$P_dim[2]))
+  cat("- Preview of first rows of P:\n")
+  print(utils::head(object$P, n = min(6L, nrow(object$P))))
 
   cat("\nReading guide for P:\n")
-  if (!is.null(x$Lambda)) {
+  if (!is.null(object$Lambda)) {
     cat("Rows list past contexts from oldest to newest, matching lags ",
-        paste0("(", paste(-sort(x$Lambda, decreasing = TRUE), collapse = ", "), ")"), ".\n", sep = "")
+        paste0("(", paste(-sort(object$Lambda, decreasing = TRUE),
+                          collapse = ", "), ")"), ".\n", sep = "")
   } else {
     cat("Rows list past contexts from oldest to newest.\n")
   }
-  invisible(x)
+  invisible(object)
 }
+
 
 # --------------------------- coef.MTD ----------------------------------
 
