@@ -79,9 +79,9 @@ NULL
 # --------------------------- print.MTD ---------------------------------
 
 #' @exportS3Method print MTD
-print.MTD <- function(object, ...) {
-  lg <- lags(object)
-  A  <- states(object)
+print.MTD <- function(x, ...) {
+  lg <- lags(x)
+  A  <- states(x)
 
   cat("An object of class 'MTD'\n")
   cat("  Relevant lags: ", fmt_vec(lg), "\n", sep = "")
@@ -89,7 +89,7 @@ print.MTD <- function(object, ...) {
   cat("  Use summary() for full description.\n")
   cat("  Accessors: transitP(), lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
   cat("  Methods: coef(), probs(), oscillation(), perfectSample(), logLik(), plot().\n")
-  invisible(object)
+  invisible(x)
 }
 
 # ------------------------- summary.MTD ---------------------------------
@@ -176,7 +176,7 @@ coef.MTD <- function(object, ...) {
 # --------------------------- logLik.MTD ----------------------------------
 
 #' @exportS3Method logLik MTD
-logLik.MTD <- function(object, X,...) {
+logLik.MTD <- function(object, X, ...) {
   checkMTD(object)
   if (missing(X)) {
     stop("Argument X is missing. A sample X must be provided since the log-likelihood is computed from the sample frequencies together with the model parameters stored in the MTD object.")
