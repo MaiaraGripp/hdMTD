@@ -116,11 +116,11 @@ summary.MTD <- function(object, ...) {
     P_dim   = dim(P),
     P       = P
   )
-  .print_MTD_summary(out)
+  print_MTD_summary(out)
   invisible(out)
 }
 
-.print_MTD_summary <- function(object) {
+print_MTD_summary <- function(object) {
   cat("Mixture Transition Distribution (MTD) model\n")
   if (!is.null(object$call)) {
     cat("\nCall:\n")
