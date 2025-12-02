@@ -103,8 +103,8 @@ oscillation.default <- function(x, S, A = NULL, ...){
 
         if (lenS > 1) {
             Z <- setdiff(S, j) # Z <-  S\{j}
-            b_S <- .groupTab(S = Z, j = NULL, b_Sja, lenX = lenX, d = S[1])
-            # .groupTab is defined at utils.R
+            b_S <- groupTab(S = Z, j = NULL, b_Sja, lenX = lenX, d = S[1])
+            # groupTab is defined at utils.R
             PositiveNx_S <- which(b_S$Nx_Sj > 0) # Positions of the x_Z that appeared in the sample
             subx <- b_S[PositiveNx_S, -lenS] # List of these x_Z
         } else {

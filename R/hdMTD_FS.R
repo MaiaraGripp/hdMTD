@@ -98,9 +98,9 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
 
           # Tables with frequencies given pasts in the selected lag set S
           b_Sja <- freqTab(S = S, j = j, A = A, countsTab = base) # given lag j and present state
-          b_Sj <- .groupTab(S = S, j = j, b_Sja, lenX = lenX, d = d) # given j but without present state
-          b_S <- .groupTab(S = S, j = NULL, b_Sja, lenX = lenX, d = d) # if S is NULL bs <- [0,lenX-d]
-          # .groupTab() is defined at utils.R
+          b_Sj <- groupTab(S = S, j = j, b_Sja, lenX = lenX, d = d) # given j but without present state
+          b_S <- groupTab(S = S, j = NULL, b_Sja, lenX = lenX, d = d) # if S is NULL bs <- [0,lenX-d]
+          # groupTab() is defined at utils.R
           ncolb_S <- ncol(b_S)
 
           # Identify sequences x_S with N(x_S) > 0 (i.e. that appeared in the sample)
