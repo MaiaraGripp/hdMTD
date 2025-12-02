@@ -17,19 +17,113 @@
 
 ## Load packages
 library("hdMTD")
-library("dplyr")
-library("ggplot2")
-library("lubridate")
-library("purrr")
-library("tidyr")
-library("future")
-library("future.apply")
+```
 
+```
+## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
+```
+
+```
+## 
+## Anexando pacote: 'hdMTD'
+```
+
+```
+## O seguinte objeto é mascarado _por_ '.GlobalEnv':
+## 
+##     tempdata
+```
+
+``` r
+library("dplyr")
+```
+
+```
+## Warning: pacote 'dplyr' foi compilado no R versão 4.4.3
+```
+
+```
+## 
+## Anexando pacote: 'dplyr'
+```
+
+```
+## Os seguintes objetos são mascarados por 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## Os seguintes objetos são mascarados por 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+``` r
+library("ggplot2")
+```
+
+```
+## Warning: pacote 'ggplot2' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("lubridate")
+```
+
+```
+## Warning: pacote 'lubridate' foi compilado no R versão 4.4.3
+```
+
+```
+## 
+## Anexando pacote: 'lubridate'
+```
+
+```
+## Os seguintes objetos são mascarados por 'package:base':
+## 
+##     date, intersect, setdiff, union
+```
+
+``` r
+library("purrr")
+```
+
+```
+## Warning: pacote 'purrr' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("tidyr")
+```
+
+```
+## Warning: pacote 'tidyr' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("future")
+```
+
+```
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("future.apply")
+```
+
+```
+## Warning: pacote 'future.apply' foi compilado no R versão 4.4.3
+```
+
+``` r
 # Set recompute_all = TRUE to override all pre-computed results (not recommended)
-recompute_all <- TRUE
+recompute_all <- FALSE
 
 # Set save_precomputed = TRUE to store results in their corresponding RDS file.
-save_precomputed <- TRUE
+save_precomputed <- FALSE
 ```
 
 ``` r
@@ -88,7 +182,7 @@ if (use_precomputed_hdMTD_outputs) {
 ```
 
 ```
-## Pre-computed results not available or recompute_all = TRUE.
+## Using pre-computed results from 'hdMTD_outputs.rds'.
 ```
 
 ## Section 5: Using hdMTD
@@ -216,7 +310,7 @@ S(FS); summary(FS)
 
 
 ``` r
-recompute <- FALSE
+recompute <- TRUE
 recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 ```
 
@@ -286,10 +380,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##           30        15,30      1,15,30   1,15,17,30 
-##     644.4959     648.0111     649.4950     650.2869 
-## smallest: 30 
-##     644.4959
+##           30        15,30      1,15,30   1,15,17,30 smallest: 30 
+##     644.4959     648.0111     649.4950     650.2869     644.4959
 ```
 
 
@@ -305,12 +397,10 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30 
-##             641.7328             643.1757 
-##              1,15,30           1,15,17,30 
-##             642.5873             641.3069 
-## smallest: 1,15,17,30 
-##             641.3069
+##                   30                15,30              1,15,30 
+##             641.7328             643.1757             642.5873 
+##           1,15,17,30 smallest: 1,15,17,30 
+##             641.3069             641.3069
 ```
 
 
@@ -326,12 +416,10 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30 
-##             637.5881             634.1956 
-##              1,15,30           1,15,17,30 
-##             628.7718             622.6559 
-## smallest: 1,15,17,30 
-##             622.6559
+##                   30                15,30              1,15,30 
+##             637.5881             634.1956             628.7718 
+##           1,15,17,30 smallest: 1,15,17,30 
+##             622.6559             622.6559
 ```
 
 
@@ -340,7 +428,7 @@ hdMTD_BIC(X, d = 40,
 
 
 ``` r
-recompute <- FALSE
+recompute <- TRUE
 recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 ```
 
@@ -375,7 +463,7 @@ print(CUT_d40)
 
 
 ``` r
-recompute <- FALSE
+recompute <- TRUE
 recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 ```
 
@@ -824,59 +912,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing simulation data for Section 5.3.
-```
-
-```
-## Using 6 workers
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
+## Using pre-computed simulation data from 'simulated_data.rds'.
 ```
 
 
@@ -1278,7 +1314,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -1314,7 +1350,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -1343,7 +1379,7 @@ Temp12_Test <- Temp12[seq_len(ndays)] # Test data
 
 
 ``` r
-recompute <- FALSE
+recompute <- TRUE
 recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 ```
 
@@ -1395,10 +1431,8 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 ```
 
 ```
-##                 1             1,364           1,6,364 
-##          1720.801          1690.543          1674.080 
-## smallest: 1,6,364 
-##          1674.080
+##                 1             1,364           1,6,364 smallest: 1,6,364 
+##          1720.801          1690.543          1674.080          1674.080
 ```
 
 
@@ -1407,7 +1441,7 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 
 
 ``` r
-recompute <- FALSE
+recompute <- TRUE
 recompute <- recompute || (!use_precomputed_hdMTD_outputs)
 ```
 
@@ -2092,7 +2126,7 @@ use_results_sequential <- !recompute_all && file.exists("results_sequential_sele
 
 
 ``` r
-recompute <- FALSE
+recompute <- TRUE
 recompute <- recompute || (!use_results_sequential)
 
 if (recompute) {
@@ -2191,18 +2225,6 @@ if (save_precomputed) {
 }
 ```
 
-```
-## Saving pre-computed results to 'hdMTD_outputs.rds'.
-```
-
-```
-## Saving simulated data to 'simulated_data.rds'.
-```
-
-```
-## Saving FS sequential selection results to 'results_sequential_selection.rds'.
-```
-
 
 ## Session info
 
@@ -2220,45 +2242,33 @@ sessionInfo()
 ## 
 ## 
 ## locale:
-## [1] LC_COLLATE=Portuguese_Brazil.utf8 
-## [2] LC_CTYPE=Portuguese_Brazil.utf8   
-## [3] LC_MONETARY=Portuguese_Brazil.utf8
-## [4] LC_NUMERIC=C                      
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
+## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
 ## [5] LC_TIME=Portuguese_Brazil.utf8    
 ## 
 ## time zone: America/Sao_Paulo
 ## tzcode source: internal
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets 
-## [6] methods   base     
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] future.apply_1.20.0 future_1.67.0      
-## [3] tidyr_1.3.1         purrr_1.1.0        
-## [5] lubridate_1.9.4     ggplot2_3.5.2      
+## [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1        
+## [4] purrr_1.1.0         lubridate_1.9.4     ggplot2_3.5.2      
 ## [7] dplyr_1.1.4         hdMTD_0.1.3        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       compiler_4.4.1    
-##  [3] highr_0.11         tidyselect_1.2.1  
-##  [5] parallel_4.4.1     globals_0.18.0    
-##  [7] scales_1.3.0       mime_0.12         
-##  [9] R6_2.6.1           commonmark_2.0.0  
-## [11] labeling_0.4.3     generics_0.1.4    
-## [13] igraph_2.2.1       knitr_1.48        
-## [15] tibble_3.3.0       munsell_0.5.1     
-## [17] RColorBrewer_1.1-3 pillar_1.11.1     
-## [19] rlang_1.1.6        litedown_0.7      
-## [21] xfun_0.52          timechange_0.3.0  
-## [23] cli_3.6.5          withr_3.0.2       
-## [25] magrittr_2.0.4     digest_0.6.36     
-## [27] grid_4.4.1         rstudioapi_0.16.0 
-## [29] markdown_2.0       lifecycle_1.0.4   
-## [31] vctrs_0.6.5        evaluate_0.24.0   
-## [33] glue_1.8.0         farver_2.1.2      
-## [35] listenv_0.9.1      codetools_0.2-20  
-## [37] parallelly_1.45.1  colorspace_2.1-1  
-## [39] tools_4.4.1        pkgconfig_2.0.3
+##  [1] gtable_0.3.5       compiler_4.4.1     highr_0.11        
+##  [4] tidyselect_1.2.1   parallel_4.4.1     globals_0.18.0    
+##  [7] scales_1.3.0       R6_2.6.1           labeling_0.4.3    
+## [10] generics_0.1.4     igraph_2.2.1       knitr_1.48        
+## [13] tibble_3.3.0       munsell_0.5.1      RColorBrewer_1.1-3
+## [16] pillar_1.11.1      rlang_1.1.6        xfun_0.52         
+## [19] timechange_0.3.0   cli_3.6.5          withr_3.0.2       
+## [22] magrittr_2.0.4     digest_0.6.36      grid_4.4.1        
+## [25] rstudioapi_0.16.0  lifecycle_1.0.4    vctrs_0.6.5       
+## [28] evaluate_0.24.0    glue_1.8.0         farver_2.1.2      
+## [31] listenv_0.9.1      codetools_0.2-20   parallelly_1.45.1 
+## [34] colorspace_2.1-1   tools_4.4.1        pkgconfig_2.0.3
 ```
 
