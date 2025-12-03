@@ -139,7 +139,7 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
     # Compute the number of parameters in an MTD with minl relevant lags
       n_param <- n_parameters(Lambda = seq_len(minl), A = A,
                               single_matrix = single_matrix,
-                              indep_part = indep_part, zeta = zeta)
+                              indep_part = indep_part, zeta = zeta) # n_parameters is defined at utils.R
       # Compute penalizations
       tryCombs[2, ] <- n_param * log(length(X)) * xi
 
@@ -178,7 +178,7 @@ hdMTD_BIC <- function(X, d, S = seq_len(d), minl = 1, maxl = length(S),
 
           # Compute the number of parameters in an MTD with i relevant lags
           n_param <- n_parameters(Lambda = seq_len(i), A = A, single_matrix = single_matrix,
-                                  indep_part = indep_part, zeta = min(zeta, i))
+                                  indep_part = indep_part, zeta = min(zeta, i)) # n_parameters is defined at utils.R
           # Compute penalizations
           tryCombs[[cont]][2, ] <- n_param * log(length(X)) * xi
 

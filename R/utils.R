@@ -176,7 +176,7 @@ n_parameters <- function(Lambda, A, single_matrix = FALSE, indep_part = TRUE, ze
     n_parameters <- n_parameters + lenA * (lenA - 1) * zeta
     # lenA*(lenA-1) is the number of free parameters in each matrix pj. zeta is the number of distinct matrices pj
     n_parameters
-} # n_parameters is used in hdMTD_BIC.R.
+} # n_parameters is used in hdMTD_BIC.R, MTDest-methods.R and MTDmodel-methods.R.
 
 
 ###########################################################
