@@ -11,15 +11,10 @@
 #'    the lag set (\code{S}), the state space (\code{A}), the final
 #'     log-likelihood, and, if available, the number of EM updates performed.
 #'
-#'   \item \code{summary.MTDest()} collects key components of the object into a
-#'   readable summary list (class \code{"summary.MTDest"}), including lambdas,
-#'   transition matrices, independent distribution (if present), log-likelihood,
-#'    oscillations (if available), and iteration diagnostics.
-#'
-#'   \item \code{print.summary.MTDest()} prints the summary in a readable format,
-#'    including lambdas, transition matrices, independent distribution,
-#'     log-likelihood, oscillations (if available), and iteration diagnostics
-#'      (if available).
+#'   \item \code{summary.MTDest()} computes and prints a detailed summary of the
+#'   key components of the object, including lambdas, transition matrices,
+#'   independent distribution (if present), log-likelihood, and
+#'   (if available) oscillations and iteration diagnostics.
 #'
 #'   \item \code{coef.MTDest()} extracts the estimated mixture weights
 #'    (\code{lambdas}), the list of transition matrices (\code{pj}), and the
@@ -30,10 +25,7 @@
 #'     under the multimatrix model) and \code{nobs} (effective sample size).
 #' }
 #'
-#' @param x An object of class \code{"MTDest"} or \code{"summary.MTDest"},
-#'  depending on the method.
-#' @param object An object of class \code{"MTDest"} (used by summary, coef, and
-#'  logLik methods).
+#' @param object An object of class \code{"MTDest"}.
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
 #' @return
@@ -41,11 +33,11 @@
 #'  \item{\code{print.MTDest}}{Invisibly returns the \code{"MTDest"} object, after
 #'     displaying its lag set, state space, final log-likelihood, and iteration
 #'     count (if available).}
-#'   \item{\code{print.summary.MTDest}}{Invisibly returns the \code{"summary.MTDest"} object,
-#'     after displaying its contents: lambdas; transition matrices; independent
-#'     distribution; log-likelihood; oscillations (if available); and
-#'     iteration diagnostics (if available).}
-#'   \item{\code{summary.MTDest}}{An object of class \code{"summary.MTDest"}.}
+#'   \item{\code{summary.MTDest}}{Invisibly returns a named list with fields:
+#'         \code{call}, \code{S}, \code{A}, \code{lambdas}, \code{pj},
+#'         \code{p0} (or \code{NULL}),\code{logLik}, \code{oscillations},
+#'         \code{iterations}, \code{lastComputedDelta} and \code{deltaLogLik}.
+#'         The same information is printed to the console in a readable format.}
 #'   \item{\code{coef.MTDest}}{A list with estimated \code{lambdas}, \code{pj}, and \code{p0}.}
 #'   \item{\code{logLik.MTDest}}{ An object of class \code{"logLik"} with attributes
 #'     \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
@@ -92,6 +84,8 @@ print.MTDest <- function(x, ...) {
   invisible(x)
 }
 
+# ------------------------- summary.MTDest ---------------------------------
+
 #' @exportS3Method summary MTDest
 summary.MTDest <- function(object, ...) {
   stopifnot(inherits(object, "MTDest"))
@@ -113,50 +107,56 @@ summary.MTDest <- function(object, ...) {
     lastComputedDelta = if (!is.null(object$lastComputedDelta)) object$lastComputedDelta else NA_real_,
     deltaLogLik = if (!is.null(object$deltaLogLik)) object$deltaLogLik else NA_real_
   )
-  class(out) <- "summary.MTDest"
-  out
+  print_MTDest_summary(out)
+  invisible(out)
 }
 
-#' @exportS3Method print summary.MTDest
-print.summary.MTDest <- function(x, ...) {
+#' @keywords internal
+#' @noRd
+print_MTDest_summary <- function(object) {
   cat("Summary of EM estimation for MTD model:\n")
 
-  if (!is.null(x$call)) cat("\nCall:\n"); if (!is.null(x$call)) print(x$call)
+  if (!is.null(object$call)){
+    cat("\nCall:\n"); if (!is.null(object$call)) print(object$call)
+  }
 
-  cat("\nLags (-S):", paste(-x$S, collapse = ", "),
-      "\nState space (A):", paste(x$A, collapse = ", "), "\n")
+  cat("\nLags (-S):", paste(-object$S, collapse = ", "),
+      "\nState space (A):", paste(object$A, collapse = ", "), "\n")
 
   cat("\nlambdas (weights):\n")
-  print(x$lambdas)
+  print(object$lambdas)
 
-  if (!is.null(x$p0)) {
+  if (!is.null(object$p0)) {
     cat("\nIndependent distribution p0:\n")
-    print(x$p0)
+    print(object$p0)
   } else {
     cat("\nIndependent distribution p0: (none)\n")
   }
 
   cat("\nTransition matrices pj (one per lag):\n")
-  for (i in seq_along(x$pj)) {
-    cat(sprintf(" \n pj for lag j = %s:\n", -x$S[i]))
-    print(x$pj[[i]])
+  for (i in seq_along(object$pj)) {
+    cat(sprintf(" \n pj for lag j = %s:\n", -object$S[i]))
+    print(object$pj[[i]])
   }
 
-  cat("\nLog-likelihood:", format(x$logLik, digits = 6), "\n")
+  cat("\nLog-likelihood:", format(object$logLik, digits = 6), "\n")
 
-  if (!is.null(x$oscillations)) {
+  if (!is.null(object$oscillations)) {
     cat("\nOscillations:\n")
-    print(x$oscillations)
+    print(object$oscillations)
   }
 
-  if (!is.na(x$iterations) || !is.na(x$lastComputedDelta)) {
+  if (!is.na(object$iterations) || !is.na(object$lastComputedDelta)) {
     cat("\nIterations Report:\n")
-    cat("Number of updates:", x$iterations, "\n")
-    cat("Last compared difference of logLik:", format(x$lastComputedDelta, digits = 6), "\n")
+    cat("Number of updates:", object$iterations, "\n")
+    cat("Last compared difference of logLik:",
+        format(object$lastComputedDelta, digits = 6), "\n")
   }
 
-  invisible(x)
+  invisible(object)
 }
+
+# --------------------------- coef.MTDest --------------------------------
 
 #' @exportS3Method coef MTDest
 coef.MTDest <- function(object, ...) {
@@ -168,6 +168,8 @@ coef.MTDest <- function(object, ...) {
   )
   out
 }
+
+# --------------------------- logLik.MTD ----------------------------------
 
 #' @exportS3Method logLik MTDest
 logLik.MTDest <- function(object, ...) {
