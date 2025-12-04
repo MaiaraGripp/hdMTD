@@ -4,11 +4,7 @@
 \alias{MTDest-methods}
 \title{Methods for objects of class \code{"MTDest"}}
 \arguments{
-\item{x}{An object of class \code{"MTDest"} or \code{"summary.MTDest"},
-depending on the method.}
-
-\item{object}{An object of class \code{"MTDest"} (used by summary, coef, and
-logLik methods).}
+\item{object}{An object of class \code{"MTDest"}.}
 
 \item{...}{Further arguments passed to or from other methods (ignored).}
 }
@@ -17,11 +13,11 @@ logLik methods).}
 \item{\code{print.MTDest}}{Invisibly returns the \code{"MTDest"} object, after
 displaying its lag set, state space, final log-likelihood, and iteration
 count (if available).}
-\item{\code{print.summary.MTDest}}{Invisibly returns the \code{"summary.MTDest"} object,
-after displaying its contents: lambdas; transition matrices; independent
-distribution; log-likelihood; oscillations (if available); and
-iteration diagnostics (if available).}
-\item{\code{summary.MTDest}}{An object of class \code{"summary.MTDest"}.}
+\item{\code{summary.MTDest}}{Invisibly returns a named list with fields:
+\code{call}, \code{S}, \code{A}, \code{lambdas}, \code{pj},
+\code{p0} (or \code{NULL}),\code{logLik}, \code{oscillations},
+\code{iterations}, \code{lastComputedDelta} and \code{deltaLogLik}.
+The same information is printed to the console in a readable format.}
 \item{\code{coef.MTDest}}{A list with estimated \code{lambdas}, \code{pj}, and \code{p0}.}
 \item{\code{logLik.MTDest}}{ An object of class \code{"logLik"} with attributes
 \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
@@ -38,15 +34,10 @@ These methods handle objects returned by \code{\link{MTDest}} (class \code{"MTDe
 the lag set (\code{S}), the state space (\code{A}), the final
 log-likelihood, and, if available, the number of EM updates performed.
 
-\item \code{summary.MTDest()} collects key components of the object into a
-readable summary list (class \code{"summary.MTDest"}), including lambdas,
-transition matrices, independent distribution (if present), log-likelihood,
-oscillations (if available), and iteration diagnostics.
-
-\item \code{print.summary.MTDest()} prints the summary in a readable format,
-including lambdas, transition matrices, independent distribution,
-log-likelihood, oscillations (if available), and iteration diagnostics
-(if available).
+\item \code{summary.MTDest()} computes and prints a detailed summary of the
+key components of the object, including lambdas, transition matrices,
+independent distribution (if present), log-likelihood, and
+(if available) oscillations and iteration diagnostics.
 
 \item \code{coef.MTDest()} extracts the estimated mixture weights
 (\code{lambdas}), the list of transition matrices (\code{pj}), and the

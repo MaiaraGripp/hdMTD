@@ -4,20 +4,24 @@
 \alias{hdMTD-methods}
 \title{Methods for objects of class \code{"hdMTD"}}
 \arguments{
-\item{x}{An object of class \code{"hdMTD"} or \code{"summary.hdMTD"}, depending on the method.}
+\item{x}{An object of class \code{"hdMTD"} used in \code{print.hdMTD()}.}
 
-\item{object}{An object of class \code{"hdMTD"}.}
+\item{object}{An object of class \code{"hdMTD"} used in \code{summary.hdMTD()}.}
 
-\item{settings}{Logical (summary.hdMTD only). If \code{TRUE}, the printed
-summary includes the method-specific \code{settings} list. Default \code{FALSE}.}
+\item{settings}{Logical (\code{summary.hdMTD()} only). If \code{TRUE}, the
+printed summary includes the method-specific \code{settings} list.
+Default \code{FALSE}.}
 
 \item{...}{Further arguments passed to or from other methods (ignored).}
 }
 \value{
 \describe{
 \item{\code{print.hdMTD}}{Invisibly returns the \code{"hdMTD"} object.}
-\item{\code{summary.hdMTD}}{An object of class \code{"summary.hdMTD"}.}
-\item{\code{print.summary.hdMTD}}{Invisibly returns the \code{"summary.hdMTD"} object.}
+\item{\code{summary.hdMTD}}{Invisibly returns a named list with fields:
+\code{call}, \code{S}, \code{lags}, \code{A},
+\code{method}, \code{d}, \code{settings}, \code{BIC_selected} and
+\code{BIC_out}. Relevant information is printed to the console in
+a readable format.}
 }
 }
 \description{
@@ -38,8 +42,9 @@ elements of \eqn{\mathbb{N}^+}) with attributes:
 output of \code{hdMTD_BIC()}).
 }
 \code{print()} shows the method, \code{d}, and the selected set of lags in
-\eqn{\mathbb{N}^+}. \code{summary()} also prints the call, the state space used,
-the estimated lag set, optional BIC diagnostics, and  the settings.
+\eqn{\mathbb{N}^+}. \code{summary()} prints the call, the estimated lag
+set, optional BIC diagnostics and (optionally) the method-specific settings
+when \code{settings = TRUE}.
 }
 \examples{
 \dontrun{

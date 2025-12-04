@@ -18,20 +18,25 @@
 #'  output of \code{hdMTD_BIC()}).
 #' }
 #' \code{print()} shows the method, \code{d}, and the selected set of lags in
-#' \eqn{\mathbb{N}^+}. \code{summary()} also prints the call, the state space used,
-#' the estimated lag set, optional BIC diagnostics, and  the settings.
+#' \eqn{\mathbb{N}^+}. \code{summary()} prints the call, the estimated lag
+#' set, optional BIC diagnostics and (optionally) the method-specific settings
+#' when \code{settings = TRUE}.
 #'
-#' @param x An object of class \code{"hdMTD"} or \code{"summary.hdMTD"}, depending on the method.
-#' @param object An object of class \code{"hdMTD"}.
-#' @param settings Logical (summary.hdMTD only). If \code{TRUE}, the printed
-#'   summary includes the method-specific \code{settings} list. Default \code{FALSE}.
+#' @param x An object of class \code{"hdMTD"} used in \code{print.hdMTD()}.
+#' @param object An object of class \code{"hdMTD"} used in \code{summary.hdMTD()}.
+#' @param settings Logical (\code{summary.hdMTD()} only). If \code{TRUE}, the
+#'  printed summary includes the method-specific \code{settings} list.
+#'  Default \code{FALSE}.
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
 #' @return
 #' \describe{
 #'   \item{\code{print.hdMTD}}{Invisibly returns the \code{"hdMTD"} object.}
-#'   \item{\code{summary.hdMTD}}{An object of class \code{"summary.hdMTD"}.}
-#'   \item{\code{print.summary.hdMTD}}{Invisibly returns the \code{"summary.hdMTD"} object.}
+#'   \item{\code{summary.hdMTD}}{Invisibly returns a named list with fields:
+#'         \code{call}, \code{S}, \code{lags}, \code{A},
+#'         \code{method}, \code{d}, \code{settings}, \code{BIC_selected} and
+#'         \code{BIC_out}. Relevant information is printed to the console in
+#'          a readable format.}
 #' }
 #'
 #' @seealso \code{\link{hdMTD}}, \code{\link{hdMTD_FS}}, \code{\link{hdMTD_FSC}},
@@ -66,6 +71,8 @@ print.hdMTD <- function(x, ...) {
   invisible(x)
 }
 
+# ------------------------- summary.hdMTD ---------------------------------
+
 #' @exportS3Method summary hdMTD
 summary.hdMTD <- function(object, settings = FALSE,...) {
 
@@ -86,36 +93,37 @@ summary.hdMTD <- function(object, settings = FALSE,...) {
     BIC_out      = BIC_out
   )
   attr(out, "include_settings") <- isTRUE(settings)  # control printing
-  class(out) <- "summary.hdMTD"
-  out
+  print_hdMTD_summary(out)
+  invisible(out)
 }
 
-#' @exportS3Method print summary.hdMTD
-print.summary.hdMTD <- function(x, ...) {
+#' @keywords internal
+#' @noRd
+print_hdMTD_summary <- function(object) {
   cat("hdMTD lag selection\n")
-  if (!is.null(x$call)) {
-    cat("\nCall:\n"); print(x$call)
+  if (!is.null(object$call)) {
+    cat("\nCall:\n"); print(object$call)
   }
-  cat("\nMethod: ", x$method, "\n", sep = "")
-  cat("Order upper bound (d): ", x$d, "\n", sep = "")
-  cat("Selected S set: ", fmt_vec(x$S), "\n", sep = "")
+  cat("\nMethod: ", object$method, "\n", sep = "")
+  cat("Order upper bound (d): ", object$d, "\n", sep = "")
+  cat("Selected S set: ", fmt_vec(object$S), "\n", sep = "")
 
-  if (!is.null(x$BIC_selected)) {
-    cat("\nBIC at selected set: ", x$BIC_selected, "\n", sep = "")
+  if (!is.null(object$BIC_selected)) {
+    cat("\nBIC at selected set: ", object$BIC_selected, "\n", sep = "")
   }
 
-  lag_str <- if (length(x$lags)) fmt_vec(x$lags) else "empty"
-  cat("\nRelevant lag set estimated by ", x$method, " method : ",
+  lag_str <- if (length(object$lags)) fmt_vec(object$lags) else "empty"
+  cat("\nRelevant lag set estimated by ", object$method, " method : ",
       lag_str, "\n", sep = "")
 
-  if (!is.null(x$BIC_out)) {
+  if (!is.null(object$BIC_out)) {
     cat("\nBIC output (as returned by hdMTD_BIC):\n")
-    print(x$BIC_out)
+    print(object$BIC_out)
   }
 
-  if (isTRUE(attr(x, "include_settings")) && !is.null(x$settings)) {
+  if (isTRUE(attr(object, "include_settings")) && !is.null(object$settings)) {
     cat("\nSettings used:\n")
-    utils::str(x$settings, give.attr = FALSE, no.list = TRUE)
+    utils::str(object$settings, give.attr = FALSE, no.list = TRUE)
   }
-  invisible(x)
+  invisible(object)
 }
