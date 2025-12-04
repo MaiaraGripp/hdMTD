@@ -120,6 +120,8 @@ summary.MTD <- function(object, ...) {
   invisible(out)
 }
 
+#' @keywords internal
+#' @noRd
 print_MTD_summary <- function(object) {
   cat("Mixture Transition Distribution (MTD) model\n")
   if (!is.null(object$call)) {
@@ -207,6 +209,6 @@ logLik.MTD <- function(object, X, ...) {
   df <- n_parameters(Lambda = L, A = A,
                      single_matrix = single_matrix,
                      indep_part = indep_part)
-
+        #n_parameters is defined at utils.R
   structure(ll, nobs = nobs, df = df, class = "logLik")
 }
