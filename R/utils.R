@@ -53,45 +53,6 @@ groupTab <- function(S, j, freqTab, lenX, d){
 }
 # groupTab is used in: oscillation.R, hdMTD_FS.R.
 
-###########################################################
-###########################################################
-###########################################################
-
-# PI: Estimates the empirical stationary distribution for a given sequence.
-#
-# This function computes the stationary distribution for sequences stored in a
-# frequency table (`groupTab`). It filters sequences that match `x_S` in the
-# specified lags `S`, then normalizes their frequencies to estimate stationary
-# probabilities.
-#
-# Arguments:
-# - S: A numeric vector of past lags. Determines which columns in `groupTab` should
-#   be used for filtering.
-# - groupTab: A tibble containing sequence frequencies (`Nx_Sj` column).
-# - x_S: A vector representing a specific sequence of states in lags `S`.
-# - lenX: Sample size (integer).
-# - d: Maximum lag order (integer).
-#
-# Returns:
-# - A numeric matrix (column vector) with estimated stationary probabilities.
-#   The column name corresponds to the concatenated elements of `x_S`.
-
-PI <- function(S, groupTab, x_S, lenX, d) {
-
-    if (length(S) > 0) {
-        # Filters groupTab by x_S.
-        filtr_S <- paste0("x", S)
-        groupTab <- groupTab %>%
-            dplyr::mutate(match = purrr::pmap_lgl(dplyr::pick(dplyr::all_of(filtr_S)),
-                ~ all(c(...) == x_S))) %>%
-            dplyr::filter(match) %>%
-            dplyr::select(-match)
-    }
-    PI <- matrix(groupTab$Nx_Sj/(lenX-d),ncol = 1)
-    colnames(PI) <- "freq"
-    PI
-}
-# PI is used in hdMTD_FS.R.
 
 ###########################################################
 ###########################################################

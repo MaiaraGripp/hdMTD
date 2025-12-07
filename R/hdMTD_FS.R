@@ -116,10 +116,9 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
           for (t in PositNx_S) { # runs in all sequences x_S with N(x_S) > 0
 
             # Compute frequencies given x_S (if lenS>0) and all possible
-            # symbols of A at lag j
+            # symbols of A at lag j with internal function PI()
             PIs <- PI(S = dec_S, groupTab = b_Sj, x_S = subx[t, ],
                       lenX = lenX, d = d) # Must use S = dec_S to match order of symbols in x_S
-            # PI() is defined in utils.R
 
             # Compute total variation distances given x_S
             dTVs <- dTV_sample(S = dec_S, j = j, lenA = lenA, base = b_Sja,
@@ -151,4 +150,43 @@ hdMTD_FS <- function(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE,...){
 
     S
 }
+
+# ------------------- Auxiliary Internal function  -------------------
+
+#' PI: Estimate empirical stationary distribution (internal)
+#'
+#' Internal helper for \code{hdMTD_FS()}. Computes the stationary distribution
+#' by filtering a frequency table for a specific past sequence \code{x_S} and
+#' normalizing the counts.
+#'
+#' @param S Numeric vector of past lags. Determines which columns in
+#'   \code{groupTab} to use for filtering.
+#' @param groupTab Tibble with sequence frequencies (must contain column
+#'   \code{Nx_Sj}).
+#' @param x_S Vector representing a specific sequence of states in lags \code{S}.
+#' @param lenX Sample size (integer).
+#' @param d Maximum lag order (integer).
+#'
+#' @return A numeric column matrix with stationary probability estimates.
+#'   Returns a value for each row in \code{groupTab} that matches
+#'   \code{x_S} in the specified lags.
+#'
+#' @keywords internal
+#' @noRd
+PI <- function(S, groupTab, x_S, lenX, d) {
+
+  if (length(S) > 0) {
+    # Filters groupTab by x_S.
+    filtr_S <- paste0("x", S)
+    groupTab <- groupTab %>%
+      dplyr::mutate(match = purrr::pmap_lgl(dplyr::pick(dplyr::all_of(filtr_S)),
+                                            ~ all(c(...) == x_S))) %>%
+      dplyr::filter(match) %>%
+      dplyr::select(-match)
+  }
+  PI <- matrix(groupTab$Nx_Sj/(lenX-d),ncol = 1)
+  colnames(PI) <- "freq"
+  PI
+}
+
 
