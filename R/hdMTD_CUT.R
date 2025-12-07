@@ -92,7 +92,7 @@ hdMTD_CUT <- function(X, d, S = seq_len(d), alpha = 0.05,
 
         R[k, ] <- sx(S = Sminusj, freqTab = b_Sja, lenA = lenA, x_S = subx[k,],
                      mu = mu, alpha = alpha, xi = xi)
-        # sx is a quantity used to calculate thresholds. See function sx() in utils.R.
+        # sx calculates thresholds (internal function below).
       }
 
       txy <- matrix(0, nrow = nrow(R), ncol = nrow(A_pairs))
@@ -108,6 +108,48 @@ hdMTD_CUT <- function(X, d, S = seq_len(d), alpha = 0.05,
 
     S <- dec_S[dTV_txy > 0] # Only the lags where the dTV surpasses the threshold remain
     sort(S)
+}
+
+# --------------------- Internal Function -------------------------------
+
+#' sx: Compute thresholds for the CUT method (internal)
+#'
+#' Internal helper for \code{hdMTD_CUT()}. Computes the threshold used in the
+#' CUT step of the MTD inference algorithm. Determines whether variation in
+#' distributions across lagged states is significant.
+#'
+#' @param S Numeric vector of past lags. Determines which columns in
+#'   \code{freqTab} to use for filtering.
+#' @param freqTab Output of \code{freqTab()} - tibble with frequency counts
+#'   (\code{Nx_Sj}) and conditional probabilities (\code{qax_Sj}).
+#' @param lenA Number of distinct states in the state space.
+#' @param x_S Vector representing a specific sequence of states in lags \code{S}.
+#' @param mu Positive real number between 0 and 3 controlling the shape
+#'   of the probability adjustment term.
+#' @param alpha Positive real number controlling the overall sensitivity
+#'   of the threshold (larger = more conservative).
+#' @param xi Positive real number providing additional scaling of the
+#'   threshold relative to alpha.
+#'
+#' @return Numeric vector of length \code{lenA} where each entry is the
+#'   computed threshold for a specific state.
+#'
+#' @keywords internal
+#' @noRd
+sx <- function(S, freqTab, lenA, x_S, mu, alpha, xi){
+  filtr_S <- paste0("x", S)
+  C <- freqTab %>%
+    dplyr::mutate(match = purrr::pmap_lgl(pick(all_of(filtr_S)), ~all(c(...) ==
+                                                                        x_S))) %>%
+    dplyr::filter(match) %>%
+    dplyr::select(-match)
+
+  Nx <- C$Nx_Sj[seq(1, nrow(C), by = lenA)]
+
+  prob_adjusted <- sqrt((C$qax_Sj + alpha/rep(Nx, each = lenA)) * mu/(2 * mu - exp(mu) + 1))
+  sum <- colSums(matrix(prob_adjusted, nrow = lenA))
+
+  return(sqrt(0.5 * alpha * (1 + xi)/Nx) * sum + alpha * lenA/(6 * Nx))
 }
 
 
