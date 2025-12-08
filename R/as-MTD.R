@@ -2,10 +2,10 @@
 #'
 #' @description
 #' Convenience coercion to rebuild an object of class \code{"MTD"} from an
-#' \code{"MTDest"} fit (or its summary). This simply feeds the estimated
+#' \code{"MTDest"} fit. This simply feeds the estimated
 #' parameters back into \code{\link{MTDmodel}}.
 #'
-#' @param x An object of class \code{"MTDest"} or \code{"summary.MTDest"}.
+#' @param x An object of class \code{"MTDest"}.
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
 #' @return An object of class \code{"MTD"} as returned by \code{\link{MTDmodel}}.
@@ -35,7 +35,6 @@ as.MTD <- function(x, ...) UseMethod("as.MTD")
 
 #' @exportS3Method as.MTD MTDest
 as.MTD.MTDest <- function(x, ...) {
-  stopifnot(inherits(x, "MTDest"))
   MTDmodel(
     Lambda = x$S,
     A      = x$A,
@@ -48,17 +47,3 @@ as.MTD.MTDest <- function(x, ...) {
   )
 }
 
-#' @exportS3Method as.MTD summary.MTDest
-as.MTD.summary.MTDest <- function(x, ...) {
-  stopifnot(inherits(x, "summary.MTDest"))
-  MTDmodel(
-    Lambda = x$S,
-    A      = x$A,
-    lam0   = x$lambdas[1],
-    lamj   = x$lambdas[-1],
-    pj     = x$pj,
-    p0     = if (is.null(x$p0)) rep(0, length(x$A)) else x$p0,
-    single_matrix = FALSE,
-    indep_part    = !is.null(x$p0) && any(x$p0 != 0)
-  )
-}

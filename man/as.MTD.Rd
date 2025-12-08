@@ -7,7 +7,7 @@
 as.MTD(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{"MTDest"} or \code{"summary.MTDest"}.}
+\item{x}{An object of class \code{"MTDest"}.}
 
 \item{...}{Further arguments passed to or from other methods (ignored).}
 }
@@ -16,7 +16,7 @@ An object of class \code{"MTD"} as returned by \code{\link{MTDmodel}}.
 }
 \description{
 Convenience coercion to rebuild an object of class \code{"MTD"} from an
-\code{"MTDest"} fit (or its summary). This simply feeds the estimated
+\code{"MTDest"} fit. This simply feeds the estimated
 parameters back into \code{\link{MTDmodel}}.
 }
 \examples{
