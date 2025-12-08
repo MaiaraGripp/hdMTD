@@ -65,7 +65,6 @@ probs <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) UseMe
 #' @rdname probs
 #' @export
 probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
-  stopifnot(inherits(object, "MTD"))
 
   P <- transitP(object)
 
@@ -151,7 +150,6 @@ probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
 #' @rdname probs
 #' @export
 probs.MTDest <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
-  stopifnot(inherits(object, "MTDest"))
 
   P <- transitP(as.MTD(object))
 

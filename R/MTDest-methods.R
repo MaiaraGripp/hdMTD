@@ -88,7 +88,6 @@ print.MTDest <- function(x, ...) {
 
 #' @exportS3Method summary MTDest
 summary.MTDest <- function(object, ...) {
-  stopifnot(inherits(object, "MTDest"))
 
   lenA <- length(object$A)
   lenS <- length(object$S)
@@ -160,7 +159,6 @@ print_MTDest_summary <- function(object) {
 
 #' @exportS3Method coef MTDest
 coef.MTDest <- function(object, ...) {
-  stopifnot(inherits(object, "MTDest"))
   out <- list(
     lambdas = object$lambdas,
     pj      = object$pj,
@@ -173,7 +171,6 @@ coef.MTDest <- function(object, ...) {
 
 #' @exportS3Method logLik MTDest
 logLik.MTDest <- function(object, ...) {
-  stopifnot(inherits(object, "MTDest"))
 
   indep <- any(object$p0 != 0)
 
