@@ -20,16 +20,13 @@
 #########################################################################
 # 1
 checkMTD <- function(MTD){
-  # Verifies if an object of class MTD is correctly structured, containing
-  # all the necessary parameters, and if these parameters satisfy their
+  # Verifies if an object is correctly structured to represent an MTD, i.e.,
+  # if it contains all the necessary parameters, and if they satisfy their
   # respective constraints
 
-  #Verifies if the object is a list with class MTD
+  #Verifies if the object is a list
   if (!is.list(MTD)) {
     stop("MTD must be a list. Try using MTDmodel() to create an MTD.")
-  }
-  if (!inherits(MTD, "MTD")) {
-    stop("MTD must be an object of class MTD. Try using MTDmodel() to create an MTD.")
   }
 
   # Checks if Lambda is a numeric vector of unique positive integers in ascending order
