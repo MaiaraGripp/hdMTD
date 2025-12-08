@@ -12,7 +12,7 @@ test_that("MTDest function works as expected", {
 
   # Test with default parameters
   result_1 <- MTDest(X = X, S = S, M = 0.05, init = init)
-  expect_true(class(result_1) == "MTDest")
+  expect_s3_class(result_1, "MTDest")
   expect_true(all(names(coef(result_1)) %in% c("lambdas", "pj", "p0")))
   expect_equal(sum(p0(result_1)),1)
   expect_equal(sum(lambdas(result_1)),1)
@@ -24,7 +24,7 @@ test_that("MTDest function works as expected", {
   init$lambdas[1] <- 0
   # Test with default parameters
   result_1 <- MTDest(X = X, S = S, M = 0.05, init = init)
-  expect_true(class(result_1) == "MTDest")
+  expect_s3_class(result_1, "MTDest")
   expect_true(all(names(coef(result_1)) %in% c("lambdas", "pj", "p0")))
   expect_true(all(c(p0(result_1), lambdas(result_1)[1])==c(0,0,0)))
   # Test with custom parameters
@@ -35,5 +35,5 @@ test_that("MTDest function works as expected", {
                  matrix(c(0.25, 0.75, 0.3, 0.7), byrow = TRUE, ncol = 2))
                )
   result_2 <- MTDest(X = X, S = S, init = init2, iter = TRUE)
-  expect_true(class(as.MTD(result_2)) == "MTD")
+  expect_s3_class(as.MTD(result_2), "MTD")
 })
