@@ -1,3 +1,11 @@
+# hdMTD 0.1.4
+
+## Fixes
+* Fixed S3 method class validation
+* Removed redundant `inherits()` checks from S3 methods
+* Reorganized internal functions (moved PI() and sx() from utils.R to respective files)
+* Improved code organization and documentation
+
 # hdMTD 0.1.3
   
 ## Fixes
