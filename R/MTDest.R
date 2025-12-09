@@ -299,7 +299,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   out$A    <- A
   out$n    <- lenX
   out$n_eff<- lenX - max(rS)
-  class(out) <- "MTDest"
+  class(out) <- c("MTDest", "MTD")
   out
 }
 
