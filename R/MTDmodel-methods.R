@@ -87,8 +87,6 @@ print.MTD <- function(x, ...) {
   cat("  Relevant lags: ", fmt_vec(lg), "\n", sep = "")
   cat("  State space (A): ", fmt_vec(A),  "\n", sep = "")
   cat("  Use summary() for full description.\n")
-  cat("  Accessors: transitP(), lambdas(), pj(), p0(), lags(), Lambda(), states().\n")
-  cat("  Methods: coef(), probs(), oscillation(), perfectSample(), logLik(), plot().\n")
   invisible(x)
 }
 
@@ -212,3 +210,5 @@ logLik.MTD <- function(object, X, ...) {
         #n_parameters is defined at utils.R
   structure(ll, nobs = nobs, df = df, class = "logLik")
 }
+
+
