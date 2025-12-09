@@ -38,32 +38,42 @@ transitP(object)
 \item{\code{p0(object)}}{A numeric probability vector for the independent component.}
 \item{\code{lambdas(object)}}{A numeric vector of mixture weights that sums to 1.}
 \item{\code{lags(object)}}{The lag set (elements of \eqn{\mathbb{Z}^-}).}
-\item{\code{Lambda(object)}}{For \code{"MTD"}, the lag set as positive integers
+\item{\code{Lambda(object)}}{The set of relevant lags as positive integers
 (elements of \eqn{\mathbb{N}^+}).}
-\item{\code{S(object)}}{For \code{"MTDest"} and \code{"hdMTD"}, the lag set as
-positive integers (elements of \eqn{\mathbb{N}^+}).}
+\item{\code{S(object)}}{For \code{"MTDest"} and \code{"hdMTD"}, the set of
+candidate/estimated lags as positive integers (elements of \eqn{\mathbb{N}^+}).}
 \item{\code{states(object)}}{The state space.}
-\item{\code{transitP(object)}}{For \code{"MTD"} objects only, the global
-transition matrix \eqn{P}. Not available for \code{"MTDest"}.}
+\item{\code{transitP(object)}}{The global transition matrix \eqn{P}.}
 }
 }
 \description{
 Public accessors that expose model components without relying on the internal
 list structure. These accessors are available for \code{"MTD"} (model
-objects), \code{"MTDest"} (EM fits), and \code{"hdMTD"} (lag selection),
-except \code{transitP()} which only applies to \code{"MTD"}.
+objects), \code{"MTDest"} (EM fits), and \code{"hdMTD"} (lag selection)..
 }
 \details{
 Returned lag sets follow the package convention and are shown as negative
 integers via \code{lags()} (elements of \eqn{\mathbb{Z}^-}). For convenience,
 positive-index accessors are also provided:
-\code{Lambda()} for \code{"MTD"} objects and \code{S()} for \code{"MTDest"} and
-\code{"hdMTD"} objects (elements of \eqn{\mathbb{N}^+}). Internally, lags may
-be stored as positive integers in \code{Lambda} or \code{S}.
+\code{Lambda()} for \code{"MTD"} objects and \code{"MTDest"} fits, and
+\code{S()} for \code{"MTDest"} and \code{"hdMTD"} objects
+(elements of \eqn{\mathbb{N}^+}).
 
-For computing the global transition matrix of an EM fit the user can first
-coerce the MTDest object into an MTD using \link{as.MTD} and then access the
-matrix with \code{transitP(as.MTD(object))}.
+The function \code{transitP()} returns the global transition matrix, i.e., a
+convex combination of the independent distribution \code{p0} and the
+lag-specific transition matrices \code{pj}, weighted by \code{lambdas}. For
+\code{"MTDest"} objects, this automatically calls \code{\link{as.MTD}} to
+first convert the fit into a proper \code{"MTD"} model.
+}
+\note{
+Naming conventions reflect the conceptual distinction:
+\itemize{
+\item \code{Lambda}: The true (known) relevant lag set in \code{"MTD"} models
+\item \code{S}: An estimated or candidate lag set in \code{"MTDest"} and
+\code{"hdMTD"} objects
+}
+For convenience, \code{Lambda()} also works on \code{"MTDest"}
+fits, returning their \code{S} component.
 }
 \examples{
 \dontrun{
@@ -76,7 +86,7 @@ transitP(m)
 X <- perfectSample(m, N = 800)
 fit <- MTDest(X, S = c(1, 3), init = coef(m))
 pj(fit); p0(fit); lambdas(fit); lags(fit); S(fit); states(fit)
-transitP(as.MTD(fit))
+transitP(fit)
 ## For lag selection:
 S_hat <- hdMTD(X, d = 5, method = "FS", l = 2)
 S(S_hat); lags(S_hat)
