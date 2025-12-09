@@ -71,9 +71,12 @@ NULL
 
 #' @exportS3Method print MTDest
 print.MTDest <- function(x, ...) {
+  lg <- lags(x)
+  A  <- states(x)
+
   cat("An object of class 'MTDest' (EM estimation of MTD model)\n")
-  cat("  Lags (-S):", paste(-x$S, collapse = ", "), "\n")
-  cat("  State space (A):", paste(x$A, collapse = ", "), "\n")
+  cat("  Lags (-S):", fmt_vec(lg), "\n")
+  cat("  State space (A):", fmt_vec(A), "\n")
   cat("  Log-likelihood:", format(x$logLik, digits = 6), "\n")
   if (!is.null(x$iterations)) {
     cat("  Number of updates:", x$iterations, "\n")
