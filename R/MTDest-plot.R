@@ -81,7 +81,8 @@
 #' @exportS3Method plot MTDest
 plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA,
                         pj_index = 1, ...) {
-  # Convert to MTD and delegate base plots to plot.MTD
+  # Convert MTDest to an MTD object and delegate the base plots to plot.MTD().
+  # Not using NextMethod() because plot.MTD() has extended parameters.
   m <- as.MTD(x)
 
   # Convergence data (may be absent or length 0)
