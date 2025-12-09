@@ -75,7 +75,7 @@ plot.MTD <- function(x, type, main, ylim, col = "gray70", border = NA,
     par(ask = TRUE)
     on.exit(par(ask = old_ask))
 
-    ## 1) Oscillations
+    ## 1) Oscillations ------------------------------------------------
     y1 <- oscillation(x)
     main1 <- "Oscillations by lag"
     ymax1 <- max(y1, 0)
@@ -86,7 +86,7 @@ plot.MTD <- function(x, type, main, ylim, col = "gray70", border = NA,
             main = main1, xlab = "Relevant lags",
             col = col, border = border)
 
-    ## 2) Lambdas
+    ## 2) Lambdas ------------------------------------------------
     lj <- lambdas(x)
     lam0 <- as.numeric(lj[1])
     lag_names <- paste0(lags(x))
@@ -102,7 +102,7 @@ plot.MTD <- function(x, type, main, ylim, col = "gray70", border = NA,
             main = main2, xlab = "Relevant lags",
             col = col, border = border)
 
-    ## 3) Graphs of pj
+    ## 3) Graphs of pj ------------------------------------------------
     P <- pj(x) # list
     pjNames <- names(P)
     for (k in seq_along(P)) {
@@ -141,7 +141,7 @@ plot.MTD <- function(x, type, main, ylim, col = "gray70", border = NA,
 
     invisible(list(oscillation = y1, lambdas = y2))
 
-  } else {
+  } else { # type informed
 
     type <- match.arg(type, c("oscillation", "lambdas", "pj"))
 
@@ -176,7 +176,7 @@ plot.MTD <- function(x, type, main, ylim, col = "gray70", border = NA,
               col = col, border = border, ...)
       invisible(y)
 
-    } else { #type = pj
+    } else { # type = pj
       P <- pj(x)
       if (length(P) == 0) stop("pj(x) returned an empty list.")
       if (pj_index < 1 || pj_index > length(P) || pj_index%%1 != 0) {
