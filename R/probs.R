@@ -145,3 +145,9 @@ probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
   }
 }
 
+#' @rdname probs
+#' @export
+probs.MTDest <- function(object, ...) {
+  # Delegate to probs.MTD via S3 inheritance and ensures `probs()` appears in `methods(class = "MTDest")`
+  NextMethod("probs")
+}

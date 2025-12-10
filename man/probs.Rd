@@ -3,11 +3,14 @@
 \name{probs}
 \alias{probs}
 \alias{probs.MTD}
+\alias{probs.MTDest}
 \title{Predictive probabilities for MTD / MTDest}
 \usage{
 probs(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 
 \method{probs}{MTD}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
+
+\method{probs}{MTDest}(object, ...)
 }
 \arguments{
 \item{object}{An \code{MTD} or \code{MTDest} object.}
