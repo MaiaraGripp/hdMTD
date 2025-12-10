@@ -82,7 +82,6 @@
 plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA,
                         pj_index = 1, ...) {
   # Convert MTDest to an MTD object and delegate the base plots to plot.MTD().
-  # Not using NextMethod() because plot.MTD() has extended parameters.
   m <- as.MTD(x)
 
   # Convergence data (may be absent or length 0)
@@ -94,6 +93,7 @@ plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA,
     par(ask = TRUE)
     on.exit(par(ask = old_ask))
 
+    # Delegate to plot.MTD()
     out_m <- plot(m, main = main, ylim = ylim, col = col, border = border)
 
     if (has_conv) {
@@ -115,7 +115,7 @@ plot.MTDest <- function(x, type, main, ylim, col = "gray70", border = NA,
     type <- match.arg(type, c("oscillation", "lambdas", "pj", "convergence"))
 
     if (type %in% c("oscillation", "lambdas", "pj")) {
-      # Delegate directly to plot.MTD
+      # Delegate to plot.MTD
       res <- plot(m, type = type, main = main, ylim = ylim,
                   col = col, border = border,
                   pj_index = pj_index, ...)
