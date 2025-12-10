@@ -68,7 +68,7 @@ oscillation.MTD <- function(x,...){
 
   # For each j in Lambda, oscillation_j = \lambda_j * dTV_pj
   y <- x$lambdas[-1] * sapply(x$pj, dTV_pj, rows) # oscillations for each j
-  names(y) <- paste0("-", x$Lambda)
+  names(y) <- paste0("-", Lambda(x))
   y
 }
 
