@@ -24,6 +24,10 @@ checkMTD <- function(MTD){
   # if it contains all the necessary parameters, and if they satisfy their
   # respective constraints
 
+  if (inherits(MTD, "MTDest")) { # converts "MTDest" objects to "MTD"
+    MTD <- as.MTD(MTD)
+  }
+
   #Verifies if the object is a list
   if (!is.list(MTD)) {
     stop("MTD must be a list. Try using MTDmodel() to create an MTD.")
@@ -66,11 +70,12 @@ checkMTD <- function(MTD){
   # (length(Lambda) + 1) that sums to 1
   if (!is.numeric(MTD$lambdas) || round(sum(MTD$lambdas), 5) != 1 ||
       !all(MTD$lambdas >= 0) || length(MTD$lambdas) != (lenL + 1)) {
-    stop(paste0("lambdas must be a vector of length ", lenL + 1, " (the number of
-  relevant lags in Lambda plus 1), consisting of nonnegative numbers that sum to 1.
-  The first element of the lambdas vector is the weight for the independent
-  distribution p0, if your MTD model does not include an independent distribution,
-  set lambdas[1] to 0. Try using MTDmodel() to create an MTD."
+    stop(paste0(
+      "lambdas must be a vector of length ", lenL + 1,
+      " (the number of relevant lags in Lambda plus 1), consisting of nonnegative numbers that sum to 1. ",
+      "The first element of the lambdas vector is the weight for the independent distribution p0; ",
+      "if your MTD model does not include an independent distribution, set lambdas[1] to 0. ",
+      "Try using MTDmodel() to create an MTD."
     ))
   }
 
