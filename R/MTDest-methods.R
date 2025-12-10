@@ -16,9 +16,9 @@
 #'   independent distribution (if present), log-likelihood, and
 #'   (if available) oscillations and iteration diagnostics.
 #'
-#'   \item \code{coef.MTDest()} extracts the estimated mixture weights
-#'    (\code{lambdas}), the list of transition matrices (\code{pj}), and the
-#'     independent distribution (\code{p0}).
+#'   \item \code{coef()} for objects of class \code{"MTDest"}, this dispatches
+#'     to the \code{"MTD"} method and returns a list with estimated
+#'     \code{lambdas}, \code{pj}, and \code{p0}.
 #'
 #'   \item \code{logLik.MTDest()} returns the log-likelihood as an object of class
 #'    \code{"logLik"}, with attributes \code{df} (number of free parameters
@@ -90,8 +90,6 @@ print.MTDest <- function(x, ...) {
 #' @exportS3Method summary MTDest
 summary.MTDest <- function(object, ...) {
 
-  lenA <- length(object$A)
-  lenS <- length(object$S)
   indep <- any(object$p0 != 0)
 
   out <- list(
@@ -160,12 +158,9 @@ print_MTDest_summary <- function(object) {
 
 #' @exportS3Method coef MTDest
 coef.MTDest <- function(object, ...) {
-  out <- list(
-    lambdas = object$lambdas,
-    pj      = object$pj,
-    p0      = object$p0
-  )
-  out
+  # Delegate to coef.MTD
+  NextMethod("coef")
+  # Simply returns p0, pj and lambdas (stored in the object).
 }
 
 # --------------------------- logLik.MTD ----------------------------------

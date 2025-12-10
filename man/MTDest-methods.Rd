@@ -39,9 +39,9 @@ key components of the object, including lambdas, transition matrices,
 independent distribution (if present), log-likelihood, and
 (if available) oscillations and iteration diagnostics.
 
-\item \code{coef.MTDest()} extracts the estimated mixture weights
-(\code{lambdas}), the list of transition matrices (\code{pj}), and the
-independent distribution (\code{p0}).
+\item \code{coef()} for objects of class \code{"MTDest"}, this dispatches
+to the \code{"MTD"} method and returns a list with estimated
+\code{lambdas}, \code{pj}, and \code{p0}.
 
 \item \code{logLik.MTDest()} returns the log-likelihood as an object of class
 \code{"logLik"}, with attributes \code{df} (number of free parameters
