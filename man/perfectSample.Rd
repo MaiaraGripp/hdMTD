@@ -10,10 +10,9 @@ perfectSample(object, ...)
 \method{perfectSample}{MTD}(object, N, ...)
 }
 \arguments{
-\item{object}{An object of class "MTD", see \code{\link[=MTDmodel]{MTDmodel()}} for properly generating}
+\item{object}{An object of class "MTD" or "MTDest".}
 
-\item{...}{Additional arguments passed to methods.
-an MTD object.}
+\item{...}{Additional arguments passed to methods.}
 
 \item{N}{Positive integer. Sample size to generate. Must be > max(Lambda(object)).}
 }

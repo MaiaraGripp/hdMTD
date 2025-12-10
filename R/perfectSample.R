@@ -3,9 +3,8 @@
 #' Samples an MTD Markov Chain from the stationary distribution.
 #'
 #' @name perfectSample
-#' @param object An object of class "MTD", see [MTDmodel()] for properly generating
+#' @param object An object of class "MTD" or "MTDest".
 #' @param ... Additional arguments passed to methods.
-#' an MTD object.
 #'
 #' @return Returns a size N sample from an MTD model (the first element is the most recent).
 #'
