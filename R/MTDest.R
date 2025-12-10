@@ -61,10 +61,13 @@
 #' \code{\link{oscillation}}.
 #' Coercion helper: \code{\link{as.MTD}}
 #'
+#' \strong{Inheritance}: `MTDest` objects inherit from `MTD`; see
+#' \code{\link{MTD-methods}} for methods that work on both classes.
+#'
 #' @export
 #'
 #' @return
-#' An S3 object of class \code{"MTDest"} (a list) with at least the following elements:
+#' An S3 object of class \code{c("MTDest", "MTD")} (a list) with at least the following elements:
 #' \itemize{
 #'   \item \code{lambdas}: estimated mixture weights (independent part first, if any).
 #'   \item \code{pj}: list of estimated transition matrices \eqn{p_j}.
@@ -103,6 +106,7 @@
 #' fit <- MTDest(X, S = c(1, 10), init = init, iter = TRUE)
 #' str(fit, max.level = 1)
 #' fit$logLik
+#' class(fit)
 #'
 #' fit2 <- MTDest(X, S = c(1, 10), init = init, oscillations = TRUE)
 #' fit2$oscillations
