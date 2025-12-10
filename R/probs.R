@@ -23,6 +23,7 @@
 #' @param oldLeft Logical. If `TRUE`, interpret rows in `newdata`/`context` as
 #' oldest to newest (e.g. leftmost = `newdata[ ,1]` = oldest). If `FALSE` (default),
 #' rows are most recent first.
+#' @param ... Further arguments passed to or from methods.
 #'
 #' @return A numeric matrix of predictive probabilities with one row per input
 #' context and columns indexed by `states(object)`. Row names are the context

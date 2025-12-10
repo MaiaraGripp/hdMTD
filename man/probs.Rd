@@ -28,6 +28,8 @@ there are extra columns, only the columns at the model lags are used.}
 \item{oldLeft}{Logical. If \code{TRUE}, interpret rows in \code{newdata}/\code{context} as
 oldest to newest (e.g. leftmost = \code{newdata[ ,1]} = oldest). If \code{FALSE} (default),
 rows are most recent first.}
+
+\item{...}{Further arguments passed to or from methods.}
 }
 \value{
 A numeric matrix of predictive probabilities with one row per input
