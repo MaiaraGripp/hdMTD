@@ -26,8 +26,7 @@
 #'   \item \code{S}: An estimated or candidate lag set in \code{"MTDest"} and
 #'         \code{"hdMTD"} objects
 #' }
-#' For convenience, \code{Lambda()} also works on \code{"MTDest"}
-#' fits, returning their \code{S} component.
+#' All accessors for \code{"MTD"} work for \code{"MTDest"} also.
 #'
 #' @param object An object of class \code{"MTD"}, \code{"MTDest"} or \code{"hdMTD"}
 #'  (as supported by each accessor).
