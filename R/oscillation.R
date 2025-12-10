@@ -1,19 +1,21 @@
 #' Oscillations of an MTD Markov chain
 #'
-#' Calculates the oscillations of an MTD model object or estimates the oscillations of a chain sample.
+#' Calculates the oscillations of an MTD model object, of an MTDest fit,
+#' or estimates the oscillations of a chain sample.
 #'
 #' @name oscillation
 #' @rdname oscillation
-#' @param x Must be an MTD object or a chain sample.
+#' @param x Either an MTD model object, an MTDest fit, or a chain sample.
 #' @param ... Ignored.
 #'
 #'
-#' @details For an MTD model, the oscillation for lag \eqn{j}
+#' @details For an MTD model (or an MTDest fit, which internally behaves as a fitted
+#' MTD model), the oscillation for lag \eqn{j}
 #' ( \eqn{ \{ \delta_j:\ j \in \Lambda \} }), is the product of the weight \eqn{\lambda_j}
 #' multiplied by the maximum of the total variation distance between the distributions in a
 #' stochastic matrix \eqn{p_j}.
 #' \deqn{\delta_j = \lambda_j\max_{b,c \in \mathcal{A}} d_{TV}(p_j(\cdot | b), p_j(\cdot | c)).}
-#' So, if \code{x} is an MTD object, the parameters \eqn{\Lambda}, \eqn{\mathcal{A}}, \eqn{\lambda_j},
+#' If \code{x} is an MTD or MTDest object, the parameters \eqn{\Lambda}, \eqn{\mathcal{A}}, \eqn{\lambda_j},
 #' and \eqn{p_j} are inputted through, respectively, the entries \code{Lambda}, \code{A},
 #' \code{lambdas} and the list \code{pj} of stochastic matrices. Hence, an oscillation \eqn{\delta_j}
 #' may be calculated for all \eqn{j \in \Lambda}.
@@ -34,12 +36,12 @@
 #' indexed by \code{S}.
 
 #' @return A named numeric vector of oscillations. If the \code{x} parameter is
-#' an MTD object, it will provide the oscillations for each element in \code{Lambda}.
+#' an MTD or MTDest object, it will provide the oscillations for each element in \code{Lambda}.
 #' If \code{x} is a chain sample, it estimates the oscillations for a user-inputted
 #' set of lags \code{S}.
 #'
 #' @examples
-#' oscillation( MTDmodel(Lambda = c(1, 4), A = c(2, 3) ) )
+#' oscillation(MTDmodel(Lambda = c(1, 4), A = c(2, 3)))
 #' oscillation(MTDmodel(Lambda = c(1, 4), A = c(2, 3), lam0 = 0.01, lamj = c(0.49, 0.5),
 #'                       pj = list(matrix(c(0.1, 0.9, 0.9, 0.1), ncol = 2)),
 #'                       single_matrix = TRUE))
@@ -49,7 +51,7 @@
 #'
 oscillation <- function(x,...) {UseMethod("oscillation")}
 
-#' @describeIn oscillation For an \code{MTD} object: computes \eqn{\delta_j} for all \eqn{j \in \Lambda}.
+#' @describeIn oscillation For an \code{MTD} or \code{MTDest} object: computes \eqn{\delta_j} for all \eqn{j \in \Lambda}.
 #' @export
 oscillation.MTD <- function(x,...){
 
