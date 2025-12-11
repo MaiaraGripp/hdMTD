@@ -19,10 +19,6 @@
 #'   independent distribution (if present), log-likelihood, and
 #'   (if available) oscillations and iteration diagnostics.
 #'
-#'   \item \code{coef()} for objects of class \code{"MTDest"}, this dispatches
-#'     to the \code{"MTD"} method via inheritance and returns a list with estimated
-#'     \code{lambdas}, \code{pj}, and \code{p0}.
-#'
 #'   \item \code{logLik.MTDest()} returns the log-likelihood as an object of class
 #'    \code{"logLik"}, with attributes \code{df} (number of free parameters
 #'     under the multimatrix model) and \code{nobs} (effective sample size).
@@ -41,7 +37,6 @@
 #'         \code{p0} (or \code{NULL}),\code{logLik}, \code{oscillations},
 #'         \code{iterations}, \code{lastComputedDelta} and \code{deltaLogLik}.
 #'         The same information is printed to the console in a readable format.}
-#'   \item{\code{coef.MTDest}}{A list with estimated \code{lambdas}, \code{pj}, and \code{p0}.}
 #'   \item{\code{logLik.MTDest}}{ An object of class \code{"logLik"} with attributes
 #'     \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
 #' }
@@ -64,7 +59,7 @@
 #' fit <- MTDest(X, S = c(1, 3), init = init, iter = TRUE)
 #' print(fit)
 #' summary(fit)
-#' coef(fit)
+#' coef(fit) # Works by inheritance
 #' logLik(fit)
 #' BIC(fit)
 #' }
@@ -157,14 +152,6 @@ print_MTDest_summary <- function(object) {
   invisible(object)
 }
 
-# --------------------------- coef.MTDest --------------------------------
-
-#' @exportS3Method coef MTDest
-coef.MTDest <- function(object, ...) {
-  # Delegate to coef.MTD
-  NextMethod("coef")
-  # Simply returns p0, pj and lambdas (stored in the object).
-}
 
 # --------------------------- logLik.MTD ----------------------------------
 

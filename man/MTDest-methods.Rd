@@ -18,7 +18,6 @@ count (if available).}
 \code{p0} (or \code{NULL}),\code{logLik}, \code{oscillations},
 \code{iterations}, \code{lastComputedDelta} and \code{deltaLogLik}.
 The same information is printed to the console in a readable format.}
-\item{\code{coef.MTDest}}{A list with estimated \code{lambdas}, \code{pj}, and \code{p0}.}
 \item{\code{logLik.MTDest}}{ An object of class \code{"logLik"} with attributes
 \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
 }
@@ -42,10 +41,6 @@ key components of the object, including lambdas, transition matrices,
 independent distribution (if present), log-likelihood, and
 (if available) oscillations and iteration diagnostics.
 
-\item \code{coef()} for objects of class \code{"MTDest"}, this dispatches
-to the \code{"MTD"} method via inheritance and returns a list with estimated
-\code{lambdas}, \code{pj}, and \code{p0}.
-
 \item \code{logLik.MTDest()} returns the log-likelihood as an object of class
 \code{"logLik"}, with attributes \code{df} (number of free parameters
 under the multimatrix model) and \code{nobs} (effective sample size).
@@ -67,7 +62,7 @@ init <- list(
 fit <- MTDest(X, S = c(1, 3), init = init, iter = TRUE)
 print(fit)
 summary(fit)
-coef(fit)
+coef(fit) # Works by inheritance
 logLik(fit)
 BIC(fit)
 }
