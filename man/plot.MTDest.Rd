@@ -52,20 +52,21 @@ available, a convergence panel (log-likelihood variation per update) is shown
 last. When \code{type} is specified, only the requested plot is drawn.
 }
 \details{
-For \code{type = "oscillation"}, the function calls \code{oscillation(as.MTD(x))}
-to obtain \eqn{\delta_j = \lambda_j \max_{b,c} d_{TV}(p_j(\cdot|b), p_j(\cdot|c))}
-for each lag in \code{Lambda(as.MTD(x))}, and draws a bar plot named by the lags.
+For \code{type = "oscillation"}, the function delegates to \code{plot.MTD()},
+which returns \eqn{\delta_j = \lambda_j \max_{b,c} d_{TV}(p_j(\cdot|b), p_j(\cdot|c))}
+for each lag in \code{lags(x)}, and draws a bar plot named by the lags.
 
-For \code{type = "lambdas"}, it plots the mixture weights \eqn{\lambda_j} by lag.
-If \code{lam0 > 0}, the weight for the independent component is included and
-labeled \code{"0"}.
+For \code{type = "lambdas"}, the function delegates to \code{plot.MTD()},
+it plots the mixture weights \eqn{\lambda_j} by lag. If \code{lam0 > 0}, the
+weight for the independent component is included and labeled \code{"0"}.
 
-For \code{type = "pj"}, the function draws the directed, weighted graph of the
-transition matrices \code{pj} taken from \code{pj(x)}. Vertices correspond to the
-states \code{states(x)}. A directed edge \code{a -> b} carries weight
-\code{p_j(b | a)}. Edge widths and edge labels are proportional to the transition
-probabilities (labels shown in the plot are rounded to two decimals).
-By default, self-loops (\code{a -> a}) are not drawn. The self-loop probability
+For \code{type = "pj"}, the function delegates to \code{plot.MTD()},
+it draws the directed, weighted graph of the transition matrices \code{pj}
+taken from \code{pj(x)}. Vertices correspond to the states \code{states(x)}.
+A directed edge \code{a -> b} carries weight \code{p_j(b | a)}. Edge widths
+and edge labels are proportional to the transition probabilities (labels
+shown in the plot are rounded to two decimals). By default,
+self-loops (\code{a -> a}) are not drawn. The self-loop probability
 at a state \code{a} can be inferred as \deqn{1 - \sum_{b: b \ne a} p_j(b \mid a).}
 For \code{type = "pj"}, a specific matrix can be selected via \code{pj_index}
 (e.g., \code{pj_index = 2} plots \code{pj(x)[[2]]}). In automatic mode (when
