@@ -3,14 +3,11 @@
 \name{probs}
 \alias{probs}
 \alias{probs.MTD}
-\alias{probs.MTDest}
 \title{Predictive probabilities for MTD / MTDest}
 \usage{
 probs(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 
 \method{probs}{MTD}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
-
-\method{probs}{MTDest}(object, ...)
 }
 \arguments{
 \item{object}{An \code{MTD} or \code{MTDest} object.}
@@ -28,8 +25,6 @@ there are extra columns, only the columns at the model lags are used.}
 \item{oldLeft}{Logical. If \code{TRUE}, interpret rows in \code{newdata}/\code{context} as
 oldest to newest (e.g. leftmost = \code{newdata[ ,1]} = oldest). If \code{FALSE} (default),
 rows are most recent first.}
-
-\item{...}{Further arguments passed to or from methods.}
 }
 \value{
 A numeric matrix of predictive probabilities with one row per input
@@ -39,7 +34,9 @@ separator. If both \code{newdata} and \code{context} are missing, the full globa
 transition matrix is returned, which can be large for big state spaces or many lags.
 }
 \description{
-Compute one-step-ahead predictive probabilities under an MTD model or an MTDest fit.
+Compute one-step-ahead predictive probabilities under an MTD model or an
+MTDest fit. For objects of class "MTDest", the method is inherited from
+the "MTD" class via S3 inheritance.
 
 Conventions:
 \itemize{

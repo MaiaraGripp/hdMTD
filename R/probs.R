@@ -1,7 +1,9 @@
 #' Predictive probabilities for MTD / MTDest
 #'
 #' @description
-#' Compute one-step-ahead predictive probabilities under an MTD model or an MTDest fit.
+#' Compute one-step-ahead predictive probabilities under an MTD model or an
+#' MTDest fit. For objects of class "MTDest", the method is inherited from
+#' the "MTD" class via S3 inheritance.
 #'
 #' Conventions:
 #' - Samples are read most recent first: `x[1] = X_{t-1}`, `x[2] = X_{t-2}`, etc.
@@ -23,7 +25,6 @@
 #' @param oldLeft Logical. If `TRUE`, interpret rows in `newdata`/`context` as
 #' oldest to newest (e.g. leftmost = `newdata[ ,1]` = oldest). If `FALSE` (default),
 #' rows are most recent first.
-#' @param ... Further arguments passed to or from methods.
 #'
 #' @return A numeric matrix of predictive probabilities with one row per input
 #' context and columns indexed by `states(object)`. Row names are the context
@@ -144,11 +145,4 @@ probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
     rownames(out) <- labels
     return(out)
   }
-}
-
-#' @rdname probs
-#' @export
-probs.MTDest <- function(object, ...) {
-  # Delegate to probs.MTD via S3 inheritance and ensures `probs()` appears in `methods(class = "MTDest")`
-  NextMethod("probs")
 }
