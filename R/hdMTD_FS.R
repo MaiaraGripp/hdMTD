@@ -15,7 +15,7 @@
 #'
 #' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
 #' (FSC) algorithm for inference in Mixture Transition Distribution (MTD) models.
-#' This method was developed by [Ost and Takahashi](http://jmlr.org/papers/v24/22-0266.html)
+#' This method was developed by [Ost and Takahashi](http://jmlr.org/papers/v24/22-0266.html).
 #' This specific function will only apply the FS step of the algorithm and return an estimated
 #' relevant lag set of length \code{l}.
 #'
