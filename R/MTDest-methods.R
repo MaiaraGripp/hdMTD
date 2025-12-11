@@ -17,7 +17,7 @@
 #'   (if available) oscillations and iteration diagnostics.
 #'
 #'   \item \code{coef()} for objects of class \code{"MTDest"}, this dispatches
-#'     to the \code{"MTD"} method and returns a list with estimated
+#'     to the \code{"MTD"} method via inheritance and returns a list with estimated
 #'     \code{lambdas}, \code{pj}, and \code{p0}.
 #'
 #'   \item \code{logLik.MTDest()} returns the log-likelihood as an object of class

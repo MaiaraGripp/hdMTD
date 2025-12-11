@@ -118,6 +118,7 @@ transitP <- function(object) {
 }
 
 # ===== MTD obj methods =====
+# All accessors for "MTD" also work for "MTDest" objects via inheritance
 
 #' @exportS3Method pj MTD
 pj.MTD <- function(object) {
