@@ -10,7 +10,7 @@
 \alias{S}
 \alias{states}
 \alias{transitP}
-\title{Accessors for objects of classes \code{"MTD"}, \code{"MTDest"}, and \code{"hdMTD"}}
+\title{Accessors for objects of classes \code{"MTD"}, \code{"MTDest"}, and/or \code{"hdMTD"}}
 \usage{
 pj(object)
 
@@ -47,9 +47,9 @@ candidate/estimated lags as positive integers (elements of \eqn{\mathbb{N}^+}).}
 }
 }
 \description{
-Public accessors that expose model components without relying on the internal
+Public accessors that expose object components without relying on the internal
 list structure. These accessors are available for \code{"MTD"} (model
-objects), \code{"MTDest"} (EM fits), and \code{"hdMTD"} (lag selection)..
+objects), \code{"MTDest"} (EM fits), and/or \code{"hdMTD"} (lag selection)..
 }
 \details{
 Returned lag sets follow the package convention and are shown as negative
