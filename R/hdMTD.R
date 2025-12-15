@@ -58,10 +58,21 @@
 #'   \item (for \code{method="BIC"}) \code{extras}: a list with \code{BIC_out} (exactly the object returned by \code{hdMTD_BIC})
 #'   \item (for \code{method="BIC"} and \code{BICvalue = TRUE}) \code{BIC_selected_value}: numeric BIC at the selected set
 #' }
-#' The returned object supports \code{print()} and \code{summary()} methods.
 #'
-#' @seealso \code{\link{hdMTD_FS}}, \code{\link{hdMTD_FSC}}, \code{\link{hdMTD_CUT}}, \code{\link{hdMTD_BIC}},
-#'   \code{\link{S}}, \code{\link{lags}}
+#' @section Methods (S3):
+#' The returned object has class \code{"hdMTD"} and supports:
+#' \itemize{
+#'   \item \code{\link[base]{print}} and \code{\link[base]{summary}}:
+#'         methods for lag-selection outputs (see \code{\link{hdMTD-methods}}).
+#' }
+#'
+#' @section Accessors:
+#' The selected lag set can be retrieved via \code{\link{S}} and in the package
+#' convention as negative lags via \code{\link{lags}}.
+#'
+#' @seealso
+#' \code{\link{hdMTD_FS}}, \code{\link{hdMTD_FSC}}, \code{\link{hdMTD_CUT}}, \code{\link{hdMTD_BIC}}
+#' for the method-specific implementations, and \code{\link{MTD-accessors}} for accessors.
 #'
 #' @export
 #'

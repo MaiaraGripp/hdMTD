@@ -93,6 +93,30 @@ the weights, the first entry must be the weight for \code{p0}, and then one entr
 for each element in \code{pj} list. If your MTD model does not have an independent
 distribution \code{p0}, set \code{init$lambdas[1]=0}.
 }
+\section{Methods (S3)}{
+
+Objects returned by \code{MTDest()} have class \code{c("MTDest","MTD")} and support:
+\itemize{
+\item \code{\link[base]{print}} and \code{\link[base]{summary}}: methods for fitted objects
+(see \code{\link{MTDest-methods}}).
+\item \code{\link[stats]{coef}}: extracts fitted parameters \code{lambdas}, \code{pj}, and \code{p0}
+(inherited from \code{"MTD"}; see \code{\link{MTD-methods}}).
+\item \code{\link[stats]{logLik}}: returns the final log-likelihood stored in the fit
+(see \code{\link{MTDest-methods}}).
+\item \code{\link[graphics]{plot}}: diagnostic plots for fitted objects (see \code{\link{plot.MTDest}}).
+\item \code{\link{probs}}, \code{\link{oscillation}}, and \code{\link{perfectSample}}: additional utilities
+available by inheritance from \code{"MTD"}.
+\item \code{\link{as.MTD}}: coerces an \code{"MTDest"} fit to an \code{"MTD"} model.
+}
+}
+
+\section{Accessors}{
+
+Stable access to fitted components is provided by \code{\link{MTD-accessors}}, including
+\code{\link{S}} (or \code{\link{Lambda}} by inheritance), \code{\link{lags}}, \code{\link{lambdas}},
+\code{\link{pj}}, \code{\link{p0}}, \code{\link{states}}, and \code{\link{transitP}}.
+}
+
 \examples{
 # Simulating data.
 set.seed(1)
@@ -125,11 +149,10 @@ An EM algorithm for estimation in the Mixture Transition Distribution model.
 \doi{10.1080/00949650701266666}
 }
 \seealso{
-Methods for fitted objects: \code{\link{MTDest-methods}}.
-Model constructor and related utilities: \code{\link{MTDmodel}},
-\code{\link{oscillation}}.
-Coercion helper: \code{\link{as.MTD}}
-
-\strong{Inheritance}: \code{MTDest} objects inherit from \code{MTD}; see
-\code{\link{MTD-methods}} for methods that work on both classes.
+\code{\link{MTDmodel}} for constructing an MTD model,
+\code{\link{hdMTD}} for lag selection procedures,
+\code{\link{MTDest-methods}} for methods specific to fitted objects,
+\code{\link{MTD-methods}} for methods inherited from \code{"MTD"},
+\code{\link{MTD-accessors}} for stable access to components,
+and \code{\link{as.MTD}} for coercion of fits to model objects.
 }

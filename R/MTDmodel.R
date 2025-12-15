@@ -20,9 +20,38 @@
 #' @param indep_part Logical. If \code{FALSE}, the model does not include an independent distribution
 #' and \code{p0} is set to zero.
 #'
-#' @details The resulting MTD object can be used by functions such as [oscillation()], which retrieves the
-#'  model's oscillation, and [perfectSample()], which will sample an MTD Markov chain from its invariant
-#'  distribution.
+#' @section Methods (S3):
+#' Objects returned by \code{MTDmodel()} have class \code{"MTD"} and support:
+#' \itemize{
+#'   \item \code{\link[base]{print}}: compact display of the relevant lag set and
+#'    the state space (see \code{\link{MTD-methods}}).
+#'   \item \code{\link[base]{summary}}: detailed summary of the model components
+#'   (see \code{\link{MTD-methods}}).
+#'   \item \code{\link[stats]{coef}}: extracts the model parameters \code{lambdas},
+#'    \code{pj}, and \code{p0} (see \code{\link{MTD-methods}}).
+#'   \item \code{\link[stats]{logLik}}: \code{logLik(object, X)} computes the
+#'   log-likelihood, provided that the user supplies a sample \code{X} (see \code{\link{MTD-methods}}).
+#'   \item \code{\link[graphics]{plot}}: diagnostic plots, including oscillations by lag, mixture weights,
+#'         and transition graphs (see \code{\link{plot.MTD}}).
+#'   \item \code{\link{oscillation}}: oscillations by lag computed from the model parameters.
+#'   \item \code{\link{perfectSample}}: perfect sampling from the stationary distribution, provided that
+#'         \eqn{\lambda_0 > 0}.
+#'   \item \code{\link{probs}}: one-step predictive probabilities.
+#' }
+#'
+#' @section Accessors:
+#' Stable access to model components is provided by \code{\link{MTD-accessors}}:
+#' \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{lambdas}}, \code{\link{pj}},
+#' \code{\link{p0}}, \code{\link{states}}, and \code{\link{transitP}}.
+#'
+#' @seealso
+#' \code{\link{MTDest}} for EM-based parameter estimation,
+#' \code{\link{hdMTD}} for lag selection procedures,
+#' \code{\link{MTD-methods}} for methods applicable to \code{"MTD"} objects,
+#' \code{\link{MTD-accessors}} for stable access to model components,
+#' \code{\link{oscillation}}, \code{\link{perfectSample}}, and \code{\link{probs}}
+#' for additional inference and simulation utilities.
+#'
 #'
 #' @return A list of class \code{MTD} containing:
 #' \describe{
