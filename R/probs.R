@@ -62,8 +62,8 @@
 #' @export
 probs <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) UseMethod("probs")
 #'
-#' @rdname probs
-#' @export
+#' @exportS3Method probs MTD
+#' @noRd
 probs.MTD <- function(object, context = NULL, newdata = NULL, oldLeft = FALSE) {
 
   P <- transitP(object)

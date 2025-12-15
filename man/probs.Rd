@@ -2,12 +2,9 @@
 % Please edit documentation in R/probs.R
 \name{probs}
 \alias{probs}
-\alias{probs.MTD}
 \title{Predictive probabilities for MTD / MTDest}
 \usage{
 probs(object, context = NULL, newdata = NULL, oldLeft = FALSE)
-
-\method{probs}{MTD}(object, context = NULL, newdata = NULL, oldLeft = FALSE)
 }
 \arguments{
 \item{object}{An \code{MTD} or \code{MTDest} object.}
