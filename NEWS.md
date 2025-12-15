@@ -1,10 +1,13 @@
 # hdMTD 0.1.4
 
-## Fixes
-* Fixed S3 method class validation
-* Removed redundant `inherits()` checks from S3 methods
-* Reorganized internal functions (moved PI() and sx() from utils.R to respective files)
-* Improved code organization and documentation
+## Fixes and improvements
+* Simplified the S3 class hierarchy: fitted objects of class `MTDest` now inherit from `MTD`.
+* Removed redundant class checks from S3 methods, relying on method dispatch.
+* Eliminated duplicated S3 methods (`coef.MTDest`, `probs.MTDest`), which now work via inheritance.
+* Streamlined plotting code: overlapping plot types in `plot.MTDest` are delegated to `plot.MTD` using `NextMethod()`.
+* Simplified `summary()` methods by printing directly from the summary output, removing auxiliary summary-print classes.
+* Reorganized internal helper functions (e.g., moved `PI()` and `sx()` from `utils.R` to dedicated files).
+* Improved and consolidated user-facing documentation, explicitly listing available S3 methods and accessors in the constructors’ help pages.
 
 # hdMTD 0.1.3
   

@@ -1,4 +1,23 @@
-## Resubmission (hdMTD 0.1.3)
+
+## Resubmission (hdMTD 0.1.4)
+
+### Summary of changes
+
+- Simplified the S3 class hierarchy: fitted objects of class `"MTDest"` now inherit from `"MTD"`, allowing methods to be shared via inheritance.
+- Removed redundant class checks from S3 methods, relying solely on method dispatch.
+- Eliminated duplicated S3 methods (`coef.MTDest`, `probs.MTDest`), which now work transparently via inheritance.
+- Streamlined plotting code: overlapping plot types in `plot.MTDest()` are delegated to `plot.MTD()` using `NextMethod()`.
+- Simplified `summary()` methods by printing directly from the summary output, removing auxiliary summary-print classes.
+- Reorganized internal helper functions (e.g., moved `PI()` and `sx()` from `utils.R` to dedicated files).
+- Improved and consolidated documentation by explicitly listing available S3 methods and accessors in the help pages of the main constructors (`MTDmodel()`, `MTDest()`, and `hdMTD()`).
+
+### R CMD check results (current)
+0 errors | 0 warnings | 0 notes
+
+---
+## Previous submission notes (for reference)
+
+version - hdMTD 0.1.3
 
 ### Summary of changes
 
