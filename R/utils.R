@@ -130,4 +130,4 @@ fmt_vec <- function(x, max_items = 10, digits = NULL, empty = "empty") {
     paste0(paste(x[seq_len(max_items)], collapse = ", "),
            ", ... (", n, " total)")
   }
-}# Used in: MTD-methods.R, hdMTD-methods.R
+}# Used in: MTD-methods.R, MTDest-methods.R and hdMTD-methods.R
