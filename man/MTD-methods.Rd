@@ -74,7 +74,7 @@ logLik(m, X)
 }
 \seealso{
 \code{\link{MTDmodel}}, \code{\link{MTDest}} for fitted models (note that "MTDest"
-objects inherits from "MTD" objects),
+objects inherit from "MTD" objects),
 \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
 \code{\link{MTDest-methods}},

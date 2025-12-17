@@ -50,7 +50,7 @@
 #'
 #' @seealso
 #' \code{\link{MTDmodel}}, \code{\link{MTDest}} for fitted models (note that "MTDest"
-#' objects inherits from "MTD" objects),
+#' objects inherit from "MTD" objects),
 #' \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 #' \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
 #' \code{\link{MTDest-methods}},
@@ -95,11 +95,11 @@ print.MTD <- function(x, ...) {
 
 #' @exportS3Method summary MTD
 summary.MTD <- function(object, ...) {
-  checkMTD(object)  # robust validation
+  checkMTD(object)  # validation
 
   w   <- lambdas(object)
-  p0 <- p0(object)
-  indep_flag <- (sum(p0) > 0) && (w[1] > 0)
+  p0v <- p0(object)
+  indep_flag <- (sum(p0v) > 0) && (w[1] > 0)
   P <- transitP(object)
 
   out <- list(
@@ -111,14 +111,14 @@ summary.MTD <- function(object, ...) {
     indep   = indep_flag,
     lambdas = w,
     pj      = pj(object),
-    p0      = if (indep_flag) p0 else NULL,
+    p0      = if (indep_flag) p0v else NULL,
     P_dim   = dim(P),
     P       = P
   )
-  print_MTD_summary(out)
+  print_MTD_summary(out) # prints summary (side effect)
   invisible(out)
 }
-
+#' Format and print the MTDmodel summary (internal helper)
 #' @keywords internal
 #' @noRd
 print_MTD_summary <- function(object) {
