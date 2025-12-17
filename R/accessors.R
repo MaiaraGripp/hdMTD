@@ -3,7 +3,7 @@
 #' @description
 #' Public accessors that expose object components without relying on the internal
 #' list structure. These accessors are available for \code{"MTD"} (model
-#' objects), \code{"MTDest"} (EM fits), and/or \code{"hdMTD"} (lag selection)..
+#' objects), \code{"MTDest"} (EM fits), and/or \code{"hdMTD"} (lag selection).
 #'
 #' @details
 #' Returned lag sets follow the package convention and are shown as negative
@@ -15,9 +15,7 @@
 #'
 #' The function \code{transitP()} returns the global transition matrix, i.e., a
 #' convex combination of the independent distribution \code{p0} and the
-#' lag-specific transition matrices \code{pj}, weighted by \code{lambdas}. For
-#' \code{"MTDest"} objects, this automatically calls \code{\link{as.MTD}} to
-#' first convert the fit into a proper \code{"MTD"} model.
+#' lag-specific transition matrices \code{pj}, weighted by \code{lambdas}.
 #'
 #' @note
 #' Naming conventions reflect the conceptual distinction:
@@ -26,7 +24,9 @@
 #'   \item \code{S}: An estimated or candidate lag set in \code{"MTDest"} and
 #'         \code{"hdMTD"} objects
 #' }
-#' All accessors for \code{"MTD"} work for \code{"MTDest"} also.
+#' Most accessors for \code{"MTD"} also work for \code{"MTDest"} via inheritance;
+#' when needed (e.g., \code{transitP()}), a specific \code{"MTDest"} method
+#' is provided.
 #'
 #' @param object An object of class \code{"MTD"}, \code{"MTDest"} or \code{"hdMTD"}
 #'  (as supported by each accessor).
@@ -45,7 +45,7 @@
 #'   \item{\code{transitP(object)}}{The global transition matrix \eqn{P}.}
 #' }
 #'
-#' @seealso \code{\link{MTDmodel}}, \code{\link{MTDest}}, \code{\link{hdMTD}}, \code{\link{as.MTD}}
+#' @seealso \code{\link{MTDmodel}}, \code{\link{MTDest}}, \code{\link{hdMTD}}.
 #'
 #' @examples
 #' \dontrun{
@@ -137,11 +137,7 @@ lambdas.MTD <- function(object) {
 
 #' @exportS3Method Lambda MTD
 Lambda.MTD <- function(object) {
-  if(inherits(object, "MTDest")) {
-    return(object$S)
-  } else {
-    return(object$Lambda)
-  }
+  object$Lambda
 }
 
 #' @exportS3Method lags MTD
@@ -156,8 +152,7 @@ states.MTD <- function(object) {
 
 #' @exportS3Method transitP MTD
 transitP.MTD <- function(object) {
-  if(inherits(object, "MTDest")) {object <- as.MTD(object)}
-  object$P
+   object$P
 }
 
 # ===== MTDest obj methods =====
@@ -165,6 +160,22 @@ transitP.MTD <- function(object) {
 #' @exportS3Method S MTDest
 S.MTDest <- function(object) {
   object$S
+}
+
+#' @exportS3Method Lambda MTDest
+Lambda.MTDest <- function(object) {
+  object$S
+}
+
+#' @exportS3Method transitP MTDest
+transitP.MTDest <- function(object) {
+  compute_transitP( # see utils.R
+    Lambda  = object$S,
+    A       = object$A,
+    lambdas = object$lambdas,
+    pj      = object$pj,
+    p0      = object$p0
+  )
 }
 
 # ===== hdMTD obj methods =====

@@ -49,7 +49,7 @@ candidate/estimated lags as positive integers (elements of \eqn{\mathbb{N}^+}).}
 \description{
 Public accessors that expose object components without relying on the internal
 list structure. These accessors are available for \code{"MTD"} (model
-objects), \code{"MTDest"} (EM fits), and/or \code{"hdMTD"} (lag selection)..
+objects), \code{"MTDest"} (EM fits), and/or \code{"hdMTD"} (lag selection).
 }
 \details{
 Returned lag sets follow the package convention and are shown as negative
@@ -61,9 +61,7 @@ positive-index accessors are also provided:
 
 The function \code{transitP()} returns the global transition matrix, i.e., a
 convex combination of the independent distribution \code{p0} and the
-lag-specific transition matrices \code{pj}, weighted by \code{lambdas}. For
-\code{"MTDest"} objects, this automatically calls \code{\link{as.MTD}} to
-first convert the fit into a proper \code{"MTD"} model.
+lag-specific transition matrices \code{pj}, weighted by \code{lambdas}.
 }
 \note{
 Naming conventions reflect the conceptual distinction:
@@ -72,7 +70,9 @@ Naming conventions reflect the conceptual distinction:
 \item \code{S}: An estimated or candidate lag set in \code{"MTDest"} and
 \code{"hdMTD"} objects
 }
-All accessors for \code{"MTD"} work for \code{"MTDest"} also.
+Most accessors for \code{"MTD"} also work for \code{"MTDest"} via inheritance;
+when needed (e.g., \code{transitP()}), a specific \code{"MTDest"} method
+is provided.
 }
 \examples{
 \dontrun{
@@ -93,5 +93,5 @@ S(S_hat); lags(S_hat)
 
 }
 \seealso{
-\code{\link{MTDmodel}}, \code{\link{MTDest}}, \code{\link{hdMTD}}, \code{\link{as.MTD}}
+\code{\link{MTDmodel}}, \code{\link{MTDest}}, \code{\link{hdMTD}}.
 }
