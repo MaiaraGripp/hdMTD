@@ -97,7 +97,6 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
 
     lenA <- length(A)
     lenL <- length(Lambda)
-    lenAL <- lenA^lenL
 
     # If the user provides p0 as a zero vector, automatically set indep_part to FALSE
     if (!is.null(p0) && all(p0 == 0) && indep_part) {
@@ -175,38 +174,8 @@ MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
     }
     names(pj) <- paste0("p-",Lambda)
 
-    # Calculating P (the transition matrix)
-
-    # Generate all possible size lenL sequences with digits from 1 to lenA
-    subx <- try(expand.grid(rep(list(seq_len(lenA)), lenL)), silent = TRUE)
-    if(inherits(subx,"try-error")) {
-        stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))
-    }
-    subx <- subx[, order(lenL:1)]
-
-    P <- matrix(0, ncol = lenA, nrow = lenAL)
-
-    if (lenL == 1) {
-        for (i in seq_len(lenAL)) { # runs in all lines of P
-            P[i, ] <- lambdas %*% rbind(p0, pj[[1]][i, ])
-        }
-        rownames(P) <- A
-    } else {
-        for (i in seq_len(lenAL)) {
-            aux <- matrix(0, ncol = lenA, nrow = lenL)
-            for (j in seq_len(lenL)) {
-                aux[j, ] <- pj[[j]][subx[i, (lenL + 1 - j)], ]
-                # The lines in aux are each from a different pj
-            }
-            P[i, ] <- lambdas %*% rbind(p0, aux)
-        }
-    }
-    colnames(P) <- A
-    if(lenL > 1){
-        subx <- as.matrix(expand.grid(rep(list(A), lenL))) # Elements from A
-        subx <- subx[, order(lenL:1)]
-        rownames(P) <- apply(subx, 1, paste0, collapse = "")
-    }
+    # Calculating P (the global transition matrix of the MTD)
+    P <- compute_transitP(Lambda, A, lambdas, pj, p0) # see utils.R
 
     MTD <- list(
       P = P, lambdas = lambdas, pj = pj, p0 = p0,

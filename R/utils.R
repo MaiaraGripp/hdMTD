@@ -7,6 +7,7 @@
 # 1 - groupTab()
 # 2 - n_parameters()
 # 3 - fmt_vec()
+# 4 - compute_transitP()
 
 # At the end of each auxiliary function below there is
 # a note naming the functions that use it.
@@ -131,3 +132,82 @@ fmt_vec <- function(x, max_items = 10, digits = NULL, empty = "empty") {
            ", ... (", n, " total)")
   }
 }# Used in: MTD-methods.R, MTDest-methods.R and hdMTD-methods.R
+
+
+###########################################################
+###########################################################
+###########################################################
+
+# compute_transitP: Computes the global transition matrix of an MTD model
+#
+# This function constructs the global transition matrix P of an MTD model from
+# the model parameters. The matrix P has |A|^|Lambda| rows (past contexts) and
+# |A| columns (next-state values). Each row corresponds to a past context
+# (ordered from oldest to newest, matching the ordering of Lambda) and gives
+# the conditional distribution of the next state given that context.
+#
+# Arguments:
+# - Lambda: A numeric vector of positive integers representing the relevant lag set.
+#   The order of the elements must match the order of the list pj.
+# - A: A vector representing the state space. The columns of P are named by A.
+# - lambdas: Numeric vector of mixture weights of length length(Lambda) + 1.
+#   The first element is the weight of the independent component (p0), and the
+#   remaining elements correspond to each lag-specific transition matrix in pj.
+# - pj: List of row-stochastic matrices (one per lag in Lambda). Each matrix must be
+#   length(A) x length(A), with rows indexing the previous state and columns indexing
+#   the next state.
+# - p0: Numeric vector of length(A) giving the independent distribution on A. If the
+#   independent component is inactive, p0 should be a zero vector (typically with
+#   lambdas[1] = 0).
+#
+# Details:
+# The returned transition probabilities are given by
+#   P(a | x) = lambda_0 p0(a) + sum_{j in Lambda} lambda_j p_j(a | x_j),
+# where x = (x_j)_{j in Lambda} denotes the past context.
+#
+# Returns:
+# - A numeric matrix P with nrow(P) = length(A)^length(Lambda) and ncol(P) = length(A).
+# - Columns are named by A.
+# - If length(Lambda) > 1, row names encode past contexts by concatenating the values
+#   in A from oldest to newest.
+#
+# Notes:
+# - This function can be expensive when length(A)^length(Lambda) is large, since it
+#   enumerates all past contexts via expand.grid().
+compute_transitP <- function(Lambda, A, lambdas, pj, p0) {
+  lenL <- length(Lambda)
+  lenA <- length(A)
+  lenAL <- lenA^lenL
+
+  # Generate all possible size lenL sequences with digits from 1 to lenA
+  subx <- try(expand.grid(rep(list(seq_len(lenA)), lenL)), silent = TRUE)
+  if(inherits(subx,"try-error")) {
+    stop(paste0("For length(Lambda)=",lenL," the dataset with all pasts sequences (x of length(Lambda)) with elements of A is too large."))
+  }
+  subx <- subx[, order(lenL:1)]
+
+  P <- matrix(0, ncol = lenA, nrow = lenAL)
+
+  if (lenL == 1) {
+    for (i in seq_len(lenAL)) { # runs in all lines of P
+      P[i, ] <- lambdas %*% rbind(p0, pj[[1]][i, ])
+    }
+    rownames(P) <- A
+  } else {
+    for (i in seq_len(lenAL)) {
+      aux <- matrix(0, ncol = lenA, nrow = lenL)
+      for (j in seq_len(lenL)) {
+        aux[j, ] <- pj[[j]][subx[i, (lenL + 1 - j)], ]
+        # The lines in aux are each from a different pj
+      }
+      P[i, ] <- lambdas %*% rbind(p0, aux)
+    }
+  }
+  colnames(P) <- A
+  if(lenL > 1){
+    subx <- as.matrix(expand.grid(rep(list(A), lenL))) # Elements from A
+    subx <- subx[, order(lenL:1)]
+    rownames(P) <- apply(subx, 1, paste0, collapse = "")
+  }
+  return(P)
+}  # Used in: MTDmodel.R and accessors.R - transitP().
