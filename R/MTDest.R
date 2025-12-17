@@ -72,7 +72,7 @@
 #'
 #' @section Accessors:
 #' Stable access to fitted components is provided by \code{\link{MTD-accessors}}, including
-#' \code{\link{S}} (or \code{\link{Lambda}} by inheritance), \code{\link{lags}}, \code{\link{lambdas}},
+#' \code{\link{S}} (or \code{\link{Lambda}}), \code{\link{lags}}, \code{\link{lambdas}},
 #' \code{\link{pj}}, \code{\link{p0}}, \code{\link{states}}, and \code{\link{transitP}}.
 #'
 #' @seealso
