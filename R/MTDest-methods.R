@@ -103,17 +103,18 @@ summary.MTDest <- function(object, ...) {
     lastComputedDelta = if (!is.null(object$lastComputedDelta)) object$lastComputedDelta else NA_real_,
     deltaLogLik = if (!is.null(object$deltaLogLik)) object$deltaLogLik else NA_real_
   )
-  print_MTDest_summary(out)
+  print_MTDest_summary(out) # prints summary (side effect)
   invisible(out)
 }
-
+#' Format and print the MTDest summary (internal helper)
 #' @keywords internal
 #' @noRd
 print_MTDest_summary <- function(object) {
   cat("Summary of EM estimation for MTD model:\n")
 
-  if (!is.null(object$call)){
-    cat("\nCall:\n"); if (!is.null(object$call)) print(object$call)
+  if (!is.null(object$call)) {
+    cat("\nCall:\n")
+    print(object$call)
   }
 
   cat("\nLags (-S):", paste(-object$S, collapse = ", "),

@@ -93,10 +93,10 @@ summary.hdMTD <- function(object, settings = FALSE,...) {
     BIC_out      = BIC_out
   )
   attr(out, "include_settings") <- isTRUE(settings)  # control printing
-  print_hdMTD_summary(out)
+  print_hdMTD_summary(out) # prints summary (side effect)
   invisible(out)
 }
-
+#' Format and print the hdMTD summary (internal helper)
 #' @keywords internal
 #' @noRd
 print_hdMTD_summary <- function(object) {
