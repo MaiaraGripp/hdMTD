@@ -53,7 +53,7 @@
 #' objects inherit from "MTD"),
 #' \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 #' \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
-#' \code{\link{oscillation}}, \code{\link{perfectSample}},
+#' \code{\link{oscillation}}, \code{\link{perfectSample}}, \code{\link{probs}},
 #' \code{\link[stats]{logLik}}
 #'
 #' @examples
