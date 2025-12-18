@@ -70,8 +70,8 @@ Naming conventions reflect the conceptual distinction:
 \item \code{S}: An estimated or candidate lag set in \code{"MTDest"} and
 \code{"hdMTD"} objects
 }
-Most accessors for \code{"MTD"} also work for \code{"MTDest"} via inheritance;
-when needed (e.g., \code{transitP()}), a specific \code{"MTDest"} method
+Most accessors for \code{"MTD"} also work for \code{"MTDest"} via inheritance.
+When needed (e.g., \code{transitP()}), a specific \code{"MTDest"} method
 is provided.
 }
 \examples{
