@@ -146,7 +146,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
       init$p0 <- rep(0, lenA)
     }
   }
-  # Creates an MTD object to validate inputs with checkMTD
+  # Creates an MTD object to validate inputs with checkMTD and computes initial transitP to check if it is compatible with the sample
   initMTD <- MTDmodel(Lambda = S, A = A, lam0 = init$lambdas[1],
                       lamj = init$lambdas[-1], pj = init$pj,
                       p0 = init$p0, indep_part = indep)
@@ -164,7 +164,7 @@ MTDest <- function(X, S, M = 0.01, init, iter = FALSE, nIter = 100, A = NULL, os
   pos <- which(baseSja$Nxa_Sj > 0)
   indexA <- expand.grid(rep(list(seq_len(lenA)), lenS0))[, order(lenS0:1)]
 
-  # Check if initial probabilities are compatible with the sample
+  # Check if initial transitP is compatible with the sample
   Pinit <- t(initMTD$P)
   dim(Pinit) <- NULL
   if(any(round(Pinit, 6) == 0)) {
