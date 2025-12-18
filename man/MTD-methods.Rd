@@ -4,10 +4,12 @@
 \alias{MTD-methods}
 \title{Methods for objects of class \code{"MTD"}}
 \arguments{
+\item{x}{An object of class \code{"MTD"} (for \code{print.MTD(x, ...)}).}
+
 \item{object}{An object of class \code{"MTD"}.}
 
 \item{X}{A vector or single-column data frame containing an MTD chain sample
-(values must be in the model's state space).}
+(for \code{logLik.MTD(object, X, ...)}). Values must be in the model's state space.}
 
 \item{...}{Further arguments passed to or from other methods (ignored).}
 }
@@ -20,7 +22,7 @@ displaying its relevant lag set and state space.}
 \code{lags}, \code{indep}, \code{lambdas}, \code{pj},
 \code{p0} (or \code{NULL}), \code{P_dim}, and \code{P}. The same
 information is printed to the console in a readable format.}
-\item{\code{coef.MTD}}{A list with model parameters:
+\item{\code{coef.MTD}}{A list with parameters:
 \code{lambdas}, \code{pj}, and \code{p0}.}
 \item{\code{logLik.MTD}}{An object of class \code{"logLik"} with attributes
 \code{nobs} (number of transitions) and \code{df} (free parameters),
@@ -33,7 +35,6 @@ Printing, summarizing, and coefficient-extraction methods for Mixture
 Transition Distribution (MTD) model objects.
 }
 \details{
-These methods operate on objects created by \code{\link{MTDmodel}}:
 \itemize{
 \item \code{print.MTD()} displays a compact summary of the model:
 the relevant lag set (shown as negative integers) and the state space.
@@ -43,8 +44,8 @@ model, including order, relevant lags, state space, mixture weights,
 the independent distribution (if present), and a compact preview of
 the global transition matrix \eqn{P}.
 
-\item \code{coef.MTD()} extracts the model parameters as a list with
-\code{lambdas}, \code{pj}, and \code{p0}.
+\item \code{coef.MTD()} extracts parameters as a list with \code{lambdas},
+\code{pj}, and \code{p0} (works for \code{c("MTDest","MTD")} objects by inheritance).
 
 \item \code{logLik.MTD()} computes the log-likelihood of a sample under the
 model. Since an object of class \code{"MTD"} carries only the model
@@ -74,10 +75,9 @@ logLik(m, X)
 }
 \seealso{
 \code{\link{MTDmodel}}, \code{\link{MTDest}} for fitted models (note that "MTDest"
-objects inherit from "MTD" objects),
+objects inherit from "MTD"),
 \code{\link{transitP}}, \code{\link{lambdas}}, \code{\link{pj}},
 \code{\link{p0}}, \code{\link{lags}}, \code{\link{Lambda}}, \code{\link{states}},
-\code{\link{MTDest-methods}},
 \code{\link{oscillation}}, \code{\link{perfectSample}},
 \code{\link[stats]{logLik}}
 }
