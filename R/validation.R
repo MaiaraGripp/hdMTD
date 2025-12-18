@@ -26,7 +26,7 @@ checkMTD <- function(MTD){
 
   #Verifies if the object is a list
   if (!is.list(MTD)) {
-    stop("MTD must be a list. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("MTD must be a list.")
   }
 
   L <- Lambda(MTD)
@@ -38,34 +38,34 @@ checkMTD <- function(MTD){
   # Checks if Lambda is a numeric vector of unique positive integers in ascending order
   if (any(L <= 0) || !all(L %% 1 == 0) || !is.vector(L) ||
        !is.numeric(L) || length(L) != length(unique(L))) {
-    stop("Lambda(MTD) must be a vector of unique positive integers. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("Lambda(MTD) must be a vector of unique positive integers.")
   }
   if (any(sort(L) != L)) {
-    stop("Lambda(MTD) must be sorted in ascending order. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("Lambda(MTD) must be sorted in ascending order.")
   }
 
   lenL <- length(L)
 
   # Checks if A is a numeric vector of integers (length ≥ 2), sorted in ascending order
   if (length(A) <= 1 || !is.vector(A) || any(A%%1 != 0) || length(A) != length(unique(A))) {
-    stop("State space A must be a vector (length >= 2) of unique integers. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("State space A must be a vector (length >= 2) of unique integers.")
   }
   if (any(sort(A) != A)) {
-    stop("State space A must be sorted in ascending order. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("State space A must be sorted in ascending order.")
   }
 
   lenA <- length(A)
 
   # Checks if p0 is a numeric nonnegative vector of length 1 or length(A), summing to 1
   if (!is.numeric(p0v) || !is.vector(p0v) || !all(p0v >= 0)) {
-    stop("p0 must be a nonnegative numeric vector. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("p0 must be a nonnegative numeric vector.")
   }
   if (!length(p0v) %in% c(1, lenA)) {
     stop(paste0("p0 must be either a scalar 0 or a numeric vector of length ",
-        lenA, ". Try using MTDmodel() or MTDest() to generate a valid MTD."))
+        lenA, "."))
   }
   if (round(sum(p0v), 5) != 1 & sum(p0v) != 0) {
-    stop("The elements in p0 must either sum to 1 or all be 0. Try using MTDmodel() or MTDest() to generate a valid MTD.")
+    stop("The elements in p0 must either sum to 1 or all be 0.")
   }
 
   # Checks if lambdas is a numeric nonnegative vector of length
@@ -76,8 +76,7 @@ checkMTD <- function(MTD){
       "lambdas must be a vector of length ", lenL + 1,
       " (the number of relevant lags in Lambda plus 1), consisting of nonnegative numbers that sum to 1. ",
       "The first element of the lambdas vector is the weight for the independent distribution p0; ",
-      "if your MTD model does not include an independent distribution, set lambdas[1] to 0. ",
-      "Try using MTDmodel() or MTDest() to generate a valid MTD."
+      "if your MTD model does not include an independent distribution, set lambdas[1] to 0."
     ))
   }
 
@@ -86,12 +85,12 @@ checkMTD <- function(MTD){
   if(!is.list(pj_list) || length(pj_list) != lenL ||
      !all(sapply(pj_list, is.matrix)) || !all(sapply(pj_list,dim) == c(lenA,lenA))) {
     stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
-         "x",lenA,". Try using MTDmodel() or MTDest() to generate a valid MTD."))
+         "x",lenA,"."))
   }
   aux <- do.call(rbind, pj_list)
   if(!is.numeric(aux) || !all(round(apply(aux, 1, sum), 5) == 1) || !all(aux>=0)) {
     stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
-    "x",lenA,". In other words, each matrix row must sum up to 1. Try using MTDmodel() or MTDest() to generate a valid MTD."))
+    "x",lenA,". In other words, each matrix row must sum up to 1."))
   }
 }
 
@@ -258,10 +257,11 @@ check_empirical_probs_inputs <- function(X, S, matrixform, A, warn) {
     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
       stop("A must be a vector of distinct nonnegative integers and length >=2.")
     }
-    if ( !all( A %in% unique(X) ) ) {
+    uX <- unique(X)
+    if ( !all( A %in% uX ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(X) %in% A ) ) {
+    if ( !all( uX %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   } else if (warn) {
@@ -292,10 +292,11 @@ check_hdMTD_FS_inputs <- function(X, d, l, A, elbowTest, warn) {
     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
       stop("A must be a vector of distinct nonnegative integers and length >=2.")
     }
-    if ( !all( A %in% unique(X) ) ) {
+    uX <- unique(X)
+    if ( !all( A %in% uX ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(X) %in% A ) ) {
+    if ( !all( uX %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   } else if (warn) {
@@ -328,10 +329,11 @@ check_hdMTD_CUT_inputs <- function(X, d, S, alpha, mu, xi, A, warn) {
     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0)) {
       stop("A must be a vector of distinct nonnegative integers and length >=2.")
     }
-    if ( !all( A %in% unique(X) ) ) {
+    uX <- unique(X)
+    if ( !all( A %in% uX ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(X) %in% A ) ) {
+    if ( !all( uX %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   } else if (warn) {
@@ -373,10 +375,11 @@ check_hdMTD_BIC_inputs <- function(X, d, S, minl, maxl,
     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
       stop("A must be a vector of distinct nonnegative integers and length >=2.")
     }
-    if ( !all( A %in% unique(X) ) ) {
+    uX <- unique(X)
+    if ( !all( A %in% uX ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(X) %in% A ) ) {
+    if ( !all( uX %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   } else if (warn) {
@@ -429,10 +432,11 @@ check_MTDest_inputs <- function(X, S, M, init, iter, nIter, A, oscillations) {
     if( length(A) <= 1 || any( A%%1 != 0 ) || length(A) != length(unique(A)) || any(A < 0) ) {
       stop("A must be a vector of distinct nonnegative integers and length >=2.")
     }
-    if ( !all( A %in% unique(X) ) ) {
+    uX <- unique(X)
+    if ( !all( A %in% uX ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(X) %in% A ) ) {
+    if ( !all( uX %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   }
@@ -491,10 +495,11 @@ check_oscillation_inputs <- function(x, S, A){
         length(A) != length(unique(A)) || any(A < 0) ) {
       stop("A must be a vector of distinct nonnegative integers with length >=2.")
     }
-    if ( !all( A %in% unique(x) ) ) {
+    uX <- unique(x)
+    if ( !all( A %in% uX ) ) {
       warning("Some elements in A do not appear in the sample.")
     }
-    if ( !all( unique(x) %in% A ) ) {
+    if ( !all( uX %in% A ) ) {
       stop("The sample contains elements that do not appear in A.")
     }
   }
