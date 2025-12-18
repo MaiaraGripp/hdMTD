@@ -3,9 +3,9 @@
 #' @description
 #' Methods for objects returned by \code{MTDest()} – EM fits of Mixture Transition
 #' Distribution models. Note that \code{"MTDest"} objects inherit from class \code{"MTD"}
-#' (they have class \code{c("MTDest", "MTD")}), so all methods defined for \code{"MTD"}
-#' also work on \code{"MTDest"} objects. The methods documented here are specific to
-#' EM fits, providing diagnostics and summaries of the estimation.
+#' (they have class \code{c("MTDest", "MTD")}), and several methods for \code{"MTD"}
+#' also work on \code{"MTDest"} objects by inheritance. The methods documented
+#' here are specific to EM fits, providing diagnostics and summaries of the estimation.
 #'
 #' @details
 #' These methods handle objects returned by \code{\link{MTDest}} (class \code{"MTDest"}):
