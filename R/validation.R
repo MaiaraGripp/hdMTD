@@ -21,82 +21,79 @@
 # 1
 checkMTD <- function(MTD){
   # Verifies if an object is correctly structured to represent an MTD, i.e.,
-  # if it contains all the necessary parameters, and if they satisfy their
+  # if it contains necessary parameters, and if they satisfy their
   # respective constraints
-
-  if (inherits(MTD, "MTDest")) { # converts "MTDest" objects to "MTD"
-    MTD <- as.MTD(MTD)
-  }
 
   #Verifies if the object is a list
   if (!is.list(MTD)) {
-    stop("MTD must be a list. Try using MTDmodel() to create an MTD.")
+    stop("MTD must be a list. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
+
+  L <- Lambda(MTD)
+  A <- states(MTD)
+  w <- lambdas(MTD)
+  p0v <- p0(MTD)
+  pj_list <- pj(MTD)
 
   # Checks if Lambda is a numeric vector of unique positive integers in ascending order
-  if ( any(MTD$Lambda <= 0) || !all(MTD$Lambda%%1 == 0) || !is.vector(MTD$Lambda) ||
-       !is.numeric(MTD$Lambda) || length(MTD$Lambda) != length(unique(MTD$Lambda)) ) {
-    stop("Lambda must be a vector of unique positive integers. Try using MTDmodel() to create an MTD.")
+  if (any(L <= 0) || !all(L %% 1 == 0) || !is.vector(L) ||
+       !is.numeric(L) || length(L) != length(unique(L))) {
+    stop("Lambda(MTD) must be a vector of unique positive integers. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
-  if ( any(sort(MTD$Lambda) != MTD$Lambda) ) {
-    stop("Lambda must be sorted in ascending order. Try using MTDmodel() to create an MTD.")
+  if (any(sort(L) != L)) {
+    stop("Lambda(MTD) must be sorted in ascending order. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
 
-  lenL <- length(MTD$Lambda)
+  lenL <- length(L)
 
   # Checks if A is a numeric vector of integers (length ≥ 2), sorted in ascending order
-  if (length(MTD$A) <= 1 || !is.vector(MTD$A) || any(MTD$A%%1 != 0) || length(MTD$A) != length(unique(MTD$A))) {
-    stop("State space A must be a vector (length >= 2) of unique integers. Try using MTDmodel() to create an MTD.")
+  if (length(A) <= 1 || !is.vector(A) || any(A%%1 != 0) || length(A) != length(unique(A))) {
+    stop("State space A must be a vector (length >= 2) of unique integers. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
-  if (any(sort(MTD$A) != MTD$A)) {
-    stop("State space A must be sorted in ascending order. Try using MTDmodel() to create an MTD.")
+  if (any(sort(A) != A)) {
+    stop("State space A must be sorted in ascending order. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
 
-  lenA <- length(MTD$A)
+  lenA <- length(A)
 
   # Checks if p0 is a numeric nonnegative vector of length 1 or length(A), summing to 1
-  if (!is.numeric(MTD$p0) || !is.vector(MTD$p0) || !all(MTD$p0 >= 0)) {
-    stop("p0 must be a nonnegative numeric vector. Try using MTDmodel() to create an MTD.")
+  if (!is.numeric(p0v) || !is.vector(p0v) || !all(p0v >= 0)) {
+    stop("p0 must be a nonnegative numeric vector. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
-  if (!length(MTD$p0) %in% c(1, lenA)) {
+  if (!length(p0v) %in% c(1, lenA)) {
     stop(paste0("p0 must be either a scalar 0 or a numeric vector of length ",
-        lenA, ". Try using MTDmodel() to create an MTD."))
+        lenA, ". Try using MTDmodel() or MTDest() to generate a valid MTD."))
   }
-  if (round(sum(MTD$p0), 5) != 1 & sum(MTD$p0) != 0) {
-    stop("The elements in p0 must either sum to 1 or all be 0. Try using MTDmodel() to create an MTD.")
+  if (round(sum(p0v), 5) != 1 & sum(p0v) != 0) {
+    stop("The elements in p0 must either sum to 1 or all be 0. Try using MTDmodel() or MTDest() to generate a valid MTD.")
   }
 
   # Checks if lambdas is a numeric nonnegative vector of length
   # (length(Lambda) + 1) that sums to 1
-  if (!is.numeric(MTD$lambdas) || round(sum(MTD$lambdas), 5) != 1 ||
-      !all(MTD$lambdas >= 0) || length(MTD$lambdas) != (lenL + 1)) {
+  if (!is.numeric(w) || round(sum(w), 5) != 1 ||
+      !all(w >= 0) || length(w) != (lenL + 1)) {
     stop(paste0(
       "lambdas must be a vector of length ", lenL + 1,
       " (the number of relevant lags in Lambda plus 1), consisting of nonnegative numbers that sum to 1. ",
       "The first element of the lambdas vector is the weight for the independent distribution p0; ",
       "if your MTD model does not include an independent distribution, set lambdas[1] to 0. ",
-      "Try using MTDmodel() to create an MTD."
+      "Try using MTDmodel() or MTDest() to generate a valid MTD."
     ))
   }
 
   # Checks if pj is a list with length(Lambda) elements, each containing a
   # stochastic matrix of size length(A) x length(A)
-  if(!is.list(MTD$pj) || length(MTD$pj) != lenL ||
-     !all(sapply(MTD$pj, is.matrix)) || !all(sapply(MTD$pj,dim) == c(lenA,lenA))) {
+  if(!is.list(pj_list) || length(pj_list) != lenL ||
+     !all(sapply(pj_list, is.matrix)) || !all(sapply(pj_list,dim) == c(lenA,lenA))) {
     stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
-         "x",lenA,". Try using MTDmodel() to create an MTD."))
+         "x",lenA,". Try using MTDmodel() or MTDest() to generate a valid MTD."))
   }
-  aux <- do.call(rbind, MTD$pj)
+  aux <- do.call(rbind, pj_list)
   if(!is.numeric(aux) || !all(round(apply(aux, 1, sum), 5) == 1) || !all(aux>=0)) {
     stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
-    "x",lenA,". In other words, each matrix row must sum up to 1. Try using MTDmodel() to create an MTD."))
+    "x",lenA,". In other words, each matrix row must sum up to 1. Try using MTDmodel() or MTDest() to generate a valid MTD."))
   }
 }
-# Note: This package includes a function called MTDmodel(), which outputs
-# a properly structured MTD object that does not require additional checks.
-# However, since the user can create the MTD object manually, this checkMTD()
-# is used, within the functions that use MTD objects as inputs, to prevent errors
-
 
 #########################################################################
 #########################################################################
