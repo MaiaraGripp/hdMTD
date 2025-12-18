@@ -4,6 +4,8 @@
 #' Convenience coercion to rebuild an object of class \code{"MTD"} from an EM fit
 #' (i.e., an output from \code{MTDest()} with class \code{c("MTDest","MTD")}).
 #' This simply feeds the estimated parameters back into \code{\link{MTDmodel}}.
+#' Note that most methods for \code{"MTD"} also work directly on \code{"MTDest"}
+#' objects via inheritance and explicit coercion is therefore optional.
 #'
 #' @param x An object of class \code{"MTDest"}.
 #' @param ... Further arguments passed to or from other methods (ignored).
