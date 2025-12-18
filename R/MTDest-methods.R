@@ -8,7 +8,7 @@
 #' here are specific to EM fits, providing diagnostics and summaries of the estimation.
 #'
 #' @details
-#' These methods handle objects returned by \code{\link{MTDest}} (class \code{"MTDest"}):
+#' These methods handle objects returned by \code{\link{MTDest}} (class \code{c("MTDest","MTD")}):
 #' \itemize{
 #'   \item \code{print.MTDest()} displays a compact summary of the fitted model:
 #'    the lag set (\code{S}), the state space (\code{A}), the final
@@ -24,6 +24,7 @@
 #'     under the multimatrix model) and \code{nobs} (effective sample size).
 #' }
 #'
+#' @param x An object of class \code{"MTDest"} (for \code{print.MTDest(x, ...)}).
 #' @param object An object of class \code{"MTDest"}.
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
@@ -41,7 +42,8 @@
 #'     \code{df} (number of free parameters) and \code{nobs} (effective sample size).}
 #' }
 #'
-#' @seealso \code{\link{MTDest}}, \code{\link{as.MTD}}
+#' @seealso \code{\link{MTDest}}, \code{\link{as.MTD}}, \code{\link{MTD-methods}},
+#' \code{\link{oscillation}}, \code{\link{perfectSample}}, \code{\link{probs}}
 #'
 #' @examples
 #' \dontrun{

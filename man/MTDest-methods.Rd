@@ -4,6 +4,8 @@
 \alias{MTDest-methods}
 \title{Methods for objects of class \code{"MTDest"}}
 \arguments{
+\item{x}{An object of class \code{"MTDest"} (for \code{print.MTDest(x, ...)}).}
+
 \item{object}{An object of class \code{"MTDest"}.}
 
 \item{...}{Further arguments passed to or from other methods (ignored).}
@@ -30,7 +32,7 @@ also work on \code{"MTDest"} objects by inheritance. The methods documented
 here are specific to EM fits, providing diagnostics and summaries of the estimation.
 }
 \details{
-These methods handle objects returned by \code{\link{MTDest}} (class \code{"MTDest"}):
+These methods handle objects returned by \code{\link{MTDest}} (class \code{c("MTDest","MTD")}):
 \itemize{
 \item \code{print.MTDest()} displays a compact summary of the fitted model:
 the lag set (\code{S}), the state space (\code{A}), the final
@@ -69,5 +71,6 @@ BIC(fit)
 
 }
 \seealso{
-\code{\link{MTDest}}, \code{\link{as.MTD}}
+\code{\link{MTDest}}, \code{\link{as.MTD}}, \code{\link{MTD-methods}},
+\code{\link{oscillation}}, \code{\link{perfectSample}}, \code{\link{probs}}
 }
