@@ -15,9 +15,9 @@ as.MTD(x, ...)
 An object of class \code{"MTD"} as returned by \code{\link{MTDmodel}}.
 }
 \description{
-Convenience coercion to rebuild an object of class \code{"MTD"} from an
-\code{"MTDest"} fit. This simply feeds the estimated
-parameters back into \code{\link{MTDmodel}}.
+Convenience coercion to rebuild an object of class \code{"MTD"} from an EM fit
+(i.e., an output from \code{MTDest()} with class \code{c("MTDest","MTD")}).
+This simply feeds the estimated parameters back into \code{\link{MTDmodel}}.
 }
 \examples{
 \dontrun{

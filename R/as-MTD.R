@@ -1,9 +1,9 @@
 #' Coerce an EM fit to an MTD model
 #'
 #' @description
-#' Convenience coercion to rebuild an object of class \code{"MTD"} from an
-#' \code{"MTDest"} fit. This simply feeds the estimated
-#' parameters back into \code{\link{MTDmodel}}.
+#' Convenience coercion to rebuild an object of class \code{"MTD"} from an EM fit
+#' (i.e., an output from \code{MTDest()} with class \code{c("MTDest","MTD")}).
+#' This simply feeds the estimated parameters back into \code{\link{MTDmodel}}.
 #'
 #' @param x An object of class \code{"MTDest"}.
 #' @param ... Further arguments passed to or from other methods (ignored).
