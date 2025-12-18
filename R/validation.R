@@ -87,10 +87,15 @@ checkMTD <- function(MTD){
     stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
          "x",lenA,"."))
   }
-  aux <- do.call(rbind, pj_list)
-  if(!is.numeric(aux) || !all(round(apply(aux, 1, sum), 5) == 1) || !all(aux>=0)) {
-    stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
-    "x",lenA,". In other words, each matrix row must sum up to 1."))
+  for (mj in pj_list) {
+    if (!is.numeric(mj) || any(mj < 0)) {
+      stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
+                  "x", lenA, ". In other words, each matrix row must sum up to 1."))
+    }
+    if (!all(round(rowSums(mj), 5) == 1)) {
+      stop(paste0("pj must be a list with ", lenL, " stochastic matrices ", lenA,
+                  "x", lenA, ". In other words, each matrix row must sum up to 1."))
+    }
   }
 }
 
@@ -139,15 +144,31 @@ check_MTDmodel_inputs <- function(Lambda, A, lam0, lamj, pj, p0, single_matrix, 
 
   if( !is.logical(single_matrix) ) stop("single_matrix must be TRUE or FALSE.")
 
-  if ( !is.null(pj) ) {
-    if ( !is.list(pj) ) stop("pj must be either NULL or a list of matrices.")
-    if ( any( lapply(pj, is.matrix) == FALSE ) ) stop("pj must be either NULL or a list of matrices.")
-    if ( single_matrix && length(pj) != 1 ) stop("Since single_matrix=TRUE, pj must be NULL or be a list with a single stochastic matrix.")
-    if ( !single_matrix && length(pj) != length(Lambda) ) stop("pj must be NULL or be a list with ", length(Lambda), "matrices.")
-    aux <- do.call(rbind,pj)
-    if( !all(round(apply(aux, 1, sum), 5) == 1)  || !all(aux >= 0) || !is.numeric(aux) ||
-        ncol(aux) != length(A) || any(sapply(pj, dim) != length(A)) ) {
-      stop(paste0("pj must be a list of stochastic matrices ", length(A), "x",length(A)))
+  if (!is.null(pj)) {
+    if (!is.list(pj)) {
+      stop("pj must be either NULL or a list of matrices.")
+    }
+
+    if (single_matrix && length(pj) != 1) {
+      stop("Since single_matrix=TRUE, pj must be NULL or be a list with a single stochastic matrix.")
+    }
+    if (!single_matrix && length(pj) != length(Lambda)) {
+      stop(paste0("pj must be NULL or be a list with ", length(Lambda), " matrices."))
+    }
+
+    for (mj in pj) {
+      if (!is.matrix(mj) || !is.numeric(mj)) {
+        stop(paste0("pj must be a list of stochastic matrices ", length(A), "x", length(A)))
+      }
+      if (!all(dim(mj) == c(length(A), length(A)))) {
+        stop(paste0("pj must be a list of stochastic matrices ", length(A), "x", length(A)))
+      }
+      if (any(mj < 0)) {
+        stop(paste0("pj must be a list of stochastic matrices ", length(A), "x", length(A)))
+      }
+      if (!all(round(rowSums(mj), 5) == 1)) {
+        stop(paste0("pj must be a list of stochastic matrices ", length(A), "x", length(A)))
+      }
     }
   }
 }
@@ -233,7 +254,7 @@ check_dTVsample_inputs <- function(S, j, A, base, lenA, A_pairs, x_S) {
         stop("A must be a vector of length greater than 1 composed of unique integers.")
       }
       if( length(lenA) != 0 || length(A_pairs) != 0 ) {
-        warning("Since the state space A was provided, this function will set lenA <- length(A) and A_pairs <-  t(utils::combn(A, 2))}, even if you have provided at least one of them.")
+        warning("Since the state space A was provided, this function will set lenA <- length(A) and A_pairs <-  t(utils::combn(A, 2)), even if you have provided at least one of them.")
       }
       if( length(S) > 0 && !all(x_S %in% A) ) {
         stop("x_S must be a sequence of elements from A.")
