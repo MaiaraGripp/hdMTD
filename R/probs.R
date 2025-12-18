@@ -7,9 +7,9 @@
 #'
 #' Conventions:
 #' - Samples are read most recent first: `x[1] = X_{t-1}`, `x[2] = X_{t-2}`, etc.
-#' - The global transition matrix `P` is indexed by row labels that list the past
-#'   context from oldest to newest. A cell at row `"s_k...s_1"` and column `"a"`
-#'   is read as `p(a | s_1...s_k)`.
+#' - The global transition matrix `P` (or transitP) is indexed by row labels that
+#'  list the past context from oldest to newest. A cell at row `"s_k...s_1"` and
+#'   column `"a"` is read as `p(a | s_1...s_k)`.
 #' - If both `newdata` and `context` are missing, `probs()` returns the full
 #'   global transition matrix (`transitP(object)`).
 #'
@@ -56,7 +56,7 @@
 #' probs(m, newdata = ctxs)
 #'
 #' @seealso \code{\link{transitP}}, \code{\link{states}}, \code{\link{Lambda}},
-#'   \code{\link{as.MTD}}, \code{\link{empirical_probs}}
+#'  \code{\link{empirical_probs}}, \code{\link{MTDmodel}}, \code{\link{MTDest}}
 #'
 #' @name probs
 #' @export

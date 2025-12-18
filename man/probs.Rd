@@ -38,9 +38,9 @@ the "MTD" class via S3 inheritance.
 Conventions:
 \itemize{
 \item Samples are read most recent first: \verb{x[1] = X_\{t-1\}}, \verb{x[2] = X_\{t-2\}}, etc.
-\item The global transition matrix \code{P} is indexed by row labels that list the past
-context from oldest to newest. A cell at row \code{"s_k...s_1"} and column \code{"a"}
-is read as \code{p(a | s_1...s_k)}.
+\item The global transition matrix \code{P} (or transitP) is indexed by row labels that
+list the past context from oldest to newest. A cell at row \code{"s_k...s_1"} and
+column \code{"a"} is read as \code{p(a | s_1...s_k)}.
 \item If both \code{newdata} and \code{context} are missing, \code{probs()} returns the full
 global transition matrix (\code{transitP(object)}).
 }
@@ -71,5 +71,5 @@ probs(m, newdata = ctxs)
 }
 \seealso{
 \code{\link{transitP}}, \code{\link{states}}, \code{\link{Lambda}},
-\code{\link{as.MTD}}, \code{\link{empirical_probs}}
+\code{\link{empirical_probs}}, \code{\link{MTDmodel}}, \code{\link{MTDest}}
 }
