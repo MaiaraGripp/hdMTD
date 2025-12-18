@@ -68,15 +68,17 @@
 #' @export
 #'
 #' @examples
-#' summary(MTDmodel(Lambda=c(1,3),A=c(4,8,12)))
+#' summary(MTDmodel(Lambda = c(1, 3), A = c(4, 8, 12)))
 #'
-#' MM <- MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,lamj=c(0.35,0.2,0.4),
-#' pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),p0=c(0.2,0.8),single_matrix=TRUE)
+#' MM <- MTDmodel(Lambda = c(2, 4, 9), A = c(0, 1), lam0 = 0.05,
+#'  lamj = c(0.35, 0.2, 0.4), pj = list(matrix(c(0.5, 0.7, 0.5, 0.3), ncol = 2)),
+#'  p0 = c(0.2, 0.8), single_matrix = TRUE)
 #' transitP(MM); pj(MM); oscillation(MM)
 #'
 #'
-#' MM <- MTDmodel(Lambda=c(2,4,9),A=c(0,1),lam0=0.05,
-#' pj=list(matrix(c(0.5,0.7,0.5,0.3),ncol=2)),single_matrix=TRUE,indep_part=FALSE)
+#' MM <- MTDmodel(Lambda = c(2, 4, 9), A = c(0, 1), lam0 = 0.05,
+#'  pj = list(matrix(c(0.5, 0.7, 0.5, 0.3), ncol = 2)), single_matrix = TRUE,
+#'  indep_part = FALSE)
 #' p0(MM); lambdas(MM)
 #'
 MTDmodel <- function(Lambda, A, lam0 = NULL, lamj = NULL, pj = NULL, p0 = NULL,
