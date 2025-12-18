@@ -28,7 +28,7 @@
 #' @param x An object of class \code{"MTD"} (for \code{print.MTD(x, ...)}).
 #' @param object An object of class \code{"MTD"}.
 #' @param X A vector or single-column data frame containing an MTD chain sample
-#' (for \code{logLik.MTD(object, X, ...)}). Values must be in the model's state space.
+#' (required for \code{logLik.MTD(object, X, ...)}). Values must be in the model's state space.
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
 #' @return
