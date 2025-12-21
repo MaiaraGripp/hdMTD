@@ -12,7 +12,9 @@
 - Improved and consolidated documentation by explicitly listing available S3 methods and accessors in the help pages of the main constructors (`MTDmodel()`, `MTDest()`, and `hdMTD()`).
 
 ### R CMD check results (current)
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 2 notes
+
+The NOTES are related to the local Windows environment (time verification and absence of pandoc) and are not specific to the package.
 
 ---
 ## Previous submission notes (for reference)

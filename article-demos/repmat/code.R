@@ -226,9 +226,15 @@ summary(emMTD)
 emMTD <- MTDest(X, S = c(1, 15, 30), M = NULL, nIter = 9, init = init, oscillations = TRUE)
 summary(emMTD)
 #'
-#' Compute estimated global transition matrix
+#' Coercing an MTDest object to an MTD
 #'
-transitP(emMTD)
+emMTD <- MTDest(X, S = c(1, 15, 30), init = init)
+class(emMTD)
+MTD_hat <- as.MTD(emMTD)
+class(MTD_hat)
+#' Return estimated transition matrix
+transitP(MTD_hat)
+all.equal(transitP(MTD_hat), transitP(emMTD))
 #'
 #' ### 5.3 Testing hdMTD
 #'

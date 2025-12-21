@@ -17,6 +17,20 @@
 
 ## Load packages
 library("hdMTD")
+```
+
+```
+## 
+## Anexando pacote: 'hdMTD'
+```
+
+```
+## O seguinte objeto é mascarado _por_ '.GlobalEnv':
+## 
+##     tempdata
+```
+
+``` r
 library("dplyr")
 ```
 
@@ -27,12 +41,6 @@ library("dplyr")
 ```
 ## 
 ## Anexando pacote: 'dplyr'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:testthat':
-## 
-##     matches
 ```
 
 ```
@@ -82,34 +90,12 @@ library("purrr")
 ## Warning: pacote 'purrr' foi compilado no R versão 4.4.3
 ```
 
-```
-## 
-## Anexando pacote: 'purrr'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:testthat':
-## 
-##     is_null
-```
-
 ``` r
 library("tidyr")
 ```
 
 ```
 ## Warning: pacote 'tidyr' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'tidyr'
-```
-
-```
-## O seguinte objeto é mascarado por 'package:testthat':
-## 
-##     matches
 ```
 
 ``` r
@@ -407,10 +393,10 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30 
-##             641.7328             643.1757             642.5873 
-##           1,15,17,30 smallest: 1,15,17,30 
-##             641.3069             641.3069
+##                   30                15,30              1,15,30           1,15,17,30 
+##             641.7328             643.1757             642.5873             641.3069 
+## smallest: 1,15,17,30 
+##             641.3069
 ```
 
 
@@ -426,10 +412,10 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30 
-##             637.5881             634.1956             628.7718 
-##           1,15,17,30 smallest: 1,15,17,30 
-##             622.6559             622.6559
+##                   30                15,30              1,15,30           1,15,17,30 
+##             637.5881             634.1956             628.7718             622.6559 
+## smallest: 1,15,17,30 
+##             622.6559
 ```
 
 
@@ -721,20 +707,12 @@ summary(emMTD)
 ```
 
 
-Coercing an MTDest object to an MTD
+Compute estimated global transition matrix
 
 
 
 ``` r
-emMTD <- MTDest(X, S = c(1, 15, 30), init = init)
-MTD_hat <- as.MTD(emMTD)
-```
-
-Return estimated transition matrix
-
-
-``` r
-transitP(MTD_hat)
+transitP(emMTD)
 ```
 
 ```
@@ -931,50 +909,11 @@ if (recompute) {
 
 ```
 ## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
 ## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
 ## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
 ## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
 ## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
-```
-
-```
 ## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-```
-## Warning: pacote 'hdMTD' foi compilado no R versão 4.4.3
 ```
 
 
@@ -1493,10 +1432,8 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 ```
 
 ```
-##                 1             1,364           1,6,364 
-##          1720.801          1690.543          1674.080 
-## smallest: 1,6,364 
-##          1674.080
+##                 1             1,364           1,6,364 smallest: 1,6,364 
+##          1720.801          1690.543          1674.080          1674.080
 ```
 
 
@@ -2306,49 +2243,29 @@ sessionInfo()
 ## 
 ## 
 ## locale:
-## [1] LC_COLLATE=Portuguese_Brazil.utf8 
-## [2] LC_CTYPE=Portuguese_Brazil.utf8   
-## [3] LC_MONETARY=Portuguese_Brazil.utf8
-## [4] LC_NUMERIC=C                      
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
+## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
 ## [5] LC_TIME=Portuguese_Brazil.utf8    
 ## 
 ## time zone: America/Sao_Paulo
 ## tzcode source: internal
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets 
-## [6] methods   base     
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] future.apply_1.20.0 future_1.67.0      
-##  [3] tidyr_1.3.1         purrr_1.1.0        
-##  [5] lubridate_1.9.4     ggplot2_3.5.2      
-##  [7] dplyr_1.1.4         hdMTD_0.1.4        
-##  [9] testthat_3.2.1.1    devtools_2.4.5     
-## [11] usethis_3.2.1      
+## [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0        
+## [5] lubridate_1.9.4     ggplot2_3.5.2       dplyr_1.1.4         hdMTD_0.1.4        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       xfun_0.52          htmlwidgets_1.6.4 
-##  [4] remotes_2.5.0      vctrs_0.6.5        tools_4.4.1       
-##  [7] generics_0.1.4     parallel_4.4.1     tibble_3.3.0      
-## [10] highr_0.11         pkgconfig_2.0.3    RColorBrewer_1.1-3
-## [13] desc_1.4.3         lifecycle_1.0.4    farver_2.1.2      
-## [16] compiler_4.4.1     stringr_1.5.1      brio_1.1.5        
-## [19] munsell_0.5.1      codetools_0.2-20   httpuv_1.6.15     
-## [22] htmltools_0.5.8.1  later_1.3.2        pillar_1.11.1     
-## [25] urlchecker_1.0.1   ellipsis_0.3.2     cachem_1.1.0      
-## [28] sessioninfo_1.2.2  mime_0.12          parallelly_1.45.1 
-## [31] commonmark_2.0.0   tidyselect_1.2.1   digest_0.6.36     
-## [34] stringi_1.8.4      listenv_0.9.1      labeling_0.4.3    
-## [37] rprojroot_2.1.1    fastmap_1.2.0      grid_4.4.1        
-## [40] colorspace_2.1-1   cli_3.6.5          magrittr_2.0.4    
-## [43] pkgbuild_1.4.8     withr_3.0.2        scales_1.3.0      
-## [46] promises_1.3.0     timechange_0.3.0   roxygen2_7.3.2    
-## [49] globals_0.18.0     igraph_2.2.1       memoise_2.0.1     
-## [52] shiny_1.8.1.1      evaluate_0.24.0    knitr_1.48        
-## [55] miniUI_0.1.1.1     profvis_0.3.8      rlang_1.1.6       
-## [58] Rcpp_1.0.13-1      xtable_1.8-4       glue_1.8.0        
-## [61] xml2_1.3.6         pkgload_1.4.0      rstudioapi_0.16.0 
-## [64] R6_2.6.1           fs_1.6.4
+##  [1] gtable_0.3.5       compiler_4.4.1     highr_0.11         tidyselect_1.2.1  
+##  [5] parallel_4.4.1     globals_0.18.0     scales_1.3.0       R6_2.6.1          
+##  [9] labeling_0.4.3     generics_0.1.4     igraph_2.2.1       knitr_1.48        
+## [13] tibble_3.3.0       munsell_0.5.1      RColorBrewer_1.1-3 pillar_1.11.1     
+## [17] rlang_1.1.6        xfun_0.52          timechange_0.3.0   cli_3.6.5         
+## [21] withr_3.0.2        magrittr_2.0.4     digest_0.6.36      grid_4.4.1        
+## [25] rstudioapi_0.16.0  lifecycle_1.0.4    vctrs_0.6.5        evaluate_0.24.0   
+## [29] glue_1.8.0         farver_2.1.2       listenv_0.9.1      codetools_0.2-20  
+## [33] parallelly_1.45.1  colorspace_2.1-1   tools_4.4.1        pkgconfig_2.0.3
 ```
 
