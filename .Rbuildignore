@@ -7,3 +7,5 @@
 ^article-demos$
 ^tests/dev/
 ^build($|/)
+^\.positai$
+^\.claude$
