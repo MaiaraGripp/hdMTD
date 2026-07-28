@@ -19,3 +19,12 @@ test_that("hdMTD_FS function works as expected", {
   # Test with warn enabled
   expect_warning(hdMTD_FS(X = X, d = d, l = 3, warn = TRUE))
 })
+
+test_that("hdMTD_FS rejects samples containing missing values", {
+  X_na <- c(0, 1, 0, NA, 1, 0)
+
+  expect_error(
+    hdMTD_FS(X = X_na, d = 2, l = 1),
+    "NA values are not allowed in the sample\\."
+  )
+})
