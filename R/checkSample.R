@@ -4,6 +4,7 @@
 #'
 #' @param X  A vector, a single-column data frame, a list, or a matrix with a
 #' single row or a single column. Must be composed by nonnegative integers.
+#' Missing values (`NA`) are not allowed.
 #'
 #' @return Returns the sample as a vector or identifies any possible sample problems.
 #' @keywords internal

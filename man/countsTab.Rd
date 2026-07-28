@@ -8,7 +8,8 @@ countsTab(X, d)
 }
 \arguments{
 \item{X}{A numeric vector, a single-column data frame, or a list with a
-sample from a Markov chain. The first element must be the most recent observation.}
+sample from a Markov chain. The first element must be the most recent
+observation. Missing values (\code{NA}) are not allowed.}
 
 \item{d}{A positive integer specifying the number of elements in each sequence,
 which will be \code{d+1}. Typically, \code{d} represents the chain order or

@@ -13,7 +13,8 @@
 #' on the number of unique sequences that appear in the sample.
 #'
 #' @param X A numeric vector, a single-column data frame, or a list with a
-#' sample from a Markov chain. The first element must be the most recent observation.
+#' sample from a Markov chain. The first element must be the most recent
+#' observation. Missing values (`NA`) are not allowed.
 #' @param d A positive integer specifying the number of elements in each sequence,
 #' which will be \code{d+1}. Typically, \code{d} represents the chain order or
 #' serves as an upper limit for it.

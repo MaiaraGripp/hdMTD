@@ -35,7 +35,7 @@
 #'
 #'
 #' @param X A vector or single-column data frame containing an MTD chain sample
-#'  (`X[1]` is the most recent).
+#'  (`X[1]` is the most recent). Missing values (`NA`) are not allowed.
 #' @param S A numeric vector of distinct positive integers, sorted increasingly.
 #' Typically, \code{S} represents a set of relevant lags.
 #' @param M A stopping point for the EM algorithm. If \code{M=NULL} the algorithm

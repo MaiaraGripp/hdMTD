@@ -7,7 +7,8 @@
 hdMTD(X, d, method = "FS", ...)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a chain sample.}
+\item{X}{A vector or single-column data frame containing a chain sample.
+(\code{X[1]} is the most recent). Missing values (\code{NA}) are not allowed.}
 
 \item{d}{A positive integer representing an upper bound for the chain order.}
 

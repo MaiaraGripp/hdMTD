@@ -42,6 +42,7 @@
 #' }
 #'
 #' @param X A vector or single-column data frame containing a chain sample.
+#' (`X[1]` is the most recent). Missing values (`NA`) are not allowed.
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param method  A character string indicating the method for estimating the relevant lag set.
 #' The available methods are: "FS" (default), "FSC", "CUT", and "BIC". See the *Details* section
