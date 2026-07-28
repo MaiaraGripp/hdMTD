@@ -40,7 +40,7 @@
 #' in the MTD, which affects the number of parameters in the penalization term. Defaulted
 #' to \code{maxl}. See more in *Details*.
 #' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
-#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
 #'
 #'
 #' @details
@@ -84,6 +84,15 @@
 #' since this is the largest number of matrices \eqn{p_j}. When \code{minl<maxl},
 #' for each \code{minl} \eqn{\leq} \code{l} \eqn{\leq} \code{maxl}, \code{zeta = min(zeta,l)}.
 #' If \code{single_matrix = TRUE} then \code{zeta} is set to 1.
+#'
+#' @section Computational cost:
+#' The computational cost of this function can be high when the candidate
+#' set \code{S} is large. If \code{S} is not provided, all lags from 1 to
+#' \code{d} are considered, and the function evaluates subsets whose sizes
+#' range from \code{minl} to \code{maxl}. Consequently, the running time can
+#' increase rapidly with \code{d}. Whenever possible, users are encouraged
+#' to provide a reduced candidate set through \code{S}, for example using
+#' the output of \code{hdMTD_FS()}.
 #'
 #' @references
 #' Imre Csiszár, Paul C. Shields.

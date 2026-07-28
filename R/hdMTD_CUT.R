@@ -16,7 +16,7 @@
 #' @param xi A positive real number, \code{xi} is also a component of the same threshold as
 #'  \code{alpha}.
 #' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
-#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
 #'
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
 #' Mixture Transition Distribution (MTD) models. It consists
@@ -24,6 +24,14 @@
 #' This method and its steps where developed by [Ost and Takahashi](http://jmlr.org/papers/v24/22-0266.html)
 #' and are specially useful for inference in high-order MTD Markov chains. This specific function
 #' will only apply the CUT step of the algorithm and return an estimated relevant lag set.
+#'
+#' @section Computational cost:
+#' The computational cost of this function can be high when the input set
+#' \code{S} is large. If \code{S} is not provided, the function uses
+#' \code{S = 1:d}, which may substantially increase both running time and
+#' memory requirements for large values of \code{d}. Whenever possible, users
+#' are encouraged to provide a reduced candidate set through \code{S}, for
+#' example using the output of \code{hdMTD_FS()}.
 #'
 #' @references
 #' Ost, G. & Takahashi, D. Y. (2023).

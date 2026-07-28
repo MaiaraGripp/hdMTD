@@ -69,7 +69,7 @@ to \code{maxl}. See more in \emph{Details}.}
 
 \item{warn}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
-\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
+\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}).}
 }
 \value{
 Returns a vector with the estimated relevant lag set using BIC. It might return more
@@ -124,6 +124,17 @@ since this is the largest number of matrices \eqn{p_j}. When \code{minl<maxl},
 for each \code{minl} \eqn{\leq} \code{l} \eqn{\leq} \code{maxl}, \code{zeta = min(zeta,l)}.
 If \code{single_matrix = TRUE} then \code{zeta} is set to 1.
 }
+\section{Computational cost}{
+
+The computational cost of this function can be high when the candidate
+set \code{S} is large. If \code{S} is not provided, all lags from 1 to
+\code{d} are considered, and the function evaluates subsets whose sizes
+range from \code{minl} to \code{maxl}. Consequently, the running time can
+increase rapidly with \code{d}. Whenever possible, users are encouraged
+to provide a reduced candidate set through \code{S}, for example using
+the output of \code{hdMTD_FS()}.
+}
+
 \examples{
 # Simulate a chain from an MTD model
 set.seed(1)

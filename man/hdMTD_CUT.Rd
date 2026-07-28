@@ -39,7 +39,7 @@ this function will set \code{A <- sort(unique(X))}.}
 
 \item{warn}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
-\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
+\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}).}
 }
 \value{
 Returns a set of relevant lags estimated using the CUT algorithm.
@@ -55,6 +55,16 @@ This method and its steps where developed by \href{http://jmlr.org/papers/v24/22
 and are specially useful for inference in high-order MTD Markov chains. This specific function
 will only apply the CUT step of the algorithm and return an estimated relevant lag set.
 }
+\section{Computational cost}{
+
+The computational cost of this function can be high when the input set
+\code{S} is large. If \code{S} is not provided, the function uses
+\code{S = 1:d}, which may substantially increase both running time and
+memory requirements for large values of \code{d}. Whenever possible, users
+are encouraged to provide a reduced candidate set through \code{S}, for
+example using the output of \code{hdMTD_FS()}.
+}
+
 \examples{
 # Simulate a chain from an MTD model
 set.seed(1)
