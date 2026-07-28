@@ -16,7 +16,7 @@
 #' is also a component of the same threshold as \code{alpha}.
 #' @param xi A positive real number, \code{xi} is also a component of the same threshold as
 #'  \code{alpha}.
-#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
 #'
 #' @details The "Forward Stepwise and Cut" (FSC) is an algorithm for inference in
 #' Mixture Transition Distribution (MTD) models. It consists

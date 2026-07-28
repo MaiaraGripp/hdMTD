@@ -10,7 +10,7 @@
 #' @param elbowTest Logical. If TRUE, the function applies an alternative stopping criterion to
 #' determine the length of the set of relevant lags. See *Details* for more information.
 #' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
-#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
 #'
 #'
 #' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"
