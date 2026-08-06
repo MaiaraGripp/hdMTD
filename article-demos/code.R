@@ -1101,7 +1101,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.13), main = "", panel.first = grid())
    title(main = expression(paste("S = ", Ø)), cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], pch = 21, bg = palette[1], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], labels = paste0(Sc[which.max(nuj1)]),
         pos = 3, col = palette[1], font = 2, cex = 1.4)
@@ -1111,7 +1111,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.025),  main = "", panel.first = grid())
    title(main = "With S = {-1}", cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj2)], nuj2[which.max(nuj2)], pch = 21, bg = palette[2], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj2)]-5, nuj2[which.max(nuj2)], labels = paste0(Sc[which.max(nuj2)]),
         pos = 3, col = palette[2], font = 2, cex = 1.4)
@@ -1121,7 +1121,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.025), main = "", panel.first = grid())
    title(main = "With S = {-364, -1}", cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], pch = 21, bg = palette[3], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], labels = paste0(Sc[which.max(nuj3)]),
         pos = 3, col = palette[3], font = 2, cex = 1.4)
