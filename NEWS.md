@@ -1,3 +1,13 @@
+# hdMTD 0.1.5
+
+## Documentation
+* Added computational-cost warnings to the documentation of `hdMTD_BIC()` and `hdMTD_CUT()`, emphasizing that unrestricted candidate sets may substantially increase running time and memory requirements.
+* Recommended using a reduced candidate lag set `S`, when possible, for example based on the output of `hdMTD_FS()`.
+* Clarified in the documentation of functions that accept chain samples that missing values (`NA`) are not allowed.
+
+## Tests
+* Added an automated test confirming that inference functions reject samples containing missing values with a clear error message.
+
 # hdMTD 0.1.4
 
 ## Fixes and improvements
