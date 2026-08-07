@@ -8,3 +8,4 @@
 .quarto
 codezin_baseline.rds
 .positai
+inst/doc

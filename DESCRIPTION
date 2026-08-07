@@ -18,5 +18,13 @@ Imports:
     purrr,
     igraph
 Suggests: 
-    testthat (>= 3.0.0)
+    future,
+    future.apply,
+    ggplot2,
+    knitr,
+    lubridate,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    tidyr
 Config/testthat/edition: 3
+VignetteBuilder: knitr
