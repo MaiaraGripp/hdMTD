@@ -5,6 +5,11 @@
 * Recommended using a reduced candidate lag set `S`, when possible, for example based on the output of `hdMTD_FS()`.
 * Clarified in the documentation of functions that accept chain samples that missing values (`NA`) are not allowed.
 
+## Vignettes
+
+- Added an official package vignette with replication materials for the examples and analyses presented in Section 5 of the article describing the `hdMTD` package.
+- Included pre-computed results for computationally intensive analyses so that the vignette can be built without rerunning long computations.
+
 ## Tests
 * Added an automated test confirming that inference functions reject samples containing missing values with a clear error message.
 

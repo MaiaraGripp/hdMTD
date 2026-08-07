@@ -8,9 +8,11 @@ This version includes minor documentation and robustness improvements motivated 
 - Added computational-cost warnings to the documentation of `hdMTD_BIC()` and `hdMTD_CUT()`. The documentation now explains that unrestricted candidate sets may substantially increase running time and memory requirements and recommends providing a reduced candidate set `S` whenever possible.
 - Clarified in the documentation of all functions that accept a chain sample that missing values (`NA`) are not allowed.
 - Added an automated test verifying that inference functions reject samples containing missing values with the intended error message.
+- Added an official package vignette providing replication materials for the examples and analyses presented in Section 5 of the article describing the `hdMTD` package.
+- Updated `DESCRIPTION` to declare the packages required to build the vignette.
 
 ### R CMD check results
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 note
 
 ---
 ## Previous submission notes (for reference)
