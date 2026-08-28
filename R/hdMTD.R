@@ -27,6 +27,7 @@
 #' - \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
 #' - \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
 #' - \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
+#' - \code{cut_fraction = 0.5}. Used in the "FSC" method.
 #' - \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
 #' All default values are specified in the documentation of the method-specific functions.
 #'
@@ -125,7 +126,7 @@ hdMTD <- function(X, d, method = "FS", ...){
   dparams <- list(S = seq_len(d), l = NULL, alpha = 0.05, mu = 1, xi = 0.5,
                   minl = 1, maxl = d, A = NULL, byl = FALSE, BICvalue = FALSE,
                   single_matrix = FALSE, indep_part = TRUE, zeta = d,
-                  elbowTest = FALSE, warn = FALSE)
+                  elbowTest = FALSE, cut_fraction = 0.5, warn = FALSE)
 
   # Overlay default with user-provided values
   if(length(params) > 0){
@@ -150,7 +151,7 @@ hdMTD <- function(X, d, method = "FS", ...){
   # l is mandatory for FSC
   if (method == "FSC") {
     if (is.null(dparams$l)) {
-      stop("For method 'FSC', please supply 'l' (number of selected lags).")
+      stop("For method 'FSC', please supply 'l' (number of candidate lags selected by FS).")
     }
   }
 
@@ -159,7 +160,8 @@ hdMTD <- function(X, d, method = "FS", ...){
     mu = dparams$mu, xi = dparams$xi, minl = dparams$minl, maxl = dparams$maxl,
     A = dparams$A, byl = dparams$byl, BICvalue = dparams$BICvalue,
     single_matrix = dparams$single_matrix, indep_part = dparams$indep_part,
-    zeta = dparams$zeta, elbowTest = dparams$elbowTest, warn = dparams$warn
+    zeta = dparams$zeta, elbowTest = dparams$elbowTest,
+    cut_fraction = dparams$cut_fraction, warn = dparams$warn
   )
 
 

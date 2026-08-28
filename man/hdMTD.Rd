@@ -62,6 +62,7 @@ The main default parameters are:
 \item \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
 \item \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
 \item \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
+\item \code{cut_fraction = 0.5}. Used in the "FSC" method.
 \item \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
 All default values are specified in the documentation of the method-specific functions.
 }
