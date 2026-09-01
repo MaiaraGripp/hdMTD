@@ -1,16 +1,26 @@
 # hdMTD 0.1.5
 
+## FSC method
+
+* Corrected the sample split in `hdMTD_FSC()` so that FS is applied to the chronologically older observations and CUT to the most recent observations, in accordance with the theoretical procedure.
+* Added the `cut_fraction` argument to control the proportion of the sample allocated to CUT. Its default value is `0.5`.
+* Added validation ensuring that `cut_fraction` is strictly between 0 and 1 and that both resulting subsamples contain more than `d + 1` observations.
+* Updated `hdMTD()` to forward `cut_fraction` to `hdMTD_FSC()` and record it in the fitted object's settings.
+
 ## Documentation
+
 * Added computational-cost warnings to the documentation of `hdMTD_BIC()` and `hdMTD_CUT()`, emphasizing that unrestricted candidate sets may substantially increase running time and memory requirements.
 * Recommended using a reduced candidate lag set `S`, when possible, for example based on the output of `hdMTD_FS()`.
 * Clarified in the documentation of functions that accept chain samples that missing values (`NA`) are not allowed.
+* Documented the chronological sample split and the role of `cut_fraction` in `hdMTD_FSC()`.
 
 ## Vignettes
 
-- Added an official package vignette with replication materials for the examples and analyses presented in Section 5 of the article describing the `hdMTD` package.
-- Included pre-computed results for computationally intensive analyses so that the vignette can be built without rerunning long computations.
+* Added an official package vignette with replication materials for the examples and analyses presented in Section 5 of the article describing the `hdMTD` package.
+* Included pre-computed results for computationally intensive analyses so that the vignette can be built without rerunning long computations.
 
 ## Tests
+
 * Added an automated test confirming that inference functions reject samples containing missing values with a clear error message.
 
 # hdMTD 0.1.4
