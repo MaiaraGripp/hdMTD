@@ -9,3 +9,5 @@
 ^build($|/)
 ^\.positai$
 ^\.claude$
+^doc$
+^Meta$
