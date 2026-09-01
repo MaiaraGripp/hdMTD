@@ -230,6 +230,30 @@ summary(emMTD)
 #'
 transitP(emMTD)
 #'
+#' 10. A three-state MTD example
+#'
+set.seed(11)
+Lambda3 <- c(2, 5)
+A3 <- c(1, 2, 3)
+lam0.3 <- 0.05
+lamj.3 <- c(0.20, 0.75)
+p0.3 <- c(0.30, 0.30, 0.40)
+MTD3 <- MTDmodel( Lambda = Lambda3, A = A3, lam0 = lam0.3, lamj = lamj.3, p0 = p0.3)
+summary(MTD3)
+#'
+Y <- perfectSample(MTD3, N = 2000)
+#'
+oscillation(MTD3)
+#'
+Sfs3 <- hdMTD_FS(Y, d = 20, l = 3)
+Sfs3
+#'
+Sbic3 <- hdMTD_BIC(Y, S = Sfs3, d = 20)
+Sbic3
+#'
+P3 <- empirical_probs(Y, S = Sbic3, matrixform = TRUE)
+P3
+#'
 #' ### 5.3 Testing hdMTD
 #'
 #' 1. MTD model specification:

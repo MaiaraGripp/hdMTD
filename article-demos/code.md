@@ -18,13 +18,89 @@
 ## Load packages
 library("hdMTD")
 library("dplyr")
-library("ggplot2")
-library("lubridate")
-library("purrr")
-library("tidyr")
-library("future")
-library("future.apply")
+```
 
+```
+## Warning: pacote 'dplyr' foi compilado no R versão 4.4.3
+```
+
+```
+## 
+## Anexando pacote: 'dplyr'
+```
+
+```
+## Os seguintes objetos são mascarados por 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## Os seguintes objetos são mascarados por 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+``` r
+library("ggplot2")
+```
+
+```
+## Warning: pacote 'ggplot2' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("lubridate")
+```
+
+```
+## Warning: pacote 'lubridate' foi compilado no R versão 4.4.3
+```
+
+```
+## 
+## Anexando pacote: 'lubridate'
+```
+
+```
+## Os seguintes objetos são mascarados por 'package:base':
+## 
+##     date, intersect, setdiff, union
+```
+
+``` r
+library("purrr")
+```
+
+```
+## Warning: pacote 'purrr' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("tidyr")
+```
+
+```
+## Warning: pacote 'tidyr' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("future")
+```
+
+```
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+```
+
+``` r
+library("future.apply")
+```
+
+```
+## Warning: pacote 'future.apply' foi compilado no R versão 4.4.3
+```
+
+``` r
 # Set recompute_all = TRUE to override all pre-computed results (not recommended)
 recompute_all <- FALSE
 
@@ -631,6 +707,132 @@ transitP(emMTD)
 ## 101 0.2234013 0.7765987
 ## 110 0.4484718 0.5515282
 ## 111 0.3404966 0.6595034
+```
+
+
+10. A three-state MTD example
+
+
+
+``` r
+set.seed(11)
+Lambda3 <- c(2, 5)
+A3 <- c(1, 2, 3)
+lam0.3 <- 0.05
+lamj.3 <- c(0.20, 0.75)
+p0.3 <- c(0.30, 0.30, 0.40)
+MTD3 <- MTDmodel( Lambda = Lambda3, A = A3, lam0 = lam0.3, lamj = lamj.3, p0 = p0.3)
+summary(MTD3)
+```
+
+```
+## Mixture Transition Distribution (MTD) model
+## 
+## Call:
+## MTDmodel(Lambda = Lambda3, A = A3, lam0 = lam0.3, lamj = lamj.3, 
+##     p0 = p0.3)
+## 
+## Relevant lags: -2, -5
+## State space: 1, 2, 3
+## 
+## lambdas (weights):
+##  lam0 lam-2 lam-5 
+##  0.05  0.20  0.75 
+## 
+## Independent distribution p0:
+## p0(1) p0(2) p0(3) 
+##   0.3   0.3   0.4 
+## 
+## Transition matrices pj (one per lag):
+##  
+##  pj for lag j = -2:
+##             1          2         3
+## 1 0.733865790 0.03718408 0.2289501
+## 2 0.001459284 0.18213079 0.8164099
+## 3 0.217636084 0.40698441 0.3753795
+##  
+##  pj for lag j = -5:
+##            1         2         3
+## 1 0.07681402 0.5655455 0.3576405
+## 2 0.11612876 0.5643812 0.3194900
+## 3 0.29278947 0.4875863 0.2196242
+## 
+## Transition matrix P: 9 x 3
+## - Preview of first rows of P:
+##             1         2         3
+## 11 0.21938367 0.4465959 0.3340204
+## 12 0.07290237 0.4755853 0.4515124
+## 13 0.11613773 0.5205560 0.3633063
+## 21 0.24886973 0.4457227 0.3054076
+## 22 0.10238843 0.4747120 0.4228995
+## 23 0.14562379 0.5196828 0.3346934
+## 
+## Reading guide for P:
+## Rows list past contexts from oldest to newest, matching lags (-5, -2).
+```
+
+
+
+
+``` r
+Y <- perfectSample(MTD3, N = 2000)
+```
+
+
+
+
+``` r
+oscillation(MTD3)
+```
+
+```
+##        -2        -5 
+## 0.1464813 0.1619816
+```
+
+
+
+
+``` r
+Sfs3 <- hdMTD_FS(Y, d = 20, l = 3)
+Sfs3
+```
+
+```
+## [1]  5  2 13
+```
+
+
+
+
+``` r
+Sbic3 <- hdMTD_BIC(Y, S = Sfs3, d = 20)
+Sbic3
+```
+
+```
+## [1] 2 5
+```
+
+
+
+
+``` r
+P3 <- empirical_probs(Y, S = Sbic3, matrixform = TRUE)
+P3
+```
+
+```
+##             1         2         3
+## 11 0.15909091 0.5454545 0.2954545
+## 12 0.04848485 0.4848485 0.4666667
+## 13 0.08000000 0.5680000 0.3520000
+## 21 0.22702703 0.4756757 0.2972973
+## 22 0.08539326 0.4651685 0.4494382
+## 23 0.15151515 0.5151515 0.3333333
+## 31 0.40186916 0.4018692 0.1962617
+## 32 0.22000000 0.4400000 0.3400000
+## 33 0.25000000 0.5000000 0.2500000
 ```
 
 
@@ -2100,26 +2302,17 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] hdMTD_0.1.5         future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0        
-##  [6] lubridate_1.9.4     ggplot2_3.5.2       dplyr_1.1.4         testthat_3.2.1.1    devtools_2.4.5     
-## [11] usethis_3.2.1      
+## [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0         lubridate_1.9.4    
+## [6] ggplot2_3.5.2       dplyr_1.1.4         hdMTD_0.1.5        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.2.1   farver_2.1.2       fastmap_1.2.0      xopen_1.0.1        promises_1.3.0    
-##  [6] digest_0.6.36      timechange_0.3.0   mime_0.12          lifecycle_1.0.4    waldo_0.5.2       
-## [11] ellipsis_0.3.2     processx_3.8.4     magrittr_2.0.4     compiler_4.4.1     rlang_1.1.6       
-## [16] tools_4.4.1        igraph_2.2.1       yaml_2.3.9         knitr_1.48         prettyunits_1.2.0 
-## [21] labeling_0.4.3     htmlwidgets_1.6.4  pkgbuild_1.4.8     curl_5.2.1         xml2_1.6.0        
-## [26] RColorBrewer_1.1-3 pkgload_1.4.0      miniUI_0.1.1.1     withr_3.0.2        desc_1.4.3        
-## [31] grid_4.4.1         roxygen2_7.3.2     urlchecker_1.0.1   profvis_0.3.8      xtable_1.8-4      
-## [36] colorspace_2.1-1   globals_0.18.0     scales_1.3.0       cli_3.6.5          rmarkdown_2.29    
-## [41] generics_0.1.4     remotes_2.5.0      rstudioapi_0.16.0  commonmark_2.0.0   sessioninfo_1.2.2 
-## [46] cachem_1.1.0       stringr_1.5.1      parallel_4.4.1     vctrs_0.6.5        litedown_0.7      
-## [51] callr_3.7.6        rcmdcheck_1.4.0    listenv_0.9.1      glue_1.8.0         parallelly_1.45.1 
-## [56] codetools_0.2-20   ps_1.9.1           stringi_1.8.4      gtable_0.3.5       later_1.3.2       
-## [61] munsell_0.5.1      tibble_3.3.0       pillar_1.11.1      htmltools_0.5.8.1  brio_1.1.5        
-## [66] R6_2.6.1           rprojroot_2.1.1    evaluate_0.24.0    shiny_1.8.1.1      markdown_2.0      
-## [71] highr_0.11         memoise_2.0.1      httpuv_1.6.15      Rcpp_1.0.13-1      xfun_0.52         
-## [76] fs_1.6.4           pkgconfig_2.0.3
+##  [1] gtable_0.3.5       compiler_4.4.1     highr_0.11         tidyselect_1.2.1   parallel_4.4.1    
+##  [6] globals_0.18.0     scales_1.3.0       R6_2.6.1           labeling_0.4.3     generics_0.1.4    
+## [11] igraph_2.2.1       knitr_1.48         tibble_3.3.0       munsell_0.5.1      pillar_1.11.1     
+## [16] RColorBrewer_1.1-3 rlang_1.1.6        xfun_0.52          timechange_0.3.0   cli_3.6.5         
+## [21] withr_3.0.3        magrittr_2.0.4     digest_0.6.36      grid_4.4.1         rstudioapi_0.16.0 
+## [26] lifecycle_1.0.5    vctrs_0.6.5        evaluate_0.24.0    glue_1.8.0         farver_2.1.2      
+## [31] listenv_0.9.1      codetools_0.2-20   parallelly_1.45.1  colorspace_2.1-1   tools_4.4.1       
+## [36] pkgconfig_2.0.3
 ```
 
