@@ -193,10 +193,10 @@ hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
 #'
 #' 6. Estimate relevant lags using FSC method
 #'
-hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1)
+hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1, cut_fraction = 0.5)
 #'
 #' FS method with halved sample
-hdMTD_FS(X[1:500], d = 40, l = 4)
+hdMTD_FS(X[501:1000], d = 40, l = 4)
 #'
 #' 7. Estimating transition probabilities
 #'
@@ -686,29 +686,14 @@ hdMTD_CUT(Temp12_Train, d = 364, S = c(1, 364, 6))
 hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
           byl = TRUE, BICvalue = TRUE )
 #'
-#' 8. Lag selection with FSC method:
-#'
-recompute <- FALSE
-recompute <- recompute || (!use_precomputed_hdMTD_outputs)
-#'
-if (recompute) {
-  message("Recomputing...")
-  FSC_Temp12Train <- hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
-  precomputed$FSC_Temp12Train <- FSC_Temp12Train
-} else {
-  message("Using pre-computed data.")
-  FSC_Temp12Train <- precomputed$FSC_Temp12Train
-}
-print(FSC_Temp12Train)
-#'
-#' 9. Estimated transition matrix for FS method output:
+#' 8. Estimated transition matrix for FS method output:
 #'
 P_FS <- empirical_probs(Temp12_Train, S = c(1, 6, 364), matrixform = T)
 P_FS
 #'
 #' ### Classic method for choosing relevant lag set:
 #'
-#' 10. Compute models:
+#' 9. Compute models:
 #'
 ct <- countsTab(Temp12_Train, d = 6) # Table with size 6 sequence counts
 head(ct,4)
@@ -764,7 +749,7 @@ BICMC6 <- -LL + 0.5 * log(length(Temp12_Train)) * freeParam
 BICMC6
 #' Comparable BIC if the model is a Markov chain of order $6$: $2031.679$
 #'
-#' 11. Comparing models:
+#' 10. Comparing models:
 #'
 BIC_vals <-  c(BICMC1, BICMC2, BICMC3, BICMC4, BICMC5, BICMC6)
 model_names <- paste0("MC", 1:6)
@@ -800,7 +785,7 @@ P_Ind
 #'
 #' ### Comparing methods
 #'
-#' 12. Computing values for Table 3.
+#' 11. Computing values for Table 3.
 #'
 Days1 <- which(Temp12_Test == 1)
 lenDays1 <- length(Days1)
@@ -934,7 +919,7 @@ suppressWarnings(print(tbl_3))
 #'
 #' ### Empirical $\nu$ Analysis
 #'
-#' 13. FS sequential selection based on $\hat{\nu}_{n,j,S}$ values:
+#' 12. FS sequential selection based on $\hat{\nu}_{n,j,S}$ values:
 #'
 run_sequential_lag_selection <- function(Temp12_Train, d = 364) {
   # Initialization

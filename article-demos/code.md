@@ -17,106 +17,16 @@
 
 ## Load packages
 library("hdMTD")
-```
-
-```
-## 
-## Anexando pacote: 'hdMTD'
-```
-
-```
-## O seguinte objeto é mascarado _por_ '.GlobalEnv':
-## 
-##     tempdata
-```
-
-``` r
 library("dplyr")
-```
-
-```
-## Warning: pacote 'dplyr' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'dplyr'
-```
-
-```
-## Os seguintes objetos são mascarados por 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## Os seguintes objetos são mascarados por 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-``` r
 library("ggplot2")
-```
-
-```
-## Warning: pacote 'ggplot2' foi compilado no R versão 4.4.3
-```
-
-``` r
 library("lubridate")
-```
-
-```
-## Warning: pacote 'lubridate' foi compilado no R versão 4.4.3
-```
-
-```
-## 
-## Anexando pacote: 'lubridate'
-```
-
-```
-## Os seguintes objetos são mascarados por 'package:base':
-## 
-##     date, intersect, setdiff, union
-```
-
-``` r
 library("purrr")
-```
-
-```
-## Warning: pacote 'purrr' foi compilado no R versão 4.4.3
-```
-
-``` r
 library("tidyr")
-```
-
-```
-## Warning: pacote 'tidyr' foi compilado no R versão 4.4.3
-```
-
-``` r
 library("future")
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-```
-
-``` r
 library("future.apply")
-```
 
-```
-## Warning: pacote 'future.apply' foi compilado no R versão 4.4.3
-```
-
-``` r
 # Set recompute_all = TRUE to override all pre-computed results (not recommended)
-recompute_all <- TRUE
+recompute_all <- FALSE
 
 # Set save_precomputed = TRUE to store results in their corresponding RDS file.
 save_precomputed <- FALSE
@@ -178,7 +88,7 @@ if (use_precomputed_hdMTD_outputs) {
 ```
 
 ```
-## Pre-computed results not available or recompute_all = TRUE.
+## Using pre-computed results from 'hdMTD_outputs.rds'.
 ```
 
 ## Section 5: Using hdMTD
@@ -325,7 +235,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -393,10 +303,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30           1,15,17,30 
-##             641.7328             643.1757             642.5873             641.3069 
-## smallest: 1,15,17,30 
-##             641.3069
+##                   30                15,30              1,15,30           1,15,17,30 smallest: 1,15,17,30 
+##             641.7328             643.1757             642.5873             641.3069             641.3069
 ```
 
 
@@ -412,10 +320,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30           1,15,17,30 
-##             637.5881             634.1956             628.7718             622.6559 
-## smallest: 1,15,17,30 
-##             622.6559
+##                   30                15,30              1,15,30           1,15,17,30 smallest: 1,15,17,30 
+##             637.5881             634.1956             628.7718             622.6559             622.6559
 ```
 
 
@@ -444,7 +350,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -480,7 +386,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -509,11 +415,11 @@ hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
 
 
 ``` r
-hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1)
+hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1, cut_fraction = 0.5)
 ```
 
 ```
-## [1] 24 30
+## [1] 15 30 35
 ```
 
 
@@ -521,11 +427,11 @@ FS method with halved sample
 
 
 ``` r
-hdMTD_FS(X[1:500], d = 40, l = 4)
+hdMTD_FS(X[501:1000], d = 40, l = 4)
 ```
 
 ```
-## [1] 11 30  7 24
+## [1] 30 15 37 35
 ```
 
 
@@ -900,20 +806,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing simulation data for Section 5.3.
-```
-
-```
-## Using 6 workers
-```
-
-```
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
-## Warning: pacote 'future' foi compilado no R versão 4.4.3
+## Using pre-computed simulation data from 'simulated_data.rds'.
 ```
 
 
@@ -1315,7 +1208,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -1351,7 +1244,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -1399,7 +1292,7 @@ if (recompute) {
 ```
 
 ```
-## Recomputing...
+## Using pre-computed data.
 ```
 
 ``` r
@@ -1437,43 +1330,7 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 ```
 
 
-8. Lag selection with FSC method:
-
-
-
-``` r
-recompute <- FALSE
-recompute <- recompute || (!use_precomputed_hdMTD_outputs)
-```
-
-
-
-
-``` r
-if (recompute) {
-  message("Recomputing...")
-  FSC_Temp12Train <- hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
-  precomputed$FSC_Temp12Train <- FSC_Temp12Train
-} else {
-  message("Using pre-computed data.")
-  FSC_Temp12Train <- precomputed$FSC_Temp12Train
-}
-```
-
-```
-## Recomputing...
-```
-
-``` r
-print(FSC_Temp12Train)
-```
-
-```
-## [1]   1   6 364
-```
-
-
-9. Estimated transition matrix for FS method output:
+8. Estimated transition matrix for FS method output:
 
 
 
@@ -1497,7 +1354,7 @@ P_FS
 
 ### Classic method for choosing relevant lag set:
 
-10. Compute models:
+9. Compute models:
 
 
 
@@ -1635,7 +1492,7 @@ BICMC6
 
 Comparable BIC if the model is a Markov chain of order $6$: $2031.679$
 
-11. Comparing models:
+10. Comparing models:
 
 
 
@@ -1718,7 +1575,7 @@ P_Ind
 
 ### Comparing methods
 
-12. Computing values for Table 3.
+11. Computing values for Table 3.
 
 
 
@@ -1974,7 +1831,7 @@ Table: Model performance metrics.
 
 ### Empirical $\nu$ Analysis
 
-13. FS sequential selection based on $\hat{\nu}_{n,j,S}$ values:
+12. FS sequential selection based on $\hat{\nu}_{n,j,S}$ values:
 
 
 
@@ -2143,20 +2000,10 @@ if (recompute) {
 ```
 
 ```
-## Recomputing FS sequential selection results.
+## Using pre-computed FS sequential selection results from 'results_sequential_selection.rds'.
 ```
 
 ```
-## === Starting Sequential Lag Selection ===
-## 
-## [Step 1] Selecting first lag (S = ∅)...
-## Selected: j = 1 (ν = 0.1253)
-## 
-## [Step 2] Selecting second lag (S = {1})...
-## Selected: j = 364 (ν = 0.0216)
-## 
-## [Step 3] Selecting third lag (S = {1,364})...
-## Selected: j = 6 (ν = 0.0165)
 ## 
 ## === Final Selection Results ===
 ##   Step Selected_Lag         nu
@@ -2180,7 +2027,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.13), main = "", panel.first = grid())
    title(main = expression(paste("S = ", Ø)), cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], pch = 21, bg = palette[1], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], labels = paste0(Sc[which.max(nuj1)]),
         pos = 3, col = palette[1], font = 2, cex = 1.4)
@@ -2190,7 +2037,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.025),  main = "", panel.first = grid())
    title(main = "With S = {-1}", cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj2)], nuj2[which.max(nuj2)], pch = 21, bg = palette[2], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj2)]-5, nuj2[which.max(nuj2)], labels = paste0(Sc[which.max(nuj2)]),
         pos = 3, col = palette[2], font = 2, cex = 1.4)
@@ -2200,7 +2047,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.025), main = "", panel.first = grid())
    title(main = "With S = {-364, -1}", cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], pch = 21, bg = palette[3], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], labels = paste0(Sc[which.max(nuj3)]),
         pos = 3, col = palette[3], font = 2, cex = 1.4)
@@ -2243,9 +2090,8 @@ sessionInfo()
 ## 
 ## 
 ## locale:
-## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
-## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
-## [5] LC_TIME=Portuguese_Brazil.utf8    
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8    LC_MONETARY=Portuguese_Brazil.utf8
+## [4] LC_NUMERIC=C                       LC_TIME=Portuguese_Brazil.utf8    
 ## 
 ## time zone: America/Sao_Paulo
 ## tzcode source: internal
@@ -2254,18 +2100,26 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0        
-## [5] lubridate_1.9.4     ggplot2_3.5.2       dplyr_1.1.4         hdMTD_0.1.4        
+##  [1] hdMTD_0.1.5         future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0        
+##  [6] lubridate_1.9.4     ggplot2_3.5.2       dplyr_1.1.4         testthat_3.2.1.1    devtools_2.4.5     
+## [11] usethis_3.2.1      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       compiler_4.4.1     highr_0.11         tidyselect_1.2.1  
-##  [5] parallel_4.4.1     globals_0.18.0     scales_1.3.0       R6_2.6.1          
-##  [9] labeling_0.4.3     generics_0.1.4     igraph_2.2.1       knitr_1.48        
-## [13] tibble_3.3.0       munsell_0.5.1      RColorBrewer_1.1-3 pillar_1.11.1     
-## [17] rlang_1.1.6        xfun_0.52          timechange_0.3.0   cli_3.6.5         
-## [21] withr_3.0.2        magrittr_2.0.4     digest_0.6.36      grid_4.4.1        
-## [25] rstudioapi_0.16.0  lifecycle_1.0.4    vctrs_0.6.5        evaluate_0.24.0   
-## [29] glue_1.8.0         farver_2.1.2       listenv_0.9.1      codetools_0.2-20  
-## [33] parallelly_1.45.1  colorspace_2.1-1   tools_4.4.1        pkgconfig_2.0.3
+##  [1] tidyselect_1.2.1   farver_2.1.2       fastmap_1.2.0      xopen_1.0.1        promises_1.3.0    
+##  [6] digest_0.6.36      timechange_0.3.0   mime_0.12          lifecycle_1.0.4    waldo_0.5.2       
+## [11] ellipsis_0.3.2     processx_3.8.4     magrittr_2.0.4     compiler_4.4.1     rlang_1.1.6       
+## [16] tools_4.4.1        igraph_2.2.1       yaml_2.3.9         knitr_1.48         prettyunits_1.2.0 
+## [21] labeling_0.4.3     htmlwidgets_1.6.4  pkgbuild_1.4.8     curl_5.2.1         xml2_1.6.0        
+## [26] RColorBrewer_1.1-3 pkgload_1.4.0      miniUI_0.1.1.1     withr_3.0.2        desc_1.4.3        
+## [31] grid_4.4.1         roxygen2_7.3.2     urlchecker_1.0.1   profvis_0.3.8      xtable_1.8-4      
+## [36] colorspace_2.1-1   globals_0.18.0     scales_1.3.0       cli_3.6.5          rmarkdown_2.29    
+## [41] generics_0.1.4     remotes_2.5.0      rstudioapi_0.16.0  commonmark_2.0.0   sessioninfo_1.2.2 
+## [46] cachem_1.1.0       stringr_1.5.1      parallel_4.4.1     vctrs_0.6.5        litedown_0.7      
+## [51] callr_3.7.6        rcmdcheck_1.4.0    listenv_0.9.1      glue_1.8.0         parallelly_1.45.1 
+## [56] codetools_0.2-20   ps_1.9.1           stringi_1.8.4      gtable_0.3.5       later_1.3.2       
+## [61] munsell_0.5.1      tibble_3.3.0       pillar_1.11.1      htmltools_0.5.8.1  brio_1.1.5        
+## [66] R6_2.6.1           rprojroot_2.1.1    evaluate_0.24.0    shiny_1.8.1.1      markdown_2.0      
+## [71] highr_0.11         memoise_2.0.1      httpuv_1.6.15      Rcpp_1.0.13-1      xfun_0.52         
+## [76] fs_1.6.4           pkgconfig_2.0.3
 ```
 
