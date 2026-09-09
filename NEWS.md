@@ -5,7 +5,7 @@
 * Corrected the sample split in `hdMTD_FSC()` so that FS is applied to the chronologically older observations and CUT to the most recent observations, in accordance with the theoretical procedure.
 * Added the `cut_fraction` argument to control the proportion of the sample allocated to CUT. Its default value is `0.5`.
 * Added validation ensuring that `cut_fraction` is strictly between 0 and 1 and that both resulting subsamples contain more than `d + 1` observations.
-* Updated `hdMTD()` to forward `cut_fraction` to `hdMTD_FSC()` and record it in the fitted object's settings.
+* Updated `hdMTD()` to forward `cut_fraction` to `hdMTD_FSC()` and record it in the returned object's settings.
 
 ## Documentation
 
@@ -13,6 +13,9 @@
 * Recommended using a reduced candidate lag set `S`, when possible, for example based on the output of `hdMTD_FS()`.
 * Clarified in the documentation of functions that accept chain samples that missing values (`NA`) are not allowed.
 * Documented the chronological sample split and the role of `cut_fraction` in `hdMTD_FSC()`.
+* Updated the documentation of the S3 methods for classes `MTD`, `MTDest`, and `hdMTD` to include explicit usage entries for the documented methods.
+* Updated the source URL in the documentation of `tempdata` to use the official INMET portal page for BDMEP historical data.
+
 
 ## Vignettes
 
