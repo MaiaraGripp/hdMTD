@@ -78,6 +78,7 @@ NULL
 
 # --------------------------- print.MTD ---------------------------------
 
+#' @rdname MTD-methods
 #' @exportS3Method print MTD
 print.MTD <- function(x, ...) {
   lg <- lags(x)
@@ -92,6 +93,7 @@ print.MTD <- function(x, ...) {
 
 # ------------------------- summary.MTD ---------------------------------
 
+#' @rdname MTD-methods
 #' @exportS3Method summary MTD
 summary.MTD <- function(object, ...) {
   checkMTD(object)  # validation
@@ -163,6 +165,7 @@ print_MTD_summary <- function(object) {
 
 # --------------------------- coef.MTD ----------------------------------
 
+#' @rdname MTD-methods
 #' @exportS3Method coef MTD
 coef.MTD <- function(object, ...) {
   checkMTD(object)
@@ -175,6 +178,7 @@ coef.MTD <- function(object, ...) {
 
 # --------------------------- logLik.MTD ----------------------------------
 
+#' @rdname MTD-methods
 #' @exportS3Method logLik MTD
 logLik.MTD <- function(object, X, ...) {
   checkMTD(object)

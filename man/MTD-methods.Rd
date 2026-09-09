@@ -2,16 +2,29 @@
 % Please edit documentation in R/MTDmodel-methods.R
 \name{MTD-methods}
 \alias{MTD-methods}
+\alias{print.MTD}
+\alias{summary.MTD}
+\alias{coef.MTD}
+\alias{logLik.MTD}
 \title{Methods for objects of class \code{"MTD"}}
+\usage{
+\method{print}{MTD}(x, ...)
+
+\method{summary}{MTD}(object, ...)
+
+\method{coef}{MTD}(object, ...)
+
+\method{logLik}{MTD}(object, X, ...)
+}
 \arguments{
 \item{x}{An object of class \code{"MTD"} (for \code{print.MTD(x, ...)}).}
+
+\item{...}{Further arguments passed to or from other methods (ignored).}
 
 \item{object}{An object of class \code{"MTD"}.}
 
 \item{X}{A vector or single-column data frame containing an MTD chain sample
 (required for \code{logLik.MTD(object, X, ...)}). Values must be in the model's state space.}
-
-\item{...}{Further arguments passed to or from other methods (ignored).}
 }
 \value{
 \describe{
