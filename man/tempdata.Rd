@@ -22,7 +22,7 @@ central-western part of the country.
 Meteorological data provided by INMET (National Institute of Meteorology, Brazil).
 Data collected from automatic weather station in Brasília
 (latitude: -15.79°, longitude: -47.93°, altitude: 1159.54 m).
-Available at: \url{https://bdmep.inmet.gov.br/}
+Available at: \url{https://portal.inmet.gov.br/servicos/bdmep-dados-historicos}
 }
 \usage{
 tempdata
