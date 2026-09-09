@@ -6,7 +6,6 @@
 ^README\.Rmd$
 ^article-demos$
 ^tests/dev/
-^build($|/)
 ^\.positai$
 ^\.claude$
 ^doc$
