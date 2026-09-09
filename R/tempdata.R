@@ -21,9 +21,9 @@
 #'
 #' @source
 #' Meteorological data provided by INMET (National Institute of Meteorology, Brazil).
+#' from the Banco de Dados Meteorológicos (BDMEP).
 #' Data collected from automatic weather station in Brasília
 #' (latitude: -15.79°, longitude: -47.93°, altitude: 1159.54 m).
-#' Available at: \url{https://portal.inmet.gov.br/servicos/bdmep-dados-historicos}
 #'
 #' @examples
 #' data(tempdata)

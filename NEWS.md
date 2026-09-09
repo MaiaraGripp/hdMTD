@@ -14,7 +14,7 @@
 * Clarified in the documentation of functions that accept chain samples that missing values (`NA`) are not allowed.
 * Documented the chronological sample split and the role of `cut_fraction` in `hdMTD_FSC()`.
 * Updated the documentation of the S3 methods for classes `MTD`, `MTDest`, and `hdMTD` to include explicit usage entries for the documented methods.
-* Updated the source URL in the documentation of `tempdata` to use the official INMET portal page for BDMEP historical data.
+* Updated the documentation of `tempdata` to identify INMET and BDMEP as the data source without including the unstable external URL that triggered connection failures in the CRAN incoming checks.
 
 
 ## Vignettes

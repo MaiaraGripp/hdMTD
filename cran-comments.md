@@ -4,7 +4,7 @@
 ### Summary of changes
 
 - Updated the documentation of the S3 methods for classes `MTD`, `MTDest`, and `hdMTD` to include explicit usage entries for the documented methods.
-- Updated the source URL in the documentation of `tempdata` to use the official INMET portal page for BDMEP historical data, avoiding connection failures reported by the CRAN incoming checks.
+- Updated the documentation of `tempdata` to identify INMET and BDMEP as the data source without including the unstable external URL that triggered connection failures in the CRAN incoming checks.
 - Corrected the sample split in `hdMTD_FSC()` so that FS is applied to the chronologically older observations and CUT to the most recent observations, in accordance with the theoretical procedure.
 - Added the `cut_fraction` argument to `hdMTD_FSC()` to control the proportion of the sample allocated to CUT. Added validation ensuring that `cut_fraction` is strictly between 0 and 1 and that both resulting subsamples contain more than `d + 1` observations.
 - Updated `hdMTD()` to forward `cut_fraction` to `hdMTD_FSC()` and record it in the returned object's settings.
