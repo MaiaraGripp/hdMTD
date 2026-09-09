@@ -102,7 +102,7 @@ library("future.apply")
 
 ``` r
 # Set recompute_all = TRUE to override all pre-computed results (not recommended)
-recompute_all <- FALSE
+recompute_all <- TRUE
 
 # Set save_precomputed = TRUE to store results in their corresponding RDS file.
 save_precomputed <- FALSE
@@ -164,7 +164,7 @@ if (use_precomputed_hdMTD_outputs) {
 ```
 
 ```
-## Using pre-computed results from 'hdMTD_outputs.rds'.
+## Pre-computed results not available or recompute_all = TRUE.
 ```
 
 ## Section 5: Using hdMTD
@@ -311,7 +311,7 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed data.
+## Recomputing...
 ```
 
 ``` r
@@ -426,7 +426,7 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed data.
+## Recomputing...
 ```
 
 ``` r
@@ -462,7 +462,7 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed data.
+## Recomputing...
 ```
 
 ``` r
@@ -1008,7 +1008,20 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed simulation data from 'simulated_data.rds'.
+## Recomputing simulation data for Section 5.3.
+```
+
+```
+## Using 6 workers
+```
+
+```
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
+## Warning: pacote 'future' foi compilado no R versão 4.4.3
 ```
 
 
@@ -1410,7 +1423,7 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed data.
+## Recomputing...
 ```
 
 ``` r
@@ -1446,7 +1459,7 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed data.
+## Recomputing...
 ```
 
 ``` r
@@ -1494,7 +1507,7 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed data.
+## Recomputing...
 ```
 
 ``` r
@@ -2202,10 +2215,20 @@ if (recompute) {
 ```
 
 ```
-## Using pre-computed FS sequential selection results from 'results_sequential_selection.rds'.
+## Recomputing FS sequential selection results.
 ```
 
 ```
+## === Starting Sequential Lag Selection ===
+## 
+## [Step 1] Selecting first lag (S = ∅)...
+## Selected: j = 1 (ν = 0.1253)
+## 
+## [Step 2] Selecting second lag (S = {1})...
+## Selected: j = 364 (ν = 0.0216)
+## 
+## [Step 3] Selecting third lag (S = {1,364})...
+## Selected: j = 6 (ν = 0.0165)
 ## 
 ## === Final Selection Results ===
 ##   Step Selected_Lag         nu
@@ -2302,17 +2325,22 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0         lubridate_1.9.4    
-## [6] ggplot2_3.5.2       dplyr_1.1.4         hdMTD_0.1.5        
+##  [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0         lubridate_1.9.4    
+##  [6] ggplot2_3.5.2       dplyr_1.1.4         devtools_2.4.5      usethis_3.2.1       hdMTD_0.1.5        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       compiler_4.4.1     highr_0.11         tidyselect_1.2.1   parallel_4.4.1    
-##  [6] globals_0.18.0     scales_1.3.0       R6_2.6.1           labeling_0.4.3     generics_0.1.4    
-## [11] igraph_2.2.1       knitr_1.48         tibble_3.3.0       munsell_0.5.1      pillar_1.11.1     
-## [16] RColorBrewer_1.1-3 rlang_1.1.6        xfun_0.52          timechange_0.3.0   cli_3.6.5         
-## [21] withr_3.0.3        magrittr_2.0.4     digest_0.6.36      grid_4.4.1         rstudioapi_0.16.0 
-## [26] lifecycle_1.0.5    vctrs_0.6.5        evaluate_0.24.0    glue_1.8.0         farver_2.1.2      
-## [31] listenv_0.9.1      codetools_0.2-20   parallelly_1.45.1  colorspace_2.1-1   tools_4.4.1       
-## [36] pkgconfig_2.0.3
+##  [1] generics_0.1.4     stringi_1.8.4      listenv_0.9.1      digest_0.6.36      magrittr_2.0.4    
+##  [6] RColorBrewer_1.1-3 timechange_0.3.0   evaluate_0.24.0    grid_4.4.1         pkgload_1.4.0     
+## [11] fastmap_1.2.0      pkgbuild_1.4.8     sessioninfo_1.2.2  urlchecker_1.0.1   promises_1.3.0    
+## [16] scales_1.3.0       codetools_0.2-20   cli_3.6.5          shiny_1.8.1.1      rlang_1.1.6       
+## [21] parallelly_1.45.1  ellipsis_0.3.2     munsell_0.5.1      remotes_2.5.0      withr_3.0.3       
+## [26] cachem_1.1.0       yaml_2.3.9         tools_4.4.1        parallel_4.4.1     memoise_2.0.1     
+## [31] colorspace_2.1-1   httpuv_1.6.15      globals_0.18.0     vctrs_0.6.5        R6_2.6.1          
+## [36] mime_0.12          lifecycle_1.0.5    stringr_1.5.1      fs_1.6.4           htmlwidgets_1.6.4 
+## [41] miniUI_0.1.1.1     pkgconfig_2.0.3    pillar_1.11.1      later_1.3.2        gtable_0.3.5      
+## [46] glue_1.8.0         profvis_0.3.8      Rcpp_1.0.13-1      highr_0.11         xfun_0.52         
+## [51] tibble_3.3.0       tidyselect_1.2.1   rstudioapi_0.16.0  knitr_1.48         farver_2.1.2      
+## [56] xtable_1.8-4       htmltools_0.5.8.1  igraph_2.2.1       labeling_0.4.3     rmarkdown_2.29    
+## [61] compiler_4.4.1
 ```
 
