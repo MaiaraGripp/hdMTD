@@ -14,15 +14,15 @@
 #'
 #' \describe{
 #'   \item{DATE}{The day, from 01/01/2003 to 31/08/2024}
-#'   \item{TIME}{The time, form 00:00 to 23:00 each day}
+#'   \item{TIME}{The time, from 00:00 to 23:00 each day}
 #'   \item{MAXTEMP}{The maximum temperature measured in the last hour in Celsius}
 #' }
 #'
 #'
 #' @source
-#' Meteorological data provided by INMET (National Institute of Meteorology, Brazil).
-#' from the Banco de Dados Meteorológicos (BDMEP).
-#' Data collected from automatic weather station in Brasília
+#' Meteorological data provided by INMET (National Institute of Meteorology, Brazil),
+#' obtained from the Banco de Dados Meteorológicos (BDMEP).
+#' Data collected from an automatic weather station in Brasília
 #' (latitude: -15.79°, longitude: -47.93°, altitude: 1159.54 m).
 #'
 #' @examples
