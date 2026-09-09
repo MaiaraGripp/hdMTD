@@ -2,17 +2,24 @@
 % Please edit documentation in R/hdMTD-methods.R
 \name{hdMTD-methods}
 \alias{hdMTD-methods}
+\alias{print.hdMTD}
+\alias{summary.hdMTD}
 \title{Methods for objects of class \code{"hdMTD"}}
+\usage{
+\method{print}{hdMTD}(x, ...)
+
+\method{summary}{hdMTD}(object, settings = FALSE, ...)
+}
 \arguments{
 \item{x}{An object of class \code{"hdMTD"} used in \code{print.hdMTD()}.}
+
+\item{...}{Further arguments passed to or from other methods (ignored).}
 
 \item{object}{An object of class \code{"hdMTD"} used in \code{summary.hdMTD()}.}
 
 \item{settings}{Logical (\code{summary.hdMTD()} only). If \code{TRUE}, the
 printed summary includes the method-specific \code{settings} list.
 Default \code{FALSE}.}
-
-\item{...}{Further arguments passed to or from other methods (ignored).}
 }
 \value{
 \describe{
