@@ -16,7 +16,13 @@
 - Updated `DESCRIPTION` to declare the packages required to build the vignette.
 
 ### R CMD check results
-0 errors | 0 warnings | 0 note
+0 errors | 0 warnings | 2 notes
+
+The two notes are due to the local check environment:
+- Pandoc is not available, so `NEWS.md` could not be checked.
+- HTML Tidy and the `V8` package are not available, so HTML validation and math rendering checks were skipped.
+
+The issues reported by the previous CRAN incoming checks have been addressed. The problematic external URL was removed from the `tempdata` documentation, and explicit usage entries were added to the S3 method documentation. The corresponding checks now pass, including `CRAN incoming feasibility` and `Rd contents`.
 
 ---
 ## Previous submission notes (for reference)
