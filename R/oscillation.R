@@ -5,7 +5,8 @@
 #'
 #' @name oscillation
 #' @rdname oscillation
-#' @param x Either an MTD model object, an MTDest fit, or a chain sample.
+#' @param x Either an MTD model object, an MTDest fit, or a chain sample. If
+#' \code{x} is a chain sample, missing values (\code{NA}) are not allowed.
 #' @param ... Ignored.
 #'
 #'

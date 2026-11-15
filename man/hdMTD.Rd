@@ -7,7 +7,8 @@
 hdMTD(X, d, method = "FS", ...)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a chain sample.}
+\item{X}{A vector or single-column data frame containing a chain sample.
+(\code{X[1]} is the most recent). Missing values (\code{NA}) are not allowed.}
 
 \item{d}{A positive integer representing an upper bound for the chain order.}
 
@@ -61,6 +62,7 @@ The main default parameters are:
 \item \code{S = seq_len(d)}: Used in "BIC" or "CUT" methods.
 \item \code{alpha = 0.05}, \code{mu = 1}. Used in "CUT" or "FSC" methods.
 \item \code{xi = 0.5}.  Used in "CUT", "FSC" or "BIC" methods.
+\item \code{cut_fraction = 0.5}. Used in the "FSC" method.
 \item \code{minl = 1}, \code{maxl = length(S)}, \code{byl = FALSE}. Used in "BIC" method.
 All default values are specified in the documentation of the method-specific functions.
 }

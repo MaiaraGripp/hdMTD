@@ -17,20 +17,6 @@
 
 ## Load packages
 library("hdMTD")
-```
-
-```
-## 
-## Anexando pacote: 'hdMTD'
-```
-
-```
-## O seguinte objeto é mascarado _por_ '.GlobalEnv':
-## 
-##     tempdata
-```
-
-``` r
 library("dplyr")
 ```
 
@@ -393,10 +379,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30           1,15,17,30 
-##             641.7328             643.1757             642.5873             641.3069 
-## smallest: 1,15,17,30 
-##             641.3069
+##                   30                15,30              1,15,30           1,15,17,30 smallest: 1,15,17,30 
+##             641.7328             643.1757             642.5873             641.3069             641.3069
 ```
 
 
@@ -412,10 +396,8 @@ hdMTD_BIC(X, d = 40,
 ```
 
 ```
-##                   30                15,30              1,15,30           1,15,17,30 
-##             637.5881             634.1956             628.7718             622.6559 
-## smallest: 1,15,17,30 
-##             622.6559
+##                   30                15,30              1,15,30           1,15,17,30 smallest: 1,15,17,30 
+##             637.5881             634.1956             628.7718             622.6559             622.6559
 ```
 
 
@@ -509,11 +491,11 @@ hdMTD_CUT(X, d = 40, S = c(1, 5, 17, 27, 30, 35), alpha = 0.13)
 
 
 ``` r
-hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1)
+hdMTD_FSC(X, d = 40, l = 4, alpha = 0.1, cut_fraction = 0.5)
 ```
 
 ```
-## [1] 24 30
+## [1] 15 30 35
 ```
 
 
@@ -521,11 +503,11 @@ FS method with halved sample
 
 
 ``` r
-hdMTD_FS(X[1:500], d = 40, l = 4)
+hdMTD_FS(X[501:1000], d = 40, l = 4)
 ```
 
 ```
-## [1] 11 30  7 24
+## [1] 30 15 37 35
 ```
 
 
@@ -725,6 +707,132 @@ transitP(emMTD)
 ## 101 0.2234013 0.7765987
 ## 110 0.4484718 0.5515282
 ## 111 0.3404966 0.6595034
+```
+
+
+10. A three-state MTD example
+
+
+
+``` r
+set.seed(11)
+Lambda3 <- c(2, 5)
+A3 <- c(1, 2, 3)
+lam0.3 <- 0.05
+lamj.3 <- c(0.20, 0.75)
+p0.3 <- c(0.30, 0.30, 0.40)
+MTD3 <- MTDmodel( Lambda = Lambda3, A = A3, lam0 = lam0.3, lamj = lamj.3, p0 = p0.3)
+summary(MTD3)
+```
+
+```
+## Mixture Transition Distribution (MTD) model
+## 
+## Call:
+## MTDmodel(Lambda = Lambda3, A = A3, lam0 = lam0.3, lamj = lamj.3, 
+##     p0 = p0.3)
+## 
+## Relevant lags: -2, -5
+## State space: 1, 2, 3
+## 
+## lambdas (weights):
+##  lam0 lam-2 lam-5 
+##  0.05  0.20  0.75 
+## 
+## Independent distribution p0:
+## p0(1) p0(2) p0(3) 
+##   0.3   0.3   0.4 
+## 
+## Transition matrices pj (one per lag):
+##  
+##  pj for lag j = -2:
+##             1          2         3
+## 1 0.733865790 0.03718408 0.2289501
+## 2 0.001459284 0.18213079 0.8164099
+## 3 0.217636084 0.40698441 0.3753795
+##  
+##  pj for lag j = -5:
+##            1         2         3
+## 1 0.07681402 0.5655455 0.3576405
+## 2 0.11612876 0.5643812 0.3194900
+## 3 0.29278947 0.4875863 0.2196242
+## 
+## Transition matrix P: 9 x 3
+## - Preview of first rows of P:
+##             1         2         3
+## 11 0.21938367 0.4465959 0.3340204
+## 12 0.07290237 0.4755853 0.4515124
+## 13 0.11613773 0.5205560 0.3633063
+## 21 0.24886973 0.4457227 0.3054076
+## 22 0.10238843 0.4747120 0.4228995
+## 23 0.14562379 0.5196828 0.3346934
+## 
+## Reading guide for P:
+## Rows list past contexts from oldest to newest, matching lags (-5, -2).
+```
+
+
+
+
+``` r
+Y <- perfectSample(MTD3, N = 2000)
+```
+
+
+
+
+``` r
+oscillation(MTD3)
+```
+
+```
+##        -2        -5 
+## 0.1464813 0.1619816
+```
+
+
+
+
+``` r
+Sfs3 <- hdMTD_FS(Y, d = 20, l = 3)
+Sfs3
+```
+
+```
+## [1]  5  2 13
+```
+
+
+
+
+``` r
+Sbic3 <- hdMTD_BIC(Y, S = Sfs3, d = 20)
+Sbic3
+```
+
+```
+## [1] 2 5
+```
+
+
+
+
+``` r
+P3 <- empirical_probs(Y, S = Sbic3, matrixform = TRUE)
+P3
+```
+
+```
+##             1         2         3
+## 11 0.15909091 0.5454545 0.2954545
+## 12 0.04848485 0.4848485 0.4666667
+## 13 0.08000000 0.5680000 0.3520000
+## 21 0.22702703 0.4756757 0.2972973
+## 22 0.08539326 0.4651685 0.4494382
+## 23 0.15151515 0.5151515 0.3333333
+## 31 0.40186916 0.4018692 0.1962617
+## 32 0.22000000 0.4400000 0.3400000
+## 33 0.25000000 0.5000000 0.2500000
 ```
 
 
@@ -1437,43 +1545,7 @@ hdMTD_BIC(Temp12_Train, d = 364, S = c(1, 364, 6), minl = 1, maxl = 3,
 ```
 
 
-8. Lag selection with FSC method:
-
-
-
-``` r
-recompute <- FALSE
-recompute <- recompute || (!use_precomputed_hdMTD_outputs)
-```
-
-
-
-
-``` r
-if (recompute) {
-  message("Recomputing...")
-  FSC_Temp12Train <- hdMTD_FSC(Temp12_Train, d = 364, l = 3) #takes ~3min.
-  precomputed$FSC_Temp12Train <- FSC_Temp12Train
-} else {
-  message("Using pre-computed data.")
-  FSC_Temp12Train <- precomputed$FSC_Temp12Train
-}
-```
-
-```
-## Recomputing...
-```
-
-``` r
-print(FSC_Temp12Train)
-```
-
-```
-## [1]   1   6 364
-```
-
-
-9. Estimated transition matrix for FS method output:
+8. Estimated transition matrix for FS method output:
 
 
 
@@ -1497,7 +1569,7 @@ P_FS
 
 ### Classic method for choosing relevant lag set:
 
-10. Compute models:
+9. Compute models:
 
 
 
@@ -1635,7 +1707,7 @@ BICMC6
 
 Comparable BIC if the model is a Markov chain of order $6$: $2031.679$
 
-11. Comparing models:
+10. Comparing models:
 
 
 
@@ -1718,7 +1790,7 @@ P_Ind
 
 ### Comparing methods
 
-12. Computing values for Table 3.
+11. Computing values for Table 3.
 
 
 
@@ -1974,7 +2046,7 @@ Table: Model performance metrics.
 
 ### Empirical $\nu$ Analysis
 
-13. FS sequential selection based on $\hat{\nu}_{n,j,S}$ values:
+12. FS sequential selection based on $\hat{\nu}_{n,j,S}$ values:
 
 
 
@@ -2180,7 +2252,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.13), main = "", panel.first = grid())
    title(main = expression(paste("S = ", Ø)), cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], pch = 21, bg = palette[1], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj1)], nuj1[which.max(nuj1)], labels = paste0(Sc[which.max(nuj1)]),
         pos = 3, col = palette[1], font = 2, cex = 1.4)
@@ -2190,7 +2262,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.025),  main = "", panel.first = grid())
    title(main = "With S = {-1}", cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj2)], nuj2[which.max(nuj2)], pch = 21, bg = palette[2], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj2)]-5, nuj2[which.max(nuj2)], labels = paste0(Sc[which.max(nuj2)]),
         pos = 3, col = palette[2], font = 2, cex = 1.4)
@@ -2200,7 +2272,7 @@ if (recompute) {
         ylab = "", xlab = "Lag (-j)", cex.lab = 1.8, cex.axis = 1.3,
         ylim = c(0,0.025), main = "", panel.first = grid())
    title(main = "With S = {-364, -1}", cex.main = 1.5, font.main = 1)
-   title(ylab = expression(widehat(nu)[n*","*j*","*S]), line = 4, cex.lab = 1.8)
+   title(ylab = expression(widehat(nu)[n*","*j*","*S]/2), line = 3, cex.lab = 1.5)
    points(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], pch = 21, bg = palette[3], cex = 1.5, lwd = 1)
    text(Sc[which.max(nuj3)], nuj3[which.max(nuj3)], labels = paste0(Sc[which.max(nuj3)]),
         pos = 3, col = palette[3], font = 2, cex = 1.4)
@@ -2243,9 +2315,8 @@ sessionInfo()
 ## 
 ## 
 ## locale:
-## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8   
-## [3] LC_MONETARY=Portuguese_Brazil.utf8 LC_NUMERIC=C                      
-## [5] LC_TIME=Portuguese_Brazil.utf8    
+## [1] LC_COLLATE=Portuguese_Brazil.utf8  LC_CTYPE=Portuguese_Brazil.utf8    LC_MONETARY=Portuguese_Brazil.utf8
+## [4] LC_NUMERIC=C                       LC_TIME=Portuguese_Brazil.utf8    
 ## 
 ## time zone: America/Sao_Paulo
 ## tzcode source: internal
@@ -2254,18 +2325,22 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0        
-## [5] lubridate_1.9.4     ggplot2_3.5.2       dplyr_1.1.4         hdMTD_0.1.4        
+##  [1] future.apply_1.20.0 future_1.67.0       tidyr_1.3.1         purrr_1.1.0         lubridate_1.9.4    
+##  [6] ggplot2_3.5.2       dplyr_1.1.4         devtools_2.4.5      usethis_3.2.1       hdMTD_0.1.5        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       compiler_4.4.1     highr_0.11         tidyselect_1.2.1  
-##  [5] parallel_4.4.1     globals_0.18.0     scales_1.3.0       R6_2.6.1          
-##  [9] labeling_0.4.3     generics_0.1.4     igraph_2.2.1       knitr_1.48        
-## [13] tibble_3.3.0       munsell_0.5.1      RColorBrewer_1.1-3 pillar_1.11.1     
-## [17] rlang_1.1.6        xfun_0.52          timechange_0.3.0   cli_3.6.5         
-## [21] withr_3.0.2        magrittr_2.0.4     digest_0.6.36      grid_4.4.1        
-## [25] rstudioapi_0.16.0  lifecycle_1.0.4    vctrs_0.6.5        evaluate_0.24.0   
-## [29] glue_1.8.0         farver_2.1.2       listenv_0.9.1      codetools_0.2-20  
-## [33] parallelly_1.45.1  colorspace_2.1-1   tools_4.4.1        pkgconfig_2.0.3
+##  [1] generics_0.1.4     stringi_1.8.4      listenv_0.9.1      digest_0.6.36      magrittr_2.0.4    
+##  [6] RColorBrewer_1.1-3 timechange_0.3.0   evaluate_0.24.0    grid_4.4.1         pkgload_1.4.0     
+## [11] fastmap_1.2.0      pkgbuild_1.4.8     sessioninfo_1.2.2  urlchecker_1.0.1   promises_1.3.0    
+## [16] scales_1.3.0       codetools_0.2-20   cli_3.6.5          shiny_1.8.1.1      rlang_1.1.6       
+## [21] parallelly_1.45.1  ellipsis_0.3.2     munsell_0.5.1      remotes_2.5.0      withr_3.0.3       
+## [26] cachem_1.1.0       yaml_2.3.9         tools_4.4.1        parallel_4.4.1     memoise_2.0.1     
+## [31] colorspace_2.1-1   httpuv_1.6.15      globals_0.18.0     vctrs_0.6.5        R6_2.6.1          
+## [36] mime_0.12          lifecycle_1.0.5    stringr_1.5.1      fs_1.6.4           htmlwidgets_1.6.4 
+## [41] miniUI_0.1.1.1     pkgconfig_2.0.3    pillar_1.11.1      later_1.3.2        gtable_0.3.5      
+## [46] glue_1.8.0         profvis_0.3.8      Rcpp_1.0.13-1      highr_0.11         xfun_0.52         
+## [51] tibble_3.3.0       tidyselect_1.2.1   rstudioapi_0.16.0  knitr_1.48         farver_2.1.2      
+## [56] xtable_1.8-4       htmltools_0.5.8.1  igraph_2.2.1       labeling_0.4.3     rmarkdown_2.29    
+## [61] compiler_4.4.1
 ```
 

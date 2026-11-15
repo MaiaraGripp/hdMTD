@@ -2,13 +2,23 @@
 % Please edit documentation in R/MTDest-methods.R
 \name{MTDest-methods}
 \alias{MTDest-methods}
+\alias{print.MTDest}
+\alias{summary.MTDest}
+\alias{logLik.MTDest}
 \title{Methods for objects of class \code{"MTDest"}}
+\usage{
+\method{print}{MTDest}(x, ...)
+
+\method{summary}{MTDest}(object, ...)
+
+\method{logLik}{MTDest}(object, ...)
+}
 \arguments{
 \item{x}{An object of class \code{"MTDest"} (for \code{print.MTDest(x, ...)}).}
 
-\item{object}{An object of class \code{"MTDest"}.}
-
 \item{...}{Further arguments passed to or from other methods (ignored).}
+
+\item{object}{An object of class \code{"MTDest"}.}
 }
 \value{
 \describe{

@@ -7,7 +7,8 @@
 empirical_probs(X, S, matrixform = FALSE, A = NULL, warn = FALSE)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a sample of a Markov chain (\code{X[1]} is the most recent).}
+\item{X}{A vector or single-column data frame containing a sample of a Markov
+chain (\code{X[1]} is the most recent). Missing values (\code{NA}) are not allowed.}
 
 \item{S}{A numeric vector of unique positive integers. Typically, \code{S} represents
 a set of relevant lags.}

@@ -56,6 +56,7 @@
 #' @name hdMTD-methods
 NULL
 
+#' @rdname hdMTD-methods
 #' @exportS3Method print hdMTD
 print.hdMTD <- function(x, ...) {
   Spos   <- S(x)
@@ -73,6 +74,7 @@ print.hdMTD <- function(x, ...) {
 
 # ------------------------- summary.hdMTD ---------------------------------
 
+#' @rdname hdMTD-methods
 #' @exportS3Method summary hdMTD
 summary.hdMTD <- function(object, settings = FALSE,...) {
 

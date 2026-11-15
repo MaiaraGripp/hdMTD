@@ -2,7 +2,8 @@
 #'
 #'  A function that estimates the set of relevant lags of an MTD model using the FS method.
 #'
-#' @param X A vector or single-column data frame containing a chain sample (`X[1]` is the most recent).
+#' @param X A vector or single-column data frame containing a chain sample
+#' (`X[1]` is the most recent). Missing values (`NA`) are not allowed.
 #' @param d A positive integer representing an upper bound for the chain order.
 #' @param l A positive integer specifying the number of lags to be selected as relevant.
 #' @param A A vector with positive integers representing the state space. If not informed,
@@ -10,7 +11,7 @@
 #' @param elbowTest Logical. If TRUE, the function applies an alternative stopping criterion to
 #' determine the length of the set of relevant lags. See *Details* for more information.
 #' @param warn Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.
-#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()].
+#' @param ... Additional arguments (not used in this function, but maintained for compatibility with [hdMTD()]).
 #'
 #'
 #' @details The "Forward Stepwise" (FS) algorithm is the first step of the "Forward Stepwise and Cut"

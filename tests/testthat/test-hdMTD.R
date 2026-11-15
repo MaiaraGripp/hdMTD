@@ -26,8 +26,20 @@ test_that("hdMTD works correctly with different methods", {
   # Add more specific checks based on your expectations for the "FS" method
 
   # Test the "FSC" method
-  fit_fsc <- hdMTD(X = X, d = d, method = "FSC", alpha = 0.001, xi = 1, l = 3)
+  cut_fraction <- 0.3
+
+  fit_fsc <- hdMTD(X = X, d = d, method = "FSC", l = 3,
+                   alpha = 0.001, xi = 1, cut_fraction = cut_fraction)
+
+  expected_fsc <- hdMTD_FSC(X = X, d = d, l = 3, alpha = 0.001,
+                            xi = 1, cut_fraction = cut_fraction)
+
   expect_hlagset(fit_fsc, d, max_len = 3)
+  expect_equal(as.integer(S(fit_fsc)), as.integer(expected_fsc))
+  expect_equal(
+    attr(fit_fsc, "settings")$cut_fraction,
+    cut_fraction
+  )
   # Add more specific checks based on your expectations for the "FSC" method
 
   # Test the "BIC" method

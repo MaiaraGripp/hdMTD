@@ -7,7 +7,8 @@
 hdMTD_FS(X, d, l, A = NULL, elbowTest = FALSE, warn = FALSE, ...)
 }
 \arguments{
-\item{X}{A vector or single-column data frame containing a chain sample (\code{X[1]} is the most recent).}
+\item{X}{A vector or single-column data frame containing a chain sample
+(\code{X[1]} is the most recent). Missing values (\code{NA}) are not allowed.}
 
 \item{d}{A positive integer representing an upper bound for the chain order.}
 
@@ -21,7 +22,7 @@ determine the length of the set of relevant lags. See \emph{Details} for more in
 
 \item{warn}{Logical. If \code{TRUE}, the function warns the user when \code{A} is set automatically.}
 
-\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}.}
+\item{...}{Additional arguments (not used in this function, but maintained for compatibility with \code{\link[=hdMTD]{hdMTD()}}).}
 }
 \value{
 A numeric vector containing the estimated relevant lag set using FS algorithm.

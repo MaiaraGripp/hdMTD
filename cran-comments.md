@@ -1,5 +1,27 @@
 
-## Resubmission (hdMTD 0.1.4)
+## Resubmission (hdMTD 0.1.5)
+
+### Summary of changes
+
+- Updated the documentation of the S3 methods for classes `MTD`, `MTDest`, and `hdMTD` to include explicit usage entries for the documented methods.
+- Updated the documentation of `tempdata` to identify INMET and BDMEP as the data source without including the unstable external URL that triggered connection failures in the CRAN incoming checks.
+- Corrected the sample split in `hdMTD_FSC()` so that FS is applied to the chronologically older observations and CUT to the most recent observations, in accordance with the theoretical procedure.
+- Added the `cut_fraction` argument to `hdMTD_FSC()` to control the proportion of the sample allocated to CUT. Added validation ensuring that `cut_fraction` is strictly between 0 and 1 and that both resulting subsamples contain more than `d + 1` observations.
+- Updated `hdMTD()` to forward `cut_fraction` to `hdMTD_FSC()` and record it in the returned object's settings.
+- Added tests verifying the corrected FSC sample split and the forwarding of `cut_fraction` through `hdMTD()`.
+- Added computational-cost warnings to the documentation of `hdMTD_BIC()` and `hdMTD_CUT()`. The documentation now explains that unrestricted candidate sets may substantially increase running time and memory requirements and recommends providing a reduced candidate set `S` whenever possible.
+- Clarified in the documentation of all functions that accept a chain sample that missing values (`NA`) are not allowed.
+- Added an automated test verifying that inference functions reject samples containing missing values with the intended error message.
+- Added an official package vignette providing replication materials for the examples and analyses presented in Section 5 of the article describing the `hdMTD` package.
+- Updated `DESCRIPTION` to declare the packages required to build the vignette.
+
+### R CMD check results
+0 errors | 0 warnings | 0 note
+
+---
+## Previous submission notes (for reference)
+
+version - hdMTD 0.1.4
 
 ### Summary of changes
 

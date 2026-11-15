@@ -13,7 +13,8 @@ oscillation(x, ...)
 \method{oscillation}{default}(x, S, A = NULL, ...)
 }
 \arguments{
-\item{x}{Either an MTD model object, an MTDest fit, or a chain sample.}
+\item{x}{Either an MTD model object, an MTDest fit, or a chain sample. If
+\code{x} is a chain sample, missing values (\code{NA}) are not allowed.}
 
 \item{...}{Ignored.}
 

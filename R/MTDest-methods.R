@@ -69,6 +69,7 @@
 #' @name MTDest-methods
 NULL
 
+#' @rdname MTDest-methods
 #' @exportS3Method print MTDest
 print.MTDest <- function(x, ...) {
   lg <- lags(x)
@@ -87,6 +88,7 @@ print.MTDest <- function(x, ...) {
 
 # ------------------------- summary.MTDest ---------------------------------
 
+#' @rdname MTDest-methods
 #' @exportS3Method summary MTDest
 summary.MTDest <- function(object, ...) {
 
@@ -158,6 +160,7 @@ print_MTDest_summary <- function(object) {
 
 # --------------------------- logLik.MTD ----------------------------------
 
+#' @rdname MTDest-methods
 #' @exportS3Method logLik MTDest
 logLik.MTDest <- function(object, ...) {
 
